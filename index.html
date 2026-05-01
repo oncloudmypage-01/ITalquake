@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ITalquake</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#0f172a"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+let _installPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();_installPrompt=e;
+  const btn=document.getElementById('installBtn');
+  if(btn)btn.style.display='flex';
+});
+window.addEventListener('appinstalled',()=>{
+  const btn=document.getElementById('installBtn');
+  if(btn)btn.style.display='none';
+  _installPrompt=null;
+});
+function triggerInstall(){
+  if(!_installPrompt)return;
+  _installPrompt.prompt();
+  _installPrompt.userChoice.then(()=>{_installPrompt=null;});
+}
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+:root{
+  --bg:#0f172a;--panel:#111827;--text:#e5e7eb;--muted:#94a3b8;
+  --accent:#22c55e;--accent-2:#3b82f6;--danger:#ef4444;
+  --border:rgba(255,255,255,0.08);--shadow:0 10px 30px rgba(0,0,0,0.28);
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:Inter,system-ui,sans-serif;
+  background:linear-gradient(180deg,#0b1120 0%,#111827 100%);
+  color:var(--text);min-height:100vh;}
+
+/* ── LANDING ── */
+#landing{position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(160deg,#06091a 0%,#0d1a2e 50%,#0b1120 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:48px;padding:24px;}
+.brand h1{margin:0;font-size:clamp(28px,5vw,48px);
+  background:linear-gradient(90deg,#22c55e,#3b82f6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.brand p{margin:10px 0 0;color:var(--muted);font-size:16px;text-align:center;}
+.choices{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
+.choice-card{width:240px;border-radius:22px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);padding:30px 22px;cursor:pointer;
+  transition:transform .2s,border-color .2s,background .2s;
+  text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.choice-card:hover{transform:translateY(-4px);background:rgba(255,255,255,0.08);}
+.choice-card.eq{border-color:rgba(239,68,68,0.4);}
+.choice-card.eq:hover{border-color:rgba(239,68,68,0.8);}
+.choice-card.stor{border-color:rgba(168,85,247,0.4);}
+.choice-card.stor:hover{border-color:rgba(168,85,247,0.8);}
+.choice-card.seis{border-color:rgba(34,197,94,0.4);}
+.choice-card.seis:hover{border-color:rgba(34,197,94,0.8);}
+.choice-card .icon{font-size:46px;}
+.choice-card h2{margin:0;font-size:18px;}
+.choice-card p{margin:0;font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* ── APP / NAV ── */
+#appContainer{display:none;}
+#appContainer.visible{display:block;}
+.nav-bar{position:sticky;top:0;z-index:100;background:rgba(11,17,32,0.92);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;gap:0;}
+.nav-brand{font-weight:700;font-size:15px;padding:15px 18px 15px 0;
+  border-right:1px solid var(--border);margin-right:10px;white-space:nowrap;}
+.nav-tab{padding:15px 18px;font-size:14px;font-weight:600;cursor:pointer;
+  color:var(--muted);border-bottom:2px solid transparent;
+  background:none;border-top:none;border-left:none;border-right:none;
+  transition:color .18s,border-color .18s;white-space:nowrap;}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.a-eq{color:#f87171;border-bottom-color:#ef4444;}
+.nav-tab.a-stor{color:#c084fc;border-bottom-color:#a855f7;}
+.nav-tab.a-seis{color:#86efac;border-bottom-color:#22c55e;}
+.nav-tab.a-fm{color:#fdba74;border-bottom-color:#fb923c;}
+.nav-spacer{flex:1;}
+.nav-home{padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;transition:all .18s;}
+.nav-home:hover{background:rgba(255,255,255,0.1);color:var(--text);}
+.section{display:none;}
+.section.active{display:block;}
+
+/* ── LAYOUT ── */
+.container{width:min(1400px,calc(100% - 32px));margin:24px auto;}
+.header{display:flex;align-items:center;justify-content:space-between;
+  gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.title-wrap h1{margin:0;font-size:clamp(20px,4vw,34px);line-height:1.1;}
+.title-wrap p{margin:8px 0 0;color:var(--muted);}
+.badge{padding:9px 14px;border-radius:999px;font-weight:600;font-size:13px;}
+.badge-green{background:rgba(34,197,94,0.12);color:#86efac;border:1px solid rgba(34,197,94,0.35);}
+.badge-red{background:rgba(239,68,68,0.12);color:#fca5a5;border:1px solid rgba(239,68,68,0.35);}
+.badge-purple{background:rgba(168,85,247,0.12);color:#d8b4fe;border:1px solid rgba(168,85,247,0.35);}
+
+/* panel — NO overflow:hidden globale; solo i panel-map lo hanno */
+.panel{background:rgba(17,24,39,0.92);border:1px solid var(--border);
+  border-radius:22px;box-shadow:var(--shadow);}
+.panel-map{overflow:hidden;} /* solo le mappe ne hanno bisogno */
+.panel-header{padding:18px 18px 10px;}
+.panel-header h2{margin:0;font-size:17px;}
+.panel-header p{margin:6px 0 0;color:var(--muted);font-size:13px;}
+
+.eq-grid{display:grid;grid-template-columns:380px 1fr;gap:18px;}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:18px;}
+@media(max-width:1000px){.eq-grid,.grid{grid-template-columns:1fr;}}
+.main{display:grid;gap:18px;}
+
+/* controls */
+.controls{padding:16px;display:grid;gap:12px;}
+.field{display:grid;gap:5px;}
+label{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+select,input{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,0.1);
+  background:#0b1220;color:var(--text);padding:11px 13px;font-size:14px;outline:none;}
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn{width:100%;border-radius:13px;border:none;padding:12px 14px;
+  font-size:14px;font-weight:700;cursor:pointer;transition:transform .18s,opacity .18s;}
+.btn:hover{transform:translateY(-1px);}
+.btn:disabled{opacity:.6;cursor:wait;}
+.btn-green{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;}
+.btn-red{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;}
+.btn-purple{background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;}
+.btn-outline{background:rgba(255,255,255,0.05);color:var(--text);
+  border:1px solid var(--border)!important;}
+.btn-outline:hover{background:rgba(255,255,255,0.1);}
+.status{font-size:13px;color:var(--muted);margin-top:4px;}
+.hint{font-size:12px;color:var(--muted);line-height:1.5;
+  background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.22);
+  border-radius:12px;padding:11px 13px;}
+.footer-note{margin-top:16px;color:var(--muted);font-size:12px;line-height:1.6;}
+
+/* filter section inside controls */
+.fsec{border-top:1px solid var(--border);padding-top:12px;margin-top:2px;}
+.fsec h3{margin:0 0 10px;font-size:11px;color:var(--muted);font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;}
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.tl{font-size:13px;font-weight:600;}
+.sw{position:relative;display:inline-block;width:38px;height:21px;flex-shrink:0;}
+.sw input{opacity:0;width:0;height:0;}
+.sl{position:absolute;cursor:pointer;inset:0;background:#374151;border-radius:20px;transition:background .2s;}
+.sl:before{content:"";position:absolute;width:15px;height:15px;left:3px;bottom:3px;
+  background:#fff;border-radius:50%;transition:transform .2s;}
+input:checked+.sl{background:var(--accent);}
+input:checked+.sl:before{transform:translateX(17px);}
+
+/* notifiche collapsible */
+details.nd summary{list-style:none;cursor:pointer;padding:9px 0 5px;
+  font-size:12px;font-weight:700;color:var(--muted);
+  display:flex;align-items:center;gap:7px;user-select:none;text-transform:uppercase;letter-spacing:.04em;}
+details.nd summary::-webkit-details-marker{display:none;}
+details.nd summary::before{content:"▶";font-size:9px;transition:transform .18s;}
+details.nd[open] summary::before{transform:rotate(90deg);}
+details.nd .nb{display:grid;gap:9px;padding-top:8px;}
+.npb{padding:9px 13px;border-radius:11px;font-size:13px;font-weight:700;width:auto;
+  background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);
+  color:#93c5fd;cursor:pointer;transition:all .18s;}
+.npb:hover{background:rgba(59,130,246,0.25);}
+.ri{font-size:11px;color:var(--muted);text-align:right;}
+
+/* ── MAPS ── */
+.mapbox{width:100%;height:480px;border-radius:0 0 22px 22px;}
+
+/* ── EQ LIST ── */
+.eq-list{max-height:440px;overflow-y:auto;}
+.eq-item{display:flex;align-items:center;gap:11px;padding:9px 16px;
+  border-bottom:1px solid var(--border);transition:background .15s;}
+.eq-item:hover{background:rgba(255,255,255,0.03);}
+.eq-item:last-child{border-bottom:none;}
+.eq-mag{min-width:44px;height:44px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;}
+.m0{background:rgba(148,163,184,.15);color:#94a3b8;}
+.m1{background:rgba(34,197,94,.15);color:#86efac;}
+.m2{background:rgba(234,179,8,.15);color:#fde047;}
+.m3{background:rgba(249,115,22,.15);color:#fdba74;}
+.m4{background:rgba(239,68,68,.15);color:#fca5a5;}
+.eq-info{flex:1;min-width:0;cursor:pointer;}
+.eq-info .pl{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.eq-info .dt{font-size:11px;color:var(--muted);margin-top:2px;}
+.eq-depth{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.seis-btn{flex-shrink:0;padding:5px 9px;border-radius:8px;font-size:13px;
+  background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
+  color:#93c5fd;cursor:pointer;transition:all .18s;width:auto;}
+.seis-btn:hover{background:rgba(59,130,246,.25);}
+
+/* summary cards */
+.summary-row{display:flex;gap:11px;flex-wrap:wrap;}
+.sc{flex:1;min-width:100px;background:rgba(255,255,255,.03);
+  border:1px solid var(--border);border-radius:14px;padding:11px 14px;}
+.sc .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
+.sc .v{font-size:20px;font-weight:800;}
+
+/* region table */
+.tbl-wrap{padding:16px;overflow-x:auto;}
+.rtbl{width:100%;border-collapse:collapse;font-size:13px;}
+.rtbl th{padding:8px 12px;text-align:left;font-size:11px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);}
+.rtbl th.r{text-align:right;}
+.rtbl td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04);}
+.rtbl td.r{text-align:right;font-variant-numeric:tabular-nums;}
+.rtbl tr:last-child td{border-bottom:none;}
+.rtbl tr:hover td{background:rgba(255,255,255,.02);}
+.rbar{display:inline-block;height:6px;border-radius:3px;
+  background:linear-gradient(90deg,#3b82f6,#22c55e);vertical-align:middle;margin-left:7px;}
+.mpill{display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:700;}
+
+/* timeline */
+.tl-header{padding:10px 16px 0;display:flex;align-items:center;gap:11px;flex-wrap:wrap;}
+.tl-header label{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;}
+.tl-header select{width:auto;padding:6px 10px;font-size:13px;border-radius:9px;}
+#timelineTooltip,#storicoTimelineTooltip{
+  position:fixed;background:rgba(11,17,32,.97);border:1px solid rgba(255,255,255,.15);
+  border-radius:9px;padding:7px 11px;font-size:13px;pointer-events:none;
+  display:none;z-index:9999;max-width:270px;line-height:1.5;}
+
+/* sismogrammi canvas */
+.canvas-box{background:#08101c;border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:12px;overflow-x:auto;}
+.log-box{padding:16px;max-height:180px;overflow:auto;color:#d1d5db;
+  font-family:ui-monospace,monospace;font-size:12px;line-height:1.5;background:#08101c;
+  border-radius:0 0 22px 22px;}
+
+/* meta grid */
+.meta-grid{padding:16px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.mc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:13px;padding:12px;}
+.mc .k{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
+.mc .v{font-size:15px;font-weight:700;word-break:break-word;}
+@media(max-width:700px){.meta-grid,.row-2{grid-template-columns:1fr;}}
+
+/* loading */
+.lo{padding:36px;text-align:center;color:var(--muted);font-size:14px;}
+.spin{display:inline-block;width:20px;height:20px;margin-right:7px;
+  border:3px solid rgba(255,255,255,.1);border-top-color:var(--accent-2);
+  border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* beach ball icon */
+.bb-icon{border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.6);cursor:pointer;display:block;}
+.fm-list-item{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:12px;
+  padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.fm-list-item:hover{background:rgba(255,255,255,.04);}
+.fm-mag{font-size:22px;font-weight:800;color:#fca5a5;}
+.fm-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* toast */
+#seisToast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:rgba(11,17,32,.97);border:1px solid rgba(59,130,246,.4);
+  border-radius:13px;padding:11px 18px;font-size:14px;z-index:9998;
+  display:none;max-width:460px;text-align:center;line-height:1.5;
+  box-shadow:0 8px 28px rgba(0,0,0,.5);}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="landing">
+  <div class="brand">
+    <h1>🌍 INGV Sismico</h1>
+    <p>Portale sismologico italiano — dati in tempo reale da INGV / EIDA</p>
+  </div>
+  <div class="choices">
+    <div class="choice-card eq" onclick="goSection('terremoti')">
+      <div class="icon">🔴</div><h2>Terremoti Recenti</h2>
+      <p>Mappa e lista degli ultimi eventi con statistiche per regione</p>
+    </div>
+    <div class="choice-card stor" onclick="goSection('storico')">
+      <div class="icon">📚</div><h2>Storico</h2>
+      <p>Ricerca libera per intervallo di date su tutto il catalogo INGV</p>
+    </div>
+    <div class="choice-card seis" onclick="goSection('sismogrammi')">
+      <div class="icon">📈</div><h2>Sismogrammi</h2>
+      <p>Terremoti, sismogrammi e meccanismi focali INGV in tempo reale</p>
+    </div>
+    <div class="choice-card" style="border-color:rgba(251,146,60,0.4);"
+         onclick="goSection('focali')">
+      <div class="icon">🎯</div><h2>Meccanismi Focali</h2>
+      <p>Beach ball TDMT su mappa — geometria delle faglie attivatrici</p>
+    </div>
+  </div>
+</div>
+
+<div id="timelineTooltip"></div>
+<div id="storicoTimelineTooltip"></div>
+<div id="seisToast"></div>
+
+<!-- APP -->
+<div id="appContainer">
+  <nav class="nav-bar">
+    <div class="nav-brand">🌍 INGV Sismico</div>
+    <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">🔴 Recenti</button>
+    <button class="nav-tab" id="tabStor" onclick="goSection('storico')">📚 Storico</button>
+    <button class="nav-tab" id="tabSeis" onclick="goSection('sismogrammi')">📈 Sismogrammi</button>
+    <button class="nav-tab" id="tabFm"   onclick="goSection('focali')">🎯 Meccanismi Focali</button>
+    <div class="nav-spacer"></div>
+    <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;align-items:center;gap:6px;margin-right:8px;" title="Installa ITalquake">⬇️ Installa</button><button class="nav-home" onclick="goHome()">⌂ Home</button>
+  </nav>
+
+  <!-- ═══ TERREMOTI RECENTI ═══ -->
+  <div class="section" id="sectionTerremoti">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Terremoti Recenti</h1>
+          <p>Ultimi eventi sismici registrati da INGV.</p></div>
+        <span class="badge badge-red">INGV FDSN Event</span>
+      </div>
+      <div class="eq-grid">
+        <!-- sx -->
+        <section class="panel">
+          <div class="panel-header"><h2>Filtri</h2></div>
+          <div class="controls">
+            <div class="field"><label>Area geografica</label>
+              <select id="eqGeo">
+                <option value="italy" selected>🇮🇹 Italia e paesi confinanti</option>
+                <option value="world">🌍 Tutto il mondo</option>
+              </select></div>
+            <div class="field"><label>Periodo</label>
+              <select id="eqPeriod">
+                <option value="6">Ultime 6 ore</option>
+                <option value="24" selected>Ultime 24 ore</option>
+                <option value="48">Ultime 48 ore</option>
+                <option value="168">Ultima settimana</option>
+              </select></div>
+            <div class="row-2">
+              <div class="field"><label>Mag. min</label>
+                <select id="eqMinMag">
+                  <option value="-1">Tutti</option><option value="1">M≥1</option>
+                  <option value="2" selected>M≥2</option><option value="3">M≥3</option>
+                  <option value="4">M≥4</option></select></div>
+              <div class="field"><label>Prof. max km</label>
+                <select id="eqMaxDepth">
+                  <option value="999" selected>Qualsiasi</option>
+                  <option value="30">≤30</option><option value="70">≤70</option>
+                  <option value="150">≤150</option></select></div>
+            </div>
+            <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes()">🔄 Aggiorna</button>
+            <div id="eqStatus" class="status">Pronto.</div>
+
+            <div class="fsec">
+              <details class="nd">
+                <summary>🔔 Notifiche &amp; Auto-aggiornamento</summary>
+                <div class="nb">
+                  <div class="toggle-row">
+                    <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked"/>
+                      <span class="sl"></span></label>
+                    <span class="tl">Attiva notifiche browser</span>
+                  </div>
+                  <div class="field"><label>Notifica se M ≥</label>
+                    <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0"/></div>
+                  <div class="field"><label>Solo provincia (es. BN) — vuoto=tutte</label>
+                    <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
+                      oninput="this.value=this.value.toUpperCase()"/></div>
+                  <button class="npb" id="notifPermBtn" onclick="askNotifPerm()">Richiedi permesso notifiche</button>
+                  <div class="field"><label>Auto-aggiornamento</label>
+                    <select id="autoRefreshSel" onchange="setAutoRefresh(this.value)">
+                      <option value="0">Disattivo</option>
+                      <option value="60">Ogni minuto</option>
+                      <option value="120" selected>Ogni 2 min</option>
+                      <option value="300">Ogni 5 min</option>
+                    </select></div>
+                  <div class="ri" id="refreshInd">—</div>
+                </div>
+              </details>
+            </div>
+            <div class="hint">📈 in lista = sismogramma stazione più vicina.</div>
+          </div>
+        </section>
+        <!-- dx -->
+        <div class="main">
+          <section class="panel panel-map">
+            <div class="panel-header"><h2>Mappa epicentri</h2>
+              <p>Dimensione ∝ magnitudo · Colore per profondità · Toggle sorgenti DISS in alto a destra.</p></div>
+            <div id="eqMap" class="mapbox"></div>
+          </section>
+          <div id="eqSumRow" class="summary-row" style="display:none">
+            <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="sTot">—</div></div>
+            <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#fca5a5">—</div></div>
+            <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#86efac">—</div></div>
+            <div class="sc"><div class="k">Prof. media</div><div class="v" id="sAvgD">—</div></div>
+          </div>
+          <section class="panel">
+            <div class="panel-header"><h2>Timeline magnitudo</h2>
+              <p>Hover per dettagli · Clic per centrare sulla mappa.</p></div>
+            <div class="tl-header">
+              <label>Filtra provincia:</label>
+              <select id="tlProv" onchange="applyTlFilter('eq')"
+                style="background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
+                <option value="">Tutta Italia</option></select>
+            </div>
+            <div style="padding:10px 16px 16px">
+              <canvas id="tlCanvas" width="1200" height="175" style="width:100%;display:block;background:#08101c;cursor:crosshair;border-radius:10px;"></canvas>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Lista eventi</h2></div>
+            <div class="eq-list" id="eqList"><div class="lo">Premi Aggiorna.</div></div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Statistiche per regione</h2></div>
+            <div class="tbl-wrap" id="eqRegTbl"><div class="lo">—</div></div>
+          </section>
+        </div>
+      </div>
+      <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> · Sorgenti sismogeniche: <code>diss.ingv.it</code></div>
+    </div>
+  </div>
+
+  <!-- ═══ STORICO ═══ -->
+  <div class="section" id="sectionStorico">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Terremoti Storici</h1>
+          <p>Ricerca nel catalogo INGV per intervallo di date libero.</p></div>
+        <span class="badge badge-purple">INGV Catalogo</span>
+      </div>
+      <div class="eq-grid">
+        <section class="panel">
+          <div class="panel-header"><h2>Ricerca</h2></div>
+          <div class="controls">
+            <div class="field"><label>Area geografica</label>
+              <select id="stGeo">
+                <option value="italy" selected>🇮🇹 Italia e confinanti</option>
+                <option value="world">🌍 Tutto il mondo</option>
+              </select></div>
+            <div class="field"><label>Data inizio (UTC)</label>
+              <input id="stFrom" type="date"/></div>
+            <div class="field"><label>Data fine (UTC)</label>
+              <input id="stTo" type="date"/></div>
+            <div class="row-2">
+              <div class="field"><label>Mag. min</label>
+                <input id="stMinMag" type="number" min="-1" max="9" step="0.5" value="2.0"/></div>
+              <div class="field"><label>Mag. max</label>
+                <input id="stMaxMag" type="number" min="-1" max="10" step="0.5" value="10"/></div>
+            </div>
+            <div class="row-2">
+              <div class="field"><label>Prof. max km</label>
+                <select id="stMaxDepth">
+                  <option value="999" selected>Qualsiasi</option>
+                  <option value="30">≤30</option><option value="70">≤70</option>
+                  <option value="150">≤150</option></select></div>
+              <div class="field"><label>Limite eventi</label>
+                <select id="stLimit">
+                  <option value="500">500</option>
+                  <option value="1000" selected>1000</option>
+                  <option value="2000">2000</option></select></div>
+            </div>
+            <button class="btn btn-purple" id="stFetchBtn" onclick="fetchStorico()">🔍 Cerca nel catalogo</button>
+            <div id="stStatus" class="status">Imposta le date e cerca.</div>
+            <div class="hint">Il catalogo INGV copre dal 1985. Per eventi molto antichi usa il catalogo CPTI.</div>
+          </div>
+        </section>
+        <div class="main">
+          <section class="panel panel-map">
+            <div class="panel-header"><h2>Mappa epicentri storici</h2>
+              <p>Toggle sorgenti DISS disponibile in alto a destra.</p></div>
+            <div id="stMap" class="mapbox"></div>
+          </section>
+          <div id="stSumRow" class="summary-row" style="display:none">
+            <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="stTot">—</div></div>
+            <div class="sc"><div class="k">Mag. max</div><div class="v" id="stMaxV" style="color:#fca5a5">—</div></div>
+            <div class="sc"><div class="k">Mag. min</div><div class="v" id="stMinV" style="color:#86efac">—</div></div>
+            <div class="sc"><div class="k">Prof. media</div><div class="v" id="stAvgD">—</div></div>
+          </div>
+          <section class="panel">
+            <div class="panel-header"><h2>Timeline magnitudo</h2></div>
+            <div class="tl-header">
+              <label>Filtra provincia:</label>
+              <select id="stTlProv" onchange="applyTlFilter('st')"
+                style="background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
+                <option value="">Tutta Italia</option></select>
+            </div>
+            <div style="padding:10px 16px 16px">
+              <canvas id="stTlCanvas" width="1200" height="175" style="width:100%;display:block;background:#08101c;cursor:crosshair;border-radius:10px;"></canvas>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Lista eventi</h2></div>
+            <div class="eq-list" id="stList"><div class="lo">Imposta date e cerca.</div></div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Statistiche per regione</h2></div>
+            <div class="tbl-wrap" id="stRegTbl"><div class="lo">—</div></div>
+          </section>
+        </div>
+      </div>
+      <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code></div>
+    </div>
+  </div>
+
+  <!-- ═══ SISMOGRAMMI ═══ -->
+  <div class="section" id="sectionSismogrammi">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Sismogrammi EIDA / INGV</h1>
+          <p>Waveform e dayplot dalle stazioni della rete <strong>IV</strong>.</p></div>
+        <span class="badge badge-green">Default: rete IV</span>
+      </div>
+      <div class="grid">
+        <section class="panel">
+          <div class="panel-header"><h2>Controlli</h2></div>
+          <div class="controls">
+            <div class="field"><label>Rete</label>
+              <select id="networkSelect">
+                <option value="IV" selected>IV - Italian Seismic Network</option>
+                <option value="IX">IX</option></select></div>
+            <div class="field"><label>Stazione</label><select id="stationSelect"></select></div>
+            <div class="field"><label>Canale</label><select id="channelSelect"></select></div>
+            <div class="row-2">
+              <div class="field"><label>Ore da visualizzare</label>
+                <input id="hoursInput" type="number" min="1" max="48" value="24"/></div>
+              <div class="field"><label>Punti max grafico</label>
+                <input id="sampleLimitInput" type="number" min="200" max="30000" value="5000"/></div>
+            </div>
+            <!-- datetime inputs STACKED (fix clipping) -->
+            <div class="field"><label>Inizio (UTC)</label>
+              <input id="startInput" type="datetime-local"/></div>
+            <div class="field"><label>Fine (UTC)</label>
+              <input id="endInput" type="datetime-local"/></div>
+
+            <div class="fsec">
+              <h3>Filtri segnale</h3>
+              <div class="toggle-row">
+                <label class="sw"><input type="checkbox" id="filterEnabled" checked/>
+                  <span class="sl"></span></label>
+                <span class="tl">Bandpass attivo</span>
+              </div>
+              <div class="row-2">
+                <div class="field"><label>Freq. min (Hz)</label>
+                  <input id="freqMinInput" type="number" min=".001" max="50" step=".01" value="0.1"/></div>
+                <div class="field"><label>Freq. max (Hz)</label>
+                  <input id="freqMaxInput" type="number" min=".01" max="100" step=".1" value="3.0"/></div>
+              </div>
+              <div class="row-2">
+                <div class="field"><label>Poli (corners)</label>
+                  <input id="cornersInput" type="number" min="1" max="8" step="1" value="4"/></div>
+                <div class="field"><label>Decimate factor</label>
+                  <input id="decimateInput" type="number" min="1" max="10" step="1" value="2"/></div>
+              </div>
+              <div class="toggle-row" style="margin-top:6px">
+                <label class="sw"><input type="checkbox" id="demeanEnabled" checked/>
+                  <span class="sl"></span></label><span class="tl">Demean</span>
+              </div>
+              <div class="toggle-row">
+                <label class="sw"><input type="checkbox" id="detrendEnabled" checked/>
+                  <span class="sl"></span></label><span class="tl">Detrend lineare</span>
+              </div>
+            </div>
+            <button class="btn btn-green" id="generateBtn">Scarica e visualizza waveform</button>
+            <div id="status" class="status">Caricamento stazioni...</div>
+            <div class="hint">Parser MiniSEED nativo · Tile CartoDB (funziona da file://).</div>
+          </div>
+        </section>
+
+        <section class="main">
+          <section class="panel panel-map">
+            <div class="panel-header"><h2>Mappa stazioni</h2></div>
+            <div id="map" class="mapbox"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Dettagli stazione</h2></div>
+            <div class="meta-grid" id="metaGrid"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+              <div><h2 id="plotTitle">Waveform</h2><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Grafico traccia selezionata.</p></div>
+              <div style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
+                <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
+                  <option value="waveform">Waveform</option>
+                  <option value="dayplot">Dayplot</option></select>
+                <div id="dayplotControls" style="display:none;align-items:center;gap:7px;">
+                  <label style="font-size:11px;color:var(--muted);white-space:nowrap;">Min/riga</label>
+                  <input id="dayplotInterval" type="number" min="1" max="120" value="30"
+                    style="width:60px;padding:7px 9px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);"/>
+                </div>
+              </div>
+            </div>
+            <div style="padding:16px">
+              <div class="canvas-box">
+                <canvas id="waveCanvas" width="1200" height="320" style="width:100%;height:320px;display:block;background:#08101c;border-radius:10px;"></canvas>
+              </div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Log</h2></div>
+            <div id="log" class="log-box"></div>
+          </section>
+        </section>
+      </div>
+      <div class="footer-note">
+        <code>webservices.ingv.it/fdsnws/station/1/query</code> ·
+        <code>webservices.ingv.it/fdsnws/dataselect/1/query</code>
+      </div>
+    </div>
+  </div>
+  <!-- ═══ MECCANISMI FOCALI ═══ -->
+  <div class="section" id="sectionFocali">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Meccanismi Focali</h1>
+          <p>Soluzioni TDMT (Time Domain Moment Tensor) — INGV.</p></div>
+        <span class="badge" style="background:rgba(251,146,60,.12);color:#fdba74;border:1px solid rgba(251,146,60,.35);">INGV TDMT</span>
+      </div>
+      <div class="eq-grid">
+        <!-- filtri -->
+        <section class="panel">
+          <div class="panel-header"><h2>Filtri</h2></div>
+          <div class="controls">
+            <div class="field"><label>Dal</label>
+              <input id="fmFrom" type="date"/></div>
+            <div class="field"><label>Al</label>
+              <input id="fmTo" type="date"/></div>
+            <div class="row-2">
+              <div class="field"><label>Mag. min</label>
+                <input id="fmMinMag" type="number" min="0" max="9" step="0.5" value="3.0"/></div>
+              <div class="field"><label>Mag. max</label>
+                <input id="fmMaxMag" type="number" min="0" max="10" step="0.5" value="10"/></div>
+            </div>
+            <div class="field"><label>Limite risultati</label>
+              <select id="fmLimit">
+                <option value="50">50</option>
+                <option value="100" selected>100</option>
+                <option value="200">200</option>
+                <option value="500">500</option>
+              </select></div>
+            <button class="gen-btn" onclick="fetchFocalMechanisms()">🔍 Cerca</button>
+            <div class="status" id="fmStatus">Premi Cerca per caricare.</div>
+          </div>
+          <div style="padding:0 16px 16px;">
+            <div id="fmSumRow" style="display:none;margin-top:12px;">
+              <div class="summary-row">
+                <div class="sc"><div class="k">Soluzioni</div><div class="v" id="fmTot">—</div></div>
+                <div class="sc"><div class="k">Mag. max</div><div class="v" id="fmMaxM" style="color:#fca5a5">—</div></div>
+                <div class="sc"><div class="k">Mag. min</div><div class="v" id="fmMinM" style="color:#86efac">—</div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- mappa -->
+        <div class="main">
+          <section class="panel panel-map">
+            <div class="panel-header"><h2>Mappa beach ball</h2>
+              <p>Ogni simbolo rappresenta la geometria del piano di faglia stimato con TDMT.</p></div>
+            <div id="fmMap" class="mapbox"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Lista soluzioni</h2></div>
+            <div class="eq-list" id="fmList"><div class="lo">Premi Cerca.</div></div>
+          </section>
+        </div>
+      </div>
+      <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> (QuakeML con focalMechanism) · <a href="https://terremoti.ingv.it/tdmt" target="_blank" style="color:var(--muted)">terremoti.ingv.it/tdmt</a></div>
+    </div>
+  </div>
+</div><!-- /appContainer -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ================================================================
+   NAVIGAZIONE
+================================================================ */
+let eqMapInited=false, stMapInited=false, seisMapInited=false, fmMapInited=false;
+
+function goHome(){
+  document.getElementById('landing').style.display='flex';
+  document.getElementById('appContainer').classList.remove('visible');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.className='nav-tab');
+}
+function goSection(sec){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('appContainer').classList.add('visible');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.className='nav-tab');
+  if(sec==='terremoti'){
+    document.getElementById('sectionTerremoti').classList.add('active');
+    document.getElementById('tabEq').classList.add('a-eq');
+    if(!eqMapInited){initEqMap();eqMapInited=true;}
+  } else if(sec==='storico'){
+    document.getElementById('sectionStorico').classList.add('active');
+    document.getElementById('tabStor').classList.add('a-stor');
+    if(!stMapInited){initStMap();stMapInited=true;initStDates();}
+  } else if(sec==='focali'){
+    document.getElementById('sectionFocali').classList.add('active');
+    document.getElementById('tabFm').classList.add('a-fm');
+    if(!fmMapInited){initFmMap();fmMapInited=true;initFmDates();}
+    else setTimeout(()=>fmMap&&fmMap.invalidateSize(),80);
+  } else {
+    document.getElementById('sectionSismogrammi').classList.add('active');
+    document.getElementById('tabSeis').classList.add('a-seis');
+    if(!seisMapInited){seisMapInited=true;initMap();loadNetwork();}
+    else setTimeout(()=>map&&map.invalidateSize(),80);
+  }
+}
+
+/* ================================================================
+   HELPERS
+================================================================ */
+const PROV_REG={
+  AQ:'Abruzzo',CH:'Abruzzo',PE:'Abruzzo',TE:'Abruzzo',
+  MT:'Basilicata',PZ:'Basilicata',
+  CZ:'Calabria',CS:'Calabria',KR:'Calabria',RC:'Calabria',VV:'Calabria',
+  AV:'Campania',BN:'Campania',CE:'Campania',NA:'Campania',SA:'Campania',
+  BO:'Emilia-Romagna',FE:'Emilia-Romagna',FC:'Emilia-Romagna',MO:'Emilia-Romagna',
+  PR:'Emilia-Romagna',PC:'Emilia-Romagna',RA:'Emilia-Romagna',RE:'Emilia-Romagna',RN:'Emilia-Romagna',
+  GO:'Friuli-Venezia Giulia',PN:'Friuli-Venezia Giulia',TS:'Friuli-Venezia Giulia',UD:'Friuli-Venezia Giulia',
+  FR:'Lazio',LT:'Lazio',RI:'Lazio',RM:'Lazio',VT:'Lazio',
+  GE:'Liguria',IM:'Liguria',SP:'Liguria',SV:'Liguria',
+  BG:'Lombardia',BS:'Lombardia',CO:'Lombardia',CR:'Lombardia',LC:'Lombardia',
+  LO:'Lombardia',MB:'Lombardia',MI:'Lombardia',MN:'Lombardia',PV:'Lombardia',SO:'Lombardia',VA:'Lombardia',
+  AN:'Marche',AP:'Marche',FM:'Marche',MC:'Marche',PU:'Marche',
+  CB:'Molise',IS:'Molise',
+  AL:'Piemonte',AT:'Piemonte',BI:'Piemonte',CN:'Piemonte',NO:'Piemonte',
+  TO:'Piemonte',VB:'Piemonte',VC:'Piemonte',
+  BA:'Puglia',BT:'Puglia',BR:'Puglia',FG:'Puglia',LE:'Puglia',TA:'Puglia',
+  CA:'Sardegna',CI:'Sardegna',NU:'Sardegna',OG:'Sardegna',OR:'Sardegna',
+  OT:'Sardegna',SS:'Sardegna',VS:'Sardegna',
+  AG:'Sicilia',CL:'Sicilia',CT:'Sicilia',EN:'Sicilia',ME:'Sicilia',
+  PA:'Sicilia',RG:'Sicilia',SR:'Sicilia',TP:'Sicilia',
+  AR:'Toscana',FI:'Toscana',GR:'Toscana',LI:'Toscana',LU:'Toscana',
+  MS:'Toscana',PI:'Toscana',PO:'Toscana',PT:'Toscana',SI:'Toscana',
+  BZ:'Trentino-Alto Adige',TN:'Trentino-Alto Adige',
+  PG:'Umbria',TR:'Umbria',AO:"Valle d'Aosta",
+  BL:'Veneto',PD:'Veneto',RO:'Veneto',TV:'Veneto',VE:'Veneto',VI:'Veneto',VR:'Veneto',
+};
+function extractProv(place){const m=place&&place.match(/\(([A-Z]{2})\)\s*$/);return m?m[1]:null;}
+function getRegione(place){
+  if(!place)return'Altre zone';
+  const p=extractProv(place);if(p&&PROV_REG[p])return PROV_REG[p];
+  const u=place.toUpperCase();
+  if(/ADRIATICO/.test(u))return'Mar Adriatico';if(/TIRRENO/.test(u))return'Mar Tirreno';
+  if(/IONIO/.test(u))return'Mar Ionio';if(/LIGURE/.test(u))return'Mar Ligure';
+  if(/CANALE DI SICILIA/.test(u))return'Canale di Sicilia';
+  if(/MEDITERRANEO/.test(u))return'Mediterraneo';
+  const kw=[['SICIL','Sicilia'],['CALABR','Calabria'],['CAMPAN','Campania'],
+    ['PUGLIA','Puglia'],['BASILI','Basilicata'],['ABRUZZ','Abruzzo'],
+    ['MOLISE','Molise'],['LAZIO','Lazio'],['TOSCAN','Toscana'],
+    ['UMBRIA','Umbria'],['MARCH','Marche'],['LIGUR','Liguria'],
+    ['LOMBAR','Lombardia'],['PIEMON','Piemonte'],['VENETO','Veneto'],
+    ['FRIULI','Friuli-Venezia Giulia'],['EMILIA','Emilia-Romagna'],
+    ['SARDEG','Sardegna'],['TRENTINO','Trentino-Alto Adige']];
+  for(const[k,r]of kw)if(u.includes(k))return r;
+  return'Altre zone';
+}
+function haversine(a,b,c,d){
+  const R=6371,r=Math.PI/180,dL=(c-a)*r,dO=(d-b)*r;
+  const x=Math.sin(dL/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dO/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+}
+function magCls(m){return m<1?'m0':m<2?'m1':m<3?'m2':m<4?'m3':'m4';}
+function magCol(m){
+  return m<1?'#94a3b8':m<2?'#22c55e':m<3?'#eab308':m<4?'#f97316':m<5?'#ef4444':'#a855f7';
+}
+function depthCol(d){return d<=10?'#ef4444':d<=30?'#f97316':d<=70?'#eab308':'#3b82f6';}
+
+/* DISS rimosso — CORS blocca l'integrazione WMS */
+
+/* ================================================================
+   EQ SHARED RENDERING
+================================================================ */
+const EQ_BASE='https://webservices.ingv.it/fdsnws/event/1/query';
+
+function buildUrl(opts){
+  /* opts: {starttime,endtime,minMag,maxMag,geo,maxDepth,limit} */
+  let u=`${EQ_BASE}?format=text&starttime=${opts.start}&endtime=${opts.end}&orderby=time`;
+  if(opts.limit) u+=`&limit=${opts.limit}`;
+  if(opts.minMag!=null&&opts.minMag>=0) u+=`&minmagnitude=${opts.minMag}`;
+  if(opts.maxMag!=null&&opts.maxMag<10) u+=`&maximummagnitude=${opts.maxMag}`;
+  if(opts.geo==='italy') u+='&minlat=33&maxlat=49&minlon=4&maxlon=21';
+  return u;
+}
+
+function parseEqText(text,maxDepth=999){
+  return text.trim().split(/\r?\n/).filter(l=>l&&!l.startsWith('#')).map(line=>{
+    const p=line.split('|');if(p.length<12)return null;
+    const depth=parseFloat(p[4]);if(depth>maxDepth)return null;
+    const mag=parseFloat(p[10]),lat=parseFloat(p[2]),lon=parseFloat(p[3]);
+    if(isNaN(lat)||isNaN(lon)||isNaN(mag))return null;
+    // Forza UTC: INGV restituisce "YYYY-MM-DDTHH:mm:ss" senza Z;
+    // senza il suffisso il browser lo interpreta come ora locale → offset di 2h in CEST
+    const rawTime=p[1].trim();
+    const time=rawTime.endsWith('Z')?rawTime:rawTime+'Z';
+    return{id:p[0].trim(),time,lat,lon,
+      depth:isNaN(depth)?0:depth,magType:p[9].trim(),mag,
+      place:p[12]?p[12].trim():'N/D'};
+  }).filter(Boolean);
+}
+
+function renderMarkers(events,leafletMap,markersArr,onSeis){
+  markersArr.forEach(m=>leafletMap.removeLayer(m));
+  markersArr.length=0;
+  const bounds=[];
+  events.forEach((ev,i)=>{
+    const r=Math.max(4,Math.min(26,ev.mag*4.5));
+    const m=L.circleMarker([ev.lat,ev.lon],{
+      radius:r,color:depthCol(ev.depth),fillColor:depthCol(ev.depth),
+      fillOpacity:0.72,weight:1.5
+    });
+    m.bindPopup(`<div style="font-family:sans-serif;min-width:180px;">
+      <b style="font-size:14px;">${ev.place}</b><br>
+      <span style="color:#555;font-size:12px;">${ev.time.replace('T',' ').slice(0,19)} UTC</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;">
+        <div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">
+          <div style="font-size:9px;color:#6b7280;text-transform:uppercase;">Magnitudo</div>
+          <div style="font-size:18px;font-weight:800;color:#dc2626;">${ev.mag.toFixed(1)}</div>
+        </div>
+        <div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">
+          <div style="font-size:9px;color:#6b7280;text-transform:uppercase;">Profondità</div>
+          <div style="font-size:18px;font-weight:800;">${ev.depth.toFixed(0)} km</div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:#6b7280;margin-top:6px;">Lat ${ev.lat.toFixed(3)} · Lon ${ev.lon.toFixed(3)}</div>
+      ${onSeis?`<button onclick="${onSeis}(${i})" style="margin-top:9px;width:100%;padding:7px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">📈 Sismogramma</button>`:''}
+    </div>`);
+    m.addTo(leafletMap);
+    markersArr.push(m);
+    bounds.push([ev.lat,ev.lon]);
+  });
+  if(bounds.length>1)leafletMap.fitBounds(bounds,{padding:[28,28]});
+  else if(bounds.length===1)leafletMap.setView(bounds[0],9);
+}
+
+function renderList(events,containerId,onSeis){
+  const el=document.getElementById(containerId);
+  if(!events.length){el.innerHTML='<div class="lo">Nessun evento.</div>';return;}
+  el.innerHTML=events.map((ev,i)=>{
+    const dt=ev.time.replace('T',' ').slice(0,19);
+    const sb=onSeis?`<button class="seis-btn" onclick="${onSeis}(${i})" title="Sismogramma">📈</button>`:'';
+    return`<div class="eq-item">
+      <div class="eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</div>
+      <div class="eq-info" onclick="focusMarker('${containerId}',${i})">
+        <div class="pl">${ev.place}</div>
+        <div class="dt">${dt} UTC · ${ev.magType}</div>
+      </div>
+      <div class="eq-depth">${ev.depth.toFixed(0)} km</div>
+      ${sb}
+    </div>`;
+  }).join('');
+}
+
+function renderSummary(events,rowId,totId,maxMId,minMId,avgDId){
+  if(!events.length)return;
+  const mags=events.map(e=>e.mag);
+  document.getElementById(rowId).style.display='flex';
+  document.getElementById(totId).textContent=events.length;
+  document.getElementById(maxMId).textContent=Math.max(...mags).toFixed(1);
+  document.getElementById(minMId).textContent=Math.min(...mags).toFixed(1);
+  document.getElementById(avgDId).textContent=(events.reduce((s,e)=>s+e.depth,0)/events.length).toFixed(1)+' km';
+}
+
+function renderRegionTable(events,containerId){
+  const wrap=document.getElementById(containerId);
+  if(!events.length){wrap.innerHTML='<div class="lo">Nessun dato.</div>';return;}
+  const by={};
+  for(const ev of events){
+    const r=getRegione(ev.place);
+    if(!by[r])by[r]={count:0,mags:[]};
+    by[r].count++;by[r].mags.push(ev.mag);
+  }
+  const rows=Object.entries(by)
+    .map(([r,d])=>({r,count:d.count,max:Math.max(...d.mags),min:Math.min(...d.mags)}))
+    .sort((a,b)=>b.count-a.count);
+  const mx=rows[0].count;
+  const pill=(m)=>{const c=magCol(m);return`<span class="mpill" style="background:${c}22;color:${c};">${m.toFixed(1)}</span>`;};
+  wrap.innerHTML=`<table class="rtbl"><thead><tr>
+    <th>Regione</th><th class="r">N° eventi</th><th class="r">Max</th><th class="r">Min</th>
+  </tr></thead><tbody>${rows.map(r=>`<tr>
+    <td>${r.r}</td>
+    <td class="r">${r.count}<span class="rbar" style="width:${Math.round(r.count/mx*65)}px"></span></td>
+    <td class="r">${pill(r.max)}</td><td class="r">${pill(r.min)}</td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+/* ================================================================
+   TIMELINE (shared, canvas-based)
+================================================================ */
+const TL_HITS={eq:[],st:[]};
+
+function drawTimeline(events,canvasId,hitsKey,provFilter=''){
+  const canvas=document.getElementById(canvasId);
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const evs=provFilter?events.filter(ev=>extractProv(ev.place)===provFilter):events;
+  ctx.fillStyle='#08101c';ctx.fillRect(0,0,W,H);
+  TL_HITS[hitsKey]=[];
+  if(!evs.length){
+    ctx.fillStyle='#94a3b8';ctx.font='14px sans-serif';ctx.textAlign='center';
+    ctx.fillText('Nessun evento',W/2,H/2);return;
+  }
+  const pL=55,pR=18,pT=18,pB=30,plotW=W-pL-pR,plotH=H-pT-pB;
+  const ts=evs.map(e=>new Date(e.time).getTime());
+  const tMin=Math.min(...ts),tMax=Math.max(...ts),tR=tMax-tMin||1;
+  const mMax=Math.max(...evs.map(e=>e.mag))+0.4;
+  /* grid */
+  for(let gm=1;gm<=Math.ceil(mMax);gm++){
+    const y=pT+plotH-((gm/mMax)*plotH);
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+plotW,y);ctx.stroke();
+    ctx.fillStyle='#475569';ctx.font='10px sans-serif';ctx.textAlign='right';
+    ctx.fillText('M'+gm,pL-3,y+4);
+  }
+  /* dots */
+  evs.forEach((ev,i)=>{
+    const t=new Date(ev.time).getTime();
+    const x=pL+((t-tMin)/tR)*plotW;
+    const y=pT+plotH-((ev.mag/mMax)*plotH);
+    const r=Math.max(3,Math.min(13,ev.mag*2.8));
+    const c=magCol(ev.mag);
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fillStyle=c+'80';ctx.fill();
+    ctx.strokeStyle=c;ctx.lineWidth=1.3;ctx.stroke();
+    TL_HITS[hitsKey].push({ev,x,y,r});
+  });
+  /* X axis */
+  ctx.fillStyle='#64748b';ctx.font='10px sans-serif';ctx.textAlign='center';
+  for(let i=0;i<=5;i++){
+    const t=tMin+(tR/5)*i,x=pL+(i/5)*plotW;
+    const d=new Date(t);
+    const lb=`${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')} `
+            +`${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}`;
+    ctx.fillText(lb,x,H-5);
+    ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=0.5;
+    ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+plotH);ctx.stroke();
+  }
+}
+
+function applyTlFilter(key){
+  const provId=key==='eq'?'tlProv':'stTlProv';
+  const canvasId=key==='eq'?'tlCanvas':'stTlCanvas';
+  const data=key==='eq'?eqData:storicoData;
+  const prov=document.getElementById(provId).value;
+  drawTimeline(data,canvasId,key,prov);
+}
+
+function updateProvSelect(events,selectId){
+  const sel=document.getElementById(selectId);
+  const cur=sel.value;
+  const provs=new Set();
+  events.forEach(ev=>{const p=extractProv(ev.place);if(p)provs.add(p);});
+  sel.innerHTML='<option value="">Tutta Italia</option>'+
+    [...provs].sort().map(p=>`<option value="${p}"${p===cur?' selected':''}>${p}${PROV_REG[p]?' — '+PROV_REG[p]:''}</option>`).join('');
+}
+
+/* Timeline tooltip + click — shared handler */
+(function(){
+  const TT={eq:document.getElementById('timelineTooltip'),st:document.getElementById('storicoTimelineTooltip')};
+  const CANVASES={eq:'tlCanvas',st:'stTlCanvas'};
+  function nearest(mx,my,hits,tol){for(const h of hits)if(Math.hypot(mx-h.x,my-h.y)<=h.r+tol)return h;return null;}
+  document.addEventListener('mousemove',e=>{
+    for(const key of['eq','st']){
+      const c=document.getElementById(CANVASES[key]);const tt=TT[key];
+      if(!c){tt.style.display='none';continue;}
+      const rect=c.getBoundingClientRect();
+      if(e.clientX<rect.left||e.clientX>rect.right||e.clientY<rect.top||e.clientY>rect.bottom){tt.style.display='none';continue;}
+      const sx=c.width/rect.width,sy=c.height/rect.height;
+      const h=nearest((e.clientX-rect.left)*sx,(e.clientY-rect.top)*sy,TL_HITS[key],6);
+      if(h){
+        c.style.cursor='pointer';tt.style.display='block';
+        tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-38)+'px';
+        const dt=h.ev.time.replace('T',' ').slice(0,19);
+        tt.innerHTML=`<strong>M${h.ev.mag.toFixed(1)}</strong> — ${h.ev.place}<br><small style="color:#94a3b8;">${dt} UTC · ${h.ev.depth.toFixed(0)} km</small>`;
+      }else{c.style.cursor='crosshair';tt.style.display='none';}
+    }
+  });
+  document.addEventListener('click',e=>{
+    for(const key of['eq','st']){
+      const c=document.getElementById(CANVASES[key]);if(!c)continue;
+      const rect=c.getBoundingClientRect();
+      if(e.clientX<rect.left||e.clientX>rect.right||e.clientY<rect.top||e.clientY>rect.bottom)continue;
+      const sx=c.width/rect.width,sy=c.height/rect.height;
+      const h=nearest((e.clientX-rect.left)*sx,(e.clientY-rect.top)*sy,TL_HITS[key],6);
+      if(h){const i=key==='eq'?eqData.indexOf(h.ev):storicoData.indexOf(h.ev);if(i>=0)focusMarker(key==='eq'?'eqList':'stList',i);}
+    }
+  });
+})();
+
+/* focusMarker helper: find index in correct markers array */
+function focusMarker(listId,i){
+  const markers=listId==='eqList'||listId==='eqMap'?eqMarkers:stMarkers;
+  const map=listId==='eqList'||listId==='eqMap'?eqMap:stMap;
+  if(!markers[i])return;
+  map.setView(markers[i].getLatLng(),9,{animate:true});
+  markers[i].openPopup();
+}
+
+/* ================================================================
+   TERREMOTI RECENTI
+================================================================ */
+let eqData=[],eqMarkers=[],eqMap;
+
+function initEqMap(){
+  eqMap=L.map('eqMap').setView([42.5,12.5],6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(eqMap);
+  addLegend(eqMap);
+  /* DISS rimosso */
+}
+
+function addLegend(m){
+  const lg=L.control({position:'bottomright'});
+  lg.onAdd=()=>{const d=L.DomUtil.create('div');
+    d.style.cssText='background:rgba(11,17,32,.88);border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:9px 13px;color:#e5e7eb;font-size:12px;line-height:1.9;';
+    d.innerHTML='<b style="font-size:10px;color:#94a3b8;text-transform:uppercase">Profondità</b><br>'
+      +'<span style="color:#ef4444">●</span> 0–10 km<br>'
+      +'<span style="color:#f97316">●</span> 10–30 km<br>'
+      +'<span style="color:#eab308">●</span> 30–70 km<br>'
+      +'<span style="color:#3b82f6">●</span> &gt;70 km';
+    return d;};
+  lg.addTo(m);
+}
+
+async function fetchEarthquakes(){
+  const btn=document.getElementById('eqFetchBtn');
+  const st=document.getElementById('eqStatus');
+  const maxD=Number(document.getElementById('eqMaxDepth').value);
+  btn.disabled=true;
+  st.textContent='Caricamento...';st.className='status';
+  document.getElementById('eqList').innerHTML='<div class="lo"><span class="spin"></span>Scarico da INGV...</div>';
+  document.getElementById('eqSumRow').style.display='none';
+  try{
+    const hours=Number(document.getElementById('eqPeriod').value);
+    const minMag=Number(document.getElementById('eqMinMag').value);
+    const geo=document.getElementById('eqGeo').value;
+    const end=new Date(),start=new Date(end-hours*3600000);
+    const fmt=d=>d.toISOString().slice(0,19);
+    const url=buildUrl({start:fmt(start),end:fmt(end),minMag,geo,limit:2000});
+    const resp=await fetch(url);
+    if(resp.status===204){eqData=[];renderList([],'eqList',null);renderRegionTable([],'eqRegTbl');st.textContent='Nessun evento.';st.className='status warn';btn.disabled=false;return;}
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const text=await resp.text();
+    eqData=parseEqText(text,maxD);
+    eqData.forEach(ev=>knownIds.add(ev.id));
+    renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq');
+    renderList(eqData,'eqList','openSeisForEq');
+    renderSummary(eqData,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
+    renderRegionTable(eqData,'eqRegTbl');
+    updateProvSelect(eqData,'tlProv');
+    drawTimeline(eqData,'tlCanvas','eq');
+    st.textContent=`Caricati ${eqData.length} eventi.`;st.className='status ok';
+  }catch(err){st.textContent='Errore: '+err.message;st.className='status err';}
+  finally{btn.disabled=false;}
+}
+
+/* ================================================================
+   STORICO
+================================================================ */
+let storicoData=[],stMarkers=[],stMap;
+
+function initStMap(){
+  stMap=L.map('stMap').setView([42.5,12.5],6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(stMap);
+  addLegend(stMap);
+  /* DISS rimosso */
+}
+
+function initStDates(){
+  const to=new Date(),from=new Date(to-30*86400000);
+  document.getElementById('stTo').value=to.toISOString().slice(0,10);
+  document.getElementById('stFrom').value=from.toISOString().slice(0,10);
+}
+
+async function fetchStorico(){
+  const btn=document.getElementById('stFetchBtn');
+  const st=document.getElementById('stStatus');
+  btn.disabled=true;
+  st.textContent='Ricerca...';st.className='status';
+  document.getElementById('stList').innerHTML='<div class="lo"><span class="spin"></span>Ricerca nel catalogo INGV...</div>';
+  document.getElementById('stSumRow').style.display='none';
+  try{
+    const from=document.getElementById('stFrom').value;
+    const to=document.getElementById('stTo').value;
+    if(!from||!to)throw new Error('Imposta data inizio e fine.');
+    if(from>to)throw new Error('Data inizio successiva alla data fine.');
+    const minMag=parseFloat(document.getElementById('stMinMag').value);
+    const maxMag=parseFloat(document.getElementById('stMaxMag').value);
+    const maxD=Number(document.getElementById('stMaxDepth').value);
+    const limit=document.getElementById('stLimit').value;
+    const geo=document.getElementById('stGeo').value;
+    const url=buildUrl({start:from+'T00:00:00',end:to+'T23:59:59',minMag,maxMag,geo,limit,maxDepth:maxD});
+    const resp=await fetch(url);
+    if(resp.status===204){storicoData=[];renderList([],'stList',null);renderRegionTable([],'stRegTbl');st.textContent='Nessun evento trovato.';st.className='status warn';btn.disabled=false;return;}
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const text=await resp.text();
+    storicoData=parseEqText(text,maxD);
+    renderMarkers(storicoData,stMap,stMarkers);
+    renderList(storicoData,'stList',null);
+    renderSummary(storicoData,'stSumRow','stTot','stMaxV','stMinV','stAvgD');
+    renderRegionTable(storicoData,'stRegTbl');
+    updateProvSelect(storicoData,'stTlProv');
+    drawTimeline(storicoData,'stTlCanvas','st');
+    st.textContent=`Trovati ${storicoData.length} eventi.`;st.className='status ok';
+  }catch(err){st.textContent='Errore: '+err.message;st.className='status err';}
+  finally{btn.disabled=false;}
+}
+
+/* ================================================================
+   NOTIFICHE & AUTO-REFRESH
+================================================================ */
+let knownIds=new Set(),notifOn=false,refreshTimer=null,refreshCountdown=null;
+
+async function askNotifPerm(){
+  if(!('Notification'in window)){alert('Browser non supporta notifiche.');return;}
+  const p=await Notification.requestPermission();
+  const b=document.getElementById('notifPermBtn');
+  if(p==='granted'){b.textContent='✓ Notifiche abilitate';b.style.background='rgba(34,197,94,0.2)';b.style.color='#86efac';}
+  else b.textContent='✗ Permesso negato';
+}
+
+function setAutoRefresh(sec){
+  clearInterval(refreshTimer);clearInterval(refreshCountdown);
+  document.getElementById('refreshInd').textContent='—';
+  if(!sec||sec==='0')return;
+  const ms=Number(sec)*1000;
+  let next=Date.now()+ms;
+  refreshTimer=setInterval(quietRefresh,ms);
+  refreshCountdown=setInterval(()=>{
+    const l=Math.max(0,Math.ceil((next-Date.now())/1000));
+    document.getElementById('refreshInd').textContent='Prossimo: '+l+'s';
+    if(l===0)next=Date.now()+ms;
+  },1000);
+}
+
+async function quietRefresh(){
+  try{
+    const maxD=Number(document.getElementById('eqMaxDepth').value);
+    const hours=Number(document.getElementById('eqPeriod').value);
+    const minMag=Number(document.getElementById('eqMinMag').value);
+    const geo=document.getElementById('eqGeo').value;
+    const end=new Date(),start=new Date(end-hours*3600000);
+    const fmt=d=>d.toISOString().slice(0,19);
+    const url=buildUrl({start:fmt(start),end:fmt(end),minMag,geo,limit:2000});
+    const resp=await fetch(url);if(!resp.ok)return;
+    const evs=parseEqText(await resp.text(),maxD);
+    const newEvs=evs.filter(ev=>!knownIds.has(ev.id));
+    if(!newEvs.length)return;
+    newEvs.forEach(ev=>{knownIds.add(ev.id);if(shouldNotif(ev))sendNotif(ev);});
+    eqData=evs;
+    renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq');renderList(eqData,'eqList','openSeisForEq');
+    renderSummary(eqData,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
+    renderRegionTable(eqData,'eqRegTbl');
+    updateProvSelect(eqData,'tlProv');
+    drawTimeline(eqData,'tlCanvas','eq',document.getElementById('tlProv').value);
+    const s=document.getElementById('eqStatus');
+    s.textContent='Auto-aggiornato — '+newEvs.length+' nuovi';s.className='status ok';
+  }catch(e){}
+}
+
+function shouldNotif(ev){
+  if(!notifOn||typeof Notification==='undefined'||Notification.permission!=='granted')return false;
+  if(ev.mag<(parseFloat(document.getElementById('notifMag').value)||3))return false;
+  const p=document.getElementById('notifProv').value.trim().toUpperCase();
+  if(p){const ep=extractProv(ev.place);if(!ep||ep!==p)return false;}
+  return true;
+}
+function sendNotif(ev){
+  try{new Notification('🔴 Terremoto M'+ev.mag.toFixed(1),{
+    body:ev.place+'\n'+ev.time.replace('T',' ').slice(0,19)+' UTC · '+ev.depth.toFixed(0)+' km',
+    tag:ev.id});}catch(e){}
+}
+
+/* ================================================================
+   LINK EQ → SISMOGRAMMA
+================================================================ */
+function findNearest(lat,lon){
+  if(!stations.length)return null;
+  let best=null,bestD=Infinity;
+  for(const s of stations){
+    if(isNaN(s.lat)||isNaN(s.lon))continue;
+    const d=haversine(lat,lon,s.lat,s.lon);
+    if(d<bestD){bestD=d;best={...s,dist:d};}
+  }
+  return best;
+}
+function showToast(html,ms=4500){
+  const t=document.getElementById('seisToast');
+  t.innerHTML=html;t.style.display='block';
+  setTimeout(()=>t.style.display='none',ms);
+}
+async function openSeisForEq(i){
+  const ev=eqData[i];if(!ev)return;
+  goSection('sismogrammi');
+  if(!stations.length)await loadNetwork();
+  const near=findNearest(ev.lat,ev.lon);
+  if(!near){setStatus('Nessuna stazione trovata.','err');return;}
+  stationSelect.value=near.code;
+  await populateChannels(near.code);
+  const evT=new Date(ev.time);
+  // Arrotonda al minuto pieno: se l'evento è alle 16:57:42 →
+  // inizio 16:55:00, fine 17:05:00 (sempre secondi esatti, no troncamenti)
+  const floorMin=Math.floor(evT.getTime()/60000)*60000;
+  startInput.value=toLocal(new Date(floorMin-2*60000));
+  endInput.value=toLocal(new Date(floorMin+8*60000));
+  renderMapStations();updateMeta();
+  document.getElementById('viewModeSelect').value='dayplot';
+  document.getElementById('dayplotInterval').value='10';
+  document.getElementById('dayplotControls').style.display='flex';
+  showToast(`📡 Stazione più vicina: <strong>${near.code}</strong> (${near.dist.toFixed(0)} km)<br>Dayplot 10 min/riga`);
+  setStatus('Stazione '+near.code+' · '+near.dist.toFixed(0)+' km · Scarico...','ok');
+  await fetchWaveformAndPlot();
+}
+
+/* ================================================================
+   MINISEED PARSER
+================================================================ */
+const MiniSEED=(()=>{
+  const u16=(b,o)=>(b[o]<<8)|b[o+1];
+  const u32=(b,o)=>((b[o]<<24)|(b[o+1]<<16)|(b[o+2]<<8)|b[o+3])>>>0;
+  const i32=(b,o)=>{const v=u32(b,o);return v>=0x80000000?v-0x100000000:v;};
+  const i16=(b,o)=>{const v=u16(b,o);return v>=0x8000?v-0x10000:v;};
+  const f32=(b,o)=>{const dv=new DataView(new ArrayBuffer(4));dv.setUint32(0,u32(b,o));return dv.getFloat32(0);};
+  function steim(w,enc){
+    const out=[];let last=i32(w,4);out.push(last);
+    for(let fi=0;fi<w.length/64;fi++){
+      const cn=u32(w,fi*64);
+      for(let ww=1;ww<16;ww++){
+        const nb=(cn>>>(30-ww*2))&3;if(!nb)continue;
+        const off=fi*64+ww*4;
+        if(enc===10){
+          if(nb===1)for(let i=0;i<4;i++){const d=w[off+i]>127?w[off+i]-256:w[off+i];last+=d;out.push(last);}
+          else if(nb===2)for(let i=0;i<2;i++){last+=i16(w,off+i*2);out.push(last);}
+          else if(nb===3){last+=i32(w,off);out.push(last);}
+        }else{
+          const word=u32(w,off);const dn=(word>>>30)&3;let ds=[];
+          if(dn===0){let v=word&0x3fffffff;if(v&0x20000000)v-=0x40000000;ds=[v];}
+          else if(dn===1)for(let i=1;i>=0;i--){let v=(word>>>(i*15))&0x7fff;if(v&0x4000)v-=0x8000;ds.push(v);}
+          else if(dn===2)for(let i=2;i>=0;i--){let v=(word>>>(i*10))&0x3ff;if(v&0x200)v-=0x400;ds.push(v);}
+          else for(let i=4;i>=0;i--){let v=(word>>>(i*6))&0x3f;if(v&0x20)v-=0x40;ds.push(v);}
+          for(const d of ds){last+=d;out.push(last);}
+        }
+      }
+    }
+    return out;
+  }
+  function parseRec(buf,off){
+    const b=new Uint8Array(buf,off);
+    const net=String.fromCharCode(...b.slice(18,20)).replace(/\0/g,'').trim();
+    const sta=String.fromCharCode(...b.slice(8,13)).replace(/\0/g,'').trim();
+    const cha=String.fromCharCode(...b.slice(15,18)).replace(/\0/g,'').trim();
+    const yr=u16(b,20),doy=u16(b,22),hr=b[24],mn=b[25],sc=b[26],tms=u16(b,28);
+    const startMs=Date.UTC(yr,0,1)+(doy-1)*86400000+hr*3600000+mn*60000+sc*1000+tms/10;
+    const nS=u16(b,30),sf=i16(b,32),sm=i16(b,34);
+    let sr=0;
+    if(sf>0&&sm>0)sr=sf*sm;else if(sf>0&&sm<0)sr=sf/-sm;
+    else if(sf<0&&sm>0)sr=sm/-sf;else if(sf<0&&sm<0)sr=1/(sf*sm);
+    const doff=u16(b,44),fb=u16(b,46);
+    let enc=11,rl=4096;
+    if(fb>0&&fb<256){const bt=u16(b,fb);if(bt===1000){enc=b[fb+4];rl=1<<b[fb+6];}}
+    const db=new Uint8Array(buf,off+doff,rl-doff);let s=[];
+    if(enc===10||enc===11)s=steim(db,enc).slice(0,nS);
+    else if(enc===3)for(let i=0;i<nS;i++)s.push(i32(db,i*4));
+    else if(enc===1)for(let i=0;i<nS;i++)s.push(i16(db,i*2));
+    else if(enc===4)for(let i=0;i<nS;i++)s.push(f32(db,i*4));
+    return{net,sta,cha,startMs,sr,nS,s,rl};
+  }
+  function parse(ab){
+    const segs=[];let off=0;
+    while(off+256<=ab.byteLength){
+      try{const r=parseRec(ab,off);if(!r||r.rl<256||r.rl>65536)break;segs.push(r);off+=r.rl;}
+      catch(e){break;}
+    }
+    if(!segs.length)return null;
+    const f=segs[0];
+    return{network:f.net,station:f.sta,channel:f.cha,startMs:f.startMs,sampleRate:f.sr,samples:segs.flatMap(s=>s.s)};
+  }
+  return{parse};
+})();
+
+/* ================================================================
+   SISMOGRAMMI APP
+================================================================ */
+const ST_BASE='https://webservices.ingv.it/fdsnws/station/1/query';
+const DS_BASE='https://webservices.ingv.it/fdsnws/dataselect/1/query';
+
+const networkSelect=document.getElementById('networkSelect');
+const stationSelect=document.getElementById('stationSelect');
+const channelSelect=document.getElementById('channelSelect');
+const hoursInput=document.getElementById('hoursInput');
+const sampleLimitInput=document.getElementById('sampleLimitInput');
+const startInput=document.getElementById('startInput');
+const endInput=document.getElementById('endInput');
+const generateBtn=document.getElementById('generateBtn');
+const statusEl=document.getElementById('status');
+const logEl=document.getElementById('log');
+const metaGrid=document.getElementById('metaGrid');
+const waveCanvas=document.getElementById('waveCanvas');
+const wCtx=waveCanvas.getContext('2d');
+
+let map,stationMarkers=[],stations=[],chCache=new Map();
+
+function logMsg(msg,type=''){
+  const d=document.createElement('div');d.className=type;
+  d.textContent='['+new Date().toLocaleTimeString('it-IT')+'] '+msg;
+  logEl.prepend(d);
+}
+function setStatus(t,type=''){statusEl.textContent=t;statusEl.className='status '+type;}
+
+function toLocal(date){
+  const p=n=>String(n).padStart(2,'0');
+  return`${date.getUTCFullYear()}-${p(date.getUTCMonth()+1)}-${p(date.getUTCDate())}T${p(date.getUTCHours())}:${p(date.getUTCMinutes())}`;
+}
+function updateDefaultRange(){
+  const end=new Date(),h=Number(hoursInput.value||24);
+  startInput.value=toLocal(new Date(end-h*3600000));
+  endInput.value=toLocal(end);
+}
+function getSta(){return stations.find(s=>s.code===stationSelect.value)||null;}
+
+function drawEmpty(msg='Nessun dato'){
+  wCtx.fillStyle='#08101c';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  wCtx.fillStyle='#94a3b8';wCtx.font='22px sans-serif';wCtx.textAlign='center';
+  wCtx.fillText(msg,waveCanvas.width/2,waveCanvas.height/2);
+}
+
+function drawWaveform(samples,title){
+  wCtx.fillStyle='#08101c';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  if(!samples||!samples.length){drawEmpty('Nessun campione');return;}
+  const pL=60,pR=20,pT=30,pB=35,W=waveCanvas.width,H=waveCanvas.height;
+  const pW=W-pL-pR,pH=H-pT-pB;
+  const amp=Math.max(Math.abs(Math.min(...samples)),Math.abs(Math.max(...samples)))||1;
+  wCtx.strokeStyle='rgba(255,255,255,.09)';wCtx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pT+(pH/4)*i;wCtx.beginPath();wCtx.moveTo(pL,y);wCtx.lineTo(pL+pW,y);wCtx.stroke();}
+  wCtx.strokeStyle='#22c55e';wCtx.lineWidth=1.3;wCtx.beginPath();
+  samples.forEach((v,i)=>{const x=pL+(i/(samples.length-1||1))*pW,y=pT+pH/2-(v/amp)*(pH/2-6);i===0?wCtx.moveTo(x,y):wCtx.lineTo(x,y);});
+  wCtx.stroke();
+  wCtx.fillStyle='#e5e7eb';wCtx.font='15px sans-serif';wCtx.textAlign='left';wCtx.fillText(title,16,20);
+  wCtx.fillStyle='#94a3b8';wCtx.font='11px sans-serif';wCtx.fillText('amp max: '+amp.toFixed(2),16,H-10);
+}
+
+function drawDayplot(samples,eSR,startMs,title,intMin=30){
+  const spr=Math.round(eSR*intMin*60),numR=Math.ceil(samples.length/spr);
+  const pL=72,pR=16,pT=34,pB=26,rH=28;
+  waveCanvas.width=1200;waveCanvas.height=Math.max(pT+numR*rH+pB,200);
+  wCtx.fillStyle='#08101c';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  wCtx.fillStyle='#e5e7eb';wCtx.font='bold 13px sans-serif';wCtx.textAlign='center';
+  wCtx.fillText(title,waveCanvas.width/2,22);
+  const pW=waveCanvas.width-pL-pR;
+  let amp=0;for(const v of samples){const a=Math.abs(v);if(a>amp)amp=a;}if(!amp)amp=1;
+  const COLS=['#d1d5db','#ef4444','#3b82f6'];
+  for(let row=0;row<numR;row++){
+    const rs=row*spr,re=Math.min(rs+spr,samples.length),rS=samples.slice(rs,re);
+    const yC=pT+row*rH+rH/2;
+    wCtx.strokeStyle='rgba(255,255,255,.05)';wCtx.lineWidth=.5;
+    wCtx.beginPath();wCtx.moveTo(pL,yC);wCtx.lineTo(pL+pW,yC);wCtx.stroke();
+    const rMs=startMs+(rs/eSR)*1000,d=new Date(rMs);
+    const hh=String(d.getUTCHours()).padStart(2,'0'),mm=String(d.getUTCMinutes()).padStart(2,'0');
+    wCtx.fillStyle='#94a3b8';wCtx.font='10px monospace';wCtx.textAlign='right';
+    wCtx.fillText(hh+':'+mm,pL-6,yC+4);
+    wCtx.strokeStyle=COLS[row%COLS.length];wCtx.lineWidth=.9;wCtx.beginPath();
+    const hH=rH/2-2;
+    rS.forEach((v,i)=>{const x=pL+(i/(spr-1||1))*pW,y=yC-(v/amp)*hH;i===0?wCtx.moveTo(x,y):wCtx.lineTo(x,y);});
+    wCtx.stroke();
+  }
+  const ts=intMin<=10?5:intMin<=30?10:30;
+  wCtx.fillStyle='#94a3b8';wCtx.font='10px sans-serif';wCtx.textAlign='center';
+  for(let m=0;m<=intMin;m+=ts){
+    const x=pL+(m/intMin)*pW;if(x>waveCanvas.width-pR)break;
+    wCtx.fillText(m,x,waveCanvas.height-8);
+    wCtx.strokeStyle='rgba(255,255,255,.06)';wCtx.lineWidth=.5;
+    wCtx.beginPath();wCtx.moveTo(x,pT);wCtx.lineTo(x,waveCanvas.height-pB);wCtx.stroke();
+  }
+  wCtx.fillStyle='#64748b';wCtx.font='10px sans-serif';wCtx.textAlign='center';
+  wCtx.fillText('time in minutes',waveCanvas.width/2,waveCanvas.height-1);
+}
+
+function updateMeta(extra={}){
+  const sta=getSta();if(!sta){metaGrid.innerHTML='';return;}
+  const items=[
+    ['Rete',sta.network],['Stazione',sta.code],['Nome',sta.name||'-'],
+    ['Lat',sta.lat],['Lon',sta.lon],['Canale',channelSelect.value||'-'],
+    ['Inizio UTC',extra.start||'-'],['Fine UTC',extra.end||'-'],
+    ['Campioni mostrati',extra.shown||'-'],['Campioni originali',extra.orig||'-'],
+  ];
+  metaGrid.innerHTML=items.map(([k,v])=>`<div class="mc"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+}
+
+function initMap(){
+  map=L.map('map').setView([42.5,12.5],6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(map);
+}
+function renderMapStations(){
+  stationMarkers.forEach(m=>map.removeLayer(m));stationMarkers=[];
+  const bounds=[];
+  stations.forEach(s=>{
+    if(isNaN(s.lat)||isNaN(s.lon))return;
+    const sel=s.code===stationSelect.value;
+    const m=L.circleMarker([s.lat,s.lon],{
+      radius:sel?9:6,color:sel?'#ef4444':'#3b82f6',fillColor:sel?'#ef4444':'#3b82f6',
+      fillOpacity:.85,weight:1.5
+    }).bindPopup(`<strong>${s.code}</strong><br>${s.name||'-'}<br>Rete ${s.network}`).addTo(map);
+    m.on('click',()=>{stationSelect.value=s.code;populateChannels(s.code);renderMapStations();updateMeta();});
+    stationMarkers.push(m);bounds.push([s.lat,s.lon]);
+  });
+  if(bounds.length)map.fitBounds(bounds,{padding:[28,28]});
+}
+
+function parseSta(text,net){
+  return text.trim().split(/\r?\n/).filter(Boolean).filter(l=>!l.startsWith('#')).map(l=>{
+    const p=l.split('|');if(p.length<6)return null;
+    const lat=Number(p[2]),lon=Number(p[3]);if(isNaN(lat)||isNaN(lon))return null;
+    return{network:p[0],code:p[1],name:p[5]?.trim()||'',lat,lon};
+  }).filter(r=>r&&r.network===net);
+}
+function parseCh(text){
+  const chs=[...new Set(text.trim().split(/\r?\n/).filter(l=>!l.startsWith('#')&&l).map(l=>{const p=l.split('|');return p.length>=4?p[3]:null;}).filter(Boolean))];
+  const pr=['HHZ','HHN','HHE','EHZ','EHN','EHE','BHZ','BHN','BHE'];
+  return chs.sort((a,b)=>{const ia=pr.indexOf(a),ib=pr.indexOf(b);if(ia>=0&&ib>=0)return ia-ib;if(ia>=0)return-1;if(ib>=0)return 1;return a.localeCompare(b);});
+}
+async function populateChannels(code){
+  const net=networkSelect.value,key=net+'.'+code;
+  if(chCache.has(key)){const c=chCache.get(key);channelSelect.innerHTML=c.map(ch=>`<option>${ch}</option>`).join('');const pr=['HHN','HHZ','EHZ','BHZ'].find(p=>c.includes(p));if(pr)channelSelect.value=pr;return;}
+  try{
+    setStatus('Canali '+key+'...','');
+    const r=await fetch(`${ST_BASE}?network=${encodeURIComponent(net)}&station=${encodeURIComponent(code)}&level=channel&format=text`);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const chs=parseCh(await r.text());
+    chCache.set(key,chs);
+    channelSelect.innerHTML=chs.map(c=>`<option>${c}</option>`).join('');
+    const pr=['HHN','HHZ','EHZ','BHZ'].find(p=>chs.includes(p));if(pr)channelSelect.value=pr;
+    setStatus('Canali caricati per '+key+'.','ok');
+  }catch(e){channelSelect.innerHTML='<option>—</option>';setStatus('Errore canali: '+e.message,'err');}
+  updateMeta();
+}
+async function loadNetwork(){
+  try{
+    generateBtn.disabled=true;
+    const net=networkSelect.value;setStatus('Carico stazioni '+net+'...');
+    const r=await fetch(`${ST_BASE}?network=${encodeURIComponent(net)}&level=station&format=text`);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    stations=parseSta(await r.text(),net);
+    if(!stations.length)throw new Error('Nessuna stazione');
+    stationSelect.innerHTML=stations.map(s=>`<option value="${s.code}">${s.code}${s.name?' ('+s.name+')':''}</option>`).join('');
+    renderMapStations();
+    await populateChannels(stationSelect.value);
+    setStatus(stations.length+' stazioni caricate.','ok');
+    logMsg(stations.length+' stazioni','ok');
+  }catch(e){setStatus('Errore: '+e.message,'err');logMsg(e.message,'err');}
+  finally{generateBtn.disabled=false;}
+}
+
+function isoUTC(v){return v?new Date(v+':00Z').toISOString():null;}
+function downsample(a,max){
+  if(a.length<=max)return a;
+  const s=a.length/max;return Array.from({length:max},(_,i)=>a[Math.floor(i*s)]);
+}
+
+/* DSP */
+function demean(s){const m=s.reduce((a,v)=>a+v,0)/s.length;return s.map(v=>v-m);}
+function detrend(s){
+  const n=s.length;let sx=0,sy=0,sxy=0,sx2=0;
+  for(let i=0;i<n;i++){sx+=i;sy+=s[i];sxy+=i*s[i];sx2+=i*i;}
+  const D=n*sx2-sx*sx;if(!D)return s.slice();
+  const sl=(n*sxy-sx*sy)/D,ic=(sy-sl*sx)/n;
+  return s.map((v,i)=>v-(sl*i+ic));
+}
+function bq(type,fc,Q){
+  const w=2*Math.PI*fc,a=Math.sin(w)/(2*Q),cw=Math.cos(w),a0=1+a;
+  if(type==='lp')return[(1-cw)/2/a0,(1-cw)/a0,(1-cw)/2/a0,-2*cw/a0,(1-a)/a0];
+  return[(1+cw)/2/a0,-(1+cw)/a0,(1+cw)/2/a0,-2*cw/a0,(1-a)/a0];
+}
+function applyBQ(sig,c){
+  const[b0,b1,b2,a1,a2]=c,out=new Float64Array(sig.length);
+  let x1=0,x2=0,y1=0,y2=0;
+  for(let i=0;i<sig.length;i++){const x0=sig[i],y0=b0*x0+b1*x1+b2*x2-a1*y1-a2*y2;out[i]=y0;x2=x1;x1=x0;y2=y1;y1=y0;}
+  return out;
+}
+function ff(sig,c){let f=applyBQ(sig,c);f.reverse();let r=applyBQ(f,c);r.reverse();return r;}
+function bandpass(samples,sr,fl,fh,ord=4){
+  const nyq=sr/2,flo=Math.max(fl/nyq,1e-6),fhi=Math.min(fh/nyq,.9999);
+  if(flo>=fhi)return samples.slice();
+  const st=Math.max(1,Math.round(ord/2)),Q=1/(2*Math.sin(Math.PI/(2*st)));
+  let sig=new Float64Array(samples);
+  const cLP=bq('lp',fhi,Q),cHP=bq('hp',flo,Q);
+  for(let s=0;s<st;s++)sig=ff(sig,cLP);
+  for(let s=0;s<st;s++)sig=ff(sig,cHP);
+  return Array.from(sig);
+}
+function decimateArr(samples,f){
+  if(f<=1)return samples.slice();
+  const fc=0.4/f,w=2*Math.PI*fc,a=Math.sin(w)/1.414,a0=1+a;
+  const c=[(1-Math.cos(w))/2/a0,(1-Math.cos(w))/a0,(1-Math.cos(w))/2/a0,-2*Math.cos(w)/a0,(1-a)/a0];
+  let sig=ff(new Float64Array(samples),c);
+  return Array.from({length:Math.ceil(sig.length/f)},(_,i)=>sig[i*f]);
+}
+function applyFilters(samples,sr){
+  let s=samples.slice();
+  if(document.getElementById('demeanEnabled').checked){s=demean(s);logMsg('Demean','ok');}
+  if(document.getElementById('detrendEnabled').checked){s=detrend(s);logMsg('Detrend','ok');}
+  if(document.getElementById('filterEnabled').checked){
+    const fl=parseFloat(document.getElementById('freqMinInput').value)||.1;
+    const fh=parseFloat(document.getElementById('freqMaxInput').value)||3;
+    const ord=parseInt(document.getElementById('cornersInput').value)||4;
+    if(fl<fh){s=bandpass(s,sr,fl,fh,ord);logMsg(`Bandpass ${fl}–${fh} Hz`,'ok');}
+    else logMsg('⚠ freq min≥max, saltato','warn');
+  }
+  const f=parseInt(document.getElementById('decimateInput').value)||1;
+  let eSR=sr;
+  if(f>1){s=decimateArr(s,f);eSR=sr/f;logMsg(`Decimate ×${f} → SR eff. ${eSR.toFixed(1)} Hz`,'ok');}
+  return{filtered:s,effectiveSR:eSR};
+}
+
+let lastPlot=null;
+function renderMode(){
+  if(!lastPlot)return;
+  const{filtered,effectiveSR,startMs,title}=lastPlot;
+  const mode=document.getElementById('viewModeSelect').value;
+  if(mode==='dayplot'){
+    const im=parseInt(document.getElementById('dayplotInterval').value)||30;
+    drawDayplot(filtered,effectiveSR,startMs,title,im);
+    document.getElementById('plotTitle').textContent='Dayplot';
+  }else{
+    waveCanvas.height=320;
+    drawWaveform(downsample(filtered,Number(sampleLimitInput.value||5000)),title);
+    document.getElementById('plotTitle').textContent='Waveform';
+  }
+}
+
+async function fetchWaveformAndPlot(){
+  const sta=getSta(),net=networkSelect.value,ch=channelSelect.value;
+  if(!sta||!ch){setStatus('Seleziona stazione e canale.','warn');return;}
+  let s0=isoUTC(startInput.value),s1=isoUTC(endInput.value);
+  if(!s0||!s1){updateDefaultRange();s0=isoUTC(startInput.value);s1=isoUTC(endInput.value);}
+  if(new Date(s0)>=new Date(s1)){setStatus('Inizio ≥ fine.','warn');return;}
+  try{
+    generateBtn.disabled=true;setStatus(`Scarico ${net}.${sta.code}.${ch}...`);
+    logMsg(`Richiesta ${net}.${sta.code}.${ch} ${s0} → ${s1}`);
+    const url=`${DS_BASE}?network=${encodeURIComponent(net)}&station=${encodeURIComponent(sta.code)}&location=*&channel=${encodeURIComponent(ch)}&starttime=${encodeURIComponent(s0)}&endtime=${encodeURIComponent(s1)}`;
+    const resp=await fetch(url);if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const ab=await resp.arrayBuffer();logMsg('Byte: '+ab.byteLength,'ok');
+    const res=MiniSEED.parse(ab);
+    if(!res||!res.samples.length)throw new Error('Nessun campione MiniSEED');
+    logMsg('SR: '+res.sampleRate+' Hz','ok');
+    const{filtered,effectiveSR}=applyFilters(res.samples,res.sampleRate);
+    const title=`${net}.${sta.code}..${ch}`;
+    lastPlot={filtered,effectiveSR,startMs:res.startMs,title};
+    renderMode();
+    updateMeta({start:s0,end:s1,shown:filtered.length,orig:res.samples.length});
+    setStatus(`OK · ${res.samples.length} camp. → ${filtered.length} filtrati (${effectiveSR.toFixed(1)} Hz).`,'ok');
+  }catch(e){drawEmpty('Errore');setStatus('Errore: '+e.message,'err');logMsg(e.message,'err');}
+  finally{generateBtn.disabled=false;}
+}
+
+/* listeners */
+networkSelect.addEventListener('change',()=>{chCache.clear();loadNetwork();});
+stationSelect.addEventListener('change',()=>{populateChannels(stationSelect.value);renderMapStations();updateMeta();});
+hoursInput.addEventListener('change',updateDefaultRange);
+generateBtn.addEventListener('click',fetchWaveformAndPlot);
+document.getElementById('viewModeSelect').addEventListener('change',()=>{
+  const dp=document.getElementById('viewModeSelect').value==='dayplot';
+  document.getElementById('dayplotControls').style.display=dp?'flex':'none';
+  renderMode();
+});
+document.getElementById('dayplotInterval').addEventListener('change',renderMode);
+
+/* init */
+updateDefaultRange();
+drawEmpty('Seleziona una stazione e scarica la waveform');
+
+/* ================================================================
+   MECCANISMI FOCALI — beach ball + TDMT via QuakeML INGV
+================================================================ */
+let fmMap, fmData=[], fmMarkers=[];
+
+function drawBeachball(canvas,strike,dip,rake){
+  const W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,R=Math.min(cx,cy)-1;
+  const ctx=canvas.getContext('2d');
+  const toR=x=>x*Math.PI/180;
+  const s=toR(strike),d=toR(dip),r=toR(rake);
+  const n=[-Math.sin(d)*Math.sin(s),Math.sin(d)*Math.cos(s),-Math.cos(d)];
+  const sl=[Math.cos(r)*Math.cos(s)+Math.sin(r)*Math.cos(d)*Math.sin(s),
+             Math.cos(r)*Math.sin(s)-Math.sin(r)*Math.cos(d)*Math.cos(s),
+            -Math.sin(r)*Math.sin(d)];
+  const img=ctx.createImageData(W,H);
+  for(let py=0;py<H;py++){
+    for(let px=0;px<W;px++){
+      const dx=px-cx,dy=py-cy,dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist>R)continue;
+      const rho=dist/R;
+      const theta=2*Math.asin(Math.min(rho/Math.SQRT2,1));
+      const phi=Math.atan2(dx,-dy);
+      const p=[Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)];
+      const dn=p[0]*n[0]+p[1]*n[1]+p[2]*n[2];
+      const ds=p[0]*sl[0]+p[1]*sl[1]+p[2]*sl[2];
+      const comp=dn*ds>0;
+      const idx=(py*W+px)*4;
+      img.data[idx]=comp?30:220;img.data[idx+1]=comp?60:225;
+      img.data[idx+2]=comp?120:235;img.data[idx+3]=255;
+    }
+  }
+  ctx.putImageData(img,0,0);
+  ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);
+  ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=1;ctx.stroke();
+}
+
+function makeBeachBallIcon(strike,dip,rake,size){
+  size=size||40;
+  const c=document.createElement('canvas');c.width=c.height=size;
+  drawBeachball(c,strike,dip,rake);
+  return L.divIcon({
+    html:'<img src="'+c.toDataURL()+'" width="'+size+'" height="'+size+'" class="bb-icon">',
+    iconSize:[size,size],iconAnchor:[size/2,size/2],className:''
+  });
+}
+
+function initFmMap(){
+  fmMap=L.map('fmMap').setView([42.5,12.5],6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(fmMap);
+}
+
+function initFmDates(){
+  const to=new Date(),from=new Date(to-90*86400000);
+  document.getElementById('fmTo').value=to.toISOString().slice(0,10);
+  document.getElementById('fmFrom').value=from.toISOString().slice(0,10);
+}
+
+/* QuakeML INGV blocca CORS da file://.
+   Strategia: prova diretta → proxy A (raw) → proxy B (get+json) → proxy C → errore chiaro. */
+const FM_QML_BASE='https://webservices.ingv.it/fdsnws/event/1/query';
+
+/* Restituisce sempre { text: string } — gestisce sia proxy raw che json-wrapper */
+async function _fmFetch(ingvUrl){
+  /* 1) Diretta */
+  try{
+    const r=await fetch(ingvUrl,{signal:AbortSignal.timeout(12000)});
+    if(r.ok||r.status===204){return {text:await r.text()};}
+  }catch(e){console.warn('FM direct blocked:',e.message);}
+
+  /* 2) corsproxy.io (raw) */
+  try{
+    const r=await fetch('https://corsproxy.io/?'+encodeURIComponent(ingvUrl),
+      {signal:AbortSignal.timeout(15000)});
+    if(r.ok){console.info('FM via corsproxy.io');return {text:await r.text()};}
+  }catch(e){console.warn('corsproxy.io failed:',e.message);}
+
+  /* 4) allorigins /get */
+  try{
+    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(ingvUrl),
+      {signal:AbortSignal.timeout(18000)});
+    if(r.ok){
+      const j=await r.json();
+      if(j&&j.contents&&j.contents.length>50){
+        console.info('FM via allorigins /get');return {text:j.contents};
+      }
+    }
+  }catch(e){console.warn('allorigins /get failed:',e.message);}
+
+  /* 4) thingproxy (raw) */
+  try{
+    const r=await fetch('https://thingproxy.freeboard.io/fetch/'+ingvUrl,
+      {signal:AbortSignal.timeout(18000)});
+    if(r.ok){console.info('FM via thingproxy');return {text:await r.text()};}
+  }catch(e){console.warn('thingproxy failed:',e.message);}
+
+  throw new Error('CORS_BLOCKED');
+}
+
+async function fetchFocalMechanisms(){
+  const st=document.getElementById('fmStatus');
+  const from=document.getElementById('fmFrom').value;
+  const to=document.getElementById('fmTo').value;
+  const minMag=document.getElementById('fmMinMag').value;
+  const maxMag=document.getElementById('fmMaxMag').value;
+  const limit=document.getElementById('fmLimit').value;
+  if(!from||!to){st.textContent='Inserisci le date.';st.className='status warn';return;}
+  st.textContent='Caricamento...';st.className='status';
+  document.getElementById('fmList').innerHTML='<div class="lo"><span class="spin"></span>Contatto INGV...</div>';
+  const ingvUrl=FM_QML_BASE
+    +'?starttime='+from+'T00:00:00&endtime='+to+'T23:59:59'
+    +'&minmagnitude='+minMag+'&maximummagnitude='+maxMag
+    +'&orderby=time&limit='+limit
+    +'&minlat=33&maxlat=49&minlon=4&maxlon=21'
+    +'&format=quakeml&includearrivals=false';
+  try{
+    const {text:xml}=await _fmFetch(ingvUrl);
+    if(!xml||xml.trim().length<10){renderFmEmpty('Nessuna soluzione nel periodo.');return;}
+    const doc=new DOMParser().parseFromString(xml,'text/xml');
+    fmData=parseFmQuakeml(doc);
+    if(!fmData.length){
+      renderFmEmpty('Nessun meccanismo focale trovato nel periodo.'
+        +'<br><small style="color:var(--muted)">INGV include dati TDMT solo per eventi significativi (tipicamente M&ge;3.5).</small>');
+      st.textContent='0 soluzioni.';st.className='status warn';
+      document.getElementById('fmSumRow').style.display='none';
+    }else{
+      renderFmMarkers();renderFmList();
+      const mags=fmData.map(e=>e.mag);
+      document.getElementById('fmTot').textContent=fmData.length;
+      document.getElementById('fmMaxM').textContent=Math.max(...mags).toFixed(1);
+      document.getElementById('fmMinM').textContent=Math.min(...mags).toFixed(1);
+      document.getElementById('fmSumRow').style.display='block';
+      st.textContent=fmData.length+' soluzioni.';st.className='status ok';
+    }
+  }catch(err){
+    if(err.message==='CORS_BLOCKED'){
+      st.textContent='Proxy non disponibile.';st.className='status err';
+      renderFmEmpty('<b>Connessione bloccata (CORS)</b><br>'
+        +'<small style="color:var(--muted)">Consulta direttamente '
+        +'<a href="https://terremoti.ingv.it/tdmt" target="_blank" style="color:#f87171">terremoti.ingv.it/tdmt</a>.</small>');
+    }else{
+      st.textContent='Errore: '+err.message;st.className='status err';
+    }
+  }
+}
+
+
+function parseFmQuakeml(doc){
+  const res=[];
+  [...doc.querySelectorAll('event')].forEach(ev=>{
+    const fm=ev.querySelector('focalMechanism');if(!fm)return;
+    const np1=fm.querySelector('nodalPlane1');if(!np1)return;
+    const strike=parseFloat(np1.querySelector('strike > value')?.textContent);
+    const dip=parseFloat(np1.querySelector('dip > value')?.textContent);
+    const rake=parseFloat(np1.querySelector('rake > value')?.textContent);
+    if(isNaN(strike)||isNaN(dip)||isNaN(rake))return;
+    const origin=ev.querySelector('origin');if(!origin)return;
+    const lat=parseFloat(origin.querySelector('latitude > value')?.textContent);
+    const lon=parseFloat(origin.querySelector('longitude > value')?.textContent);
+    const depM=parseFloat(origin.querySelector('depth > value')?.textContent);
+    const time=(origin.querySelector('time > value')?.textContent)||'';
+    if(isNaN(lat)||isNaN(lon))return;
+    const magEl=ev.querySelector('magnitude > mag > value');
+    const mag=magEl?parseFloat(magEl.textContent):NaN;
+    const magType=(ev.querySelector('magnitude > type')?.textContent)||'M';
+    const place=(ev.querySelector('description > text')?.textContent)||'N/D';
+    const np2=fm.querySelector('nodalPlane2');
+    const s2=parseFloat(np2?.querySelector('strike > value')?.textContent);
+    const d2=parseFloat(np2?.querySelector('dip > value')?.textContent);
+    const r2=parseFloat(np2?.querySelector('rake > value')?.textContent);
+    res.push({id:ev.getAttribute('publicID')||time,
+      time:time.endsWith('Z')?time:time+'Z',
+      lat,lon,depth:isNaN(depM)?0:depM/1000,
+      mag:isNaN(mag)?0:mag,magType,place,
+      strike,dip,rake,strike2:s2,dip2:d2,rake2:r2});
+  });
+  return res;
+}
+
+function fmPopupHtml(ev){
+  const np1=ev.strike.toFixed(0)+'/'+ev.dip.toFixed(0)+'/'+ev.rake.toFixed(0);
+  const np2=!isNaN(ev.strike2)?ev.strike2.toFixed(0)+'/'+ev.dip2.toFixed(0)+'/'+ev.rake2.toFixed(0):'N/D';
+  return '<div style="font-family:sans-serif;min-width:200px;">'
+    +'<b style="font-size:14px">'+ev.place+'</b><br>'
+    +'<span style="font-size:12px;color:#6b7280">'+ev.time.replace('T',' ').slice(0,19)+' UTC</span>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;">'
+    +'<div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">'
+    +'<div style="font-size:9px;color:#6b7280;text-transform:uppercase">Magnitudo</div>'
+    +'<div style="font-size:18px;font-weight:800;color:#dc2626">'+ev.mag.toFixed(1)+' '+ev.magType+'</div></div>'
+    +'<div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">'
+    +'<div style="font-size:9px;color:#6b7280;text-transform:uppercase">Profondita</div>'
+    +'<div style="font-size:18px;font-weight:800;color:#2563eb">'+ev.depth.toFixed(0)+' km</div></div></div>'
+    +'<div style="margin-top:8px;font-size:12px;background:#f3f4f6;border-radius:7px;padding:7px 10px;">'
+    +'<div style="color:#6b7280;font-size:10px;text-transform:uppercase;margin-bottom:3px">Piani nodali (str/dip/rake)</div>'
+    +'<div>NP1: <b>'+np1+'</b></div><div>NP2: <b>'+np2+'</b></div></div></div>';
+}
+
+function renderFmMarkers(){
+  fmMarkers.forEach(m=>fmMap.removeLayer(m));fmMarkers.length=0;
+  const bounds=[];
+  fmData.forEach((ev,i)=>{
+    const sz=Math.max(28,Math.min(58,ev.mag*9));
+    const icon=makeBeachBallIcon(ev.strike,ev.dip,ev.rake,sz);
+    const m=L.marker([ev.lat,ev.lon],{icon});
+    m.bindPopup(fmPopupHtml(ev));
+    m.on('click',()=>highlightFmItem(i));
+    fmMarkers.push(m);m.addTo(fmMap);
+    bounds.push([ev.lat,ev.lon]);
+  });
+  if(bounds.length)fmMap.fitBounds(bounds,{padding:[30,30]});
+}
+
+function renderFmList(){
+  const el=document.getElementById('fmList');
+  if(!fmData.length){el.innerHTML='<div class="lo">Nessuna soluzione.</div>';return;}
+  el.innerHTML=fmData.map((ev,i)=>{
+    const sz=32,c=document.createElement('canvas');c.width=c.height=sz;
+    drawBeachball(c,ev.strike,ev.dip,ev.rake);
+    const img='<img src="'+c.toDataURL()+'" width="'+sz+'" height="'+sz+'" class="bb-icon">';
+    return '<div class="fm-list-item" onclick="focusFmMarker('+i+')">'
+      +img+'<div>'
+      +'<div style="font-weight:600;font-size:13px">'+ev.place+'</div>'
+      +'<div class="fm-meta">'+ev.time.replace('T',' ').slice(0,16)+' UTC &middot; '+ev.depth.toFixed(0)+' km</div>'
+      +'<div class="fm-meta" style="margin-top:2px">NP1: '+ev.strike.toFixed(0)+'&deg;/'+ev.dip.toFixed(0)+'&deg;/'+ev.rake.toFixed(0)+'&deg;</div>'
+      +'</div><div class="fm-mag">'+ev.mag.toFixed(1)+'</div></div>';
+  }).join('');
+}
+
+function renderFmEmpty(msg){
+  document.getElementById('fmList').innerHTML='<div class="lo">'+msg+'</div>';
+  document.getElementById('fmSumRow').style.display='none';
+}
+function focusFmMarker(i){
+  if(!fmMarkers[i])return;
+  fmMap.setView(fmMarkers[i].getLatLng(),9,{animate:true});
+  fmMarkers[i].openPopup();
+}
+function highlightFmItem(i){
+  const items=document.getElementById('fmList').querySelectorAll('.fm-list-item');
+  items.forEach((it,j)=>it.style.background=j===i?'rgba(251,146,60,.12)':'');
+  if(items[i])items[i].scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+</script>
+</body>
+</html>
