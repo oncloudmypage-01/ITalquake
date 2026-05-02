@@ -911,6 +911,8 @@ function _bootLoadPrefs(){
       /* Avvia subito il timer, indipendentemente dalla sezione aperta */
       if(ar&&ar!=='0') setAutoRefresh(ar);
     }
+    /* Ripristina tutti i filtri */
+    restoreFilters();
   }catch(e){}
 }
 
@@ -1371,6 +1373,30 @@ async function fetchStorico(){
 ================================================================ */
 let knownIds=new Set(),notifOn=false,refreshTimer=null,refreshCountdown=null;
 
+
+/* ── PERSISTENZA FILTRI ── */
+const _FILTER_IDS=['eqGeo','eqPeriod','eqMinMag','eqMaxDepth',
+  'stFrom','stTo','stMinMag','stMaxMag','stMaxDepth','stLimit','hoursInput'];
+
+function saveFilters(){
+  try{
+    const obj={};
+    _FILTER_IDS.forEach(id=>{const el=document.getElementById(id);if(el)obj[id]=el.value;});
+    obj.networkSelect=networkSelect.value;
+    localStorage.setItem('itq_filters',JSON.stringify(obj));
+  }catch(e){}
+}
+
+function restoreFilters(){
+  try{
+    const saved=JSON.parse(localStorage.getItem('itq_filters')||'{}');
+    _FILTER_IDS.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el&&saved[id]!=null&&saved[id]!=='') el.value=saved[id];
+    });
+    if(saved.networkSelect) networkSelect.value=saved.networkSelect;
+  }catch(e){}
+}
 function saveNotifPrefs(){
   try{
     localStorage.setItem('itq_notifEnabled', document.getElementById('notifEnabled').checked?'1':'0');
@@ -1404,6 +1430,7 @@ function setAutoRefresh(sec){
 }
 
 async function quietRefresh(){
+  if(!eqMapInited||!eqMap)return;/* mappa non pronta */
   try{
     const maxD=Number(document.getElementById('eqMaxDepth').value);
     const hours=Number(document.getElementById('eqPeriod').value);
@@ -1845,10 +1872,20 @@ async function fetchWaveformAndPlot(){
 }
 
 /* listeners */
-networkSelect.addEventListener('change',()=>{chCache.clear();loadNetwork();});
+networkSelect.addEventListener('change',()=>{chCache.clear();loadNetwork();saveFilters();});
 stationSelect.addEventListener('change',()=>{populateChannels(stationSelect.value);renderMapStations();updateMeta();});
-hoursInput.addEventListener('change',updateDefaultRange);
+hoursInput.addEventListener('change',()=>{updateDefaultRange();saveFilters();});
 generateBtn.addEventListener('click',fetchWaveformAndPlot);
+/* Salva filtri terremoti e storico ad ogni modifica */
+['eqGeo','eqPeriod','eqMinMag','eqMaxDepth',
+ 'stFrom','stTo','stMinMag','stMaxMag','stMaxDepth','stLimit'
+].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el){
+    el.addEventListener('change',saveFilters);
+    el.addEventListener('input',saveFilters);
+  }
+});
 document.getElementById('viewModeSelect').addEventListener('change',()=>{
   const dp=document.getElementById('viewModeSelect').value==='dayplot';
   document.getElementById('dayplotControls').style.display=dp?'flex':'none';
