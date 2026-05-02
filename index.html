@@ -852,7 +852,7 @@ function goSection(sec){
   if(sec==='terremoti'){
     document.getElementById('sectionTerremoti').classList.add('active');
     document.getElementById('tabEq').classList.add('a-eq');
-    if(!eqMapInited){initEqMap();eqMapInited=true;loadNotifPrefs();fetchEarthquakes();}
+    if(!eqMapInited){initEqMap();eqMapInited=true;fetchEarthquakes();}
   } else if(sec==='storico'){
     document.getElementById('sectionStorico').classList.add('active');
     document.getElementById('tabStor').classList.add('a-stor');
@@ -865,7 +865,6 @@ function goSection(sec){
   } else if(sec==='notifiche'){
     document.getElementById('sectionNotifiche').classList.add('active');
     document.getElementById('tabNotif').classList.add('a-notif');
-    loadNotifPrefs();
   } else if(sec==='localizzazione'){
     document.getElementById('sectionLocalizzazione').classList.add('active');
     document.getElementById('tabLoc').classList.add('a-loc');
@@ -885,11 +884,58 @@ window.addEventListener('popstate',e=>{
   if(sec) goSection(sec); else goHome();
   _navFromHistory=false;
 });
-/* Ripristina sezione all'apertura (da URL hash o ultima visita) */
+/* ── BOOT: carica prefs e avvia timer PRIMA di qualsiasi navigazione ── */
 window.addEventListener('load',()=>{
+  /* 1. Carica sempre le preferenze notifiche e avvia il timer */
+  _bootLoadPrefs();
+  /* 2. Ripristina sezione (URL hash) */
   const hash=location.hash.slice(1);
   if(hash) goSection(hash);
 });
+
+function _bootLoadPrefs(){
+  try{
+    const en=localStorage.getItem('itq_notifEnabled');
+    if(en!==null){
+      const chk=en==='1';
+      document.getElementById('notifEnabled').checked=chk;
+      notifOn=chk;
+    }
+    const mag=localStorage.getItem('itq_notifMag');
+    if(mag) document.getElementById('notifMag').value=mag;
+    const prov=localStorage.getItem('itq_notifProv');
+    if(prov) document.getElementById('notifProv').value=prov;
+    const ar=localStorage.getItem('itq_autoRefresh');
+    if(ar){
+      document.getElementById('autoRefreshSel').value=ar;
+      /* Avvia subito il timer, indipendentemente dalla sezione aperta */
+      if(ar&&ar!=='0') setAutoRefresh(ar);
+    }
+  }catch(e){}
+}
+
+/* loadNotifPrefs usata dalla sezione Notifiche per sincronizzare i controlli
+   senza riavviare il timer se già attivo */
+function loadNotifPrefs(){
+  try{
+    const en=localStorage.getItem('itq_notifEnabled');
+    if(en!==null){
+      const chk=en==='1';
+      document.getElementById('notifEnabled').checked=chk;
+      notifOn=chk;
+    }
+    const mag=localStorage.getItem('itq_notifMag');
+    if(mag) document.getElementById('notifMag').value=mag;
+    const prov=localStorage.getItem('itq_notifProv');
+    if(prov) document.getElementById('notifProv').value=prov;
+    const ar=localStorage.getItem('itq_autoRefresh');
+    if(ar){
+      document.getElementById('autoRefreshSel').value=ar;
+      /* Riavvia il timer SOLO se non è già attivo con lo stesso intervallo */
+      if(ar!=='0'&&!refreshTimer) setAutoRefresh(ar);
+    }
+  }catch(e){}
+}
 
 
 /* ── GPS ── */
@@ -1333,18 +1379,7 @@ function saveNotifPrefs(){
     localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
   }catch(e){}
 }
-function loadNotifPrefs(){
-  try{
-    const en=localStorage.getItem('itq_notifEnabled');
-    if(en!==null){const chk=en==='1';document.getElementById('notifEnabled').checked=chk;notifOn=chk;}
-    const mag=localStorage.getItem('itq_notifMag');
-    if(mag) document.getElementById('notifMag').value=mag;
-    const prov=localStorage.getItem('itq_notifProv');
-    if(prov) document.getElementById('notifProv').value=prov;
-    const ar=localStorage.getItem('itq_autoRefresh');
-    if(ar){document.getElementById('autoRefreshSel').value=ar;if(ar!=='0')setAutoRefresh(ar);}
-  }catch(e){}
-}
+/* loadNotifPrefs definita sopra nel boot block */
 
 async function askNotifPerm(){
   if(!('Notification'in window)){alert('Browser non supporta notifiche.');return;}
