@@ -258,6 +258,47 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
   border-radius:13px;padding:11px 18px;font-size:14px;z-index:9998;
   display:none;max-width:460px;text-align:center;line-height:1.5;
   box-shadow:0 8px 28px rgba(0,0,0,.5);}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  .nav-brand{display:none;}
+  .nav-bar{overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex-wrap:nowrap;}
+  .nav-bar::-webkit-scrollbar{display:none;}
+  .nav-tab{padding:12px 12px;font-size:12px;white-space:nowrap;flex-shrink:0;}
+  .nav-home{padding:5px 9px;font-size:12px;flex-shrink:0;}
+  #installBtn{padding:5px 9px!important;font-size:12px!important;flex-shrink:0;}
+  .choices{flex-direction:row;flex-wrap:wrap;gap:12px;}
+  .choice-card{width:calc(50% - 6px);padding:18px 12px;gap:8px;}
+  .choice-card .icon{font-size:32px;}
+  .choice-card h2{font-size:14px;}
+  .choice-card p{font-size:11px;}
+  .mapbox{min-height:260px!important;height:48vw!important;}
+  .eq-list{max-height:320px;}
+  .container{margin:12px auto;}
+  .header{margin-bottom:12px;}
+  .title-wrap h1{font-size:22px;}
+  .panel-header{padding:12px 14px 8px;}
+  .controls{padding:12px;}
+  .btn{padding:10px 14px;font-size:14px;}
+  .eq-item{padding:9px 12px;gap:8px;}
+  .eq-mag{min-width:38px;height:38px;font-size:15px;}
+  .summary-row{gap:7px;}
+  .sc{padding:9px 10px;}
+  .tbl-wrap{padding:10px;}
+  .brand h1{font-size:28px;}
+  .brand p{font-size:13px;}
+}
+/* ── GPS BUTTON ── */
+.gps-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;
+  border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;
+  background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);
+  color:#93c5fd;transition:all .18s;}
+.gps-btn:hover{background:rgba(59,130,246,0.28);}
+.gps-btn.active{background:rgba(59,130,246,0.3);color:#60a5fa;}
+/* ── NOTIFICHE SECTION ── */
+.nav-tab.a-notif{color:#f9a8d4;border-bottom-color:#ec4899;}
+.notif-grid{display:grid;gap:18px;max-width:560px;margin:0 auto;}
+.toggle-row{display:flex;align-items:center;gap:12px;padding:4px 0;}
 </style>
 </head>
 <body>
@@ -265,7 +306,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 <!-- LANDING -->
 <div id="landing">
   <div class="brand">
-    <h1>🌍 INGV Sismico</h1>
+    <h1>🌍 ITalquake</h1>
     <p>Portale sismologico italiano — dati in tempo reale da INGV / EIDA</p>
   </div>
   <div class="choices">
@@ -286,6 +327,11 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
       <div class="icon">🎯</div><h2>Meccanismi Focali</h2>
       <p>Beach ball TDMT su mappa — geometria delle faglie attivatrici</p>
     </div>
+    <div class="choice-card" style="border-color:rgba(236,72,153,0.4);"
+         onclick="goSection('notifiche')">
+      <div class="icon">🔔</div><h2>Notifiche</h2>
+      <p>Avvisi push per terremoti nella tua provincia e auto-aggiornamento</p>
+    </div>
   </div>
 </div>
 
@@ -296,11 +342,12 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 <!-- APP -->
 <div id="appContainer">
   <nav class="nav-bar">
-    <div class="nav-brand">🌍 INGV Sismico</div>
+    <div class="nav-brand">🌍 ITalquake</div>
     <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">🔴 Recenti</button>
     <button class="nav-tab" id="tabStor" onclick="goSection('storico')">📚 Storico</button>
     <button class="nav-tab" id="tabSeis" onclick="goSection('sismogrammi')">📈 Sismogrammi</button>
     <button class="nav-tab" id="tabFm"   onclick="goSection('focali')">🎯 Meccanismi Focali</button>
+    <button class="nav-tab" id="tabNotif" onclick="goSection('notifiche')">🔔 Notifiche</button>
     <div class="nav-spacer"></div>
     <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;align-items:center;gap:6px;margin-right:8px;" title="Installa ITalquake">⬇️ Installa</button><button class="nav-home" onclick="goHome()">⌂ Home</button>
   </nav>
@@ -345,40 +392,14 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
             <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes()">🔄 Aggiorna</button>
             <div id="eqStatus" class="status">Pronto.</div>
 
-            <div class="fsec">
-              <details class="nd">
-                <summary>🔔 Notifiche &amp; Auto-aggiornamento</summary>
-                <div class="nb">
-                  <div class="toggle-row">
-                    <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked;saveNotifPrefs()"/>
-                      <span class="sl"></span></label>
-                    <span class="tl">Attiva notifiche browser</span>
-                  </div>
-                  <div class="field"><label>Notifica se M ≥</label>
-                    <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0" oninput="saveNotifPrefs()"/></div>
-                  <div class="field"><label>Solo provincia (es. BN) — vuoto=tutte</label>
-                    <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
-                      oninput="this.value=this.value.toUpperCase();saveNotifPrefs()"/></div>
-                  <button class="npb" id="notifPermBtn" onclick="askNotifPerm()">Richiedi permesso notifiche</button>
-                  <div class="field"><label>Auto-aggiornamento</label>
-                    <select id="autoRefreshSel" onchange="setAutoRefresh(this.value);saveNotifPrefs()">
-                      <option value="0">Disattivo</option>
-                      <option value="60">Ogni minuto</option>
-                      <option value="120" selected>Ogni 2 min</option>
-                      <option value="300">Ogni 5 min</option>
-                    </select></div>
-                  <div class="ri" id="refreshInd">—</div>
-                </div>
-              </details>
-            </div>
+            <button onclick="goSection('notifiche')" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;">🔔 Notifiche &amp; Auto-aggiornamento →</button>
             <div class="hint">📈 in lista = sismogramma stazione più vicina.</div>
           </div>
         </section>
         <!-- dx -->
         <div class="main">
           <section class="panel panel-map">
-            <div class="panel-header"><h2>Mappa epicentri</h2>
-              <p>Dimensione ∝ magnitudo · Colore per profondità · Toggle sorgenti DISS in alto a destra.</p></div>
+            <div class="panel-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div><h2>Mappa epicentri</h2><p>Dimensione ∝ magnitudo · Colore ∝ profondità</p></div><button class="gps-btn" id="gpsEqBtn" onclick="locateUser()">📍 Mostra posizione</button></div>
             <div id="eqMap" class="mapbox"></div>
           </section>
           <div id="eqSumRow" class="summary-row" style="display:none">
@@ -460,8 +481,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
         </section>
         <div class="main">
           <section class="panel panel-map">
-            <div class="panel-header"><h2>Mappa epicentri storici</h2>
-              <p>Toggle sorgenti DISS disponibile in alto a destra.</p></div>
+            <div class="panel-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div><h2>Mappa epicentri storici</h2><p>Dimensione ∝ magnitudo · Colore ∝ profondità</p></div><button class="gps-btn" id="gpsStBtn" onclick="locateUser()">📍 Mostra posizione</button></div>
             <div id="stMap" class="mapbox"></div>
           </section>
           <div id="stSumRow" class="summary-row" style="display:none">
@@ -660,6 +680,52 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
       <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> (QuakeML con focalMechanism) · <a href="https://terremoti.ingv.it/tdmt" target="_blank" style="color:var(--muted)">terremoti.ingv.it/tdmt</a></div>
     </div>
   </div>
+
+  <!-- ═══ NOTIFICHE ═══ -->
+  <div class="section" id="sectionNotifiche">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>🔔 Notifiche</h1>
+          <p>Configura avvisi push e auto-aggiornamento per la tua area.</p></div>
+        <span class="badge" style="background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.35);">Push API</span>
+      </div>
+      <div class="notif-grid">
+        <section class="panel">
+          <div class="panel-header"><h2>Avvisi Terremoti</h2>
+            <p>Ricevi notifiche push del browser per nuovi eventi.</p></div>
+          <div class="controls">
+            <div class="toggle-row">
+              <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked;saveNotifPrefs()"/>
+                <span class="sl"></span></label>
+              <span class="tl">Attiva notifiche browser</span>
+            </div>
+            <button class="npb" id="notifPermBtn" onclick="askNotifPerm()" style="margin-top:8px;">Richiedi permesso notifiche</button>
+            <div class="field" style="margin-top:12px;"><label>Notifica se M ≥</label>
+              <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0"
+                oninput="saveNotifPrefs()"/></div>
+            <div class="field"><label>Solo provincia (es. BN) — vuoto = tutte le province</label>
+              <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
+                oninput="this.value=this.value.toUpperCase();saveNotifPrefs()"/></div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-header"><h2>Auto-aggiornamento</h2>
+            <p>Ricarica automaticamente i terremoti recenti.</p></div>
+          <div class="controls">
+            <div class="field"><label>Frequenza di aggiornamento</label>
+              <select id="autoRefreshSel" onchange="setAutoRefresh(this.value);saveNotifPrefs()">
+                <option value="0">Disattivo</option>
+                <option value="60">Ogni minuto</option>
+                <option value="120" selected>Ogni 2 minuti</option>
+                <option value="300">Ogni 5 minuti</option>
+              </select></div>
+            <div class="ri" id="refreshInd" style="margin-top:8px;color:var(--muted);font-size:13px;">—</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /appContainer -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -680,6 +746,7 @@ function goSection(sec){
   document.getElementById('appContainer').classList.add('visible');
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.className='nav-tab');
+  try{sessionStorage.setItem('itq_sec',sec);}catch(e){}
   if(sec==='terremoti'){
     document.getElementById('sectionTerremoti').classList.add('active');
     document.getElementById('tabEq').classList.add('a-eq');
@@ -693,6 +760,10 @@ function goSection(sec){
     document.getElementById('tabFm').classList.add('a-fm');
     if(!fmMapInited){initFmMap();fmMapInited=true;initFmDates();}
     else setTimeout(()=>fmMap&&fmMap.invalidateSize(),80);
+  } else if(sec==='notifiche'){
+    document.getElementById('sectionNotifiche').classList.add('active');
+    document.getElementById('tabNotif').classList.add('a-notif');
+    loadNotifPrefs();
   } else {
     document.getElementById('sectionSismogrammi').classList.add('active');
     document.getElementById('tabSeis').classList.add('a-seis');
@@ -700,7 +771,41 @@ function goSection(sec){
     else setTimeout(()=>map&&map.invalidateSize(),80);
   }
 }
+/* Ripristina sezione dopo refresh */
+(function(){
+  try{
+    const s=sessionStorage.getItem('itq_sec');
+    if(s) window.addEventListener('load',()=>goSection(s));
+  }catch(e){}
+})();
 
+
+/* ── GPS ── */
+let userLat=null,userLon=null,userMarkerEq=null,userMarkerSt=null;
+function haverDist(la1,lo1,la2,lo2){
+  const R=6371,r=Math.PI/180;
+  const dlat=(la2-la1)*r,dlon=(lo2-lo1)*r;
+  const a=Math.sin(dlat/2)**2+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dlon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function locateUser(){
+  if(!navigator.geolocation){alert('Geolocalizzazione non supportata dal browser.');return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    userLat=pos.coords.latitude; userLon=pos.coords.longitude;
+    const icon=L.divIcon({html:'<div style="width:16px;height:16px;border-radius:50%;background:#3b82f6;border:3px solid #fff;box-shadow:0 0 0 3px rgba(59,130,246,.4)"></div>',className:'',iconAnchor:[8,8]});
+    if(eqMap){
+      if(userMarkerEq) eqMap.removeLayer(userMarkerEq);
+      userMarkerEq=L.marker([userLat,userLon],{icon}).bindPopup('<b>📍 Sei qui</b><br>'+userLat.toFixed(4)+', '+userLon.toFixed(4)).addTo(eqMap);
+    }
+    if(stMap){
+      if(userMarkerSt) stMap.removeLayer(userMarkerSt);
+      userMarkerSt=L.marker([userLat,userLon],{icon}).bindPopup('<b>📍 Sei qui</b><br>'+userLat.toFixed(4)+', '+userLon.toFixed(4)).addTo(stMap);
+    }
+    document.querySelectorAll('.gps-btn').forEach(b=>b.classList.add('active'));
+    if(eqData.length) renderList(eqData,'eqList','openSeisForEq');
+    if(storicoData.length) renderList(storicoData,'stList','openSeisForSt');
+  },err=>{alert('GPS non disponibile: '+err.message);},{enableHighAccuracy:true,timeout:12000});
+}
 /* ================================================================
    HELPERS
 ================================================================ */
@@ -834,11 +939,12 @@ function renderList(events,containerId,onSeis){
   el.innerHTML=events.map((ev,i)=>{
     const dt=ev.time.replace('T',' ').slice(0,19);
     const sb=onSeis?`<button class="seis-btn" onclick="${onSeis}(${i})" title="Sismogramma">📈</button>`:'';
+    const distStr=userLat!=null?` · 📍 ${haverDist(userLat,userLon,ev.lat,ev.lon).toFixed(0)} km`:'';
     return`<div class="eq-item">
       <div class="eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</div>
       <div class="eq-info" onclick="focusMarker('${containerId}',${i})">
         <div class="pl">${ev.place}</div>
-        <div class="dt">${dt} UTC · ${ev.magType}</div>
+        <div class="dt">${dt} UTC · ${ev.magType}${distStr}</div>
       </div>
       <div class="eq-depth">${ev.depth.toFixed(0)} km</div>
       ${sb}
@@ -1118,20 +1224,13 @@ function saveNotifPrefs(){
 function loadNotifPrefs(){
   try{
     const en=localStorage.getItem('itq_notifEnabled');
-    if(en!==null){
-      const checked=en==='1';
-      document.getElementById('notifEnabled').checked=checked;
-      notifOn=checked;
-    }
+    if(en!==null){const chk=en==='1';document.getElementById('notifEnabled').checked=chk;notifOn=chk;}
     const mag=localStorage.getItem('itq_notifMag');
-    if(mag!==null) document.getElementById('notifMag').value=mag;
+    if(mag) document.getElementById('notifMag').value=mag;
     const prov=localStorage.getItem('itq_notifProv');
-    if(prov!==null) document.getElementById('notifProv').value=prov;
+    if(prov) document.getElementById('notifProv').value=prov;
     const ar=localStorage.getItem('itq_autoRefresh');
-    if(ar!==null){
-      document.getElementById('autoRefreshSel').value=ar;
-      if(ar&&ar!=='0') setAutoRefresh(ar);
-    }
+    if(ar){document.getElementById('autoRefreshSel').value=ar;if(ar!=='0')setAutoRefresh(ar);}
   }catch(e){}
 }
 
