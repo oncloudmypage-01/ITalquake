@@ -333,8 +333,8 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
             <div class="row-2">
               <div class="field"><label>Mag. min</label>
                 <select id="eqMinMag">
-                  <option value="-1">Tutti</option><option value="1">M≥1</option>
-                  <option value="2" selected>M≥2</option><option value="3">M≥3</option>
+                  <option value="-1" selected>Tutti</option><option value="1">M≥1</option>
+                  <option value="2">M≥2</option><option value="3">M≥3</option>
                   <option value="4">M≥4</option></select></div>
               <div class="field"><label>Prof. max km</label>
                 <select id="eqMaxDepth">
@@ -350,18 +350,18 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
                 <summary>🔔 Notifiche &amp; Auto-aggiornamento</summary>
                 <div class="nb">
                   <div class="toggle-row">
-                    <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked"/>
+                    <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked;saveNotifPrefs()"/>
                       <span class="sl"></span></label>
                     <span class="tl">Attiva notifiche browser</span>
                   </div>
                   <div class="field"><label>Notifica se M ≥</label>
-                    <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0"/></div>
+                    <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0" oninput="saveNotifPrefs()"/></div>
                   <div class="field"><label>Solo provincia (es. BN) — vuoto=tutte</label>
                     <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
-                      oninput="this.value=this.value.toUpperCase()"/></div>
+                      oninput="this.value=this.value.toUpperCase();saveNotifPrefs()"/></div>
                   <button class="npb" id="notifPermBtn" onclick="askNotifPerm()">Richiedi permesso notifiche</button>
                   <div class="field"><label>Auto-aggiornamento</label>
-                    <select id="autoRefreshSel" onchange="setAutoRefresh(this.value)">
+                    <select id="autoRefreshSel" onchange="setAutoRefresh(this.value);saveNotifPrefs()">
                       <option value="0">Disattivo</option>
                       <option value="60">Ogni minuto</option>
                       <option value="120" selected>Ogni 2 min</option>
@@ -683,7 +683,7 @@ function goSection(sec){
   if(sec==='terremoti'){
     document.getElementById('sectionTerremoti').classList.add('active');
     document.getElementById('tabEq').classList.add('a-eq');
-    if(!eqMapInited){initEqMap();eqMapInited=true;}
+    if(!eqMapInited){initEqMap();eqMapInited=true;loadNotifPrefs();fetchEarthquakes();}
   } else if(sec==='storico'){
     document.getElementById('sectionStorico').classList.add('active');
     document.getElementById('tabStor').classList.add('a-stor');
@@ -1091,8 +1091,8 @@ async function fetchStorico(){
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const text=await resp.text();
     storicoData=parseEqText(text,maxD);
-    renderMarkers(storicoData,stMap,stMarkers);
-    renderList(storicoData,'stList',null);
+    renderMarkers(storicoData,stMap,stMarkers,'openSeisForSt');
+    renderList(storicoData,'stList','openSeisForSt');
     renderSummary(storicoData,'stSumRow','stTot','stMaxV','stMinV','stAvgD');
     renderRegionTable(storicoData,'stRegTbl');
     updateProvSelect(storicoData,'stTlProv');
@@ -1106,6 +1106,34 @@ async function fetchStorico(){
    NOTIFICHE & AUTO-REFRESH
 ================================================================ */
 let knownIds=new Set(),notifOn=false,refreshTimer=null,refreshCountdown=null;
+
+function saveNotifPrefs(){
+  try{
+    localStorage.setItem('itq_notifEnabled', document.getElementById('notifEnabled').checked?'1':'0');
+    localStorage.setItem('itq_notifMag',     document.getElementById('notifMag').value);
+    localStorage.setItem('itq_notifProv',    document.getElementById('notifProv').value.trim().toUpperCase());
+    localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
+  }catch(e){}
+}
+function loadNotifPrefs(){
+  try{
+    const en=localStorage.getItem('itq_notifEnabled');
+    if(en!==null){
+      const checked=en==='1';
+      document.getElementById('notifEnabled').checked=checked;
+      notifOn=checked;
+    }
+    const mag=localStorage.getItem('itq_notifMag');
+    if(mag!==null) document.getElementById('notifMag').value=mag;
+    const prov=localStorage.getItem('itq_notifProv');
+    if(prov!==null) document.getElementById('notifProv').value=prov;
+    const ar=localStorage.getItem('itq_autoRefresh');
+    if(ar!==null){
+      document.getElementById('autoRefreshSel').value=ar;
+      if(ar&&ar!=='0') setAutoRefresh(ar);
+    }
+  }catch(e){}
+}
 
 async function askNotifPerm(){
   if(!('Notification'in window)){alert('Browser non supporta notifiche.');return;}
@@ -1196,6 +1224,27 @@ async function openSeisForEq(i){
   const evT=new Date(ev.time);
   // Arrotonda al minuto pieno: se l'evento è alle 16:57:42 →
   // inizio 16:55:00, fine 17:05:00 (sempre secondi esatti, no troncamenti)
+  const floorMin=Math.floor(evT.getTime()/60000)*60000;
+  startInput.value=toLocal(new Date(floorMin-2*60000));
+  endInput.value=toLocal(new Date(floorMin+8*60000));
+  renderMapStations();updateMeta();
+  document.getElementById('viewModeSelect').value='dayplot';
+  document.getElementById('dayplotInterval').value='10';
+  document.getElementById('dayplotControls').style.display='flex';
+  showToast(`📡 Stazione più vicina: <strong>${near.code}</strong> (${near.dist.toFixed(0)} km)<br>Dayplot 10 min/riga`);
+  setStatus('Stazione '+near.code+' · '+near.dist.toFixed(0)+' km · Scarico...','ok');
+  await fetchWaveformAndPlot();
+}
+
+async function openSeisForSt(i){
+  const ev=storicoData[i];if(!ev)return;
+  goSection('sismogrammi');
+  if(!stations.length)await loadNetwork();
+  const near=findNearest(ev.lat,ev.lon);
+  if(!near){setStatus('Nessuna stazione trovata.','err');return;}
+  stationSelect.value=near.code;
+  await populateChannels(near.code);
+  const evT=new Date(ev.time);
   const floorMin=Math.floor(evT.getTime()/60000)*60000;
   startInput.value=toLocal(new Date(floorMin-2*60000));
   endInput.value=toLocal(new Date(floorMin+8*60000));
