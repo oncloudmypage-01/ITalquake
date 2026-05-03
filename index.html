@@ -39,7 +39,7 @@ function triggerInstall(){
 *{box-sizing:border-box;}
 body{margin:0;font-family:Inter,system-ui,sans-serif;
   background:linear-gradient(180deg,#0b1120 0%,#111827 100%);
-  color:var(--text);min-height:100vh;}
+  color:var(--text);min-height:100vh;overflow-x:hidden;}
 
 /* ── LANDING ── */
 #landing{position:fixed;inset:0;z-index:9999;
@@ -274,10 +274,11 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
   .choice-card p{font-size:11px;}
   .mapbox{min-height:260px!important;height:48vw!important;}
   .eq-list{max-height:320px;}
-  .container{margin:12px auto;}
-  .header{margin-bottom:12px;}
+  .container{margin:12px auto;width:calc(100% - 24px);}
+  .header{margin-bottom:12px;flex-wrap:wrap;}
   .title-wrap h1{font-size:22px;}
   .panel-header{padding:12px 14px 8px;}
+  .panel-header>div[style*="display:flex"]{flex-direction:column;align-items:flex-start!important;}
   .controls{padding:12px;}
   .btn{padding:10px 14px;font-size:14px;}
   .eq-item{padding:9px 12px;gap:8px;}
@@ -287,6 +288,19 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
   .tbl-wrap{padding:10px;}
   .brand h1{font-size:28px;}
   .brand p{font-size:13px;}
+  /* loc-manual: stack verticale su mobile */
+  .loc-manual{flex-direction:column;align-items:stretch!important;gap:8px;}
+  .loc-manual input,.loc-manual button{width:100%!important;}
+  /* bottoni monitor in colonna su mobile */
+  .loc-monitor-btns{flex-direction:column!important;gap:6px!important;}
+  /* notif-grid: una colonna */
+  .notif-grid{grid-template-columns:1fr!important;}
+  /* header panel-map: stack su mobile */
+  .panel-map .panel-header{flex-direction:column!important;align-items:flex-start!important;}
+  /* dayplot controls a riga intera */
+  #dayplotControls{flex-wrap:wrap;}
+  /* sismogrammi view controls a colonna */
+  .seis-view-ctrl{flex-direction:column!important;align-items:flex-start!important;padding:4px 12px 0!important;}
 }
 /* ── GPS BUTTON ── */
 .gps-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;
@@ -623,7 +637,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
           <section class="panel">
             <div class="panel-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;">
               <div><h2 id="plotTitle">Waveform</h2><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Grafico traccia selezionata.</p></div>
-              <div style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
+              <div class="seis-view-ctrl" style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
                 <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
                   <option value="waveform">Waveform</option>
                   <option value="dayplot">Dayplot</option></select>
@@ -776,7 +790,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
             <h2>Monitor STIMA PROVVISORIA</h2>
             <p>Controlla automaticamente terremoti.ingv.it ogni 30 secondi.</p>
           </div>
-          <div style="display:flex;gap:8px;">
+          <div class="loc-monitor-btns" style="display:flex;gap:8px;">
             <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="startLocMonitor()">▶ Avvia monitor</button>
             <button class="btn" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#fca5a5;" onclick="stopLocMonitor()">⏹ Ferma</button>
           </div>
@@ -913,6 +927,8 @@ function _bootLoadPrefs(){
     }
     /* Ripristina tutti i filtri */
     restoreFilters();
+    /* Aggiorna stato bottone permesso notifiche */
+    updatePermBtn();
   }catch(e){}
 }
 
@@ -1407,12 +1423,18 @@ function saveNotifPrefs(){
 }
 /* loadNotifPrefs definita sopra nel boot block */
 
+function updatePermBtn(){
+  const b=document.getElementById('notifPermBtn');
+  if(!b||typeof Notification==='undefined')return;
+  const p=Notification.permission;
+  if(p==='granted'){b.textContent='✓ Notifiche abilitate';b.style.background='rgba(34,197,94,0.2)';b.style.color='#86efac';b.disabled=true;}
+  else if(p==='denied'){b.textContent='✗ Permesso negato (impostazioni browser)';b.style.background='rgba(239,68,68,0.12)';b.style.color='#fca5a5';b.disabled=false;}
+  else{b.textContent='Richiedi permesso notifiche';b.style.background='';b.style.color='';b.disabled=false;}
+}
 async function askNotifPerm(){
   if(!('Notification'in window)){alert('Browser non supporta notifiche.');return;}
   const p=await Notification.requestPermission();
-  const b=document.getElementById('notifPermBtn');
-  if(p==='granted'){b.textContent='✓ Notifiche abilitate';b.style.background='rgba(34,197,94,0.2)';b.style.color='#86efac';}
-  else b.textContent='✗ Permesso negato';
+  updatePermBtn();
 }
 
 function setAutoRefresh(sec){
