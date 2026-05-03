@@ -350,12 +350,12 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 <!-- LANDING -->
 <div id="landing">
   <div class="brand">
-    <h1>🌍 ITalquake</h1>
-    <p><u>Portale sismologico italiano — Dati in tempo reale da INGV / EIDA</u></p>
+    <h1><span style="-webkit-text-fill-color:initial;background:none;">🌍</span> ITalquake</h1>
+    <p>Portale sismologico italiano — Dati in tempo reale da INGV / EIDA</p>
   </div>
   <div class="choices">
     <div class="choice-card eq" onclick="goSection('terremoti')">
-      <div class="icon">⚡</div><h2>Terremoti Recenti</h2>
+      <div class="icon">🫨</div><h2>Terremoti Recenti</h2>
       <p>Mappa e lista degli ultimi eventi con statistiche per regione</p>
     </div>
     <div class="choice-card stor" onclick="goSection('storico')">
@@ -392,7 +392,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 <div id="appContainer">
   <nav class="nav-bar">
     <div class="nav-brand" onclick="goHome()" title="Torna alla home">🌍 ITalquake</div>
-    <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">⚡ Recenti</button>
+    <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">🫨 Recenti</button>
     <button class="nav-tab" id="tabStor" onclick="goSection('storico')">📚 Storico</button>
     <button class="nav-tab" id="tabSeis" onclick="goSection('sismogrammi')">📈 Sismogrammi</button>
     <button class="nav-tab" id="tabFm"   onclick="goSection('focali')">🎯 Meccanismi Focali</button>
