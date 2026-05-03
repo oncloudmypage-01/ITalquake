@@ -73,7 +73,9 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
   display:flex;align-items:center;padding:0 20px;gap:0;}
 .nav-brand{font-weight:700;font-size:15px;padding:15px 18px 15px 0;
-  border-right:1px solid var(--border);margin-right:10px;white-space:nowrap;}
+  border-right:1px solid var(--border);margin-right:10px;white-space:nowrap;
+  cursor:pointer;transition:opacity .18s;}
+.nav-brand:hover{opacity:.75;}
 .nav-tab{padding:15px 18px;font-size:14px;font-weight:600;cursor:pointer;
   color:var(--muted);border-bottom:2px solid transparent;
   background:none;border-top:none;border-left:none;border-right:none;
@@ -84,10 +86,10 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .nav-tab.a-seis{color:#86efac;border-bottom-color:#22c55e;}
 .nav-tab.a-fm{color:#fdba74;border-bottom-color:#fb923c;}
 .nav-spacer{flex:1;}
-.nav-home{padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;
-  background:rgba(255,255,255,0.06);border:1px solid var(--border);
-  color:var(--muted);cursor:pointer;transition:all .18s;}
-.nav-home:hover{background:rgba(255,255,255,0.1);color:var(--text);}
+.nav-home{padding:7px 13px;border-radius:9px;font-size:14px;font-weight:600;
+  background:rgba(34,197,94,0.10);border:1px solid rgba(34,197,94,0.30);
+  color:#86efac;cursor:pointer;transition:all .18s;}
+.nav-home:hover{background:rgba(34,197,94,0.22);color:#bbf7d0;border-color:rgba(34,197,94,0.55);}
 .section{display:none;}
 .section.active{display:block;}
 
@@ -349,7 +351,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 <div id="landing">
   <div class="brand">
     <h1>🌍 ITalquake</h1>
-    <p>Portale sismologico italiano — dati in tempo reale da INGV / EIDA</p>
+    <p><u>Portale sismologico italiano — Dati in tempo reale da INGV / EIDA</u></p>
   </div>
   <div class="choices">
     <div class="choice-card eq" onclick="goSection('terremoti')">
@@ -389,7 +391,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 <!-- APP -->
 <div id="appContainer">
   <nav class="nav-bar">
-    <div class="nav-brand">🌍 ITalquake</div>
+    <div class="nav-brand" onclick="goHome()" title="Torna alla home">🌍 ITalquake</div>
     <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">⚡ Recenti</button>
     <button class="nav-tab" id="tabStor" onclick="goSection('storico')">📚 Storico</button>
     <button class="nav-tab" id="tabSeis" onclick="goSection('sismogrammi')">📈 Sismogrammi</button>
@@ -397,7 +399,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
     <button class="nav-tab" id="tabNotif" onclick="goSection('notifiche')">🔔 Notifiche</button>
     <button class="nav-tab" id="tabLoc" onclick="goSection('localizzazione')">🔬 Localizzazione</button>
     <div class="nav-spacer"></div>
-    <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;align-items:center;gap:6px;margin-right:8px;" title="Installa ITalquake">⬇️ Installa</button><button class="nav-home" onclick="goHome()">⌂ Home</button>
+    <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;align-items:center;gap:6px;margin-right:8px;" title="Installa ITalquake">⬇️ Installa</button><button class="nav-home" onclick="goHome()">🏠 Home</button>
   </nav>
 
   <!-- ═══ TERREMOTI RECENTI ═══ -->
