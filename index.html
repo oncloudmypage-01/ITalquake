@@ -37,10 +37,9 @@ function triggerInstall(){
   --border:rgba(255,255,255,0.08);--shadow:0 10px 30px rgba(0,0,0,0.28);
 }
 *{box-sizing:border-box;}
-html{overflow-x:hidden;max-width:100vw;}
 body{margin:0;font-family:Inter,system-ui,sans-serif;
   background:linear-gradient(180deg,#0b1120 0%,#111827 100%);
-  color:var(--text);min-height:100vh;overflow-x:hidden;}
+  color:var(--text);min-height:100vh;}
 
 /* ── LANDING ── */
 #landing{position:fixed;inset:0;z-index:9999;
@@ -74,9 +73,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
   display:flex;align-items:center;padding:0 20px;gap:0;}
 .nav-brand{font-weight:700;font-size:15px;padding:15px 18px 15px 0;
-  border-right:1px solid var(--border);margin-right:10px;white-space:nowrap;
-  cursor:pointer;transition:opacity .18s;}
-.nav-brand:hover{opacity:.75;}
+  border-right:1px solid var(--border);margin-right:10px;white-space:nowrap;}
 .nav-tab{padding:15px 18px;font-size:14px;font-weight:600;cursor:pointer;
   color:var(--muted);border-bottom:2px solid transparent;
   background:none;border-top:none;border-left:none;border-right:none;
@@ -87,15 +84,15 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .nav-tab.a-seis{color:#86efac;border-bottom-color:#22c55e;}
 .nav-tab.a-fm{color:#fdba74;border-bottom-color:#fb923c;}
 .nav-spacer{flex:1;}
-.nav-home{padding:7px 13px;border-radius:9px;font-size:14px;font-weight:600;
-  background:rgba(34,197,94,0.10);border:1px solid rgba(34,197,94,0.30);
-  color:#86efac;cursor:pointer;transition:all .18s;}
-.nav-home:hover{background:rgba(34,197,94,0.22);color:#bbf7d0;border-color:rgba(34,197,94,0.55);}
+.nav-home{padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;transition:all .18s;}
+.nav-home:hover{background:rgba(255,255,255,0.1);color:var(--text);}
 .section{display:none;}
 .section.active{display:block;}
 
 /* ── LAYOUT ── */
-.container{width:min(1400px,calc(100% - 32px));margin:24px auto;max-width:100%;overflow-x:hidden;}
+.container{width:min(1400px,calc(100% - 32px));margin:24px auto;}
 .header{display:flex;align-items:center;justify-content:space-between;
   gap:16px;margin-bottom:20px;flex-wrap:wrap;}
 .title-wrap h1{margin:0;font-size:clamp(20px,4vw,34px);line-height:1.1;}
@@ -116,10 +113,6 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .eq-grid{display:grid;grid-template-columns:380px 1fr;gap:18px;}
 .grid{display:grid;grid-template-columns:380px 1fr;gap:18px;}
 @media(max-width:1000px){.eq-grid,.grid{grid-template-columns:1fr;}}
-@media(max-width:768px){
-  .eq-grid,.grid{grid-template-columns:1fr;width:100%;}
-  .container{padding:0;}
-}
 .main{display:grid;gap:18px;}
 
 /* controls */
@@ -176,16 +169,6 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 
 /* ── MAPS ── */
 .mapbox{width:100%;height:480px;border-radius:0 0 22px 22px;}
-.leaflet-container{background:#0b1120!important;}
-.leaflet-container:focus,.leaflet-container:focus-visible{outline:none!important;}
-.leaflet-tile-pane{-webkit-transform:translateZ(0);transform:translateZ(0);}
-.leaflet-tile{
-  backface-visibility:hidden;-webkit-backface-visibility:hidden;
-}
-.leaflet-tile-container{
-  -webkit-transform:translateZ(0);transform:translateZ(0);
-  image-rendering:-webkit-optimize-contrast;
-}
 
 /* ── EQ LIST ── */
 .eq-list{max-height:440px;overflow-y:auto;}
@@ -275,94 +258,6 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
   border-radius:13px;padding:11px 18px;font-size:14px;z-index:9998;
   display:none;max-width:460px;text-align:center;line-height:1.5;
   box-shadow:0 8px 28px rgba(0,0,0,.5);}
-
-/* ── MOBILE ── */
-@media(max-width:640px){
-  .nav-brand{display:none;}
-  .nav-bar{overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex-wrap:nowrap;}
-  .nav-bar::-webkit-scrollbar{display:none;}
-  .nav-tab{padding:12px 12px;font-size:12px;white-space:nowrap;flex-shrink:0;}
-  .nav-home{padding:5px 9px;font-size:12px;flex-shrink:0;}
-  #installBtn{padding:5px 9px!important;font-size:12px!important;flex-shrink:0;}
-  .choices{flex-direction:row;flex-wrap:wrap;gap:12px;}
-  .choice-card{width:calc(50% - 6px);padding:18px 12px;gap:8px;}
-  .choice-card .icon{font-size:32px;}
-  .choice-card h2{font-size:14px;}
-  .choice-card p{font-size:11px;}
-  .mapbox{min-height:260px!important;height:48vw!important;}
-  .eq-list{max-height:320px;}
-  .container{margin:12px auto;width:calc(100% - 24px);}
-  .header{margin-bottom:12px;flex-wrap:wrap;}
-  .title-wrap h1{font-size:22px;}
-  .panel-header{padding:12px 14px 8px;}
-  .panel-header>div[style*="display:flex"]{flex-direction:column;align-items:flex-start!important;}
-  .controls{padding:12px;}
-  .btn{padding:10px 14px;font-size:14px;}
-  .eq-item{padding:9px 12px;gap:8px;}
-  .eq-mag{min-width:38px;height:38px;font-size:15px;}
-  .summary-row{gap:7px;}
-  .sc{padding:9px 10px;}
-  .tbl-wrap{padding:10px;}
-  .brand h1{font-size:28px;}
-  .brand p{font-size:13px;}
-  /* loc-manual: stack verticale su mobile */
-  .loc-manual{flex-direction:column;align-items:stretch!important;gap:8px;}
-  .loc-manual input,.loc-manual button{width:100%!important;}
-  /* bottoni monitor in colonna su mobile */
-  .loc-monitor-btns{flex-direction:column!important;gap:6px!important;}
-  /* notif-grid: una colonna */
-  .notif-grid{grid-template-columns:1fr!important;}
-  /* header panel-map: stack su mobile */
-  .panel-map .panel-header{flex-direction:column!important;align-items:flex-start!important;}
-  /* dayplot controls a riga intera */
-  #dayplotControls{flex-wrap:wrap;}
-  /* sismogrammi view controls a colonna */
-  .seis-view-ctrl{flex-direction:column!important;align-items:flex-start!important;padding:4px 12px 0!important;}
-  /* terremoti recenti: niente overflow */
-  #sectionTerremoti .panel-header[style]{flex-direction:column!important;align-items:flex-start!important;}
-  #sectionTerremoti .gps-btn{align-self:flex-start;}
-  .tl-header{flex-direction:column;align-items:flex-start;gap:6px;}
-  .tl-header select{width:100%!important;}
-  .footer-note code{word-break:break-all;font-size:10px;}
-  /* summary cards più compatte */
-  .sc .v{font-size:16px;}
-}
-/* ── GPS BUTTON ── */
-.gps-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;
-  border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;
-  background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);
-  color:#93c5fd;transition:all .18s;}
-.gps-btn:hover{background:rgba(59,130,246,0.28);}
-.gps-btn.active{background:rgba(59,130,246,0.3);color:#60a5fa;}
-/* ── NOTIFICHE SECTION ── */
-.nav-tab.a-notif{color:#f9a8d4;border-bottom-color:#ec4899;}
-.notif-grid{display:grid;gap:18px;max-width:560px;margin:0 auto;}
-.toggle-row{display:flex;align-items:center;gap:12px;padding:4px 0;}
-
-/* ── SEZIONE LOCALIZZAZIONE ── */
-.nav-tab.a-loc{color:#6ee7b7;border-bottom-color:#10b981;}
-.loc-alert{border-radius:14px;padding:14px 18px;background:rgba(251,146,60,0.12);
-  border:1px solid rgba(251,146,60,0.4);color:#fed7aa;font-size:14px;line-height:1.6;}
-.loc-alert b{color:#fb923c;}
-.loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-@media(max-width:900px){.loc-grid{grid-template-columns:1fr;}}
-.sta-card{display:grid;grid-template-columns:80px 1fr;gap:10px;align-items:center;
-  padding:10px 14px;border-bottom:1px solid var(--border);}
-.sta-card:last-child{border-bottom:none;}
-.sta-canvas{border-radius:6px;background:#08101c;display:block;}
-.sta-info{font-size:12px;}
-.sta-code{font-weight:700;font-size:14px;color:#6ee7b7;}
-.sta-pick{color:var(--muted);margin-top:2px;}
-.loc-result{border-radius:14px;padding:16px 20px;
-  background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.35);margin-top:18px;}
-.loc-result h3{margin:0 0 8px;color:#6ee7b7;font-size:15px;}
-.loc-result .coords{font-size:22px;font-weight:700;color:#d1fae5;letter-spacing:.02em;}
-.loc-result .uncer{font-size:12px;color:var(--muted);margin-top:4px;}
-.poll-dot{display:inline-block;width:8px;height:8px;border-radius:50%;
-  background:#94a3b8;margin-right:6px;vertical-align:middle;}
-.poll-dot.active{background:#22c55e;animation:pulse 1.2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
-.loc-manual{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;}
 </style>
 </head>
 <body>
@@ -370,12 +265,12 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 <!-- LANDING -->
 <div id="landing">
   <div class="brand">
-    <h1><span style="-webkit-text-fill-color:initial;background:none;">🌍</span> ITalquake</h1>
-    <p>Portale sismologico italiano — Dati in tempo reale da INGV / EIDA</p>
+    <h1>🌍 INGV Sismico</h1>
+    <p>Portale sismologico italiano — dati in tempo reale da INGV / EIDA</p>
   </div>
   <div class="choices">
     <div class="choice-card eq" onclick="goSection('terremoti')">
-      <div class="icon">🫨</div><h2>Terremoti Recenti</h2>
+      <div class="icon">🔴</div><h2>Terremoti Recenti</h2>
       <p>Mappa e lista degli ultimi eventi con statistiche per regione</p>
     </div>
     <div class="choice-card stor" onclick="goSection('storico')">
@@ -391,16 +286,6 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
       <div class="icon">🎯</div><h2>Meccanismi Focali</h2>
       <p>Beach ball TDMT su mappa — geometria delle faglie attivatrici</p>
     </div>
-    <div class="choice-card" style="border-color:rgba(236,72,153,0.4);"
-         onclick="goSection('notifiche')">
-      <div class="icon">🔔</div><h2>Notifiche</h2>
-      <p>Avvisi push per terremoti nella tua provincia e auto-aggiornamento</p>
-    </div>
-    <div class="choice-card" style="border-color:rgba(16,185,129,0.4);"
-         onclick="goSection('localizzazione')">
-      <div class="icon">🔬</div><h2>Localizzazione</h2>
-      <p>Stima sperimentale epicentro da tempi S-P su stazioni vicine</p>
-    </div>
   </div>
 </div>
 
@@ -411,15 +296,13 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 <!-- APP -->
 <div id="appContainer">
   <nav class="nav-bar">
-    <div class="nav-brand" onclick="goHome()" title="Torna alla home">🌍 ITalquake</div>
-    <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">🫨 Recenti</button>
+    <div class="nav-brand">🌍 INGV Sismico</div>
+    <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">🔴 Recenti</button>
     <button class="nav-tab" id="tabStor" onclick="goSection('storico')">📚 Storico</button>
     <button class="nav-tab" id="tabSeis" onclick="goSection('sismogrammi')">📈 Sismogrammi</button>
     <button class="nav-tab" id="tabFm"   onclick="goSection('focali')">🎯 Meccanismi Focali</button>
-    <button class="nav-tab" id="tabNotif" onclick="goSection('notifiche')">🔔 Notifiche</button>
-    <button class="nav-tab" id="tabLoc" onclick="goSection('localizzazione')">🔬 Localizzazione</button>
     <div class="nav-spacer"></div>
-    <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;align-items:center;gap:6px;margin-right:8px;" title="Installa ITalquake">⬇️ Installa</button><button class="nav-home" onclick="goHome()">🏠 Home</button>
+    <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;align-items:center;gap:6px;margin-right:8px;" title="Installa ITalquake">⬇️ Installa</button><button class="nav-home" onclick="goHome()">⌂ Home</button>
   </nav>
 
   <!-- ═══ TERREMOTI RECENTI ═══ -->
@@ -450,8 +333,8 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
             <div class="row-2">
               <div class="field"><label>Mag. min</label>
                 <select id="eqMinMag">
-                  <option value="-1" selected>Tutti</option><option value="1">M≥1</option>
-                  <option value="2">M≥2</option><option value="3">M≥3</option>
+                  <option value="-1">Tutti</option><option value="1">M≥1</option>
+                  <option value="2" selected>M≥2</option><option value="3">M≥3</option>
                   <option value="4">M≥4</option></select></div>
               <div class="field"><label>Prof. max km</label>
                 <select id="eqMaxDepth">
@@ -462,14 +345,40 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
             <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes()">🔄 Aggiorna</button>
             <div id="eqStatus" class="status">Pronto.</div>
 
-            <button onclick="goSection('notifiche')" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;">🔔 Notifiche &amp; Auto-aggiornamento →</button>
+            <div class="fsec">
+              <details class="nd">
+                <summary>🔔 Notifiche &amp; Auto-aggiornamento</summary>
+                <div class="nb">
+                  <div class="toggle-row">
+                    <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked"/>
+                      <span class="sl"></span></label>
+                    <span class="tl">Attiva notifiche browser</span>
+                  </div>
+                  <div class="field"><label>Notifica se M ≥</label>
+                    <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0"/></div>
+                  <div class="field"><label>Solo provincia (es. BN) — vuoto=tutte</label>
+                    <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
+                      oninput="this.value=this.value.toUpperCase()"/></div>
+                  <button class="npb" id="notifPermBtn" onclick="askNotifPerm()">Richiedi permesso notifiche</button>
+                  <div class="field"><label>Auto-aggiornamento</label>
+                    <select id="autoRefreshSel" onchange="setAutoRefresh(this.value)">
+                      <option value="0">Disattivo</option>
+                      <option value="60">Ogni minuto</option>
+                      <option value="120" selected>Ogni 2 min</option>
+                      <option value="300">Ogni 5 min</option>
+                    </select></div>
+                  <div class="ri" id="refreshInd">—</div>
+                </div>
+              </details>
+            </div>
             <div class="hint">📈 in lista = sismogramma stazione più vicina.</div>
           </div>
         </section>
         <!-- dx -->
         <div class="main">
           <section class="panel panel-map">
-            <div class="panel-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div><h2>Mappa epicentri</h2><p>Dimensione ∝ magnitudo · Colore ∝ profondità</p></div><button class="gps-btn" id="gpsEqBtn" onclick="locateUser()">📍 Mostra posizione</button></div>
+            <div class="panel-header"><h2>Mappa epicentri</h2>
+              <p>Dimensione ∝ magnitudo · Colore per profondità · Toggle sorgenti DISS in alto a destra.</p></div>
             <div id="eqMap" class="mapbox"></div>
           </section>
           <div id="eqSumRow" class="summary-row" style="display:none">
@@ -551,7 +460,8 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
         </section>
         <div class="main">
           <section class="panel panel-map">
-            <div class="panel-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div><h2>Mappa epicentri storici</h2><p>Dimensione ∝ magnitudo · Colore ∝ profondità</p></div><button class="gps-btn" id="gpsStBtn" onclick="locateUser()">📍 Mostra posizione</button></div>
+            <div class="panel-header"><h2>Mappa epicentri storici</h2>
+              <p>Toggle sorgenti DISS disponibile in alto a destra.</p></div>
             <div id="stMap" class="mapbox"></div>
           </section>
           <div id="stSumRow" class="summary-row" style="display:none">
@@ -646,7 +556,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
             </div>
             <button class="btn btn-green" id="generateBtn">Scarica e visualizza waveform</button>
             <div id="status" class="status">Caricamento stazioni...</div>
-            <div class="hint">⚠️ Non tutti i sismogrammi potrebbero essere disponibili o avere registrazioni nella finestra temporale desiderata.</div>
+            <div class="hint">Parser MiniSEED nativo · Tile CartoDB (funziona da file://).</div>
           </div>
         </section>
 
@@ -662,7 +572,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
           <section class="panel">
             <div class="panel-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;">
               <div><h2 id="plotTitle">Waveform</h2><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Grafico traccia selezionata.</p></div>
-              <div class="seis-view-ctrl" style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
+              <div style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
                 <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
                   <option value="waveform">Waveform</option>
                   <option value="dayplot">Dayplot</option></select>
@@ -750,119 +660,6 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
       <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> (QuakeML con focalMechanism) · <a href="https://terremoti.ingv.it/tdmt" target="_blank" style="color:var(--muted)">terremoti.ingv.it/tdmt</a></div>
     </div>
   </div>
-
-  <!-- ═══ NOTIFICHE ═══ -->
-  <div class="section" id="sectionNotifiche">
-    <div class="container">
-      <div class="header">
-        <div class="title-wrap"><h1>🔔 Notifiche</h1>
-          <p>Configura avvisi push e auto-aggiornamento per la tua area.</p></div>
-        <span class="badge" style="background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.35);">Push API</span>
-      </div>
-      <div class="notif-grid">
-        <section class="panel">
-          <div class="panel-header"><h2>Avvisi Terremoti</h2>
-            <p>Ricevi notifiche push del browser per nuovi eventi.</p></div>
-          <div class="controls">
-            <div class="toggle-row">
-              <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked;saveNotifPrefs()"/>
-                <span class="sl"></span></label>
-              <span class="tl">Attiva notifiche browser</span>
-            </div>
-            <button class="npb" id="notifPermBtn" onclick="askNotifPerm()" style="margin-top:8px;">Richiedi permesso notifiche</button>
-            <div class="field" style="margin-top:12px;"><label>Notifica se M ≥</label>
-              <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0"
-                oninput="saveNotifPrefs()"/></div>
-            <div class="field"><label>Solo provincia (es. BN) — vuoto = tutte le province</label>
-              <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
-                oninput="this.value=this.value.toUpperCase();saveNotifPrefs()"/></div>
-          </div>
-        </section>
-        <section class="panel">
-          <div class="panel-header"><h2>Auto-aggiornamento</h2>
-            <p>Ricarica automaticamente i terremoti recenti.</p></div>
-          <div class="controls">
-            <div class="field"><label>Frequenza di aggiornamento</label>
-              <select id="autoRefreshSel" onchange="setAutoRefresh(this.value);saveNotifPrefs()">
-                <option value="0">Disattivo</option>
-                <option value="60">Ogni minuto</option>
-                <option value="120" selected>Ogni 2 minuti</option>
-                <option value="300">Ogni 5 minuti</option>
-              </select></div>
-            <div class="ri" id="refreshInd" style="margin-top:8px;color:var(--muted);font-size:13px;">—</div>
-          </div>
-        </section>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ═══ LOCALIZZAZIONE SPERIMENTALE ═══ -->
-  <div class="section" id="sectionLocalizzazione">
-    <div class="container">
-      <div class="header">
-        <div class="title-wrap">
-          <h1>🔬 Localizzazione Sperimentale</h1>
-          <p>Stima dell'area epicentrale da tempi S-P su stazioni vicine. Solo indicativa — errori dell'ordine delle decine di km.</p>
-        </div>
-        <span class="badge" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border:1px solid rgba(16,185,129,0.35);">⚗️ SPERIMENTALE</span>
-      </div>
-
-      <!-- Monitor + controlli -->
-      <section class="panel" style="margin-bottom:18px;">
-        <div class="panel-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-          <div>
-            <h2>Monitor STIMA PROVVISORIA</h2>
-            <p>Controlla automaticamente terremoti.ingv.it ogni 30 secondi.</p>
-          </div>
-          <div class="loc-monitor-btns" style="display:flex;gap:8px;">
-            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="startLocMonitor()">▶ Avvia monitor</button>
-            <button class="btn" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#fca5a5;" onclick="stopLocMonitor()">⏹ Ferma</button>
-          </div>
-        </div>
-        <div style="padding:0 18px 16px;">
-          <div id="locPollStatus" style="font-size:13px;color:var(--muted);"><span class="poll-dot" id="pollDot"></span>Monitor fermo. Premi Avvia per iniziare.</div>
-          <!-- Analisi manuale -->
-          <div class="loc-manual">
-            <span style="font-size:12px;color:var(--muted);">Oppure analisi manuale:</span>
-            <input id="locProvInput" type="text" placeholder="Provincia (es. Palermo)" style="width:180px;padding:7px 11px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:var(--text);font-size:13px;"/>
-            <input id="locTimeInput" type="datetime-local" style="padding:7px 11px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:var(--text);font-size:13px;"/>
-            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="runLocAnalysis(document.getElementById('locProvInput').value, document.getElementById('locTimeInput').value||null)">🔍 Analizza</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Alert STIMA PROVVISORIA -->
-      <div id="locAlertBox" style="display:none;margin-bottom:18px;" class="loc-alert">
-        <b>⚡ STIMA PROVVISORIA RILEVATA</b><br>
-        <span id="locAlertText">—</span>
-      </div>
-
-      <div id="locAnalysisArea" style="display:none;">
-        <div id="locAnalysisStatus" class="status" style="margin-bottom:12px;"></div>
-        <div class="loc-grid">
-          <!-- Stazioni -->
-          <section class="panel">
-            <div class="panel-header"><h2>Stazioni analizzate</h2><p>Pick P (verde) e S (rosso) automatici via STA/LTA</p></div>
-            <div id="locStaList"></div>
-          </section>
-          <!-- Mappa -->
-          <section class="panel panel-map">
-            <div class="panel-header"><h2>Cerchi di distanza S-P</h2><p>Intersezione = area stimata epicentro</p></div>
-            <div id="locMap" class="mapbox" style="min-height:380px;"></div>
-          </section>
-        </div>
-        <!-- Risultato -->
-        <div id="locResultBox" class="loc-result" style="display:none;">
-          <h3>📍 Stima epicentro</h3>
-          <div class="coords" id="locCoords">—</div>
-          <div class="uncer" id="locUncer">—</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:8px;">⚠️ Stima puramente sperimentale basata su modello di velocità uniforme (Vp=6 km/s, Vs=3.5 km/s). Errore tipico: 10–50 km.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div><!-- /appContainer -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -872,26 +669,21 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 ================================================================ */
 let eqMapInited=false, stMapInited=false, seisMapInited=false, fmMapInited=false;
 
-/* ── HISTORY NAVIGATION (frecce browser + tasto indietro mobile) ── */
-let _navFromHistory=false;
-
 function goHome(){
   document.getElementById('landing').style.display='flex';
   document.getElementById('appContainer').classList.remove('visible');
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.className='nav-tab');
-  if(!_navFromHistory) history.pushState({sec:null},'',location.pathname+location.search);
 }
 function goSection(sec){
   document.getElementById('landing').style.display='none';
   document.getElementById('appContainer').classList.add('visible');
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.className='nav-tab');
-  if(!_navFromHistory) history.pushState({sec},'','#'+sec);
   if(sec==='terremoti'){
     document.getElementById('sectionTerremoti').classList.add('active');
     document.getElementById('tabEq').classList.add('a-eq');
-    if(!eqMapInited){initEqMap();eqMapInited=true;fetchEarthquakes();}
+    if(!eqMapInited){initEqMap();eqMapInited=true;}
   } else if(sec==='storico'){
     document.getElementById('sectionStorico').classList.add('active');
     document.getElementById('tabStor').classList.add('a-stor');
@@ -901,14 +693,6 @@ function goSection(sec){
     document.getElementById('tabFm').classList.add('a-fm');
     if(!fmMapInited){initFmMap();fmMapInited=true;initFmDates();}
     else setTimeout(()=>fmMap&&fmMap.invalidateSize(),80);
-  } else if(sec==='notifiche'){
-    document.getElementById('sectionNotifiche').classList.add('active');
-    document.getElementById('tabNotif').classList.add('a-notif');
-  } else if(sec==='localizzazione'){
-    document.getElementById('sectionLocalizzazione').classList.add('active');
-    document.getElementById('tabLoc').classList.add('a-loc');
-    if(!locMapInited){initLocMap();locMapInited=true;}
-    else setTimeout(()=>locMap&&locMap.invalidateSize(),80);
   } else {
     document.getElementById('sectionSismogrammi').classList.add('active');
     document.getElementById('tabSeis').classList.add('a-seis');
@@ -916,97 +700,7 @@ function goSection(sec){
     else setTimeout(()=>map&&map.invalidateSize(),80);
   }
 }
-/* Frecce avanti/indietro e tasto back mobile */
-window.addEventListener('popstate',e=>{
-  _navFromHistory=true;
-  const sec=e.state&&e.state.sec;
-  if(sec) goSection(sec); else goHome();
-  _navFromHistory=false;
-});
-/* ── BOOT: carica prefs e avvia timer PRIMA di qualsiasi navigazione ── */
-window.addEventListener('load',()=>{
-  /* 1. Carica sempre le preferenze notifiche e avvia il timer */
-  _bootLoadPrefs();
-  /* 2. Ripristina sezione (URL hash) */
-  const hash=location.hash.slice(1);
-  if(hash) goSection(hash);
-});
 
-function _bootLoadPrefs(){
-  try{
-    const en=localStorage.getItem('itq_notifEnabled');
-    if(en!==null){
-      const chk=en==='1';
-      document.getElementById('notifEnabled').checked=chk;
-      notifOn=chk;
-    }
-    const mag=localStorage.getItem('itq_notifMag');
-    if(mag) document.getElementById('notifMag').value=mag;
-    const prov=localStorage.getItem('itq_notifProv');
-    if(prov) document.getElementById('notifProv').value=prov;
-    const ar=localStorage.getItem('itq_autoRefresh');
-    if(ar){
-      document.getElementById('autoRefreshSel').value=ar;
-      /* Avvia subito il timer, indipendentemente dalla sezione aperta */
-      if(ar&&ar!=='0') setAutoRefresh(ar);
-    }
-    /* Ripristina tutti i filtri */
-    restoreFilters();
-    /* Aggiorna stato bottone permesso notifiche */
-    updatePermBtn();
-  }catch(e){}
-}
-
-/* loadNotifPrefs usata dalla sezione Notifiche per sincronizzare i controlli
-   senza riavviare il timer se già attivo */
-function loadNotifPrefs(){
-  try{
-    const en=localStorage.getItem('itq_notifEnabled');
-    if(en!==null){
-      const chk=en==='1';
-      document.getElementById('notifEnabled').checked=chk;
-      notifOn=chk;
-    }
-    const mag=localStorage.getItem('itq_notifMag');
-    if(mag) document.getElementById('notifMag').value=mag;
-    const prov=localStorage.getItem('itq_notifProv');
-    if(prov) document.getElementById('notifProv').value=prov;
-    const ar=localStorage.getItem('itq_autoRefresh');
-    if(ar){
-      document.getElementById('autoRefreshSel').value=ar;
-      /* Riavvia il timer SOLO se non è già attivo con lo stesso intervallo */
-      if(ar!=='0'&&!refreshTimer) setAutoRefresh(ar);
-    }
-  }catch(e){}
-}
-
-
-/* ── GPS ── */
-let userLat=null,userLon=null,userMarkerEq=null,userMarkerSt=null;
-function haverDist(la1,lo1,la2,lo2){
-  const R=6371,r=Math.PI/180;
-  const dlat=(la2-la1)*r,dlon=(lo2-lo1)*r;
-  const a=Math.sin(dlat/2)**2+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dlon/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-function locateUser(){
-  if(!navigator.geolocation){alert('Geolocalizzazione non supportata dal browser.');return;}
-  navigator.geolocation.getCurrentPosition(pos=>{
-    userLat=pos.coords.latitude; userLon=pos.coords.longitude;
-    const icon=L.divIcon({html:'<div style="width:16px;height:16px;border-radius:50%;background:#3b82f6;border:3px solid #fff;box-shadow:0 0 0 3px rgba(59,130,246,.4)"></div>',className:'',iconAnchor:[8,8]});
-    if(eqMap){
-      if(userMarkerEq) eqMap.removeLayer(userMarkerEq);
-      userMarkerEq=L.marker([userLat,userLon],{icon}).bindPopup('<b>📍 Sei qui</b><br>'+userLat.toFixed(4)+', '+userLon.toFixed(4)).addTo(eqMap);
-    }
-    if(stMap){
-      if(userMarkerSt) stMap.removeLayer(userMarkerSt);
-      userMarkerSt=L.marker([userLat,userLon],{icon}).bindPopup('<b>📍 Sei qui</b><br>'+userLat.toFixed(4)+', '+userLon.toFixed(4)).addTo(stMap);
-    }
-    document.querySelectorAll('.gps-btn').forEach(b=>b.classList.add('active'));
-    if(eqData.length) renderList(eqData,'eqList','openSeisForEq');
-    if(storicoData.length) renderList(storicoData,'stList','openSeisForSt');
-  },err=>{alert('GPS non disponibile: '+err.message);},{enableHighAccuracy:true,timeout:12000});
-}
 /* ================================================================
    HELPERS
 ================================================================ */
@@ -1110,30 +804,22 @@ function renderMarkers(events,leafletMap,markersArr,onSeis){
       radius:r,color:depthCol(ev.depth),fillColor:depthCol(ev.depth),
       fillOpacity:0.72,weight:1.5
     });
-    const _popupEv=ev,_popupI=i,_popupOnSeis=onSeis;
-    m.on('popupopen',function(){
-      const distRow=userLat!=null
-        ?`<div style="font-size:11px;color:#3b82f6;font-weight:600;margin-top:5px;">📍 ${haverDist(userLat,userLon,_popupEv.lat,_popupEv.lon).toFixed(0)} km da te</div>`
-        :'';
-      this.getPopup().setContent(`<div style="font-family:sans-serif;min-width:180px;">
-      <b style="font-size:14px;">${_popupEv.place}</b><br>
-      <span style="color:#555;font-size:12px;">${_popupEv.time.replace('T',' ').slice(0,19)} UTC</span>
+    m.bindPopup(`<div style="font-family:sans-serif;min-width:180px;">
+      <b style="font-size:14px;">${ev.place}</b><br>
+      <span style="color:#555;font-size:12px;">${ev.time.replace('T',' ').slice(0,19)} UTC</span>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;">
         <div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">
           <div style="font-size:9px;color:#6b7280;text-transform:uppercase;">Magnitudo</div>
-          <div style="font-size:18px;font-weight:800;color:#dc2626;">${_popupEv.mag.toFixed(1)}</div>
+          <div style="font-size:18px;font-weight:800;color:#dc2626;">${ev.mag.toFixed(1)}</div>
         </div>
         <div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">
           <div style="font-size:9px;color:#6b7280;text-transform:uppercase;">Profondità</div>
-          <div style="font-size:18px;font-weight:800;">${_popupEv.depth.toFixed(0)} km</div>
+          <div style="font-size:18px;font-weight:800;">${ev.depth.toFixed(0)} km</div>
         </div>
       </div>
-      <div style="font-size:10px;color:#6b7280;margin-top:6px;">Lat ${_popupEv.lat.toFixed(3)} · Lon ${_popupEv.lon.toFixed(3)}</div>
-      ${distRow}
-      ${_popupOnSeis?`<button onclick="${_popupOnSeis}(${_popupI})" style="margin-top:9px;width:100%;padding:7px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">📈 Sismogramma</button>`:''}
+      <div style="font-size:10px;color:#6b7280;margin-top:6px;">Lat ${ev.lat.toFixed(3)} · Lon ${ev.lon.toFixed(3)}</div>
+      ${onSeis?`<button onclick="${onSeis}(${i})" style="margin-top:9px;width:100%;padding:7px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">📈 Sismogramma</button>`:''}
     </div>`);
-    });
-    m.bindPopup('');
     m.addTo(leafletMap);
     markersArr.push(m);
     bounds.push([ev.lat,ev.lon]);
@@ -1148,12 +834,11 @@ function renderList(events,containerId,onSeis){
   el.innerHTML=events.map((ev,i)=>{
     const dt=ev.time.replace('T',' ').slice(0,19);
     const sb=onSeis?`<button class="seis-btn" onclick="${onSeis}(${i})" title="Sismogramma">📈</button>`:'';
-    const distStr=userLat!=null?` · 📍 ${haverDist(userLat,userLon,ev.lat,ev.lon).toFixed(0)} km`:'';
     return`<div class="eq-item">
       <div class="eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</div>
       <div class="eq-info" onclick="focusMarker('${containerId}',${i})">
         <div class="pl">${ev.place}</div>
-        <div class="dt">${dt} UTC · ${ev.magType}${distStr}</div>
+        <div class="dt">${dt} UTC · ${ev.magType}</div>
       </div>
       <div class="eq-depth">${ev.depth.toFixed(0)} km</div>
       ${sb}
@@ -1313,7 +998,7 @@ let eqData=[],eqMarkers=[],eqMap;
 
 function initEqMap(){
   eqMap=L.map('eqMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(eqMap);
   addLegend(eqMap);
   /* DISS rimosso */
@@ -1371,7 +1056,7 @@ let storicoData=[],stMarkers=[],stMap;
 
 function initStMap(){
   stMap=L.map('stMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(stMap);
   addLegend(stMap);
   /* DISS rimosso */
@@ -1406,8 +1091,8 @@ async function fetchStorico(){
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const text=await resp.text();
     storicoData=parseEqText(text,maxD);
-    renderMarkers(storicoData,stMap,stMarkers,'openSeisForSt');
-    renderList(storicoData,'stList','openSeisForSt');
+    renderMarkers(storicoData,stMap,stMarkers);
+    renderList(storicoData,'stList',null);
     renderSummary(storicoData,'stSumRow','stTot','stMaxV','stMinV','stAvgD');
     renderRegionTable(storicoData,'stRegTbl');
     updateProvSelect(storicoData,'stTlProv');
@@ -1422,52 +1107,12 @@ async function fetchStorico(){
 ================================================================ */
 let knownIds=new Set(),notifOn=false,refreshTimer=null,refreshCountdown=null;
 
-
-/* ── PERSISTENZA FILTRI ── */
-const _FILTER_IDS=['eqGeo','eqPeriod','eqMinMag','eqMaxDepth',
-  'stFrom','stTo','stMinMag','stMaxMag','stMaxDepth','stLimit','hoursInput'];
-
-function saveFilters(){
-  try{
-    const obj={};
-    _FILTER_IDS.forEach(id=>{const el=document.getElementById(id);if(el)obj[id]=el.value;});
-    obj.networkSelect=networkSelect.value;
-    localStorage.setItem('itq_filters',JSON.stringify(obj));
-  }catch(e){}
-}
-
-function restoreFilters(){
-  try{
-    const saved=JSON.parse(localStorage.getItem('itq_filters')||'{}');
-    _FILTER_IDS.forEach(id=>{
-      const el=document.getElementById(id);
-      if(el&&saved[id]!=null&&saved[id]!=='') el.value=saved[id];
-    });
-    if(saved.networkSelect) networkSelect.value=saved.networkSelect;
-  }catch(e){}
-}
-function saveNotifPrefs(){
-  try{
-    localStorage.setItem('itq_notifEnabled', document.getElementById('notifEnabled').checked?'1':'0');
-    localStorage.setItem('itq_notifMag',     document.getElementById('notifMag').value);
-    localStorage.setItem('itq_notifProv',    document.getElementById('notifProv').value.trim().toUpperCase());
-    localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
-  }catch(e){}
-}
-/* loadNotifPrefs definita sopra nel boot block */
-
-function updatePermBtn(){
-  const b=document.getElementById('notifPermBtn');
-  if(!b||typeof Notification==='undefined')return;
-  const p=Notification.permission;
-  if(p==='granted'){b.textContent='✓ Notifiche abilitate';b.style.background='rgba(34,197,94,0.2)';b.style.color='#86efac';b.disabled=true;}
-  else if(p==='denied'){b.textContent='✗ Permesso negato (impostazioni browser)';b.style.background='rgba(239,68,68,0.12)';b.style.color='#fca5a5';b.disabled=false;}
-  else{b.textContent='Richiedi permesso notifiche';b.style.background='';b.style.color='';b.disabled=false;}
-}
 async function askNotifPerm(){
   if(!('Notification'in window)){alert('Browser non supporta notifiche.');return;}
   const p=await Notification.requestPermission();
-  updatePermBtn();
+  const b=document.getElementById('notifPermBtn');
+  if(p==='granted'){b.textContent='✓ Notifiche abilitate';b.style.background='rgba(34,197,94,0.2)';b.style.color='#86efac';}
+  else b.textContent='✗ Permesso negato';
 }
 
 function setAutoRefresh(sec){
@@ -1485,7 +1130,6 @@ function setAutoRefresh(sec){
 }
 
 async function quietRefresh(){
-  if(!eqMapInited||!eqMap)return;/* mappa non pronta */
   try{
     const maxD=Number(document.getElementById('eqMaxDepth').value);
     const hours=Number(document.getElementById('eqPeriod').value);
@@ -1498,18 +1142,7 @@ async function quietRefresh(){
     const evs=parseEqText(await resp.text(),maxD);
     const newEvs=evs.filter(ev=>!knownIds.has(ev.id));
     if(!newEvs.length)return;
-    const toNotif=[];
-    newEvs.forEach(ev=>{knownIds.add(ev.id);if(shouldNotif(ev))toNotif.push(ev);});
-    if(toNotif.length===1){
-      sendNotif(toNotif[0]);
-    } else if(toNotif.length>1){
-      /* raggruppa: un solo avviso con riepilogo */
-      const maxEv=toNotif.reduce((a,b)=>b.mag>a.mag?b:a);
-      const magList=toNotif.map(e=>'M'+e.mag.toFixed(1)).join(', ');
-      try{new Notification('⚡ '+toNotif.length+' nuovi terremoti rilevati',{
-        body:'Più forte: M'+maxEv.mag.toFixed(1)+' — '+maxEv.place+' ('+magList+')',
-        tag:'itq_batch_'+Date.now()});}catch(e){}
-    }
+    newEvs.forEach(ev=>{knownIds.add(ev.id);if(shouldNotif(ev))sendNotif(ev);});
     eqData=evs;
     renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq');renderList(eqData,'eqList','openSeisForEq');
     renderSummary(eqData,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
@@ -1563,27 +1196,6 @@ async function openSeisForEq(i){
   const evT=new Date(ev.time);
   // Arrotonda al minuto pieno: se l'evento è alle 16:57:42 →
   // inizio 16:55:00, fine 17:05:00 (sempre secondi esatti, no troncamenti)
-  const floorMin=Math.floor(evT.getTime()/60000)*60000;
-  startInput.value=toLocal(new Date(floorMin-2*60000));
-  endInput.value=toLocal(new Date(floorMin+8*60000));
-  renderMapStations();updateMeta();
-  document.getElementById('viewModeSelect').value='dayplot';
-  document.getElementById('dayplotInterval').value='10';
-  document.getElementById('dayplotControls').style.display='flex';
-  showToast(`📡 Stazione più vicina: <strong>${near.code}</strong> (${near.dist.toFixed(0)} km)<br>Dayplot 10 min/riga`);
-  setStatus('Stazione '+near.code+' · '+near.dist.toFixed(0)+' km · Scarico...','ok');
-  await fetchWaveformAndPlot();
-}
-
-async function openSeisForSt(i){
-  const ev=storicoData[i];if(!ev)return;
-  goSection('sismogrammi');
-  if(!stations.length)await loadNetwork();
-  const near=findNearest(ev.lat,ev.lon);
-  if(!near){setStatus('Nessuna stazione trovata.','err');return;}
-  stationSelect.value=near.code;
-  await populateChannels(near.code);
-  const evT=new Date(ev.time);
   const floorMin=Math.floor(evT.getTime()/60000)*60000;
   startInput.value=toLocal(new Date(floorMin-2*60000));
   endInput.value=toLocal(new Date(floorMin+8*60000));
@@ -1772,7 +1384,7 @@ function updateMeta(extra={}){
 
 function initMap(){
   map=L.map('map').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(map);
 }
 function renderMapStations(){
@@ -1938,20 +1550,10 @@ async function fetchWaveformAndPlot(){
 }
 
 /* listeners */
-networkSelect.addEventListener('change',()=>{chCache.clear();loadNetwork();saveFilters();});
+networkSelect.addEventListener('change',()=>{chCache.clear();loadNetwork();});
 stationSelect.addEventListener('change',()=>{populateChannels(stationSelect.value);renderMapStations();updateMeta();});
-hoursInput.addEventListener('change',()=>{updateDefaultRange();saveFilters();});
+hoursInput.addEventListener('change',updateDefaultRange);
 generateBtn.addEventListener('click',fetchWaveformAndPlot);
-/* Salva filtri terremoti e storico ad ogni modifica */
-['eqGeo','eqPeriod','eqMinMag','eqMaxDepth',
- 'stFrom','stTo','stMinMag','stMaxMag','stMaxDepth','stLimit'
-].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el){
-    el.addEventListener('change',saveFilters);
-    el.addEventListener('input',saveFilters);
-  }
-});
 document.getElementById('viewModeSelect').addEventListener('change',()=>{
   const dp=document.getElementById('viewModeSelect').value==='dayplot';
   document.getElementById('dayplotControls').style.display=dp?'flex':'none';
@@ -2011,7 +1613,7 @@ function makeBeachBallIcon(strike,dip,rake,size){
 
 function initFmMap(){
   fmMap=L.map('fmMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(fmMap);
 }
 
@@ -2205,376 +1807,6 @@ function highlightFmItem(i){
   items.forEach((it,j)=>it.style.background=j===i?'rgba(251,146,60,.12)':'');
   if(items[i])items[i].scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-
-/* ================================================================
-   LOCALIZZAZIONE SPERIMENTALE
-================================================================ */
-let locMapInited=false, locMap=null, locPollTimer=null;
-let locCircles=[], locEpiMarker=null, locStaMarkers=[];
-
-/* Coordinate centri province italiane */
-const PROV_COORDS={
-  'Palermo':[38.12,13.36],'Catania':[37.50,15.09],'Messina':[38.19,15.55],
-  'Agrigento':[37.31,13.58],'Siracusa':[37.07,15.29],'Trapani':[38.02,12.52],
-  'Ragusa':[36.93,14.73],'Caltanissetta':[37.49,14.06],'Enna':[37.56,14.28],
-  'Napoli':[40.84,14.25],'Salerno':[40.68,14.76],'Avellino':[40.91,14.79],
-  'Benevento':[41.13,14.78],'Caserta':[41.07,14.33],
-  'Roma':[41.90,12.48],'Frosinone':[41.64,13.34],'Latina':[41.47,12.90],
-  'Rieti':[42.40,12.86],'Viterbo':[42.42,12.11],
-  "L'Aquila":[42.35,13.40],'Pescara':[42.46,14.21],'Chieti':[42.35,14.17],
-  'Teramo':[42.66,13.70],'Campobasso':[41.56,14.66],'Isernia':[41.59,14.23],
-  'Potenza':[40.64,15.80],'Matera':[40.67,16.60],
-  'Cosenza':[39.30,16.25],'Catanzaro':[38.90,16.59],'Crotone':[39.08,17.13],
-  'Vibo Valentia':[38.67,16.10],'Reggio Calabria':[38.11,15.65],
-  'Bari':[41.12,16.87],'Foggia':[41.46,15.56],'Taranto':[40.47,17.25],
-  'Lecce':[40.36,18.17],'Brindisi':[40.63,17.94],'Andria':[41.23,16.29],
-  'Perugia':[43.11,12.39],'Terni':[42.56,12.65],
-  'Ancona':[43.62,13.51],'Macerata':[43.30,13.45],'Ascoli Piceno':[42.85,13.58],
-  'Fermo':[43.16,13.72],'Pesaro':[43.91,12.91],
-  'Firenze':[43.77,11.25],'Arezzo':[43.47,11.88],'Siena':[43.32,11.33],
-  'Grosseto':[42.76,11.11],'Livorno':[43.55,10.31],'Pisa':[43.71,10.40],
-  'Lucca':[43.84,10.50],'Pistoia':[43.93,10.91],'Prato':[43.88,11.10],
-  'Massa':[44.04,10.14],'La Spezia':[44.10,9.82],
-  'Bologna':[44.50,11.34],'Modena':[44.65,10.93],'Ferrara':[44.84,11.62],
-  'Parma':[44.80,10.33],'Piacenza':[45.05,9.69],'Reggio Emilia':[44.70,10.63],
-  'Ravenna':[44.42,12.20],'Forli':[44.22,12.04],'Rimini':[44.06,12.56],
-  'Trento':[46.07,11.12],'Bolzano':[46.50,11.35],
-  'Venezia':[45.44,12.33],'Verona':[45.44,11.00],'Vicenza':[45.55,11.55],
-  'Padova':[45.41,11.88],'Treviso':[45.67,12.24],'Belluno':[46.14,12.22],
-  'Rovigo':[45.07,11.79],
-  'Trieste':[45.65,13.78],'Udine':[46.06,13.23],'Gorizia':[45.94,13.62],
-  'Pordenone':[45.96,12.66],
-  'Torino':[45.07,7.69],'Cuneo':[44.39,7.55],'Asti':[44.90,8.21],
-  'Alessandria':[44.91,8.61],'Novara':[45.45,8.62],'Vercelli':[45.33,8.42],
-  'Biella':[45.57,8.05],'Verbania':[45.92,8.55],'Aosta':[45.74,7.32],
-  'Milano':[45.46,9.19],'Bergamo':[45.70,9.67],'Brescia':[45.54,10.22],
-  'Como':[45.81,9.09],'Varese':[45.82,8.82],'Lecco':[45.86,9.39],
-  'Lodi':[45.31,9.50],'Mantova':[45.16,10.79],'Cremona':[45.13,10.03],
-  'Pavia':[45.19,9.16],'Sondrio':[46.17,9.88],'Monza':[45.58,9.27],
-  'Genova':[44.41,8.94],'Savona':[44.31,8.47],'Imperia':[43.89,8.03],
-  'Cagliari':[39.23,9.12],'Sassari':[40.73,8.56],'Nuoro':[40.32,9.33],
-  'Oristano':[39.90,8.59],'Carbonia':[39.17,8.52],'Ogliastra':[39.90,9.50],
-  'Olbia':[40.92,9.50],'Medio Campidano':[39.57,8.74],
-};
-
-function initLocMap(){
-  locMap=L.map('locMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(locMap);
-}
-
-/* ── STA/LTA ── */
-function stalta(samples, sr, staSec=0.5, ltaSec=10.0){
-  const staN=Math.max(2,Math.round(staSec*sr));
-  const ltaN=Math.max(staN+1,Math.round(ltaSec*sr));
-  const n=samples.length;
-  const cum=new Float64Array(n+1);
-  for(let i=0;i<n;i++) cum[i+1]=cum[i]+Math.abs(samples[i]);
-  const ratio=new Float32Array(n);
-  for(let i=ltaN;i<n;i++){
-    const sta=(cum[i+1]-cum[i-staN])/staN;
-    const lta=(cum[i+1]-cum[i-ltaN])/ltaN;
-    ratio[i]=lta>1e-10?sta/lta:0;
-  }
-  return ratio;
-}
-
-function pickFirst(ratio, threshold, startIdx=0){
-  for(let i=Math.max(0,startIdx);i<ratio.length;i++) if(ratio[i]>=threshold) return i;
-  return -1;
-}
-
-/* S-P time → distanza km */
-function spDist(sp_s){ return Math.max(0,sp_s*8.4); }
-
-/* ── FETCH INGV PAGE per STIMA PROVVISORIA ── */
-async function fetchStimaProv(){
-  const url='https://terremoti.ingv.it/';
-  /* prova proxy locale, poi allorigins */
-  for(const p of ['http://localhost:8080/ingvproxy?url=',
-                   'https://api.allorigins.win/get?url=']){
-    try{
-      const r=await fetch(p+encodeURIComponent(url),{signal:AbortSignal.timeout(15000)});
-      if(!r.ok) continue;
-      let html;
-      if(p.includes('allorigins')){const j=await r.json();html=j.contents||'';}
-      else html=await r.text();
-      return html;
-    }catch(e){}
-  }
-  return null;
-}
-
-function parseStimaProv(html){
-  if(!html) return null;
-  /* Cerca il pattern: STIMA PROVVISORIA ... prov/zona NOME */
-  const m=html.match(/STIMA\s+PROVVISORIA[^<]{0,300}?(?:prov\/zona|prov\.|zona)\s+([A-Za-zÀ-ɏ'\s]{3,30}?)(?:\s*[-<]|$)/i);
-  if(!m) return null;
-  const prov=m[1].trim().replace(/\s+/g,' ');
-  /* Estrai anche magnitude e orario se presenti */
-  const mag=html.match(/magnitud[ei][^2-9]*([2-9][\.,]\d)/i);
-  const ora=html.match(/ore\s+(\d{2}:\d{2})/i);
-  return{
-    prov,
-    mag: mag?mag[1]:null,
-    ora: ora?ora[1]:null,
-    raw: m[0].slice(0,120)
-  };
-}
-
-/* ── MONITOR ── */
-function startLocMonitor(){
-  if(locPollTimer) clearInterval(locPollTimer);
-  document.getElementById('pollDot').classList.add('active');
-  document.getElementById('locPollStatus').innerHTML='<span class="poll-dot active" id="pollDot"></span>Monitor attivo — controllo ogni 30s';
-  pollLocOnce();
-  locPollTimer=setInterval(pollLocOnce,30000);
-}
-function stopLocMonitor(){
-  if(locPollTimer){clearInterval(locPollTimer);locPollTimer=null;}
-  document.getElementById('pollDot').classList.remove('active');
-  document.getElementById('locPollStatus').innerHTML='<span class="poll-dot" id="pollDot"></span>Monitor fermo.';
-  document.getElementById('locAlertBox').style.display='none';
-}
-async function pollLocOnce(){
-  const html=await fetchStimaProv();
-  const result=parseStimaProv(html);
-  const box=document.getElementById('locAlertBox');
-  const now=new Date().toLocaleTimeString('it-IT');
-  if(result){
-    box.style.display='block';
-    document.getElementById('locAlertText').innerHTML=
-      `<b>${result.prov}</b>${result.mag?' · M ~'+result.mag:''}${result.ora?' · ore '+result.ora:''}<br><small style="opacity:.7">${result.raw}</small>`;
-    document.getElementById('locPollStatus').innerHTML='<span class="poll-dot active" id="pollDot"></span>⚡ STIMA PROVVISORIA attiva — '+now;
-    runLocAnalysis(result.prov, null);
-  } else {
-    box.style.display='none';
-    document.getElementById('locPollStatus').innerHTML='<span class="poll-dot active" id="pollDot"></span>Nessuna stima provvisoria — ultimo controllo '+now;
-  }
-}
-
-/* ── ANALISI PRINCIPALE ── */
-async function runLocAnalysis(provName, eventTimeStr){
-  if(!provName||provName.trim()===''){
-    alert('Inserisci il nome di una provincia.'); return;
-  }
-  provName=provName.trim();
-  const statusEl=document.getElementById('locAnalysisStatus');
-  document.getElementById('locAnalysisArea').style.display='block';
-  document.getElementById('locResultBox').style.display='none';
-  document.getElementById('locStaList').innerHTML='<div class="lo"><span class="spin"></span>Ricerca stazioni...</div>';
-  statusEl.textContent='Ricerca province e stazioni...'; statusEl.className='status';
-
-  /* Trova coordinate provincia */
-  let provLL=null;
-  const pnorm=provName.toLowerCase();
-  for(const[k,v] of Object.entries(PROV_COORDS)){
-    if(k.toLowerCase()===pnorm||k.toLowerCase().startsWith(pnorm)||pnorm.startsWith(k.toLowerCase())){
-      provLL=v; break;
-    }
-  }
-  if(!provLL){
-    statusEl.textContent='Provincia "'+provName+'" non trovata nel database. Prova il capoluogo (es. Reggio Calabria).';
-    statusEl.className='status err'; return;
-  }
-
-  /* Carica stazioni se necessario */
-  if(!stations.length){statusEl.textContent='Caricamento stazioni...';await loadNetwork();}
-  if(!stations.length){statusEl.textContent='Impossibile caricare stazioni.';statusEl.className='status err';return;}
-
-  /* Seleziona le 6 stazioni più vicine entro 200 km */
-  const near=stations
-    .map(s=>({...s, d:haverDist(provLL[0],provLL[1],s.lat||0,s.lon||0)}))
-    .filter(s=>s.d<200&&s.lat&&s.lon)
-    .sort((a,b)=>a.d-b.d)
-    .slice(0,6);
-
-  if(near.length<2){
-    statusEl.textContent='Meno di 2 stazioni trovate entro 200 km da '+provName+'.';
-    statusEl.className='status err'; return;
-  }
-
-  statusEl.textContent=`Trovate ${near.length} stazioni — scarico waveform...`;
-
-  /* Finestra temporale: ultimi 10 minuti o intorno all'evento */
-  const end=eventTimeStr?new Date(eventTimeStr+'Z'):new Date();
-  const start=new Date(end.getTime()-10*60000);
-  const fmt=d=>d.toISOString().slice(0,19);
-
-  /* Aggiorna mappa */
-  if(!locMapInited){initLocMap();locMapInited=true;}
-  locCircles.forEach(l=>locMap.removeLayer(l)); locCircles=[];
-  locStaMarkers.forEach(l=>locMap.removeLayer(l)); locStaMarkers=[];
-  if(locEpiMarker){locMap.removeLayer(locEpiMarker);locEpiMarker=null;}
-  locMap.setView(provLL,8);
-
-  /* Fetch waveform per ogni stazione */
-  const results=[];
-  const listEl=document.getElementById('locStaList');
-  listEl.innerHTML='';
-
-  for(const sta of near){
-    const card=document.createElement('div');
-    card.className='sta-card';
-    const canv=document.createElement('canvas');
-    canv.width=200;canv.height=60;canv.className='sta-canvas';
-    const info=document.createElement('div');
-    info.className='sta-info';
-    info.innerHTML=`<div class="sta-code">${sta.code}</div><div class="sta-pick" id="pick_${sta.code}">scarico...</div>`;
-    card.appendChild(canv);card.appendChild(info);
-    listEl.appendChild(card);
-
-    try{
-      /* scegli canale HHZ o EHZ o BHZ */
-      const chans=await fetchChannels(sta.code,networkSelect.value);
-      const ch=chans.find(c=>/^[HEB]HZ/i.test(c))||chans[0];
-      if(!ch){document.getElementById('pick_'+sta.code).textContent='nessun canale HZ';continue;}
-      const net=networkSelect.value||'IV';
-      const url=`${DS_BASE}?network=${encodeURIComponent(net)}&station=${encodeURIComponent(sta.code)}&location=*&channel=${encodeURIComponent(ch)}&starttime=${encodeURIComponent(fmt(start)+'Z')}&endtime=${encodeURIComponent(fmt(end)+'Z')}`;
-      const resp=await fetch(url);
-      if(!resp.ok)throw new Error('HTTP '+resp.status);
-      const ab=await resp.arrayBuffer();
-      const ms=MiniSEED.parse(ab);
-      if(!ms||!ms.samples.length)throw new Error('no samples');
-
-      const sr=ms.sampleRate;
-      const samp=ms.samples;
-
-      /* STA/LTA per pick P */
-      const ratioP=stalta(samp,sr,0.5,10);
-      const pickP=pickFirst(ratioP,3.0,Math.round(sr*1));/* skip first 1s */
-
-      /* STA/LTA su versione filtrata HP per pick S (STA più breve) */
-      const ratioS=stalta(samp,sr,1.0,6);
-      const pickS=pickP>=0?pickFirst(ratioS,4.0,pickP+Math.round(sr*0.5)):-1;
-
-      /* Disegna mini-waveform con picks */
-      drawLocTrace(canv,samp,sr,pickP,pickS,ms.startMs);
-
-      /* Calcola distanza da S-P */
-      let dist=null, tP=null, tS=null;
-      if(pickP>=0&&pickS>pickP){
-        const sp=(pickS-pickP)/sr;
-        dist=spDist(sp);
-        tP=new Date(ms.startMs+pickP*1000/sr);
-        tS=new Date(ms.startMs+pickS*1000/sr);
-        const spStr=sp.toFixed(2)+'s → '+dist.toFixed(0)+' km';
-        document.getElementById('pick_'+sta.code).innerHTML=
-          `P: ${tP.toUTCString().slice(17,25)} · S: ${tS.toUTCString().slice(17,25)}<br>S-P: ${spStr}`;
-        results.push({sta,dist,tP,tS});
-        /* cerchio sulla mappa */
-        const circle=L.circle([sta.lat,sta.lon],{
-          radius:dist*1000,color:'#22c55e',fillColor:'#22c55e',
-          fillOpacity:0.06,weight:2,dashArray:'6,4'
-        }).addTo(locMap);
-        locCircles.push(circle);
-      } else {
-        document.getElementById('pick_'+sta.code).textContent=pickP>=0?'Solo P rilevata — S non trovata':'Pick non rilevati';
-      }
-
-      /* Marker stazione */
-      const sm=L.circleMarker([sta.lat,sta.lon],{radius:5,color:'#3b82f6',fillColor:'#3b82f6',fillOpacity:.9,weight:1.5})
-        .bindPopup(`<b>${sta.code}</b>${dist?'<br>S-P dist: '+dist.toFixed(0)+' km':''}`).addTo(locMap);
-      locStaMarkers.push(sm);
-    }catch(e){
-      document.getElementById('pick_'+sta.code).textContent='Errore: '+e.message;
-      drawLocEmpty(canv,'N/D');
-    }
-  }
-
-  /* Stima epicentro: intersezione cerchi (grid search semplificato) */
-  if(results.length>=2){
-    const epi=gridSearchEpicenter(results);
-    locEpiMarker=L.circleMarker([epi.lat,epi.lon],{
-      radius:10,color:'#ef4444',fillColor:'#ef4444',fillOpacity:.85,weight:2.5
-    }).bindPopup('<b>📍 Stima epicentro</b>').addTo(locMap);
-    /* cerchio incertezza */
-    const uncCircle=L.circle([epi.lat,epi.lon],{
-      radius:epi.uncer*1000,color:'#ef4444',fillColor:'none',weight:1.5,dashArray:'4,6'
-    }).addTo(locMap);
-    locCircles.push(uncCircle);
-    document.getElementById('locCoords').textContent=
-      epi.lat.toFixed(3)+'°N  '+epi.lon.toFixed(3)+'°E';
-    document.getElementById('locUncer').textContent=
-      'Incertezza stimata: ±'+epi.uncer.toFixed(0)+' km · Basato su '+results.length+' stazioni';
-    document.getElementById('locResultBox').style.display='block';
-    statusEl.textContent='Analisi completata — '+results.length+' stazioni con pick S-P.';
-    statusEl.className='status ok';
-    locMap.fitBounds([...results.map(r=>[r.sta.lat,r.sta.lon]),[epi.lat,epi.lon]],{padding:[30,30]});
-  } else {
-    statusEl.textContent='Pick S-P rilevati su meno di 2 stazioni — stima non possibile.';
-    statusEl.className='status warn';
-  }
-}
-
-/* Grid search: trova il punto che minimizza la somma dei quadrati dei residui */
-function gridSearchEpicenter(results){
-  /* Centroide pesato come punto di partenza */
-  const wTot=results.reduce((s,r)=>s+1/r.dist,0);
-  const cLat=results.reduce((s,r)=>s+(1/r.dist)*r.sta.lat,0)/wTot;
-  const cLon=results.reduce((s,r)=>s+(1/r.dist)*r.sta.lon,0)/wTot;
-  const maxDist=Math.max(...results.map(r=>r.dist));
-  const step=0.05, halfG=2.0;
-  let bestLat=cLat,bestLon=cLon,bestRes=Infinity;
-  for(let dlat=-halfG;dlat<=halfG;dlat+=step){
-    for(let dlon=-halfG;dlon<=halfG;dlon+=step){
-      const lat=cLat+dlat, lon=cLon+dlon;
-      let res=0;
-      results.forEach(r=>{
-        const predDist=haverDist(lat,lon,r.sta.lat,r.sta.lon);
-        res+=(predDist-r.dist)**2;
-      });
-      if(res<bestRes){bestRes=res;bestLat=lat;bestLon=lon;}
-    }
-  }
-  const uncer=Math.min(80,Math.max(10,Math.sqrt(bestRes/results.length)));
-  return{lat:bestLat,lon:bestLon,uncer};
-}
-
-/* ── Mini-waveform con picks ── */
-function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
-  const W=canvas.width,H=canvas.height;
-  const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#08101c';ctx.fillRect(0,0,W,H);
-  const n=samples.length;
-  if(!n) return;
-  const mi=Math.min(...samples),ma=Math.max(...samples),range=ma-mi||1;
-  ctx.strokeStyle='#6ee7b7';ctx.lineWidth=1;ctx.beginPath();
-  for(let i=0;i<n;i++){
-    const x=i/n*W,y=H-(samples[i]-mi)/range*(H-4)-2;
-    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-  }
-  ctx.stroke();
-  /* Pick P — verde */
-  if(pickP>=0){
-    ctx.strokeStyle='#22c55e';ctx.lineWidth=1.5;ctx.beginPath();
-    const xP=pickP/n*W;ctx.moveTo(xP,0);ctx.lineTo(xP,H);ctx.stroke();
-    ctx.fillStyle='#22c55e';ctx.font='9px sans-serif';ctx.fillText('P',xP+2,9);
-  }
-  /* Pick S — rosso */
-  if(pickS>=0){
-    ctx.strokeStyle='#ef4444';ctx.lineWidth=1.5;ctx.beginPath();
-    const xS=pickS/n*W;ctx.moveTo(xS,0);ctx.lineTo(xS,H);ctx.stroke();
-    ctx.fillStyle='#ef4444';ctx.font='9px sans-serif';ctx.fillText('S',xS+2,9);
-  }
-}
-function drawLocEmpty(canvas,msg){
-  const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#08101c';ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle='#64748b';ctx.font='11px sans-serif';ctx.textAlign='center';
-  ctx.fillText(msg,canvas.width/2,canvas.height/2+4);
-}
-
-/* Helper: fetch canali stazione */
-async function fetchChannels(staCode,net){
-  try{
-    const r=await fetch(`${ST_BASE}?network=${encodeURIComponent(net)}&station=${encodeURIComponent(staCode)}&level=channel&format=text`);
-    if(!r.ok) return [];
-    const lines=(await r.text()).split('\n').filter(l=>l&&!l.startsWith('#'));
-    return [...new Set(lines.map(l=>l.split('|')[3]).filter(Boolean))];
-  }catch(e){return [];}
-}
-
 </script>
 </body>
 </html>
