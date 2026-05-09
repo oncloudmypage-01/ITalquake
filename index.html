@@ -94,7 +94,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .section.active{display:block;}
 
 /* ── LAYOUT ── */
-.container{width:min(1400px,calc(100% - 32px));margin:24px auto;}
+.container{width:min(1400px,calc(100% - 32px));margin:24px auto;max-width:100%;}
 .header{display:flex;align-items:center;justify-content:space-between;
   gap:16px;margin-bottom:20px;flex-wrap:wrap;}
 .title-wrap h1{margin:0;font-size:clamp(20px,4vw,34px);line-height:1.1;}
@@ -171,9 +171,13 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 
 /* ── MAPS ── */
 .mapbox{width:100%;height:480px;border-radius:0 0 22px 22px;}
+.leaflet-container{background:#0b1120!important;}
 .leaflet-container:focus,.leaflet-container:focus-visible{outline:none!important;}
 .leaflet-tile-pane{-webkit-transform:translateZ(0);transform:translateZ(0);}
-.leaflet-tile{backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.leaflet-tile{
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  width:257px!important;height:257px!important;
+}
 
 /* ── EQ LIST ── */
 .eq-list{max-height:440px;overflow-y:auto;}
@@ -306,6 +310,14 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
   #dayplotControls{flex-wrap:wrap;}
   /* sismogrammi view controls a colonna */
   .seis-view-ctrl{flex-direction:column!important;align-items:flex-start!important;padding:4px 12px 0!important;}
+  /* terremoti recenti: niente overflow */
+  #sectionTerremoti .panel-header[style]{flex-direction:column!important;align-items:flex-start!important;}
+  #sectionTerremoti .gps-btn{align-self:flex-start;}
+  .tl-header{flex-direction:column;align-items:flex-start;gap:6px;}
+  .tl-header select{width:100%!important;}
+  .footer-note code{word-break:break-all;font-size:10px;}
+  /* summary cards più compatte */
+  .sc .v{font-size:16px;}
 }
 /* ── GPS BUTTON ── */
 .gps-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;
@@ -626,7 +638,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
             </div>
             <button class="btn btn-green" id="generateBtn">Scarica e visualizza waveform</button>
             <div id="status" class="status">Caricamento stazioni...</div>
-            <div class="hint">Parser MiniSEED nativo · Tile CartoDB (funziona da file://).</div>
+            <div class="hint">⚠️ Non tutti i sismogrammi potrebbero essere disponibili o avere registrazioni nella finestra temporale desiderata.</div>
           </div>
         </section>
 
