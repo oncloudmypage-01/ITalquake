@@ -28,6 +28,10 @@ function triggerInstall(){
   _installPrompt.userChoice.then(()=>{_installPrompt=null;});
 }
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
@@ -396,10 +400,11 @@ body{padding-bottom:64px;}
 .eq-info .dt{font-size:12px;color:var(--muted);margin-top:3px;display:flex;flex-direction:column;gap:2px;}
 .eq-mag{min-width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
   justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;order:2;margin-left:auto;}
-.seis-btn{flex-shrink:0;padding:6px;border-radius:8px;font-size:16px;
+.seis-btn{flex-shrink:0;padding:6px 8px;border-radius:8px;font-size:16px;
   background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
-  color:#93c5fd;cursor:pointer;transition:all .18s;width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;}
+  color:#93c5fd;cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;line-height:1;min-width:50px;}
 
 /* ── FILTER DRAWER ── */
 .filter-drawer{position:fixed;top:0;right:0;bottom:60px;width:min(340px,85vw);z-index:300;
@@ -481,6 +486,7 @@ body{padding-bottom:64px;}
     <div class="hdr-actions">
       <button class="hdr-btn" id="filterToggle" onclick="toggleFilters()" title="Filtri" style="display:none;">⚙️</button>
       <button class="hdr-btn" id="gpsHdrBtn" onclick="locateUser()" title="Posizione GPS">📍</button>
+      <button class="hdr-btn" id="authBtn" onclick="handleAuth()" title="Account">👤</button>
       <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:6px 10px;border-radius:8px;font-size:14px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;" title="Installa">⬇️</button>
     </div>
   </div>
@@ -823,40 +829,74 @@ body{padding-bottom:64px;}
     <div class="container">
       <div class="header">
         <div class="title-wrap"><h1>🔔 Notifiche</h1>
-          <p>Configura avvisi push e auto-aggiornamento per la tua area.</p></div>
-        <span class="badge" style="background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.35);">Push API</span>
+          <p>Configura avvisi push personalizzati per la tua area.</p></div>
+        <span class="badge" style="background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.35);">Firebase</span>
       </div>
+
+      <!-- ACCOUNT -->
+      <section class="panel" style="margin-bottom:18px;">
+        <div class="panel-header"><h2>👤 Account</h2>
+          <p>Accedi per salvare le tue preferenze nel cloud e ricevere notifiche push.</p></div>
+        <div class="controls">
+          <div id="authStatus" style="padding:8px 0;font-size:14px;color:var(--muted);">Non collegato.</div>
+          <button class="btn" id="loginBtn" onclick="handleAuth()" style="background:rgba(66,133,244,0.15);border-color:rgba(66,133,244,0.4);color:#93bbfc;">
+            <span id="loginBtnText">🔑 Accedi con Google</span>
+          </button>
+        </div>
+      </section>
+
       <div class="notif-grid">
         <section class="panel">
-          <div class="panel-header"><h2>Avvisi Terremoti</h2>
-            <p>Ricevi notifiche push del browser per nuovi eventi.</p></div>
+          <div class="panel-header"><h2>Criteri notifica</h2>
+            <p>Ricevi push quando un terremoto supera i tuoi filtri.</p></div>
           <div class="controls">
             <div class="toggle-row">
-              <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked;saveNotifPrefs()"/>
+              <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked;saveAllPrefs()"/>
                 <span class="sl"></span></label>
-              <span class="tl">Attiva notifiche browser</span>
+              <span class="tl">Attiva notifiche</span>
             </div>
-            <button class="npb" id="notifPermBtn" onclick="askNotifPerm()" style="margin-top:8px;">Richiedi permesso notifiche</button>
-            <div class="field" style="margin-top:12px;"><label>Notifica se M ≥</label>
+            <button class="npb" id="notifPermBtn" onclick="askNotifPerm()" style="margin-top:8px;">Richiedi permesso notifiche browser</button>
+            <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+            <div class="field"><label>Magnitudo minima (M ≥)</label>
               <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0"
-                oninput="saveNotifPrefs()"/></div>
-            <div class="field"><label>Solo provincia (es. BN) — vuoto = tutte le province</label>
+                oninput="saveAllPrefs()"/></div>
+            <div class="field"><label>Distanza massima epicentro (km) — 0 = ovunque</label>
+              <input id="notifDist" type="number" min="0" max="2000" step="10" value="0"
+                oninput="saveAllPrefs()" placeholder="es. 200"/></div>
+            <div class="field"><label>Solo provincia (es. BN) — vuoto = tutte</label>
               <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
-                oninput="this.value=this.value.toUpperCase();saveNotifPrefs()"/></div>
+                oninput="this.value=this.value.toUpperCase();saveAllPrefs()"/></div>
+            <div class="field"><label>Profondità massima (km) — 0 = qualsiasi</label>
+              <input id="notifMaxDepth" type="number" min="0" max="700" step="10" value="0"
+                oninput="saveAllPrefs()" placeholder="es. 100"/></div>
+            <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.6;">
+              ℹ️ La distanza si calcola dalla tua posizione GPS. Attiva il GPS dall'icona 📍 in alto.<br>
+              Le preferenze vengono salvate in locale e, se hai effettuato l'accesso, anche nel cloud Firebase.
+            </div>
           </div>
         </section>
         <section class="panel">
           <div class="panel-header"><h2>Auto-aggiornamento</h2>
-            <p>Ricarica automaticamente i terremoti recenti.</p></div>
+            <p>Polling INGV per nuovi eventi.</p></div>
           <div class="controls">
             <div class="field"><label>Frequenza di aggiornamento</label>
-              <select id="autoRefreshSel" onchange="setAutoRefresh(this.value);saveNotifPrefs()">
+              <select id="autoRefreshSel" onchange="setAutoRefresh(this.value);saveAllPrefs()">
                 <option value="0">Disattivo</option>
                 <option value="60">Ogni minuto</option>
                 <option value="120" selected>Ogni 2 minuti</option>
                 <option value="300">Ogni 5 minuti</option>
               </select></div>
             <div class="ri" id="refreshInd" style="margin-top:8px;color:var(--muted);font-size:13px;">—</div>
+          </div>
+          <div class="panel-header" style="margin-top:12px;"><h2>Push Cloud (FCM)</h2>
+            <p>Ricevi notifiche anche con l'app chiusa (richiede account).</p></div>
+          <div class="controls">
+            <div class="toggle-row">
+              <label class="sw"><input type="checkbox" id="fcmEnabled" onchange="toggleFcm(this.checked)"/>
+                <span class="sl"></span></label>
+              <span class="tl">Push cloud attive</span>
+            </div>
+            <div id="fcmStatus" style="font-size:12px;color:var(--muted);margin-top:6px;">Accedi per attivare le notifiche push cloud.</div>
           </div>
         </section>
       </div>
@@ -1041,16 +1081,19 @@ function _bootLoadPrefs(){
     if(mag) document.getElementById('notifMag').value=mag;
     const prov=localStorage.getItem('itq_notifProv');
     if(prov) document.getElementById('notifProv').value=prov;
+    const dist=localStorage.getItem('itq_notifDist');
+    if(dist) document.getElementById('notifDist').value=dist;
+    const md=localStorage.getItem('itq_notifMaxDepth');
+    if(md) document.getElementById('notifMaxDepth').value=md;
     const ar=localStorage.getItem('itq_autoRefresh');
     if(ar){
       document.getElementById('autoRefreshSel').value=ar;
-      /* Avvia subito il timer, indipendentemente dalla sezione aperta */
       if(ar&&ar!=='0') setAutoRefresh(ar);
     }
-    /* Ripristina tutti i filtri */
     restoreFilters();
-    /* Aggiorna stato bottone permesso notifiche */
     updatePermBtn();
+    /* Init Firebase auth listener */
+    initFirebase();
   }catch(e){}
 }
 
@@ -1246,7 +1289,7 @@ function renderList(events,containerId,onSeis){
   let html='';
   let lastSection='';
   events.forEach((ev,i)=>{
-    const evTime=new Date(ev.time+'Z').getTime();
+    const evTime=new Date(ev.time).getTime();
     const diffMs=now-evTime;
     const diffMin=Math.floor(diffMs/60000);
     const diffH=Math.floor(diffMs/3600000);
@@ -1265,7 +1308,7 @@ function renderList(events,containerId,onSeis){
       html+=`<div class="time-section">${secLabel}</div>`;
       lastSection=secLabel;
     }
-    const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma">📈</button>`:'';
+    const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span style="font-size:16px;">📈</span><span style="font-size:8px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
     const distStr=userLat!=null?`📍 ${haverDist(userLat,userLon,ev.lat,ev.lon).toFixed(0)} km`:'';
     html+=`<div class="eq-item" onclick="focusMarker('${containerId}',${i})">
       <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;">
@@ -1597,12 +1640,17 @@ function restoreFilters(){
     if(saved.networkSelect) networkSelect.value=saved.networkSelect;
   }catch(e){}
 }
-function saveNotifPrefs(){
+function saveNotifPrefs(){ saveAllPrefs(); }
+function saveAllPrefs(){
   try{
     localStorage.setItem('itq_notifEnabled', document.getElementById('notifEnabled').checked?'1':'0');
     localStorage.setItem('itq_notifMag',     document.getElementById('notifMag').value);
     localStorage.setItem('itq_notifProv',    document.getElementById('notifProv').value.trim().toUpperCase());
+    localStorage.setItem('itq_notifDist',    document.getElementById('notifDist').value);
+    localStorage.setItem('itq_notifMaxDepth',document.getElementById('notifMaxDepth').value);
     localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
+    /* Sync to Firestore if logged in */
+    syncPrefsToFirestore();
   }catch(e){}
 }
 /* loadNotifPrefs definita sopra nel boot block */
@@ -1677,6 +1725,13 @@ function shouldNotif(ev){
   if(ev.mag<(parseFloat(document.getElementById('notifMag').value)||3))return false;
   const p=document.getElementById('notifProv').value.trim().toUpperCase();
   if(p){const ep=extractProv(ev.place);if(!ep||ep!==p)return false;}
+  const maxDist=parseFloat(document.getElementById('notifDist').value)||0;
+  if(maxDist>0&&userLat!=null){
+    const d=haverDist(userLat,userLon,ev.lat,ev.lon);
+    if(d>maxDist)return false;
+  }
+  const maxDepth=parseFloat(document.getElementById('notifMaxDepth').value)||0;
+  if(maxDepth>0&&ev.depth>maxDepth)return false;
   return true;
 }
 function sendNotif(ev){
@@ -2724,6 +2779,182 @@ async function fetchChannels(staCode,net){
     const lines=(await r.text()).split('\n').filter(l=>l&&!l.startsWith('#'));
     return [...new Set(lines.map(l=>l.split('|')[3]).filter(Boolean))];
   }catch(e){return [];}
+}
+
+/* ================================================================
+   FIREBASE: AUTH + FIRESTORE + FCM
+================================================================ */
+/* ⚠️ INSERISCI QUI LA TUA CONFIGURAZIONE FIREBASE */
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyBRpSLDgJmiOVEhQQoqBlJ8yDYq2WDawww",
+  authDomain:        "italquake.firebaseapp.com",
+  projectId:         "italquake",
+  storageBucket:     "italquake.firebasestorage.app",
+  messagingSenderId: "456621086487",
+  appId:             "1:456621086487:web:1df98fb06d9e4bada20952"
+};
+/* ⚠️ VAPID key per FCM web push (Firebase Console → Cloud Messaging → Web Push certificates) */
+const FCM_VAPID_KEY = "YOUR_VAPID_KEY";
+
+let _fb=null, _fbAuth=null, _fbDb=null, _fbMsg=null, _currentUser=null;
+
+function initFirebase(){
+  try{
+    if(FIREBASE_CONFIG.apiKey==='YOUR_API_KEY') {
+      console.log('Firebase config non impostata — funzionalità cloud disabilitata.');
+      return;
+    }
+    _fb=firebase.initializeApp(FIREBASE_CONFIG);
+    _fbAuth=firebase.auth();
+    _fbDb=firebase.firestore();
+    try{ _fbMsg=firebase.messaging(); }catch(e){ console.log('FCM non supportato in questo browser.'); }
+    _fbAuth.onAuthStateChanged(user=>{
+      _currentUser=user;
+      updateAuthUI();
+      if(user) loadPrefsFromFirestore();
+    });
+  }catch(e){console.error('Firebase init error:',e);}
+}
+
+function updateAuthUI(){
+  const statusEl=document.getElementById('authStatus');
+  const btnText=document.getElementById('loginBtnText');
+  const hdrBtn=document.getElementById('authBtn');
+  const fcmStatus=document.getElementById('fcmStatus');
+  if(_currentUser){
+    const name=_currentUser.displayName||_currentUser.email||'Utente';
+    if(statusEl) statusEl.innerHTML='✅ Connesso come <b>'+name+'</b>';
+    if(btnText) btnText.textContent='🚪 Esci';
+    if(hdrBtn) hdrBtn.textContent='😊';
+    if(fcmStatus) fcmStatus.textContent='Push cloud disponibili. Attiva lo switch.';
+  } else {
+    if(statusEl) statusEl.textContent='Non collegato.';
+    if(btnText) btnText.textContent='🔑 Accedi con Google';
+    if(hdrBtn) hdrBtn.textContent='👤';
+    if(fcmStatus) fcmStatus.textContent='Accedi per attivare le notifiche push cloud.';
+    const fcmChk=document.getElementById('fcmEnabled');
+    if(fcmChk) fcmChk.checked=false;
+  }
+}
+
+async function handleAuth(){
+  if(!_fbAuth){
+    if(FIREBASE_CONFIG.apiKey==='YOUR_API_KEY'){
+      alert('Firebase non configurato.\n\nModifica FIREBASE_CONFIG in index.html con le credenziali del tuo progetto Firebase.');
+    } else {
+      alert('Errore Firebase. Controlla la console.');
+    }
+    return;
+  }
+  if(_currentUser){
+    await _fbAuth.signOut();
+  } else {
+    try{
+      const provider=new firebase.auth.GoogleAuthProvider();
+      await _fbAuth.signInWithPopup(provider);
+    }catch(e){
+      if(e.code!=='auth/popup-closed-by-user') alert('Errore login: '+e.message);
+    }
+  }
+}
+
+/* ── Firestore sync ── */
+async function syncPrefsToFirestore(){
+  if(!_fbDb||!_currentUser) return;
+  try{
+    const prefs={
+      notifEnabled: document.getElementById('notifEnabled').checked,
+      minMag: parseFloat(document.getElementById('notifMag').value)||3,
+      maxDist: parseFloat(document.getElementById('notifDist').value)||0,
+      province: document.getElementById('notifProv').value.trim().toUpperCase(),
+      maxDepth: parseFloat(document.getElementById('notifMaxDepth').value)||0,
+      autoRefresh: document.getElementById('autoRefreshSel').value,
+      userLat: userLat||null,
+      userLon: userLon||null,
+      fcmToken: localStorage.getItem('itq_fcmToken')||null,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    await _fbDb.collection('users').doc(_currentUser.uid).set(prefs,{merge:true});
+  }catch(e){console.error('Firestore sync error:',e);}
+}
+
+async function loadPrefsFromFirestore(){
+  if(!_fbDb||!_currentUser) return;
+  try{
+    const doc=await _fbDb.collection('users').doc(_currentUser.uid).get();
+    if(!doc.exists) return;
+    const d=doc.data();
+    if(d.notifEnabled!=null){document.getElementById('notifEnabled').checked=d.notifEnabled;notifOn=d.notifEnabled;}
+    if(d.minMag!=null) document.getElementById('notifMag').value=d.minMag;
+    if(d.maxDist!=null) document.getElementById('notifDist').value=d.maxDist;
+    if(d.province) document.getElementById('notifProv').value=d.province;
+    if(d.maxDepth!=null) document.getElementById('notifMaxDepth').value=d.maxDepth;
+    if(d.autoRefresh) {document.getElementById('autoRefreshSel').value=d.autoRefresh;if(d.autoRefresh!=='0')setAutoRefresh(d.autoRefresh);}
+    /* Save to local too */
+    localStorage.setItem('itq_notifEnabled',d.notifEnabled?'1':'0');
+    if(d.minMag!=null)localStorage.setItem('itq_notifMag',d.minMag);
+    if(d.maxDist!=null)localStorage.setItem('itq_notifDist',d.maxDist);
+    if(d.province)localStorage.setItem('itq_notifProv',d.province);
+    if(d.maxDepth!=null)localStorage.setItem('itq_notifMaxDepth',d.maxDepth);
+    if(d.autoRefresh)localStorage.setItem('itq_autoRefresh',d.autoRefresh);
+    /* Restore FCM toggle */
+    const fcmChk=document.getElementById('fcmEnabled');
+    if(fcmChk&&d.fcmToken) fcmChk.checked=true;
+  }catch(e){console.error('Firestore load error:',e);}
+}
+
+/* ── FCM Push ── */
+async function toggleFcm(enabled){
+  if(!_currentUser){
+    alert('Devi prima accedere con Google.');
+    document.getElementById('fcmEnabled').checked=false;
+    return;
+  }
+  if(!_fbMsg){
+    alert('Push cloud non supportato in questo browser.');
+    document.getElementById('fcmEnabled').checked=false;
+    return;
+  }
+  const fcmStatus=document.getElementById('fcmStatus');
+  if(enabled){
+    try{
+      const perm=await Notification.requestPermission();
+      if(perm!=='granted'){
+        alert('Permesso notifiche negato dal browser.');
+        document.getElementById('fcmEnabled').checked=false;
+        return;
+      }
+      const token=await _fbMsg.getToken({vapidKey:FCM_VAPID_KEY});
+      localStorage.setItem('itq_fcmToken',token);
+      if(fcmStatus) fcmStatus.textContent='✅ Push attive. Token registrato.';
+      syncPrefsToFirestore();
+    }catch(e){
+      console.error('FCM error:',e);
+      if(fcmStatus) fcmStatus.textContent='❌ Errore: '+e.message;
+      document.getElementById('fcmEnabled').checked=false;
+    }
+  } else {
+    localStorage.removeItem('itq_fcmToken');
+    if(fcmStatus) fcmStatus.textContent='Push cloud disattivate.';
+    /* Remove token from Firestore */
+    if(_fbDb&&_currentUser){
+      try{await _fbDb.collection('users').doc(_currentUser.uid).update({fcmToken:null});}catch(e){}
+    }
+  }
+}
+
+/* FCM foreground message handler */
+if(typeof firebase!=='undefined'&&firebase.messaging&&firebase.messaging.isSupported&&firebase.messaging.isSupported()){
+  try{
+    const msg=firebase.messaging();
+    msg.onMessage(payload=>{
+      const n=payload.notification||{};
+      const d=payload.data||{};
+      if(n.title){
+        try{new Notification(n.title,{body:n.body||'',tag:d.eventId||'itq_fcm_'+Date.now()});}catch(e){}
+      }
+    });
+  }catch(e){}
 }
 
 </script>
