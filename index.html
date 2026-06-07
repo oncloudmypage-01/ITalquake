@@ -524,7 +524,7 @@ body{padding-bottom:64px;}
       <button class="hdr-btn" id="filterToggle" onclick="toggleFilters()" title="Filtri" style="display:none;">⚙️</button>
       <button class="hdr-btn" id="gpsHdrBtn" onclick="locateUser()" title="Posizione GPS">📍</button>
       <button class="hdr-btn" id="authBtn" onclick="handleAuth()" title="Account">👤</button>
-      <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:6px 10px;border-radius:8px;font-size:14px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;" title="Installa">⬇️</button>
+      <button class="hdr-btn" onclick="goSection('terremoti')" title="Terremoti recenti" style="font-size:20px;">🫨</button>
     </div>
   </div>
 
@@ -1317,7 +1317,7 @@ function parseEqText(text,maxDepth=999){
   }).filter(Boolean);
 }
 
-function renderMarkers(events,leafletMap,markersArr,onSeis){
+function renderMarkers(events,leafletMap,markersArr,onSeis,autoZoom=true){
   markersArr.forEach(m=>leafletMap.removeLayer(m));
   markersArr.length=0;
   const bounds=[];
@@ -1355,8 +1355,10 @@ function renderMarkers(events,leafletMap,markersArr,onSeis){
     markersArr.push(m);
     bounds.push([ev.lat,ev.lon]);
   });
-  if(bounds.length>1)leafletMap.fitBounds(bounds,{padding:[28,28]});
-  else if(bounds.length===1)leafletMap.setView(bounds[0],9);
+  if(autoZoom){
+    if(bounds.length>1)leafletMap.fitBounds(bounds,{padding:[28,28]});
+    else if(bounds.length===1)leafletMap.setView(bounds[0],9);
+  }
 }
 
 function renderList(events,containerId,onSeis){
@@ -1674,7 +1676,7 @@ async function fetchEarthquakes(){
     drawTimeline(eqData,'tlCanvas','eq');
     /* Renderizza markers solo se la mappa è pronta */
     if(eqMap){
-      try{ renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq'); }catch(e){}
+      try{ renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq',false); }catch(e){}
     }
     st.textContent=`Caricati ${eqData.length} eventi.`;st.className='status ok';
   }catch(err){
@@ -1836,7 +1838,7 @@ async function quietRefresh(){
         tag:'itq_batch_'+Date.now()});}catch(e){}
     }
     eqData=evs;
-    renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq');renderList(eqData,'eqList','openSeisForEq');
+    renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq',false);renderList(eqData,'eqList','openSeisForEq');
     renderSummary(eqData,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
     renderRegionTable(eqData,'eqRegTbl');
     updateProvSelect(eqData,'tlProv');
