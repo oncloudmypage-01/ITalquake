@@ -647,7 +647,7 @@ body{padding-bottom:64px;}
   <div style="display:none;">
     <select id="tlProv"><option value="">Tutta Italia</option></select>
     <canvas id="tlCanvas" width="1" height="1"></canvas>
-    <div id="eqRegTbl"></div>
+    <div id="eqRegTbl_unused"></div>
     <button id="gpsEqBtn"></button>
   </div>
 
@@ -2973,10 +2973,12 @@ function updateAuthUI(){
     }
     /* Stato notifiche nel panel */
     const mag=localStorage.getItem('itq_notifMag')||'3';
-    const dist=localStorage.getItem('itq_notifDist')||'0';
+    const dist=parseFloat(localStorage.getItem('itq_notifDist')||'0');
     const en=localStorage.getItem('itq_notifEnabled')==='1';
-    let notifDesc=en?'Attive — M≥'+mag:(dist>0?' max '+dist+' km':''):'Disattivate';
-    if(en&&dist>0) notifDesc='Attive — M≥'+mag+', entro '+dist+' km';
+    let notifDesc;
+    if(!en) notifDesc='Disattivate';
+    else if(dist>0) notifDesc='Attive — M≥'+mag+', entro '+dist+' km';
+    else notifDesc='Attive — M≥'+mag;
     document.getElementById('profileNotifStatus').textContent=notifDesc;
     if(fcmStatus) fcmStatus.textContent='Push cloud disponibili. Attiva lo switch.';
   } else {
