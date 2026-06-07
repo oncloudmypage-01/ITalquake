@@ -605,7 +605,27 @@ body{padding-bottom:64px;}
       <button class="sort-btn active" id="sortData" onclick="sortEq('data')">Data</button>
       <button class="sort-btn" id="sortMag" onclick="sortEq('mag')">Magnitudo</button>
       <button class="sort-btn" id="sortDist" onclick="sortEq('dist')">Distanza</button>
+      <button class="sort-btn" id="sortStats" onclick="toggleStats()" style="flex:none;padding:8px 14px;">📊</button>
     </div>
+
+    <!-- PANNELLO STATISTICHE -->
+    <div id="statsPanel" style="display:none;border-bottom:1px solid var(--border);">
+      <div style="padding:12px 16px 4px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:13px;font-weight:700;color:var(--text);">Statistiche periodo selezionato</span>
+        <button onclick="toggleStats()" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;">✕</button>
+      </div>
+      <div id="eqSumRow" class="summary-row" style="display:none;padding:8px 16px;">
+        <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="sTot">—</div></div>
+        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#fca5a5">—</div></div>
+        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#86efac">—</div></div>
+        <div class="sc"><div class="k">Prof. media</div><div class="v" id="sAvgD">—</div></div>
+      </div>
+      <div style="padding:0 16px 4px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Per Regione</div>
+      <div class="tbl-wrap" id="eqRegTbl" style="padding:0 16px 12px;"><div class="lo" style="padding:12px 0;">—</div></div>
+      <div style="padding:0 16px 4px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Per Provincia</div>
+      <div class="tbl-wrap" id="eqProvTbl" style="padding:0 16px 12px;"><div class="lo" style="padding:12px 0;">—</div></div>
+    </div>
+
     <div id="eqListFull" style="overflow-y:auto;max-height:calc(100vh - 170px);">
       <div class="eq-list" id="eqList"><div class="lo" style="padding:40px 16px;text-align:center;color:var(--muted);">Caricamento...</div></div>
     </div>
@@ -620,12 +640,6 @@ body{padding-bottom:64px;}
         </div>
         <div id="eqMap" class="mapbox" style="min-height:300px;"></div>
       </section>
-      <div id="eqSumRow" class="summary-row" style="display:none;padding:12px 16px;">
-        <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="sTot">—</div></div>
-        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#fca5a5">—</div></div>
-        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#86efac">—</div></div>
-        <div class="sc"><div class="k">Prof. media</div><div class="v" id="sAvgD">—</div></div>
-      </div>
     </div>
   </div>
 
@@ -1395,13 +1409,55 @@ let currentSort='data';
 function sortEq(by){
   currentSort=by;
   document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sort'+by.charAt(0).toUpperCase()+by.slice(1)).classList.add('active');
+  const btn=document.getElementById('sort'+by.charAt(0).toUpperCase()+by.slice(1));
+  if(btn) btn.classList.add('active');
   if(!eqData.length) return;
   let sorted=[...eqData];
   if(by==='mag') sorted.sort((a,b)=>b.mag-a.mag);
   else if(by==='dist'&&userLat!=null) sorted.sort((a,b)=>haverDist(userLat,userLon,a.lat,a.lon)-haverDist(userLat,userLon,b.lat,b.lon));
   else sorted.sort((a,b)=>new Date(b.time)-new Date(a.time));
   renderList(sorted,'eqList','openSeisForEq');
+}
+
+/* ── STATS PANEL ── */
+function toggleStats(){
+  const panel=document.getElementById('statsPanel');
+  const btn=document.getElementById('sortStats');
+  const open=panel.style.display==='none';
+  panel.style.display=open?'block':'none';
+  if(btn) btn.classList.toggle('active',open);
+  /* Altezza lista si adatta */
+  const listWrap=document.getElementById('eqListFull');
+  if(listWrap) listWrap.style.maxHeight=open?'calc(100vh - 400px)':'calc(100vh - 170px)';
+  if(open && eqData.length){
+    renderSummary(eqData,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
+    renderRegionTable(eqData,'eqRegTbl');
+    renderProvTable(eqData,'eqProvTbl');
+  }
+}
+
+function renderProvTable(events,containerId){
+  const wrap=document.getElementById(containerId);
+  if(!wrap) return;
+  if(!events.length){wrap.innerHTML='<div class="lo">Nessun dato.</div>';return;}
+  const by={};
+  for(const ev of events){
+    const p=extractProv(ev.place)||'—';
+    if(!by[p])by[p]={count:0,mags:[]};
+    by[p].count++;by[p].mags.push(ev.mag);
+  }
+  const rows=Object.entries(by)
+    .map(([p,d])=>({p,count:d.count,max:Math.max(...d.mags)}))
+    .sort((a,b)=>b.count-a.count);
+  const mx=rows[0].count;
+  const pill=(m)=>{const c=magCol(m);return`<span class="mpill" style="background:${c}22;color:${c};">${m.toFixed(1)}</span>`;};
+  wrap.innerHTML=`<table class="rtbl"><thead><tr>
+    <th>Provincia</th><th class="r">N° eventi</th><th class="r">Max M</th>
+  </tr></thead><tbody>${rows.map(r=>`<tr>
+    <td>${r.p}</td>
+    <td class="r">${r.count}<span class="rbar" style="width:${Math.round(r.count/mx*65)}px"></span></td>
+    <td class="r">${pill(r.max)}</td>
+  </tr>`).join('')}</tbody></table>`;
 }
 
 /* ── FILTER DRAWER ── */
@@ -1610,14 +1666,21 @@ async function fetchEarthquakes(){
     const text=await resp.text();
     eqData=parseEqText(text,maxD);
     eqData.forEach(ev=>knownIds.add(ev.id));
-    renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq');
+    /* Renderizza sempre la lista */
     renderList(eqData,'eqList','openSeisForEq');
     renderSummary(eqData,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
     renderRegionTable(eqData,'eqRegTbl');
     updateProvSelect(eqData,'tlProv');
     drawTimeline(eqData,'tlCanvas','eq');
+    /* Renderizza markers solo se la mappa è pronta */
+    if(eqMap){
+      try{ renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq'); }catch(e){}
+    }
     st.textContent=`Caricati ${eqData.length} eventi.`;st.className='status ok';
-  }catch(err){st.textContent='Errore: '+err.message;st.className='status err';}
+  }catch(err){
+    st.textContent='Errore: '+err.message;st.className='status err';
+    console.error('fetchEarthquakes:',err);
+  }
   finally{btn.disabled=false;}
 }
 
