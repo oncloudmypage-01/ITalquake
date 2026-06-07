@@ -28,36 +28,6 @@ function triggerInstall(){
   _installPrompt.userChoice.then(()=>{_installPrompt=null;});
 }
 </script>
-<script>
-/* Coordinated line-icon set (stroke, currentColor) */
-window.IC=(function(){
-  const W=b=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+b+'</svg>';
-  return {
-    quake:W('<circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M8.3 8.3a5.2 5.2 0 0 0 0 7.4"/><path d="M15.7 8.3a5.2 5.2 0 0 1 0 7.4"/><path d="M5.6 5.6a9 9 0 0 0 0 12.8"/><path d="M18.4 5.6a9 9 0 0 1 0 12.8"/>'),
-    storico:W('<path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-7.4 3.9"/><path d="M3.2 3v4h4"/><path d="M12 7.8V12l3 1.8"/>'),
-    seismo:W('<path d="M2 12h3.4l2-6 3 13 2.5-9 1.4 2H22"/>'),
-    focal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 12V3A9 9 0 0 1 21 12Z" fill="currentColor" stroke="none"/><path d="M12 12v9A9 9 0 0 1 3 12Z" fill="currentColor" stroke="none"/></svg>',
-    bell:W('<path d="M6 9.5a6 6 0 0 1 12 0c0 4 1.1 5.2 1.9 6H4.1c.8-.8 1.9-2 1.9-6Z"/><path d="M10 19a2 2 0 0 0 4 0"/>'),
-    locate:W('<circle cx="12" cy="12" r="6"/><path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/>'),
-    globe:W('<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.5 2.6 15.5 0 18M12 3c-2.6 2.5-2.6 15.5 0 18"/>'),
-    home:W('<path d="M3 11.5 12 3l9 8.5"/><path d="M5.5 10.2V20h13V10.2"/>'),
-    map:W('<path d="M9 4 3 6.2v14L9 18l6 2 6-2.2v-14L15 6 9 4Z"/><path d="M9 4v14M15 6v14"/>'),
-    stats:W('<path d="M3.5 21h17"/><path d="M7 21v-6.5M12 21V9M17 21v-9.5"/>'),
-    pin:W('<path d="M12 21.5s6.5-5.8 6.5-11A6.5 6.5 0 0 0 5.5 10.5c0 5.2 6.5 11 6.5 11Z"/><circle cx="12" cy="10.2" r="2.3"/>'),
-    bolt:W('<path d="M13 2.5 5 13.5h5.5l-1 8 9-11.5H13z"/>'),
-    clock:W('<circle cx="12" cy="12" r="9"/><path d="M12 7.2V12l3.4 2"/>'),
-    gear:W('<circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.8 7.8 0 0 0 0-2l1.9-1.5-2-3.4-2.3.9a7.6 7.6 0 0 0-1.7-1L15 3h-4l-.3 2.5a7.6 7.6 0 0 0-1.7 1l-2.3-.9-2 3.4L4.6 11a7.8 7.8 0 0 0 0 2l-1.9 1.5 2 3.4 2.3-.9a7.6 7.6 0 0 0 1.7 1L11 21h4l.3-2.5a7.6 7.6 0 0 0 1.7-1l2.3.9 2-3.4z"/>'),
-    user:W('<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>'),
-    logout:W('<path d="M14 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8"/><path d="M16.5 8 20.5 12l-4 4"/><path d="M20.5 12H10"/>'),
-    refresh:W('<path d="M3 12a9 9 0 0 1 15-6.6L21 8"/><path d="M21 3.5V8h-4.5"/><path d="M21 12a9 9 0 0 1-15 6.6L3 16"/><path d="M3 20.5V16h4.5"/>')
-  };
-})();
-document.addEventListener('DOMContentLoaded',function(){
-  document.querySelectorAll('[data-ic]').forEach(function(el){
-    var k=el.getAttribute('data-ic'); if(window.IC&&IC[k]) el.innerHTML=IC[k];
-  });
-});
-</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -96,43 +66,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .choice-card.stor:hover{border-color:rgba(168,85,247,0.8);}
 .choice-card.seis{border-color:rgba(34,197,94,0.4);}
 .choice-card.seis:hover{border-color:rgba(34,197,94,0.8);}
-.choice-card .icon{font-size:42px;}
-.choice-card .icon.ic{font-size:36px;width:76px;height:76px;border-radius:20px;background:color-mix(in srgb,currentColor 12%,transparent);border:1px solid color-mix(in srgb,currentColor 28%,transparent);transition:background .2s,transform .2s;}
-.choice-card:hover .icon.ic{background:color-mix(in srgb,currentColor 20%,transparent);transform:translateY(-1px);}
-/* ── coordinated line-icon system ── */
-.ic{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:0 0 auto;}
-.ic svg{width:1em;height:1em;display:block;}
-.nav-brand{display:inline-flex;align-items:center;gap:8px;}
-.nav-brand .ic{font-size:18px;color:#86efac;}
-.nav-tab{display:inline-flex;align-items:center;gap:7px;}
-.nav-tab .ic{font-size:17px;}
-.nav-home{display:inline-flex;align-items:center;gap:7px;}
-.nav-home .ic{font-size:16px;}
-.btab-icon.ic{font-size:21px;}
-.top-header h1{display:inline-flex;align-items:center;gap:9px;}
-.top-header h1 .ic{font-size:0.85em;}
-.title-wrap h1{display:inline-flex;align-items:center;gap:11px;}
-.title-wrap h1 .ic{font-size:0.82em;}
-.profile-row .ic{font-size:16px;color:var(--muted);}
-.profile-avatar-placeholder .ic{font-size:26px;}
-.hdr-btn .ic{font-size:18px;}
-.seis-btn .ic{font-size:17px;color:#86efac;}
-/* ── tocco di colore leggero sulle icone (smorzato verso lo slate) ── */
-#tabEq .ic{color:color-mix(in srgb,#f87171 70%,#94a3b8);}
-#tabStor .ic{color:color-mix(in srgb,#c084fc 70%,#94a3b8);}
-#tabSeis .ic{color:color-mix(in srgb,#34d399 70%,#94a3b8);}
-#tabFm .ic{color:color-mix(in srgb,#fb923c 70%,#94a3b8);}
-#tabNotif .ic{color:color-mix(in srgb,#f472b6 70%,#94a3b8);}
-#tabLoc .ic{color:color-mix(in srgb,#2dd4bf 70%,#94a3b8);}
-.nav-tab:hover .ic,.nav-tab.a-eq .ic,.nav-tab.a-stor .ic,.nav-tab.a-seis .ic,.nav-tab.a-fm .ic{filter:saturate(1.35) brightness(1.12);}
-.btab.t-eq .btab-icon{color:color-mix(in srgb,#f87171 72%,#94a3b8);}
-.btab.t-map .btab-icon{color:color-mix(in srgb,#60a5fa 72%,#94a3b8);}
-.btab.t-seis .btab-icon{color:color-mix(in srgb,#34d399 72%,#94a3b8);}
-.btab.t-fm .btab-icon{color:color-mix(in srgb,#fb923c 72%,#94a3b8);}
-.btab.active .btab-icon{filter:saturate(1.4) brightness(1.12);}
-#gpsHdrBtn .ic{color:color-mix(in srgb,#60a5fa 66%,#94a3b8);}
-.profile-row:nth-of-type(1) .ic{color:color-mix(in srgb,#f472b6 66%,#94a3b8);}
-.profile-row:nth-of-type(2) .ic{color:color-mix(in srgb,#60a5fa 66%,#94a3b8);}
+.choice-card .icon{font-size:46px;}
 .choice-card h2{margin:0;font-size:18px;}
 .choice-card p{margin:0;font-size:12px;color:var(--muted);line-height:1.5;}
 
@@ -349,7 +283,6 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
   .choices{flex-direction:row;flex-wrap:wrap;gap:12px;}
   .choice-card{width:calc(50% - 6px);padding:18px 12px;gap:8px;}
   .choice-card .icon{font-size:32px;}
-  .choice-card .icon.ic{width:56px;height:56px;font-size:28px;border-radius:16px;}
   .choice-card h2{font-size:14px;}
   .choice-card p{font-size:11px;}
   .mapbox{min-height:260px!important;height:48vw!important;}
@@ -544,35 +477,35 @@ body{padding-bottom:64px;}
 <!-- LANDING -->
 <div id="landing">
   <div class="brand">
-    <h1 style="display:inline-flex;align-items:center;gap:13px;justify-content:center;"><span class="ic" data-ic="globe" style="color:#22c55e;font-size:0.74em;-webkit-text-fill-color:initial;"></span><span>ITalquake</span></h1>
+    <h1><span style="-webkit-text-fill-color:initial;background:none;">🌍</span> ITalquake</h1>
     <p>Portale sismologico italiano — Dati in tempo reale da INGV / EIDA</p>
   </div>
   <div class="choices">
     <div class="choice-card eq" onclick="goSection('terremoti')">
-      <div class="icon ic" data-ic="quake" style="color:#f87171;"></div><h2>Terremoti Recenti</h2>
+      <div class="icon">🫨</div><h2>Terremoti Recenti</h2>
       <p>Mappa e lista degli ultimi eventi con statistiche per regione</p>
     </div>
     <div class="choice-card stor" onclick="goSection('storico')">
-      <div class="icon ic" data-ic="storico" style="color:#c084fc;"></div><h2>Storico</h2>
+      <div class="icon">📚</div><h2>Storico</h2>
       <p>Ricerca libera per intervallo di date su tutto il catalogo INGV</p>
     </div>
     <div class="choice-card seis" onclick="goSection('sismogrammi')">
-      <div class="icon ic" data-ic="seismo" style="color:#86efac;"></div><h2>Sismogrammi</h2>
+      <div class="icon">📈</div><h2>Sismogrammi</h2>
       <p>Terremoti, sismogrammi e meccanismi focali INGV in tempo reale</p>
     </div>
     <div class="choice-card" style="border-color:rgba(251,146,60,0.4);"
          onclick="goSection('focali')">
-      <div class="icon ic" data-ic="focal" style="color:#fdba74;"></div><h2>Meccanismi Focali</h2>
+      <div class="icon">🎯</div><h2>Meccanismi Focali</h2>
       <p>Beach ball TDMT su mappa — geometria delle faglie attivatrici</p>
     </div>
     <div class="choice-card" style="border-color:rgba(236,72,153,0.4);"
          onclick="goSection('notifiche')">
-      <div class="icon ic" data-ic="bell" style="color:#f9a8d4;"></div><h2>Notifiche</h2>
+      <div class="icon">🔔</div><h2>Notifiche</h2>
       <p>Avvisi push per terremoti nella tua provincia e auto-aggiornamento</p>
     </div>
     <div class="choice-card" style="border-color:rgba(16,185,129,0.4);"
          onclick="goSection('localizzazione')">
-      <div class="icon ic" data-ic="locate" style="color:#5eead4;"></div><h2>Localizzazione</h2>
+      <div class="icon">🔬</div><h2>Localizzazione</h2>
       <p>Stima sperimentale epicentro da tempi S-P su stazioni vicine</p>
     </div>
   </div>
@@ -586,12 +519,12 @@ body{padding-bottom:64px;}
 <div id="appContainer">
   <!-- TOP HEADER -->
   <div class="top-header" id="topHeader">
-    <h1 id="topTitle"><span class="ic" data-ic="quake"></span>Terremoti</h1>
+    <h1 id="topTitle">🌍 Terremoti</h1>
     <div class="hdr-actions">
-      <button class="hdr-btn" id="filterToggle" onclick="toggleFilters()" title="Filtri" style="display:none;"><span class="ic" data-ic="gear"></span></button>
-      <button class="hdr-btn" id="gpsHdrBtn" onclick="locateUser()" title="Posizione GPS"><span class="ic" data-ic="pin"></span></button>
-      <button class="hdr-btn" id="authBtn" onclick="handleAuth()" title="Account"><span class="ic" data-ic="user"></span></button>
-      <button class="hdr-btn" onclick="goSection('terremoti')" title="Terremoti recenti"><span class="ic" data-ic="quake" style="font-size:20px;"></span></button>
+      <button class="hdr-btn" id="filterToggle" onclick="toggleFilters()" title="Filtri" style="display:none;">⚙️</button>
+      <button class="hdr-btn" id="gpsHdrBtn" onclick="locateUser()" title="Posizione GPS">📍</button>
+      <button class="hdr-btn" id="authBtn" onclick="handleAuth()" title="Account">👤</button>
+      <button class="hdr-btn" onclick="goSection('terremoti')" title="Terremoti recenti" style="font-size:20px;">🫨</button>
     </div>
   </div>
 
@@ -603,7 +536,7 @@ body{padding-bottom:64px;}
   <div class="profile-panel" id="profilePanel">
     <div class="profile-header">
       <div id="profileAvatarWrap">
-        <div class="profile-avatar-placeholder"><span class="ic" data-ic="user"></span></div>
+        <div class="profile-avatar-placeholder">👤</div>
       </div>
       <div class="profile-info">
         <div class="pname" id="profileName">—</div>
@@ -611,12 +544,12 @@ body{padding-bottom:64px;}
       </div>
     </div>
     <div class="profile-body">
-      <div class="profile-row"><span class="ic" data-ic="bell"></span><span id="profileNotifStatus">Notifiche non configurate</span></div>
-      <div class="profile-row"><span class="ic" data-ic="pin"></span><span id="profileGpsStatus">Posizione non rilevata</span></div>
+      <div class="profile-row"><span>🔔</span><span id="profileNotifStatus">Notifiche non configurate</span></div>
+      <div class="profile-row"><span>📍</span><span id="profileGpsStatus">Posizione non rilevata</span></div>
     </div>
     <div class="profile-actions">
-      <button class="profile-btn-notif" onclick="closeProfile();goSection('notifiche')" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="gear" style="font-size:17px;"></span>Impostazioni notifiche</button>
-      <button class="profile-btn-logout" onclick="doLogout()" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="logout" style="font-size:17px;"></span>Esci dall'account</button>
+      <button class="profile-btn-notif" onclick="closeProfile();goSection('notifiche')">⚙️ Impostazioni notifiche</button>
+      <button class="profile-btn-logout" onclick="doLogout()">🚪 Esci dall'account</button>
     </div>
   </div>
   <div class="filter-drawer" id="filterDrawer">
@@ -647,23 +580,23 @@ body{padding-bottom:64px;}
             <option value="30">≤30</option><option value="70">≤70</option>
             <option value="150">≤150</option></select></div>
       </div>
-      <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes();toggleFilters();" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="refresh" style="font-size:17px;"></span>Aggiorna</button>
+      <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes();toggleFilters();">🔄 Aggiorna</button>
       <div id="eqStatus" class="status">Pronto.</div>
       <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
-      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="bell" style="font-size:16px;"></span>Notifiche &amp; Auto-aggiornamento →</button>
+      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;">🔔 Notifiche &amp; Auto-aggiornamento →</button>
     </div>
   </div>
 
   <nav class="nav-bar">
-    <div class="nav-brand" onclick="goHome()" title="Torna alla home"><span class="ic" data-ic="globe"></span>ITalquake</div>
-    <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')"><span class="ic" data-ic="quake"></span>Recenti</button>
-    <button class="nav-tab" id="tabStor" onclick="goSection('storico')"><span class="ic" data-ic="storico"></span>Storico</button>
-    <button class="nav-tab" id="tabSeis" onclick="goSection('sismogrammi')"><span class="ic" data-ic="seismo"></span>Sismogrammi</button>
-    <button class="nav-tab" id="tabFm"   onclick="goSection('focali')"><span class="ic" data-ic="focal"></span>Meccanismi Focali</button>
-    <button class="nav-tab" id="tabNotif" onclick="goSection('notifiche')"><span class="ic" data-ic="bell"></span>Notifiche</button>
-    <button class="nav-tab" id="tabLoc" onclick="goSection('localizzazione')"><span class="ic" data-ic="locate"></span>Localizzazione</button>
+    <div class="nav-brand" onclick="goHome()" title="Torna alla home">🌍 ITalquake</div>
+    <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">🫨 Recenti</button>
+    <button class="nav-tab" id="tabStor" onclick="goSection('storico')">📚 Storico</button>
+    <button class="nav-tab" id="tabSeis" onclick="goSection('sismogrammi')">📈 Sismogrammi</button>
+    <button class="nav-tab" id="tabFm"   onclick="goSection('focali')">🎯 Meccanismi Focali</button>
+    <button class="nav-tab" id="tabNotif" onclick="goSection('notifiche')">🔔 Notifiche</button>
+    <button class="nav-tab" id="tabLoc" onclick="goSection('localizzazione')">🔬 Localizzazione</button>
     <div class="nav-spacer"></div>
-    <button class="nav-home" onclick="goHome()"><span class="ic" data-ic="home"></span>Home</button>
+    <button class="nav-home" onclick="goHome()">🏠 Home</button>
   </nav>
 
   <!-- ═══ TERREMOTI RECENTI ═══ -->
@@ -672,7 +605,7 @@ body{padding-bottom:64px;}
       <button class="sort-btn active" id="sortData" onclick="sortEq('data')">Data</button>
       <button class="sort-btn" id="sortMag" onclick="sortEq('mag')">Magnitudo</button>
       <button class="sort-btn" id="sortDist" onclick="sortEq('dist')">Distanza</button>
-      <button class="sort-btn" id="sortStats" onclick="toggleStats()" style="flex:none;padding:8px 14px;"><span class="ic" data-ic="stats" style="font-size:17px;"></span></button>
+      <button class="sort-btn" id="sortStats" onclick="toggleStats()" style="flex:none;padding:8px 14px;">📊</button>
     </div>
 
     <!-- PANNELLO STATISTICHE -->
@@ -968,14 +901,14 @@ body{padding-bottom:64px;}
   <div class="section" id="sectionNotifiche">
     <div class="container">
       <div class="header">
-        <div class="title-wrap"><h1><span class="ic" data-ic="bell" style="color:#f9a8d4;"></span>Notifiche</h1>
+        <div class="title-wrap"><h1>🔔 Notifiche</h1>
           <p>Configura avvisi push personalizzati per la tua area.</p></div>
         <span class="badge" style="background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.35);">Firebase</span>
       </div>
 
       <!-- ACCOUNT -->
       <section class="panel" style="margin-bottom:18px;">
-        <div class="panel-header"><h2 style="display:inline-flex;align-items:center;gap:9px;"><span class="ic" data-ic="user" style="font-size:0.9em;color:#93c5fd;"></span>Account</h2>
+        <div class="panel-header"><h2>👤 Account</h2>
           <p>Accedi per salvare le tue preferenze nel cloud e ricevere notifiche push.</p></div>
         <div class="controls">
           <div id="authStatus" style="padding:8px 0;font-size:14px;color:var(--muted);">Non collegato.</div>
@@ -1049,7 +982,7 @@ body{padding-bottom:64px;}
     <div class="container">
       <div class="header">
         <div class="title-wrap">
-          <h1><span class="ic" data-ic="locate" style="color:#5eead4;"></span>Localizzazione Sperimentale</h1>
+          <h1>🔬 Localizzazione Sperimentale</h1>
           <p>Stima dell'area epicentrale da tempi S-P su stazioni vicine. Solo indicativa — errori dell'ordine delle decine di km.</p>
         </div>
         <span class="badge" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border:1px solid rgba(16,185,129,0.35);">⚗️ SPERIMENTALE</span>
@@ -1113,13 +1046,13 @@ body{padding-bottom:64px;}
   <!-- BOTTOM TABS -->
   <nav class="bottom-tabs" id="bottomTabs">
     <button class="btab t-eq active" id="btEq" onclick="goSection('terremoti')">
-      <span class="btab-icon ic" data-ic="quake"></span>Terremoti</button>
+      <span class="btab-icon">🫨</span>Terremoti</button>
     <button class="btab t-map" id="btMap" onclick="goSection('mappa')">
-      <span class="btab-icon ic" data-ic="map"></span>Mappa</button>
+      <span class="btab-icon">🗺️</span>Mappa</button>
     <button class="btab t-seis" id="btSeis" onclick="goSection('sismogrammi')">
-      <span class="btab-icon ic" data-ic="seismo"></span>Sismogrammi</button>
+      <span class="btab-icon">📈</span>Sismogrammi</button>
     <button class="btab t-fm" id="btFm" onclick="goSection('focali')">
-      <span class="btab-icon ic" data-ic="focal"></span>Focali</button>
+      <span class="btab-icon">🎯</span>Focali</button>
   </nav>
 
 </div><!-- /appContainer -->
@@ -1145,10 +1078,9 @@ function goSection(sec){
   /* bottom tabs */
   document.querySelectorAll('.btab').forEach(t=>t.classList.remove('active'));
   /* top header context */
-  const titles={terremoti:['quake','Terremoti'],mappa:['map','Mappa'],sismogrammi:['seismo','Sismogrammi'],
-    focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],localizzazione:['locate','Localizzazione']};
-  const _tt=titles[sec];
-  document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
+  const titles={terremoti:'🌍 Terremoti',mappa:'🗺️ Mappa',sismogrammi:'📈 Sismogrammi',
+    focali:'🎯 Meccanismi Focali',storico:'📚 Storico',notifiche:'🔔 Notifiche',localizzazione:'🔬 Localizzazione'};
+  document.getElementById('topTitle').textContent=titles[sec]||'ITalquake';
   document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
   if(!_navFromHistory) history.pushState({sec},'','#'+sec);
   if(sec==='terremoti'){
@@ -1455,8 +1387,8 @@ function renderList(events,containerId,onSeis){
       html+=`<div class="time-section">${secLabel}</div>`;
       lastSection=secLabel;
     }
-    const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic" style="font-size:17px;">${IC.seismo}</span><span style="font-size:8px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
-    const distStr=userLat!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> ${haverDist(userLat,userLon,ev.lat,ev.lon).toFixed(0)} km`:'';
+    const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span style="font-size:16px;">📈</span><span style="font-size:8px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
+    const distStr=userLat!=null?`📍 ${haverDist(userLat,userLon,ev.lat,ev.lon).toFixed(0)} km`:'';
     html+=`<div class="eq-item" onclick="focusMarker('${containerId}',${i})">
       <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;">
         ${sb}
@@ -1464,7 +1396,7 @@ function renderList(events,containerId,onSeis){
       <div class="eq-info">
         <div class="pl">${ev.place}</div>
         <div class="dt">
-          <span><span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.clock}</span> ${agoStr}</span>
+          <span>🕐 ${agoStr}</span>
           ${distStr?`<span>⊙ ${distStr}</span>`:''}
         </div>
       </div>
@@ -3022,13 +2954,13 @@ function updateAuthUI(){
     const email=_currentUser.email||'';
     const photo=_currentUser.photoURL||null;
     if(statusEl) statusEl.innerHTML='✅ Connesso come <b>'+name+'</b>';
-    if(btnText) btnText.innerHTML='<span class="ic" style="font-size:15px;vertical-align:-2px;">'+IC.logout+'</span> Esci';
+    if(btnText) btnText.textContent='🚪 Esci';
     /* Bottone header: foto profilo o emoji */
     if(hdrBtn){
       if(photo){
         hdrBtn.innerHTML='<img src="'+photo+'" style="width:28px;height:28px;border-radius:50%;border:2px solid #3b82f6;vertical-align:middle;">';
       } else {
-        hdrBtn.innerHTML='<span class="ic" style="font-size:18px;">'+IC.user+'</span>';
+        hdrBtn.textContent='😊';
       }
     }
     /* Aggiorna dati nel panel */
@@ -3053,8 +2985,8 @@ function updateAuthUI(){
     if(fcmStatus) fcmStatus.textContent='Push cloud disponibili. Attiva lo switch.';
   } else {
     if(statusEl) statusEl.textContent='Non collegato.';
-    if(btnText) btnText.innerHTML='<span class="ic" style="font-size:15px;vertical-align:-2px;">'+IC.user+'</span> Accedi con Google';
-    if(hdrBtn){ hdrBtn.innerHTML='<span class="ic" style="font-size:18px;">'+IC.user+'</span>'; }
+    if(btnText) btnText.textContent='🔑 Accedi con Google';
+    if(hdrBtn){ hdrBtn.innerHTML=''; hdrBtn.textContent='👤'; }
     if(fcmStatus) fcmStatus.textContent='Accedi per attivare le notifiche push cloud.';
     const fcmChk=document.getElementById('fcmEnabled');
     if(fcmChk) fcmChk.checked=false;
