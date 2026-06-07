@@ -44,7 +44,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 /* ── LANDING ── */
 #landing{position:fixed;inset:0;z-index:9999;
   background:linear-gradient(160deg,#06091a 0%,#0d1a2e 50%,#0b1120 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
   gap:48px;padding:24px;}
 .brand h1{margin:0;font-size:clamp(28px,5vw,48px);
   background:linear-gradient(90deg,#22c55e,#3b82f6);
@@ -67,7 +67,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .choice-card p{margin:0;font-size:12px;color:var(--muted);line-height:1.5;}
 
 /* ── APP / NAV ── */
-#appContainer{display:none;}
+#appContainer{display:block;}
 #appContainer.visible{display:block;}
 .nav-bar{position:sticky;top:0;z-index:100;background:rgba(11,17,32,0.92);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
@@ -347,6 +347,87 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .poll-dot.active{background:#22c55e;animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
 .loc-manual{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;}
+
+/* ── BOTTOM TAB BAR ── */
+.nav-bar{display:none!important;}
+.bottom-tabs{position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(11,17,32,0.97);backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);display:flex;
+  padding:0 0 env(safe-area-inset-bottom,0);height:60px;}
+.btab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;border:none;background:none;color:var(--muted);font-size:10px;font-weight:600;
+  cursor:pointer;transition:color .15s;padding:6px 0;}
+.btab .btab-icon{font-size:22px;line-height:1;}
+.btab.active{color:#3b82f6;}
+.btab.active.t-eq{color:#f87171;}
+.btab.active.t-map{color:#60a5fa;}
+.btab.active.t-seis{color:#86efac;}
+.btab.active.t-fm{color:#fdba74;}
+body{padding-bottom:64px;}
+
+/* ── TOP HEADER BAR ── */
+.top-header{position:sticky;top:0;z-index:100;background:rgba(11,17,32,0.95);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
+.top-header h1{margin:0;font-size:20px;font-weight:700;color:var(--text);}
+.top-header .hdr-actions{display:flex;gap:8px;align-items:center;}
+.hdr-btn{padding:6px 10px;border-radius:8px;font-size:18px;
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  cursor:pointer;color:var(--text);transition:background .15s;}
+.hdr-btn:hover{background:rgba(255,255,255,0.12);}
+
+/* ── SORT TABS (Data/Magnitudo/Distanza) ── */
+.sort-bar{display:flex;gap:0;padding:8px 16px 4px;background:rgba(11,17,32,0.6);}
+.sort-btn{flex:1;padding:8px;border:none;border-radius:20px;font-size:13px;font-weight:600;
+  background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;text-align:center;}
+.sort-btn.active{background:rgba(59,130,246,0.15);color:#93c5fd;}
+
+/* ── TIME-SECTION LABELS ── */
+.time-section{padding:10px 16px 4px;font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#3b82f6;}
+
+/* ── INGV-STYLE EQ LIST ── */
+.eq-list{max-height:none;overflow-y:visible;}
+.eq-item{display:flex;align-items:center;gap:12px;padding:14px 16px;
+  border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
+.eq-item:active{background:rgba(255,255,255,0.05);}
+.eq-info{flex:1;min-width:0;}
+.eq-info .pl{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.eq-info .dt{font-size:12px;color:var(--muted);margin-top:3px;display:flex;flex-direction:column;gap:2px;}
+.eq-mag{min-width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;order:2;margin-left:auto;}
+.seis-btn{flex-shrink:0;padding:6px;border-radius:8px;font-size:16px;
+  background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
+  color:#93c5fd;cursor:pointer;transition:all .18s;width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;}
+
+/* ── FILTER DRAWER ── */
+.filter-drawer{position:fixed;top:0;right:0;bottom:60px;width:min(340px,85vw);z-index:300;
+  background:var(--panel);border-left:1px solid var(--border);
+  transform:translateX(100%);transition:transform .25s ease;
+  overflow-y:auto;padding:20px;}
+.filter-drawer.open{transform:translateX(0);}
+.filter-overlay{position:fixed;inset:0;z-index:299;background:rgba(0,0,0,0.5);
+  display:none;pointer-events:all;}
+.filter-overlay.open{display:block;}
+.filter-drawer h3{margin:0 0 16px;font-size:16px;color:var(--text);}
+.filter-drawer .close-x{position:absolute;top:12px;right:14px;font-size:22px;
+  cursor:pointer;color:var(--muted);background:none;border:none;}
+
+/* ── MAPPA SECTION ── */
+#sectionMappa .mapbox{height:calc(100vh - 180px)!important;min-height:300px!important;}
+
+/* ── SECTION TERREMOTI SIMPLIFIED ── */
+#sectionTerremoti .container{margin:0;width:100%;padding:0;}
+
+/* ── Toast position above bottom bar ── */
+#seisToast{bottom:80px!important;}
+
+@media(max-width:640px){
+  .eq-item{padding:12px 14px;gap:10px;}
+  .eq-mag{min-width:44px;height:44px;font-size:16px;}
+  #sectionMappa .mapbox{height:calc(100vh - 140px)!important;}
+}
 </style>
 </head>
 <body>
@@ -394,6 +475,53 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 
 <!-- APP -->
 <div id="appContainer">
+  <!-- TOP HEADER -->
+  <div class="top-header" id="topHeader">
+    <h1 id="topTitle">🌍 Terremoti</h1>
+    <div class="hdr-actions">
+      <button class="hdr-btn" id="filterToggle" onclick="toggleFilters()" title="Filtri" style="display:none;">⚙️</button>
+      <button class="hdr-btn" id="gpsHdrBtn" onclick="locateUser()" title="Posizione GPS">📍</button>
+      <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:6px 10px;border-radius:8px;font-size:14px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;" title="Installa">⬇️</button>
+    </div>
+  </div>
+
+  <!-- FILTER DRAWER (terremoti) -->
+  <div class="filter-overlay" id="filterOverlay" onclick="toggleFilters()"></div>
+  <div class="filter-drawer" id="filterDrawer">
+    <button class="close-x" onclick="toggleFilters()">✕</button>
+    <h3>Filtri Terremoti</h3>
+    <div class="controls">
+      <div class="field"><label>Area geografica</label>
+        <select id="eqGeo">
+          <option value="italy" selected>🇮🇹 Italia e paesi confinanti</option>
+          <option value="world">🌍 Tutto il mondo</option>
+        </select></div>
+      <div class="field"><label>Periodo</label>
+        <select id="eqPeriod">
+          <option value="6">Ultime 6 ore</option>
+          <option value="24" selected>Ultime 24 ore</option>
+          <option value="48">Ultime 48 ore</option>
+          <option value="168">Ultima settimana</option>
+        </select></div>
+      <div class="row-2">
+        <div class="field"><label>Mag. min</label>
+          <select id="eqMinMag">
+            <option value="-1" selected>Tutti</option><option value="1">M≥1</option>
+            <option value="2">M≥2</option><option value="3">M≥3</option>
+            <option value="4">M≥4</option></select></div>
+        <div class="field"><label>Prof. max km</label>
+          <select id="eqMaxDepth">
+            <option value="999" selected>Qualsiasi</option>
+            <option value="30">≤30</option><option value="70">≤70</option>
+            <option value="150">≤150</option></select></div>
+      </div>
+      <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes();toggleFilters();">🔄 Aggiorna</button>
+      <div id="eqStatus" class="status">Pronto.</div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;">🔔 Notifiche &amp; Auto-aggiornamento →</button>
+    </div>
+  </div>
+
   <nav class="nav-bar">
     <div class="nav-brand" onclick="goHome()" title="Torna alla home">🌍 ITalquake</div>
     <button class="nav-tab" id="tabEq"   onclick="goSection('terremoti')">🫨 Recenti</button>
@@ -403,90 +531,45 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
     <button class="nav-tab" id="tabNotif" onclick="goSection('notifiche')">🔔 Notifiche</button>
     <button class="nav-tab" id="tabLoc" onclick="goSection('localizzazione')">🔬 Localizzazione</button>
     <div class="nav-spacer"></div>
-    <button id="installBtn" onclick="triggerInstall()" style="display:none;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;cursor:pointer;align-items:center;gap:6px;margin-right:8px;" title="Installa ITalquake">⬇️ Installa</button><button class="nav-home" onclick="goHome()">🏠 Home</button>
+    <button class="nav-home" onclick="goHome()">🏠 Home</button>
   </nav>
 
   <!-- ═══ TERREMOTI RECENTI ═══ -->
   <div class="section" id="sectionTerremoti">
-    <div class="container">
-      <div class="header">
-        <div class="title-wrap"><h1>Terremoti Recenti</h1>
-          <p>Ultimi eventi sismici registrati da INGV.</p></div>
-        <span class="badge badge-red">INGV FDSN Event</span>
-      </div>
-      <div class="eq-grid">
-        <!-- sx -->
-        <section class="panel">
-          <div class="panel-header"><h2>Filtri</h2></div>
-          <div class="controls">
-            <div class="field"><label>Area geografica</label>
-              <select id="eqGeo">
-                <option value="italy" selected>🇮🇹 Italia e paesi confinanti</option>
-                <option value="world">🌍 Tutto il mondo</option>
-              </select></div>
-            <div class="field"><label>Periodo</label>
-              <select id="eqPeriod">
-                <option value="6">Ultime 6 ore</option>
-                <option value="24" selected>Ultime 24 ore</option>
-                <option value="48">Ultime 48 ore</option>
-                <option value="168">Ultima settimana</option>
-              </select></div>
-            <div class="row-2">
-              <div class="field"><label>Mag. min</label>
-                <select id="eqMinMag">
-                  <option value="-1" selected>Tutti</option><option value="1">M≥1</option>
-                  <option value="2">M≥2</option><option value="3">M≥3</option>
-                  <option value="4">M≥4</option></select></div>
-              <div class="field"><label>Prof. max km</label>
-                <select id="eqMaxDepth">
-                  <option value="999" selected>Qualsiasi</option>
-                  <option value="30">≤30</option><option value="70">≤70</option>
-                  <option value="150">≤150</option></select></div>
-            </div>
-            <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes()">🔄 Aggiorna</button>
-            <div id="eqStatus" class="status">Pronto.</div>
-
-            <button onclick="goSection('notifiche')" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;">🔔 Notifiche &amp; Auto-aggiornamento →</button>
-            <div class="hint">📈 in lista = sismogramma stazione più vicina.</div>
-          </div>
-        </section>
-        <!-- dx -->
-        <div class="main">
-          <section class="panel panel-map">
-            <div class="panel-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div><h2>Mappa epicentri</h2><p>Dimensione ∝ magnitudo · Colore ∝ profondità</p></div><button class="gps-btn" id="gpsEqBtn" onclick="locateUser()">📍 Mostra posizione</button></div>
-            <div id="eqMap" class="mapbox"></div>
-          </section>
-          <div id="eqSumRow" class="summary-row" style="display:none">
-            <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="sTot">—</div></div>
-            <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#fca5a5">—</div></div>
-            <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#86efac">—</div></div>
-            <div class="sc"><div class="k">Prof. media</div><div class="v" id="sAvgD">—</div></div>
-          </div>
-          <section class="panel">
-            <div class="panel-header"><h2>Timeline magnitudo</h2>
-              <p>Hover per dettagli · Clic per centrare sulla mappa.</p></div>
-            <div class="tl-header">
-              <label>Filtra provincia:</label>
-              <select id="tlProv" onchange="applyTlFilter('eq')"
-                style="background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
-                <option value="">Tutta Italia</option></select>
-            </div>
-            <div style="padding:10px 16px 16px">
-              <canvas id="tlCanvas" width="1200" height="175" style="width:100%;display:block;background:#08101c;cursor:crosshair;border-radius:10px;"></canvas>
-            </div>
-          </section>
-          <section class="panel">
-            <div class="panel-header"><h2>Lista eventi</h2></div>
-            <div class="eq-list" id="eqList"><div class="lo">Premi Aggiorna.</div></div>
-          </section>
-          <section class="panel">
-            <div class="panel-header"><h2>Statistiche per regione</h2></div>
-            <div class="tbl-wrap" id="eqRegTbl"><div class="lo">—</div></div>
-          </section>
-        </div>
-      </div>
-      <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> · Sorgenti sismogeniche: <code>diss.ingv.it</code></div>
+    <div class="sort-bar">
+      <button class="sort-btn active" id="sortData" onclick="sortEq('data')">Data</button>
+      <button class="sort-btn" id="sortMag" onclick="sortEq('mag')">Magnitudo</button>
+      <button class="sort-btn" id="sortDist" onclick="sortEq('dist')">Distanza</button>
     </div>
+    <div id="eqListFull" style="overflow-y:auto;max-height:calc(100vh - 170px);">
+      <div class="eq-list" id="eqList"><div class="lo" style="padding:40px 16px;text-align:center;color:var(--muted);">Caricamento...</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ MAPPA EVENTI ═══ -->
+  <div class="section" id="sectionMappa">
+    <div class="container" style="margin:0;width:100%;padding:0;">
+      <section class="panel panel-map" style="margin:0;border-radius:0;border:none;">
+        <div class="panel-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div><h2>Mappa epicentri</h2><p>Dimensione ∝ magnitudo · Colore ∝ profondità</p></div>
+        </div>
+        <div id="eqMap" class="mapbox" style="min-height:300px;"></div>
+      </section>
+      <div id="eqSumRow" class="summary-row" style="display:none;padding:12px 16px;">
+        <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="sTot">—</div></div>
+        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#fca5a5">—</div></div>
+        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#86efac">—</div></div>
+        <div class="sc"><div class="k">Prof. media</div><div class="v" id="sAvgD">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- hidden elements for JS compat -->
+  <div style="display:none;">
+    <select id="tlProv"><option value="">Tutta Italia</option></select>
+    <canvas id="tlCanvas" width="1" height="1"></canvas>
+    <div id="eqRegTbl"></div>
+    <button id="gpsEqBtn"></button>
   </div>
 
   <!-- ═══ STORICO ═══ -->
@@ -847,6 +930,18 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
     </div>
   </div>
 
+  <!-- BOTTOM TABS -->
+  <nav class="bottom-tabs" id="bottomTabs">
+    <button class="btab t-eq active" id="btEq" onclick="goSection('terremoti')">
+      <span class="btab-icon">🫨</span>Terremoti</button>
+    <button class="btab t-map" id="btMap" onclick="goSection('mappa')">
+      <span class="btab-icon">🗺️</span>Mappa</button>
+    <button class="btab t-seis" id="btSeis" onclick="goSection('sismogrammi')">
+      <span class="btab-icon">📈</span>Sismogrammi</button>
+    <button class="btab t-fm" id="btFm" onclick="goSection('focali')">
+      <span class="btab-icon">🎯</span>Focali</button>
+  </nav>
+
 </div><!-- /appContainer -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -860,22 +955,31 @@ let eqMapInited=false, stMapInited=false, seisMapInited=false, fmMapInited=false
 let _navFromHistory=false;
 
 function goHome(){
-  document.getElementById('landing').style.display='flex';
-  document.getElementById('appContainer').classList.remove('visible');
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.className='nav-tab');
-  if(!_navFromHistory) history.pushState({sec:null},'',location.pathname+location.search);
+  goSection('terremoti');
 }
 function goSection(sec){
   document.getElementById('landing').style.display='none';
   document.getElementById('appContainer').classList.add('visible');
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.className='nav-tab');
+  /* bottom tabs */
+  document.querySelectorAll('.btab').forEach(t=>t.classList.remove('active'));
+  /* top header context */
+  const titles={terremoti:'🌍 Terremoti',mappa:'🗺️ Mappa',sismogrammi:'📈 Sismogrammi',
+    focali:'🎯 Meccanismi Focali',storico:'📚 Storico',notifiche:'🔔 Notifiche',localizzazione:'🔬 Localizzazione'};
+  document.getElementById('topTitle').textContent=titles[sec]||'ITalquake';
+  document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
   if(!_navFromHistory) history.pushState({sec},'','#'+sec);
   if(sec==='terremoti'){
     document.getElementById('sectionTerremoti').classList.add('active');
     document.getElementById('tabEq').classList.add('a-eq');
+    document.getElementById('btEq').classList.add('active');
     if(!eqMapInited){initEqMap();eqMapInited=true;fetchEarthquakes();}
+  } else if(sec==='mappa'){
+    document.getElementById('sectionMappa').classList.add('active');
+    document.getElementById('btMap').classList.add('active');
+    if(!eqMapInited){initEqMap();eqMapInited=true;fetchEarthquakes();}
+    else setTimeout(()=>eqMap&&eqMap.invalidateSize(),80);
   } else if(sec==='storico'){
     document.getElementById('sectionStorico').classList.add('active');
     document.getElementById('tabStor').classList.add('a-stor');
@@ -883,6 +987,7 @@ function goSection(sec){
   } else if(sec==='focali'){
     document.getElementById('sectionFocali').classList.add('active');
     document.getElementById('tabFm').classList.add('a-fm');
+    document.getElementById('btFm').classList.add('active');
     if(!fmMapInited){initFmMap();fmMapInited=true;initFmDates();}
     else setTimeout(()=>fmMap&&fmMap.invalidateSize(),80);
   } else if(sec==='notifiche'){
@@ -896,6 +1001,7 @@ function goSection(sec){
   } else {
     document.getElementById('sectionSismogrammi').classList.add('active');
     document.getElementById('tabSeis').classList.add('a-seis');
+    document.getElementById('btSeis').classList.add('active');
     if(!seisMapInited){seisMapInited=true;initMap();loadNetwork();}
     else setTimeout(()=>map&&map.invalidateSize(),80);
   }
@@ -911,9 +1017,16 @@ window.addEventListener('popstate',e=>{
 window.addEventListener('load',()=>{
   /* 1. Carica sempre le preferenze notifiche e avvia il timer */
   _bootLoadPrefs();
-  /* 2. Ripristina sezione (URL hash) */
+  /* 2. Ripristina sezione (URL hash) o vai a terremoti */
   const hash=location.hash.slice(1);
-  if(hash) goSection(hash);
+  goSection(hash||'terremoti');
+  /* 3. Auto-locate user for distance */
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      userLat=pos.coords.latitude;userLon=pos.coords.longitude;
+      if(eqData.length) renderList(eqData,'eqList','openSeisForEq');
+    },()=>{},{enableHighAccuracy:false,timeout:8000});
+  }
 });
 
 function _bootLoadPrefs(){
@@ -1128,21 +1241,70 @@ function renderMarkers(events,leafletMap,markersArr,onSeis){
 
 function renderList(events,containerId,onSeis){
   const el=document.getElementById(containerId);
-  if(!events.length){el.innerHTML='<div class="lo">Nessun evento.</div>';return;}
-  el.innerHTML=events.map((ev,i)=>{
-    const dt=ev.time.replace('T',' ').slice(0,19);
-    const sb=onSeis?`<button class="seis-btn" onclick="${onSeis}(${i})" title="Sismogramma">📈</button>`:'';
-    const distStr=userLat!=null?` · 📍 ${haverDist(userLat,userLon,ev.lat,ev.lon).toFixed(0)} km`:'';
-    return`<div class="eq-item">
-      <div class="eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</div>
-      <div class="eq-info" onclick="focusMarker('${containerId}',${i})">
-        <div class="pl">${ev.place}</div>
-        <div class="dt">${dt} UTC · ${ev.magType}${distStr}</div>
+  if(!events.length){el.innerHTML='<div class="lo" style="padding:40px 16px;text-align:center;color:var(--muted);">Nessun evento nel periodo selezionato.</div>';return;}
+  const now=Date.now();
+  let html='';
+  let lastSection='';
+  events.forEach((ev,i)=>{
+    const evTime=new Date(ev.time+'Z').getTime();
+    const diffMs=now-evTime;
+    const diffMin=Math.floor(diffMs/60000);
+    const diffH=Math.floor(diffMs/3600000);
+    let agoStr='';
+    if(diffMin<1) agoStr='Adesso';
+    else if(diffMin<60) agoStr=diffMin+' minut'+(diffMin===1?'o':'i')+' fa';
+    else if(diffH<24) agoStr=diffH+' or'+(diffH===1?'a':'e')+' fa';
+    else {const d=Math.floor(diffH/24);agoStr=d+' giorn'+(d===1?'o':'i')+' fa';}
+    /* section label */
+    let secLabel='';
+    if(diffMin<60) secLabel='ULTIMA ORA';
+    else if(diffH<24) secLabel='ULTIME 24 ORE';
+    else if(diffH<48) secLabel='IERI';
+    else secLabel='PRECEDENTI';
+    if(secLabel!==lastSection){
+      html+=`<div class="time-section">${secLabel}</div>`;
+      lastSection=secLabel;
+    }
+    const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma">📈</button>`:'';
+    const distStr=userLat!=null?`📍 ${haverDist(userLat,userLon,ev.lat,ev.lon).toFixed(0)} km`:'';
+    html+=`<div class="eq-item" onclick="focusMarker('${containerId}',${i})">
+      <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        ${sb}
       </div>
-      <div class="eq-depth">${ev.depth.toFixed(0)} km</div>
-      ${sb}
+      <div class="eq-info">
+        <div class="pl">${ev.place}</div>
+        <div class="dt">
+          <span>🕐 ${agoStr}</span>
+          ${distStr?`<span>⊙ ${distStr}</span>`:''}
+        </div>
+      </div>
+      <div class="eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</div>
     </div>`;
-  }).join('');
+  });
+  el.innerHTML=html;
+}
+
+/* ── SORTING ── */
+let currentSort='data';
+function sortEq(by){
+  currentSort=by;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sort'+by.charAt(0).toUpperCase()+by.slice(1)).classList.add('active');
+  if(!eqData.length) return;
+  let sorted=[...eqData];
+  if(by==='mag') sorted.sort((a,b)=>b.mag-a.mag);
+  else if(by==='dist'&&userLat!=null) sorted.sort((a,b)=>haverDist(userLat,userLon,a.lat,a.lon)-haverDist(userLat,userLon,b.lat,b.lon));
+  else sorted.sort((a,b)=>new Date(b.time)-new Date(a.time));
+  renderList(sorted,'eqList','openSeisForEq');
+}
+
+/* ── FILTER DRAWER ── */
+function toggleFilters(){
+  const d=document.getElementById('filterDrawer');
+  const o=document.getElementById('filterOverlay');
+  const isOpen=d.classList.contains('open');
+  d.classList.toggle('open');
+  o.classList.toggle('open');
 }
 
 function renderSummary(events,rowId,totId,maxMId,minMId,avgDId){
@@ -1284,9 +1446,14 @@ function updateProvSelect(events,selectId){
 /* focusMarker helper: find index in correct markers array */
 function focusMarker(listId,i){
   const markers=listId==='eqList'||listId==='eqMap'?eqMarkers:stMarkers;
-  const map=listId==='eqList'||listId==='eqMap'?eqMap:stMap;
+  const mapRef=listId==='eqList'||listId==='eqMap'?eqMap:stMap;
   if(!markers[i])return;
-  map.setView(markers[i].getLatLng(),9,{animate:true});
+  if(listId==='eqList'){
+    goSection('mappa');
+    setTimeout(()=>{eqMap&&eqMap.invalidateSize();eqMap.setView(markers[i].getLatLng(),9,{animate:true});markers[i].openPopup();},150);
+    return;
+  }
+  mapRef.setView(markers[i].getLatLng(),9,{animate:true});
   markers[i].openPopup();
 }
 
