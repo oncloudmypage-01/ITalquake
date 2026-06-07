@@ -428,6 +428,43 @@ body{padding-bottom:64px;}
 /* ── Toast position above bottom bar ── */
 #seisToast{bottom:80px!important;}
 
+/* ── PROFILE PANEL ── */
+.profile-overlay{position:fixed;inset:0;z-index:499;background:rgba(0,0,0,0.5);display:none;}
+.profile-overlay.open{display:block;}
+.profile-panel{position:fixed;top:64px;right:12px;z-index:500;
+  background:var(--panel);border:1px solid var(--border);border-radius:18px;
+  width:min(300px,88vw);padding:0;overflow:hidden;
+  box-shadow:0 16px 48px rgba(0,0,0,0.5);
+  opacity:0;transform:translateY(-10px) scale(0.97);
+  transition:opacity .18s ease,transform .18s ease;pointer-events:none;}
+.profile-panel.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
+.profile-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;
+  border:3px solid rgba(59,130,246,0.4);display:block;}
+.profile-avatar-placeholder{width:64px;height:64px;border-radius:50%;
+  background:linear-gradient(135deg,#3b82f6,#22c55e);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  border:3px solid rgba(59,130,246,0.4);}
+.profile-header{padding:22px 20px 16px;display:flex;align-items:center;gap:14px;
+  border-bottom:1px solid var(--border);}
+.profile-info{min-width:0;}
+.profile-info .pname{font-size:16px;font-weight:700;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;}
+.profile-info .pemail{font-size:12px;color:var(--muted);margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-body{padding:14px 20px;}
+.profile-row{display:flex;align-items:center;gap:10px;padding:8px 0;
+  font-size:13px;color:var(--muted);}
+.profile-row span:first-child{font-size:18px;}
+.profile-actions{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px;}
+.profile-btn-notif{width:100%;padding:10px;border-radius:10px;font-size:14px;font-weight:600;
+  background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.3);
+  color:#f9a8d4;cursor:pointer;transition:background .15s;}
+.profile-btn-notif:hover{background:rgba(236,72,153,0.2);}
+.profile-btn-logout{width:100%;padding:10px;border-radius:10px;font-size:14px;font-weight:600;
+  background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);
+  color:#fca5a5;cursor:pointer;transition:background .15s;}
+.profile-btn-logout:hover{background:rgba(239,68,68,0.18);}
+
 @media(max-width:640px){
   .eq-item{padding:12px 14px;gap:10px;}
   .eq-mag{min-width:44px;height:44px;font-size:16px;}
@@ -493,6 +530,28 @@ body{padding-bottom:64px;}
 
   <!-- FILTER DRAWER (terremoti) -->
   <div class="filter-overlay" id="filterOverlay" onclick="toggleFilters()"></div>
+
+  <!-- PROFILE PANEL -->
+  <div class="profile-overlay" id="profileOverlay" onclick="closeProfile()"></div>
+  <div class="profile-panel" id="profilePanel">
+    <div class="profile-header">
+      <div id="profileAvatarWrap">
+        <div class="profile-avatar-placeholder">👤</div>
+      </div>
+      <div class="profile-info">
+        <div class="pname" id="profileName">—</div>
+        <div class="pemail" id="profileEmail">—</div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="profile-row"><span>🔔</span><span id="profileNotifStatus">Notifiche non configurate</span></div>
+      <div class="profile-row"><span>📍</span><span id="profileGpsStatus">Posizione non rilevata</span></div>
+    </div>
+    <div class="profile-actions">
+      <button class="profile-btn-notif" onclick="closeProfile();goSection('notifiche')">⚙️ Impostazioni notifiche</button>
+      <button class="profile-btn-logout" onclick="doLogout()">🚪 Esci dall'account</button>
+    </div>
+  </div>
   <div class="filter-drawer" id="filterDrawer">
     <button class="close-x" onclick="toggleFilters()">✕</button>
     <h3>Filtri Terremoti</h3>
@@ -1144,7 +1203,11 @@ function locateUser(){
     }
     document.querySelectorAll('.gps-btn').forEach(b=>b.classList.add('active'));
     if(eqData.length) renderList(eqData,'eqList','openSeisForEq');
-    if(storicoData.length) renderList(storicoData,'stList','openSeisForSt');
+    /* aggiorna GPS status nel panel profilo */
+    const gpsEl=document.getElementById('profileGpsStatus');
+    if(gpsEl) gpsEl.textContent='Rilevata ('+userLat.toFixed(3)+', '+userLon.toFixed(3)+')';
+    /* salva posizione su Firestore */
+    syncPrefsToFirestore();
   },err=>{alert('GPS non disponibile: '+err.message);},{enableHighAccuracy:true,timeout:12000});
 }
 /* ================================================================
@@ -2823,39 +2886,90 @@ function updateAuthUI(){
   const fcmStatus=document.getElementById('fcmStatus');
   if(_currentUser){
     const name=_currentUser.displayName||_currentUser.email||'Utente';
+    const email=_currentUser.email||'';
+    const photo=_currentUser.photoURL||null;
     if(statusEl) statusEl.innerHTML='✅ Connesso come <b>'+name+'</b>';
     if(btnText) btnText.textContent='🚪 Esci';
-    if(hdrBtn) hdrBtn.textContent='😊';
+    /* Bottone header: foto profilo o emoji */
+    if(hdrBtn){
+      if(photo){
+        hdrBtn.innerHTML='<img src="'+photo+'" style="width:28px;height:28px;border-radius:50%;border:2px solid #3b82f6;vertical-align:middle;">';
+      } else {
+        hdrBtn.textContent='😊';
+      }
+    }
+    /* Aggiorna dati nel panel */
+    document.getElementById('profileName').textContent=name;
+    document.getElementById('profileEmail').textContent=email;
+    if(photo){
+      document.getElementById('profileAvatarWrap').innerHTML=
+        '<img class="profile-avatar" src="'+photo+'" referrerpolicy="no-referrer">';
+    } else {
+      document.getElementById('profileAvatarWrap').innerHTML=
+        '<div class="profile-avatar-placeholder">'+name.charAt(0).toUpperCase()+'</div>';
+    }
+    /* Stato notifiche nel panel */
+    const mag=localStorage.getItem('itq_notifMag')||'3';
+    const dist=localStorage.getItem('itq_notifDist')||'0';
+    const en=localStorage.getItem('itq_notifEnabled')==='1';
+    let notifDesc=en?'Attive — M≥'+mag:(dist>0?' max '+dist+' km':''):'Disattivate';
+    if(en&&dist>0) notifDesc='Attive — M≥'+mag+', entro '+dist+' km';
+    document.getElementById('profileNotifStatus').textContent=notifDesc;
     if(fcmStatus) fcmStatus.textContent='Push cloud disponibili. Attiva lo switch.';
   } else {
     if(statusEl) statusEl.textContent='Non collegato.';
     if(btnText) btnText.textContent='🔑 Accedi con Google';
-    if(hdrBtn) hdrBtn.textContent='👤';
+    if(hdrBtn){ hdrBtn.innerHTML=''; hdrBtn.textContent='👤'; }
     if(fcmStatus) fcmStatus.textContent='Accedi per attivare le notifiche push cloud.';
     const fcmChk=document.getElementById('fcmEnabled');
     if(fcmChk) fcmChk.checked=false;
   }
+  /* GPS status nel panel */
+  const gpsEl=document.getElementById('profileGpsStatus');
+  if(gpsEl) gpsEl.textContent=userLat!=null
+    ?'Rilevata ('+userLat.toFixed(3)+', '+userLon.toFixed(3)+')'
+    :'Non rilevata';
 }
 
-async function handleAuth(){
+function handleAuth(){
   if(!_fbAuth){
     if(FIREBASE_CONFIG.apiKey==='YOUR_API_KEY'){
-      alert('Firebase non configurato.\n\nModifica FIREBASE_CONFIG in index.html con le credenziali del tuo progetto Firebase.');
+      alert('Firebase non configurato.');
     } else {
       alert('Errore Firebase. Controlla la console.');
     }
     return;
   }
   if(_currentUser){
-    await _fbAuth.signOut();
+    openProfile();
   } else {
-    try{
-      const provider=new firebase.auth.GoogleAuthProvider();
-      await _fbAuth.signInWithPopup(provider);
-    }catch(e){
-      if(e.code!=='auth/popup-closed-by-user') alert('Errore login: '+e.message);
-    }
+    signInWithGoogle();
   }
+}
+
+async function signInWithGoogle(){
+  try{
+    const provider=new firebase.auth.GoogleAuthProvider();
+    await _fbAuth.signInWithPopup(provider);
+  }catch(e){
+    if(e.code!=='auth/popup-closed-by-user') alert('Errore login: '+e.message);
+  }
+}
+
+function openProfile(){
+  document.getElementById('profileOverlay').classList.add('open');
+  document.getElementById('profilePanel').classList.add('open');
+  updateAuthUI();
+}
+
+function closeProfile(){
+  document.getElementById('profileOverlay').classList.remove('open');
+  document.getElementById('profilePanel').classList.remove('open');
+}
+
+async function doLogout(){
+  closeProfile();
+  await _fbAuth.signOut();
 }
 
 /* ── Firestore sync ── */
