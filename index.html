@@ -447,6 +447,16 @@ body{padding-bottom:64px;}
   cursor:pointer;color:var(--text);transition:background .15s;}
 .hdr-btn:hover{background:rgba(255,255,255,0.12);}
 
+/* ── SEARCH BAR (Provincia/Regione/Località) ── */
+.search-bar{padding:10px 16px 4px;position:relative;}
+.search-bar input{padding-right:38px;}
+.search-clear{display:none;position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;
+  width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;}
+.search-clear:active{background:rgba(255,255,255,0.08);}
+.search-clear.show{display:flex;}
+.search-info{padding:6px 16px 0;font-size:12px;color:var(--muted);}
+
 /* ── SORT TABS (Data/Magnitudo/Distanza) ── */
 .sort-bar{display:flex;gap:0;padding:8px 16px 4px;background:rgba(11,17,32,0.6);}
 .sort-btn{flex:1;padding:8px;border:none;border-radius:20px;font-size:13px;font-weight:600;
@@ -668,6 +678,10 @@ body{padding-bottom:64px;}
 
   <!-- ═══ TERREMOTI RECENTI ═══ -->
   <div class="section" id="sectionTerremoti">
+    <div class="search-bar">
+      <input id="eqSearchInput" type="text" placeholder="🔍 Cerca per provincia, regione o località (es. Benevento, BN, Campania)" oninput="filterEqByProv()"/>
+      <button id="eqSearchClear" class="search-clear" title="Cancella ricerca" onclick="clearEqSearch()">✕</button>
+    </div>
     <div class="sort-bar">
       <button class="sort-btn active" id="sortData" onclick="sortEq('data')">Data</button>
       <button class="sort-btn" id="sortMag" onclick="sortEq('mag')">Magnitudo</button>
@@ -1205,7 +1219,7 @@ window.addEventListener('load',()=>{
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(pos=>{
       userLat=pos.coords.latitude;userLon=pos.coords.longitude;
-      if(eqData.length) renderList(eqData,'eqList','openSeisForEq');
+      if(eqData.length) renderEqView();
     },()=>{},{enableHighAccuracy:false,timeout:8000});
   }
 });
@@ -1284,7 +1298,7 @@ function locateUser(){
       userMarkerSt=L.marker([userLat,userLon],{icon}).bindPopup('<b>📍 Sei qui</b><br>'+userLat.toFixed(4)+', '+userLon.toFixed(4)).addTo(stMap);
     }
     document.querySelectorAll('.gps-btn').forEach(b=>b.classList.add('active'));
-    if(eqData.length) renderList(eqData,'eqList','openSeisForEq');
+    if(eqData.length) renderEqView();
     /* aggiorna GPS status nel panel profilo */
     const gpsEl=document.getElementById('profileGpsStatus');
     if(gpsEl) gpsEl.textContent='Rilevata ('+userLat.toFixed(3)+', '+userLon.toFixed(3)+')';
@@ -1323,6 +1337,44 @@ const PROV_REG={
   BL:'Veneto',PD:'Veneto',RO:'Veneto',TV:'Veneto',VE:'Veneto',VI:'Veneto',VR:'Veneto',
 };
 function extractProv(place){const m=place&&place.match(/\(([A-Z]{2})\)\s*$/);return m?m[1]:null;}
+/* Nomi delle province (capoluogo), usati per la ricerca testuale */
+const PROV_NAMES={
+  AQ:"L'Aquila",CH:'Chieti',PE:'Pescara',TE:'Teramo',
+  MT:'Matera',PZ:'Potenza',
+  CZ:'Catanzaro',CS:'Cosenza',KR:'Crotone',RC:'Reggio Calabria',VV:'Vibo Valentia',
+  AV:'Avellino',BN:'Benevento',CE:'Caserta',NA:'Napoli',SA:'Salerno',
+  BO:'Bologna',FE:'Ferrara',FC:'Forlì-Cesena',MO:'Modena',PR:'Parma',PC:'Piacenza',
+  RA:'Ravenna',RE:'Reggio Emilia',RN:'Rimini',
+  GO:'Gorizia',PN:'Pordenone',TS:'Trieste',UD:'Udine',
+  FR:'Frosinone',LT:'Latina',RI:'Rieti',RM:'Roma',VT:'Viterbo',
+  GE:'Genova',IM:'Imperia',SP:'La Spezia',SV:'Savona',
+  BG:'Bergamo',BS:'Brescia',CO:'Como',CR:'Cremona',LC:'Lecco',LO:'Lodi',
+  MB:'Monza e Brianza',MI:'Milano',MN:'Mantova',PV:'Pavia',SO:'Sondrio',VA:'Varese',
+  AN:'Ancona',AP:'Ascoli Piceno',FM:'Fermo',MC:'Macerata',PU:'Pesaro e Urbino',
+  CB:'Campobasso',IS:'Isernia',
+  AL:'Alessandria',AT:'Asti',BI:'Biella',CN:'Cuneo',NO:'Novara',TO:'Torino',VB:'Verbano-Cusio-Ossola',VC:'Vercelli',
+  BA:'Bari',BT:'Barletta-Andria-Trani',BR:'Brindisi',FG:'Foggia',LE:'Lecce',TA:'Taranto',
+  CA:'Cagliari',CI:'Carbonia-Iglesias',NU:'Nuoro',OG:'Ogliastra',OR:'Oristano',OT:'Olbia-Tempio',SS:'Sassari',VS:'Medio Campidano',
+  AG:'Agrigento',CL:'Caltanissetta',CT:'Catania',EN:'Enna',ME:'Messina',PA:'Palermo',RG:'Ragusa',SR:'Siracusa',TP:'Trapani',
+  AR:'Arezzo',FI:'Firenze',GR:'Grosseto',LI:'Livorno',LU:'Lucca',MS:'Massa-Carrara',PI:'Pisa',PO:'Prato',PT:'Pistoia',SI:'Siena',
+  BZ:'Bolzano',TN:'Trento',
+  PG:'Perugia',TR:'Terni',AO:'Aosta',
+  BL:'Belluno',PD:'Padova',RO:'Rovigo',TV:'Treviso',VE:'Venezia',VI:'Vicenza',VR:'Verona',
+};
+/* Normalizza stringhe per la ricerca: minuscole, senza accenti */
+function normStr(s){return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();}
+/* Verifica se un evento corrisponde alla query di ricerca (provincia, regione o località) */
+function eqMatchesSearch(ev,q){
+  if(!q) return true;
+  const nq=normStr(q);
+  const prov=extractProv(ev.place);
+  if(prov){
+    if(normStr(prov)===nq) return true;
+    const pname=PROV_NAMES[prov]; if(pname&&normStr(pname).includes(nq)) return true;
+    const reg=PROV_REG[prov]; if(reg&&normStr(reg).includes(nq)) return true;
+  }
+  return normStr(ev.place).includes(nq);
+}
 function getRegione(place){
   if(!place)return'Altre zone';
   const p=extractProv(place);if(p&&PROV_REG[p])return PROV_REG[p];
@@ -1397,8 +1449,9 @@ function renderMarkers(events,leafletMap,markersArr,onSeis,autoZoom=true){
     });
     const _popupEv=ev,_popupI=i,_popupOnSeis=onSeis;
     m.on('popupopen',function(){
-      const distRow=userLat!=null
-        ?`<div style="font-size:11px;color:#3b82f6;font-weight:600;margin-top:5px;">📍 ${haverDist(userLat,userLon,_popupEv.lat,_popupEv.lon).toFixed(0)} km da te</div>`
+      const _distVal=userLat!=null?haverDist(userLat,userLon,_popupEv.lat,_popupEv.lon):null;
+      const distRow=_distVal!=null
+        ?`<div style="font-size:11px;color:${_distVal<100?'#ef4444':'#3b82f6'};font-weight:600;margin-top:5px;">📍 ${_distVal.toFixed(0)} km da te</div>`
         :'';
       this.getPopup().setContent(`<div style="font-family:sans-serif;min-width:180px;">
       <b style="font-size:14px;">${_popupEv.place}</b><br>
@@ -1431,7 +1484,12 @@ function renderMarkers(events,leafletMap,markersArr,onSeis,autoZoom=true){
 
 function renderList(events,containerId,onSeis){
   const el=document.getElementById(containerId);
-  if(!events.length){el.innerHTML='<div class="lo" style="padding:40px 16px;text-align:center;color:var(--muted);">Nessun evento nel periodo selezionato.</div>';return;}
+  if(!events.length){
+    const msg=(containerId==='eqList'&&typeof eqSearchQ!=='undefined'&&eqSearchQ)
+      ?`Nessun evento trovato per «${eqSearchQ}».`
+      :'Nessun evento nel periodo selezionato.';
+    el.innerHTML=`<div class="lo" style="padding:40px 16px;text-align:center;color:var(--muted);">${msg}</div>`;return;
+  }
   const now=Date.now();
   let html='';
   let lastSection='';
@@ -1456,7 +1514,8 @@ function renderList(events,containerId,onSeis){
       lastSection=secLabel;
     }
     const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic" style="font-size:17px;">${IC.seismo}</span><span style="font-size:8px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
-    const distStr=userLat!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> ${haverDist(userLat,userLon,ev.lat,ev.lon).toFixed(0)} km`:'';
+    const _distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
+    const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
     html+=`<div class="eq-item" onclick="focusMarker('${containerId}',${i})">
       <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;">
         ${sb}
@@ -1476,17 +1535,43 @@ function renderList(events,containerId,onSeis){
 
 /* ── SORTING ── */
 let currentSort='data';
+/* ── RICERCA PER PROVINCIA/REGIONE/LOCALITÀ ── */
+let eqSearchQ='';
+function getEqView(){
+  let arr=eqSearchQ?eqData.filter(ev=>eqMatchesSearch(ev,eqSearchQ)):eqData.slice();
+  if(currentSort==='mag') arr.sort((a,b)=>b.mag-a.mag);
+  else if(currentSort==='dist'&&userLat!=null) arr.sort((a,b)=>haverDist(userLat,userLon,a.lat,a.lon)-haverDist(userLat,userLon,b.lat,b.lon));
+  else arr.sort((a,b)=>new Date(b.time)-new Date(a.time));
+  return arr;
+}
+function renderEqView(){
+  const view=getEqView();
+  renderList(view,'eqList','openSeisForEq');
+  renderSummary(view,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
+  renderRegionTable(view,'eqRegTbl');
+  if(eqMap){ try{ renderMarkers(view,eqMap,eqMarkers,'openSeisForEq',false); }catch(e){} }
+  const clearBtn=document.getElementById('eqSearchClear');
+  if(clearBtn) clearBtn.classList.toggle('show',!!eqSearchQ);
+}
+function filterEqByProv(){
+  eqSearchQ=document.getElementById('eqSearchInput').value;
+  if(!eqData.length) return;
+  renderEqView();
+}
+function clearEqSearch(){
+  const inp=document.getElementById('eqSearchInput');
+  if(inp) inp.value='';
+  eqSearchQ='';
+  if(!eqData.length) return;
+  renderEqView();
+}
 function sortEq(by){
   currentSort=by;
   document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
   const btn=document.getElementById('sort'+by.charAt(0).toUpperCase()+by.slice(1));
   if(btn) btn.classList.add('active');
   if(!eqData.length) return;
-  let sorted=[...eqData];
-  if(by==='mag') sorted.sort((a,b)=>b.mag-a.mag);
-  else if(by==='dist'&&userLat!=null) sorted.sort((a,b)=>haverDist(userLat,userLon,a.lat,a.lon)-haverDist(userLat,userLon,b.lat,b.lon));
-  else sorted.sort((a,b)=>new Date(b.time)-new Date(a.time));
-  renderList(sorted,'eqList','openSeisForEq');
+  renderEqView();
 }
 
 /* ── STATS PANEL ── */
@@ -1540,7 +1625,16 @@ function toggleFilters(){
 }
 
 function renderSummary(events,rowId,totId,maxMId,minMId,avgDId){
-  if(!events.length)return;
+  if(!events.length){
+    const row=document.getElementById(rowId);
+    if(row&&row.style.display!=='none'){
+      document.getElementById(totId).textContent='0';
+      document.getElementById(maxMId).textContent='—';
+      document.getElementById(minMId).textContent='—';
+      document.getElementById(avgDId).textContent='—';
+    }
+    return;
+  }
   const mags=events.map(e=>e.mag);
   document.getElementById(rowId).style.display='flex';
   document.getElementById(totId).textContent=events.length;
@@ -1731,21 +1825,15 @@ async function fetchEarthquakes(){
     const fmt=d=>d.toISOString().slice(0,19);
     const url=buildUrl({start:fmt(start),end:fmt(end),minMag,geo,limit:2000});
     const resp=await fetch(url);
-    if(resp.status===204){eqData=[];renderList([],'eqList',null);renderRegionTable([],'eqRegTbl');st.textContent='Nessun evento.';st.className='status warn';btn.disabled=false;return;}
+    if(resp.status===204){eqData=[];renderEqView();st.textContent='Nessun evento.';st.className='status warn';btn.disabled=false;return;}
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const text=await resp.text();
     eqData=parseEqText(text,maxD);
     eqData.forEach(ev=>knownIds.add(ev.id));
-    /* Renderizza sempre la lista */
-    renderList(eqData,'eqList','openSeisForEq');
-    renderSummary(eqData,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
-    renderRegionTable(eqData,'eqRegTbl');
+    /* Renderizza sempre la lista (applicando ricerca/ordinamento correnti) */
+    renderEqView();
     updateProvSelect(eqData,'tlProv');
     drawTimeline(eqData,'tlCanvas','eq');
-    /* Renderizza markers solo se la mappa è pronta */
-    if(eqMap){
-      try{ renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq',false); }catch(e){}
-    }
     st.textContent=`Caricati ${eqData.length} eventi.`;st.className='status ok';
   }catch(err){
     st.textContent='Errore: '+err.message;st.className='status err';
@@ -1906,9 +1994,7 @@ async function quietRefresh(){
         tag:'itq_batch_'+Date.now()});}catch(e){}
     }
     eqData=evs;
-    renderMarkers(eqData,eqMap,eqMarkers,'openSeisForEq',false);renderList(eqData,'eqList','openSeisForEq');
-    renderSummary(eqData,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
-    renderRegionTable(eqData,'eqRegTbl');
+    renderEqView();
     updateProvSelect(eqData,'tlProv');
     drawTimeline(eqData,'tlCanvas','eq',document.getElementById('tlProv').value);
     const s=document.getElementById('eqStatus');
