@@ -164,9 +164,12 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .choice-card .icon.ic{font-size:36px;width:76px;height:76px;border-radius:20px;background:color-mix(in srgb,currentColor 12%,transparent);border:1px solid color-mix(in srgb,currentColor 28%,transparent);transition:background .2s,transform .2s;}
 .choice-card:hover .icon.ic{background:color-mix(in srgb,currentColor 20%,transparent);transform:translateY(-1px);}
 
-/* ── LIVE CARD (YouTube embed, play on hover) ── */
-.choice-card.live{padding:0;gap:0;overflow:hidden;border-color:rgba(59,130,246,0.4);}
-.choice-card.live:hover{border-color:rgba(59,130,246,0.8);}
+/* ── LIVE WIDGET (YouTube embed, play on hover) — sezione Terremoti ── */
+.live-widget{padding:10px 16px;}
+.live-widget .live-card{border-radius:16px;overflow:hidden;cursor:pointer;
+  border:1px solid rgba(59,130,246,0.4);background:rgba(255,255,255,0.04);
+  transition:border-color .2s;}
+.live-widget .live-card:hover{border-color:rgba(59,130,246,0.8);}
 .live-frame-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;}
 .live-frame-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;}
 .live-badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:5px;
@@ -176,9 +179,9 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 @keyframes livepulse{0%,100%{opacity:1}50%{opacity:.25}}
 .live-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-size:30px;color:#fff;background:rgba(0,0,0,.30);transition:opacity .2s;pointer-events:none;}
-.choice-card.live.playing .live-play{opacity:0;}
-.choice-card.live h2{padding:0 22px;margin-top:16px;font-size:18px;}
-.choice-card.live p{padding:0 22px;margin:0 0 20px;}
+.live-card.playing .live-play{opacity:0;}
+.live-card .live-label{padding:10px 14px;font-size:13px;font-weight:700;}
+.live-card .live-label small{display:block;font-weight:500;color:var(--muted);font-size:11px;margin-top:2px;}
 /* ── coordinated line-icon system ── */
 .ic{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:0 0 auto;}
 .ic svg{width:1em;height:1em;display:block;}
@@ -682,17 +685,6 @@ body{padding-bottom:64px;}
       <div class="icon ic" data-ic="locate" style="color:#5eead4;"></div><h2>Localizzazione</h2>
       <p>Stima sperimentale epicentro da tempi S-P su stazioni vicine</p>
     </div>
-    <div class="choice-card live" id="liveCard" onmouseenter="playLiveCam()" onmouseleave="pauseLiveCam()" onclick="toggleLiveCam(event)">
-      <div class="live-frame-wrap">
-        <iframe id="liveCamFrame" loading="lazy" title="Live"
-          src="https://www.youtube-nocookie.com/embed/TIr6IFxY9iU?enablejsapi=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;playsinline=1"
-          frameborder="0" allow="autoplay; encrypted-media; picture-in-picture"></iframe>
-        <div class="live-badge"><span class="dot"></span>LIVE</div>
-        <div class="live-play">▶</div>
-      </div>
-      <h2>In diretta</h2>
-      <p>Passa il mouse sopra (o tocca) per avviare la diretta</p>
-    </div>
   </div>
 </div>
 
@@ -792,6 +784,18 @@ body{padding-bottom:64px;}
 
   <!-- ═══ TERREMOTI RECENTI ═══ -->
   <div class="section" id="sectionTerremoti">
+    <div class="live-widget">
+      <div class="live-card" id="liveCard" onmouseenter="playLiveCam()" onmouseleave="pauseLiveCam()" onclick="toggleLiveCam(event)">
+        <div class="live-frame-wrap">
+          <iframe id="liveCamFrame" loading="lazy" title="Live"
+            src="https://www.youtube-nocookie.com/embed/TIr6IFxY9iU?enablejsapi=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;playsinline=1"
+            frameborder="0" allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+          <div class="live-badge"><span class="dot"></span>LIVE</div>
+          <div class="live-play">▶</div>
+        </div>
+        <div class="live-label">In diretta<small>Passa il mouse sopra (o tocca) per avviare la diretta</small></div>
+      </div>
+    </div>
     <div class="search-bar">
       <input id="eqSearchInput" type="text" placeholder="🔍 Cerca per provincia, regione o località (es. Benevento, BN, Campania)" oninput="filterEqByProv()"/>
       <button id="eqSearchClear" class="search-clear" title="Cancella ricerca" onclick="clearEqSearch()">✕</button>
