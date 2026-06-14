@@ -9,7 +9,49 @@
 <link rel="apple-touch-icon" href="icon-192.png"/>
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      /* Se c'è già un worker in attesa (aggiornamento scaricato in una sessione precedente) */
+      if(reg.waiting) showUpdateBanner(reg);
+      /* Nuovo worker scaricato durante questa sessione */
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing;
+        if(!nw)return;
+        nw.addEventListener('statechange',()=>{
+          if(nw.state==='installed'&&navigator.serviceWorker.controller){
+            showUpdateBanner(reg);
+          }
+        });
+      });
+      /* Controlla periodicamente se è disponibile una nuova versione */
+      setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
+      document.addEventListener('visibilitychange',()=>{
+        if(document.visibilityState==='visible') reg.update().catch(()=>{});
+      });
+    }).catch(()=>{});
+  });
+  /* Quando il nuovo SW prende il controllo, ricarica la pagina una sola volta */
+  let _swRefreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(_swRefreshing)return;
+    _swRefreshing=true;
+    window.location.reload();
+  });
+}
+function showUpdateBanner(reg){
+  const b=document.getElementById('updateBanner');
+  if(!b)return;
+  b.classList.add('show');
+  const btn=document.getElementById('updateBtn');
+  if(btn) btn.onclick=()=>{
+    btn.disabled=true;btn.textContent='Aggiornamento...';
+    const w=reg.waiting;
+    if(w) w.postMessage({type:'SKIP_WAITING'});
+  };
+}
+function dismissUpdate(){
+  const b=document.getElementById('updateBanner');
+  if(b) b.classList.remove('show');
 }
 let _installPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
@@ -26,6 +68,28 @@ function triggerInstall(){
   if(!_installPrompt)return;
   _installPrompt.prompt();
   _installPrompt.userChoice.then(()=>{_installPrompt=null;});
+}
+
+/* ── LIVE CARD: avvia/ferma la diretta YouTube al passaggio del mouse ── */
+let _liveCamPlaying=false;
+function _liveCamPost(func){
+  const f=document.getElementById('liveCamFrame');
+  if(!f||!f.contentWindow)return;
+  try{ f.contentWindow.postMessage(JSON.stringify({event:'command',func,args:[]}),'*'); }catch(e){}
+}
+function playLiveCam(){
+  _liveCamPost('playVideo');
+  _liveCamPlaying=true;
+  const c=document.getElementById('liveCard'); if(c) c.classList.add('playing');
+}
+function pauseLiveCam(){
+  _liveCamPost('pauseVideo');
+  _liveCamPlaying=false;
+  const c=document.getElementById('liveCard'); if(c) c.classList.remove('playing');
+}
+function toggleLiveCam(e){
+  if(e) e.stopPropagation();
+  if(_liveCamPlaying) pauseLiveCam(); else playLiveCam();
 }
 </script>
 <script>
@@ -99,6 +163,22 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .choice-card .icon{font-size:42px;}
 .choice-card .icon.ic{font-size:36px;width:76px;height:76px;border-radius:20px;background:color-mix(in srgb,currentColor 12%,transparent);border:1px solid color-mix(in srgb,currentColor 28%,transparent);transition:background .2s,transform .2s;}
 .choice-card:hover .icon.ic{background:color-mix(in srgb,currentColor 20%,transparent);transform:translateY(-1px);}
+
+/* ── LIVE CARD (YouTube embed, play on hover) ── */
+.choice-card.live{padding:0;gap:0;overflow:hidden;border-color:rgba(59,130,246,0.4);}
+.choice-card.live:hover{border-color:rgba(59,130,246,0.8);}
+.live-frame-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;}
+.live-frame-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;}
+.live-badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:5px;
+  background:rgba(239,68,68,.92);color:#fff;font-size:10px;font-weight:800;letter-spacing:.06em;
+  padding:3px 8px;border-radius:6px;}
+.live-badge .dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:livepulse 1.4s infinite;}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:.25}}
+.live-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:30px;color:#fff;background:rgba(0,0,0,.30);transition:opacity .2s;pointer-events:none;}
+.choice-card.live.playing .live-play{opacity:0;}
+.choice-card.live h2{padding:0 22px;margin-top:16px;font-size:18px;}
+.choice-card.live p{padding:0 22px;margin:0 0 20px;}
 /* ── coordinated line-icon system ── */
 .ic{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:0 0 auto;}
 .ic svg{width:1em;height:1em;display:block;}
@@ -337,6 +417,23 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
   border-radius:13px;padding:11px 18px;font-size:14px;z-index:9998;
   display:none;max-width:460px;text-align:center;line-height:1.5;
   box-shadow:0 8px 28px rgba(0,0,0,.5);}
+
+/* update banner */
+.update-banner{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);
+  display:none;align-items:center;gap:10px;
+  background:rgba(11,17,32,.97);border:1px solid rgba(34,197,94,.45);
+  border-radius:13px;padding:10px 10px 10px 16px;font-size:13px;font-weight:600;
+  color:var(--text);z-index:10000;max-width:min(92vw,420px);
+  box-shadow:0 8px 28px rgba(0,0,0,.5);}
+.update-banner.show{display:flex;}
+.update-banner .ic{color:#22c55e;font-size:18px;flex-shrink:0;}
+.update-banner span:nth-of-type(2){flex:1;}
+.update-banner #updateBtn{border:none;border-radius:9px;padding:8px 14px;font-size:12.5px;
+  font-weight:700;cursor:pointer;background:#22c55e;color:#06210a;flex-shrink:0;}
+.update-banner #updateBtn:disabled{opacity:.6;cursor:default;}
+.update-banner .update-dismiss{border:none;background:transparent;color:var(--muted);
+  font-size:15px;cursor:pointer;padding:6px;line-height:1;flex-shrink:0;}
+.update-banner .update-dismiss:hover{color:var(--text);}
 
 /* ── MOBILE ── */
 @media(max-width:640px){
@@ -585,12 +682,29 @@ body{padding-bottom:64px;}
       <div class="icon ic" data-ic="locate" style="color:#5eead4;"></div><h2>Localizzazione</h2>
       <p>Stima sperimentale epicentro da tempi S-P su stazioni vicine</p>
     </div>
+    <div class="choice-card live" id="liveCard" onmouseenter="playLiveCam()" onmouseleave="pauseLiveCam()" onclick="toggleLiveCam(event)">
+      <div class="live-frame-wrap">
+        <iframe id="liveCamFrame" loading="lazy" title="Live"
+          src="https://www.youtube-nocookie.com/embed/TIr6IFxY9iU?enablejsapi=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;playsinline=1"
+          frameborder="0" allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+        <div class="live-badge"><span class="dot"></span>LIVE</div>
+        <div class="live-play">▶</div>
+      </div>
+      <h2>In diretta</h2>
+      <p>Passa il mouse sopra (o tocca) per avviare la diretta</p>
+    </div>
   </div>
 </div>
 
 <div id="timelineTooltip"></div>
 <div id="storicoTimelineTooltip"></div>
 <div id="seisToast"></div>
+<div id="updateBanner" class="update-banner">
+  <span class="ic" data-ic="refresh"></span>
+  <span>Nuova versione disponibile</span>
+  <button id="updateBtn">Aggiorna</button>
+  <button class="update-dismiss" onclick="dismissUpdate()" title="Più tardi">✕</button>
+</div>
 
 <!-- APP -->
 <div id="appContainer">

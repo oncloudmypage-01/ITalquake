@@ -35,15 +35,23 @@ self.addEventListener('notificationclick', e => {
   }));
 });
 
-const CACHE = 'italquake-v1';
+/* Incrementa questa stringa ad ogni nuova versione pubblicata:
+   è il modo in cui il Service Worker rileva l'aggiornamento e
+   mostra il banner "Nuova versione disponibile" agli utenti
+   che hanno già installato l'app. */
+const CACHE = 'italquake-v2';
 const PRECACHE = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e =>
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting()))
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE)))
 );
 self.addEventListener('activate', e =>
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))
 );
+/* L'app invia questo messaggio quando l'utente clicca "Aggiorna" nel banner */
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
+});
 self.addEventListener('fetch', e => {
   // Solo cache per i file locali; le richieste INGV vanno sempre in rete
   if (!e.request.url.startsWith(self.location.origin)) return;
