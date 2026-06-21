@@ -1102,7 +1102,7 @@ body{padding-bottom:64px;}
         <div style="padding:16px">
           <div class="live-frame-wrap" id="liveFrameWrap">
             <iframe id="liveCamFrame" loading="lazy" title="Live"
-              src="https://www.youtube-nocookie.com/embed/TIr6IFxY9iU?enablejsapi=1&amp;mute=1&amp;controls=1&amp;modestbranding=1&amp;rel=0&amp;playsinline=1"
+              src="https://www.youtube-nocookie.com/embed/_uMKBt18SGg?enablejsapi=1&amp;mute=1&amp;controls=1&amp;modestbranding=1&amp;rel=0&amp;playsinline=1"
               frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             <div class="live-badge"><span class="dot"></span>LIVE</div>
             <button class="live-fs-btn" onclick="toggleLiveFullscreen()" title="Schermo intero"><span class="ic" data-ic="expand"></span></button>
@@ -1139,7 +1139,7 @@ body{padding-bottom:64px;}
             <p>Ricevi push quando un terremoto supera i tuoi filtri.</p></div>
           <div class="controls">
             <div class="toggle-row">
-              <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked;saveAllPrefs()"/>
+              <label class="sw"><input type="checkbox" id="notifEnabled" onchange="notifOn=this.checked;markNotifDirty()"/>
                 <span class="sl"></span></label>
               <span class="tl">Attiva notifiche</span>
             </div>
@@ -1147,19 +1147,21 @@ body{padding-bottom:64px;}
             <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
             <div class="field"><label>Magnitudo minima (M ≥)</label>
               <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0"
-                oninput="saveAllPrefs()"/></div>
+                oninput="markNotifDirty()"/></div>
             <div class="field"><label>Distanza massima epicentro (km) — 0 = ovunque</label>
               <input id="notifDist" type="number" min="0" max="2000" step="10" value="0"
-                oninput="saveAllPrefs()" placeholder="es. 200"/></div>
+                oninput="markNotifDirty()" placeholder="es. 200"/></div>
             <div class="field"><label>Solo provincia (es. BN) — vuoto = tutte</label>
               <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
-                oninput="this.value=this.value.toUpperCase();saveAllPrefs()"/></div>
+                oninput="this.value=this.value.toUpperCase();markNotifDirty()"/></div>
             <div class="field"><label>Profondità massima (km) — 0 = qualsiasi</label>
               <input id="notifMaxDepth" type="number" min="0" max="700" step="10" value="0"
-                oninput="saveAllPrefs()" placeholder="es. 100"/></div>
+                oninput="markNotifDirty()" placeholder="es. 100"/></div>
+            <button class="btn btn-green" id="saveNotifBtn" onclick="saveNotifPrefsBtn()" style="margin-top:14px;width:100%;">💾 Salva modifiche</button>
+            <div id="saveNotifStatus" style="font-size:12px;margin-top:8px;color:var(--muted);min-height:16px;"></div>
             <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.6;">
               ℹ️ La distanza si calcola dalla tua posizione GPS. Attiva il GPS dall'icona 📍 in alto.<br>
-              Le preferenze vengono salvate in locale e, se hai effettuato l'accesso, anche nel cloud Firebase.
+              Le modifiche hanno effetto immediato sulle notifiche mostrate mentre l'app è aperta; per renderle effettive anche per le notifiche push con app chiusa e dopo un ricaricamento della pagina, premi "Salva modifiche".
             </div>
           </div>
         </section>
@@ -1168,7 +1170,7 @@ body{padding-bottom:64px;}
             <p>Polling INGV per nuovi eventi.</p></div>
           <div class="controls">
             <div class="field"><label>Frequenza di aggiornamento</label>
-              <select id="autoRefreshSel" onchange="setAutoRefresh(this.value);saveAllPrefs()">
+              <select id="autoRefreshSel" onchange="setAutoRefresh(this.value);markNotifDirty()">
                 <option value="0">Disattivo</option>
                 <option value="60">Ogni minuto</option>
                 <option value="120" selected>Ogni 2 minuti</option>
@@ -2067,7 +2069,59 @@ function restoreFilters(){
     if(saved.networkSelect) networkSelect.value=saved.networkSelect;
   }catch(e){}
 }
-function saveNotifPrefs(){ saveAllPrefs(); }
+/* ── Salvataggio preferenze notifiche: ora esplicito tramite pulsante,
+   per evitare la corsa critica (race condition) tra una digitazione
+   appena fatta e una sincronizzazione Firestore non ancora completata,
+   che in precedenza poteva causare il "ripristino" del valore vecchio
+   al ricaricamento della pagina. ── */
+let _notifDirty=false;
+function markNotifDirty(){
+  _notifDirty=true;
+  const status=document.getElementById('saveNotifStatus');
+  if(status){
+    status.textContent='● Modifiche non salvate — premi "Salva modifiche" per renderle effettive anche dopo un ricaricamento o con l\'app chiusa.';
+    status.style.color='#fbbf24';
+  }
+}
+async function saveNotifPrefsBtn(){
+  const btn=document.getElementById('saveNotifBtn');
+  const status=document.getElementById('saveNotifStatus');
+  if(btn){btn.disabled=true;btn.textContent='Salvataggio...';}
+  try{
+    localStorage.setItem('itq_notifEnabled', document.getElementById('notifEnabled').checked?'1':'0');
+    localStorage.setItem('itq_notifMag',     document.getElementById('notifMag').value);
+    localStorage.setItem('itq_notifProv',    document.getElementById('notifProv').value.trim().toUpperCase());
+    localStorage.setItem('itq_notifDist',    document.getElementById('notifDist').value);
+    localStorage.setItem('itq_notifMaxDepth',document.getElementById('notifMaxDepth').value);
+    localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
+    notifOn=document.getElementById('notifEnabled').checked;
+
+    if(_fbDb&&_currentUser){
+      /* Attende il completamento reale della sincronizzazione cloud
+         PRIMA di confermare il salvataggio: così, se l'utente ricarica
+         la pagina subito dopo, i dati nel cloud sono già aggiornati. */
+      const ok=await syncPrefsToFirestore();
+      if(status){
+        status.textContent= ok
+          ? '✅ Preferenze salvate (dispositivo + cloud).'
+          : '⚠️ Salvate sul dispositivo, ma la sincronizzazione cloud è fallita. Riprova.';
+        status.style.color= ok ? '#6ee7b7' : '#fca5a5';
+      }
+    } else {
+      if(status){
+        status.textContent='✅ Preferenze salvate sul dispositivo. Accedi con Google per sincronizzarle anche nel cloud (necessario per le notifiche push con app chiusa).';
+        status.style.color='#6ee7b7';
+      }
+    }
+    _notifDirty=false;
+  }catch(e){
+    if(status){status.textContent='❌ Errore nel salvataggio: '+e.message;status.style.color='#fca5a5';}
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='💾 Salva modifiche';}
+  }
+}
+/* Mantenuta per compatibilità: salvataggio "silenzioso" (es. usato internamente
+   da altre funzioni che non necessitano di feedback visivo nel pannello). */
 function saveAllPrefs(){
   try{
     localStorage.setItem('itq_notifEnabled', document.getElementById('notifEnabled').checked?'1':'0');
@@ -2076,7 +2130,6 @@ function saveAllPrefs(){
     localStorage.setItem('itq_notifDist',    document.getElementById('notifDist').value);
     localStorage.setItem('itq_notifMaxDepth',document.getElementById('notifMaxDepth').value);
     localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
-    /* Sync to Firestore if logged in */
     syncPrefsToFirestore();
   }catch(e){}
 }
@@ -3237,7 +3290,7 @@ const FIREBASE_CONFIG = {
   appId:             "1:456621086487:web:1df98fb06d9e4bada20952"
 };
 /* ⚠️ VAPID key per FCM web push (Firebase Console → Cloud Messaging → Web Push certificates) */
-const FCM_VAPID_KEY = "BHlHfgXtc8VSMY5QiMW429JTBGaLThNKHEWDak_k5MpUpEpIEMcOMR-zJqWLoaUENVbnAc-E9HJdyyqSqjr4Tnw";
+const FCM_VAPID_KEY = "YOUR_VAPID_KEY";
 
 let _fb=null, _fbAuth=null, _fbDb=null, _fbMsg=null, _currentUser=null;
 
@@ -3354,9 +3407,12 @@ async function doLogout(){
   await _fbAuth.signOut();
 }
 
-/* ── Firestore sync ── */
+/* ── Firestore sync ──
+   Restituisce true/false: il chiamante (es. il pulsante "Salva modifiche")
+   ne ha bisogno per mostrare un esito affidabile invece di assumere sempre
+   il successo. */
 async function syncPrefsToFirestore(){
-  if(!_fbDb||!_currentUser) return;
+  if(!_fbDb||!_currentUser) return false;
   try{
     const prefs={
       notifEnabled: document.getElementById('notifEnabled').checked,
@@ -3371,7 +3427,8 @@ async function syncPrefsToFirestore(){
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
     await _fbDb.collection('users').doc(_currentUser.uid).set(prefs,{merge:true});
-  }catch(e){console.error('Firestore sync error:',e);}
+    return true;
+  }catch(e){console.error('Firestore sync error:',e); return false;}
 }
 
 async function loadPrefsFromFirestore(){
@@ -3383,14 +3440,14 @@ async function loadPrefsFromFirestore(){
     if(d.notifEnabled!=null){document.getElementById('notifEnabled').checked=d.notifEnabled;notifOn=d.notifEnabled;}
     if(d.minMag!=null) document.getElementById('notifMag').value=d.minMag;
     if(d.maxDist!=null) document.getElementById('notifDist').value=d.maxDist;
-    if(d.province) document.getElementById('notifProv').value=d.province;
+    if(d.province!=null) document.getElementById('notifProv').value=d.province;
     if(d.maxDepth!=null) document.getElementById('notifMaxDepth').value=d.maxDepth;
     if(d.autoRefresh) {document.getElementById('autoRefreshSel').value=d.autoRefresh;if(d.autoRefresh!=='0')setAutoRefresh(d.autoRefresh);}
     /* Save to local too */
     localStorage.setItem('itq_notifEnabled',d.notifEnabled?'1':'0');
     if(d.minMag!=null)localStorage.setItem('itq_notifMag',d.minMag);
     if(d.maxDist!=null)localStorage.setItem('itq_notifDist',d.maxDist);
-    if(d.province)localStorage.setItem('itq_notifProv',d.province);
+    if(d.province!=null)localStorage.setItem('itq_notifProv',d.province);
     if(d.maxDepth!=null)localStorage.setItem('itq_notifMaxDepth',d.maxDepth);
     if(d.autoRefresh)localStorage.setItem('itq_autoRefresh',d.autoRefresh);
     /* Restore FCM toggle */
