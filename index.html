@@ -1146,17 +1146,17 @@ body{padding-bottom:64px;}
             <button class="npb" id="notifPermBtn" onclick="askNotifPerm()" style="margin-top:8px;">Richiedi permesso notifiche browser</button>
             <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
             <div class="field"><label>Magnitudo minima (M ≥)</label>
-              <input id="notifMag" type="number" min="0" max="9" step="0.5" value="3.0"
-                oninput="markNotifDirty()"/></div>
+              <input id="notifMag" type="text" inputmode="decimal" value="3.0"
+                oninput="this.value=this.value.replace(/,/g,'.').replace(/[^0-9.]/g,'');markNotifDirty()"/></div>
             <div class="field"><label>Distanza massima epicentro (km) — 0 = ovunque</label>
-              <input id="notifDist" type="number" min="0" max="2000" step="10" value="0"
-                oninput="markNotifDirty()" placeholder="es. 200"/></div>
+              <input id="notifDist" type="text" inputmode="decimal" value="0"
+                oninput="this.value=this.value.replace(/,/g,'.').replace(/[^0-9.]/g,'');markNotifDirty()" placeholder="es. 200"/></div>
             <div class="field"><label>Solo provincia (es. BN) — vuoto = tutte</label>
               <input id="notifProv" type="text" maxlength="2" placeholder="es. BN"
                 oninput="this.value=this.value.toUpperCase();markNotifDirty()"/></div>
             <div class="field"><label>Profondità massima (km) — 0 = qualsiasi</label>
-              <input id="notifMaxDepth" type="number" min="0" max="700" step="10" value="0"
-                oninput="markNotifDirty()" placeholder="es. 100"/></div>
+              <input id="notifMaxDepth" type="text" inputmode="decimal" value="0"
+                oninput="this.value=this.value.replace(/,/g,'.').replace(/[^0-9.]/g,'');markNotifDirty()" placeholder="es. 100"/></div>
             <button class="btn btn-green" id="saveNotifBtn" onclick="saveNotifPrefsBtn()" style="margin-top:14px;width:100%;">💾 Salva modifiche</button>
             <div id="saveNotifStatus" style="font-size:12px;margin-top:8px;color:var(--muted);min-height:16px;"></div>
             <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.6;">
@@ -2069,6 +2069,15 @@ function restoreFilters(){
     if(saved.networkSelect) networkSelect.value=saved.networkSelect;
   }catch(e){}
 }
+/* Legge un campo numerico delle preferenze notifica in modo "robusto":
+   tollera la virgola come separatore decimale (tastiere/locale italiani)
+   e restituisce un fallback sicuro se il valore non è interpretabile. */
+function notifNum(id, fallback){
+  const raw=(document.getElementById(id).value||'').toString().replace(',','.');
+  const n=parseFloat(raw);
+  return isNaN(n) ? fallback : n;
+}
+
 /* ── Salvataggio preferenze notifiche: ora esplicito tramite pulsante,
    per evitare la corsa critica (race condition) tra una digitazione
    appena fatta e una sincronizzazione Firestore non ancora completata,
@@ -2089,11 +2098,15 @@ async function saveNotifPrefsBtn(){
   if(btn){btn.disabled=true;btn.textContent='Salvataggio...';}
   try{
     localStorage.setItem('itq_notifEnabled', document.getElementById('notifEnabled').checked?'1':'0');
-    localStorage.setItem('itq_notifMag',     document.getElementById('notifMag').value);
+    localStorage.setItem('itq_notifMag',     String(notifNum('notifMag',3)));
     localStorage.setItem('itq_notifProv',    document.getElementById('notifProv').value.trim().toUpperCase());
-    localStorage.setItem('itq_notifDist',    document.getElementById('notifDist').value);
-    localStorage.setItem('itq_notifMaxDepth',document.getElementById('notifMaxDepth').value);
+    localStorage.setItem('itq_notifDist',    String(notifNum('notifDist',0)));
+    localStorage.setItem('itq_notifMaxDepth',String(notifNum('notifMaxDepth',0)));
     localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
+    /* Riallinea anche i campi a schermo al valore numerico "pulito" appena salvato */
+    document.getElementById('notifMag').value=notifNum('notifMag',3);
+    document.getElementById('notifDist').value=notifNum('notifDist',0);
+    document.getElementById('notifMaxDepth').value=notifNum('notifMaxDepth',0);
     notifOn=document.getElementById('notifEnabled').checked;
 
     if(_fbDb&&_currentUser){
@@ -2119,19 +2132,6 @@ async function saveNotifPrefsBtn(){
   }finally{
     if(btn){btn.disabled=false;btn.textContent='💾 Salva modifiche';}
   }
-}
-/* Mantenuta per compatibilità: salvataggio "silenzioso" (es. usato internamente
-   da altre funzioni che non necessitano di feedback visivo nel pannello). */
-function saveAllPrefs(){
-  try{
-    localStorage.setItem('itq_notifEnabled', document.getElementById('notifEnabled').checked?'1':'0');
-    localStorage.setItem('itq_notifMag',     document.getElementById('notifMag').value);
-    localStorage.setItem('itq_notifProv',    document.getElementById('notifProv').value.trim().toUpperCase());
-    localStorage.setItem('itq_notifDist',    document.getElementById('notifDist').value);
-    localStorage.setItem('itq_notifMaxDepth',document.getElementById('notifMaxDepth').value);
-    localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
-    syncPrefsToFirestore();
-  }catch(e){}
 }
 /* loadNotifPrefs definita sopra nel boot block */
 
@@ -2200,15 +2200,15 @@ async function quietRefresh(){
 
 function shouldNotif(ev){
   if(!notifOn||typeof Notification==='undefined'||Notification.permission!=='granted')return false;
-  if(ev.mag<(parseFloat(document.getElementById('notifMag').value)||3))return false;
+  if(ev.mag<notifNum('notifMag',3))return false;
   const p=document.getElementById('notifProv').value.trim().toUpperCase();
   if(p){const ep=extractProv(ev.place);if(!ep||ep!==p)return false;}
-  const maxDist=parseFloat(document.getElementById('notifDist').value)||0;
+  const maxDist=notifNum('notifDist',0);
   if(maxDist>0&&userLat!=null){
     const d=haverDist(userLat,userLon,ev.lat,ev.lon);
     if(d>maxDist)return false;
   }
-  const maxDepth=parseFloat(document.getElementById('notifMaxDepth').value)||0;
+  const maxDepth=notifNum('notifMaxDepth',0);
   if(maxDepth>0&&ev.depth>maxDepth)return false;
   return true;
 }
@@ -3416,10 +3416,10 @@ async function syncPrefsToFirestore(){
   try{
     const prefs={
       notifEnabled: document.getElementById('notifEnabled').checked,
-      minMag: parseFloat(document.getElementById('notifMag').value)||3,
-      maxDist: parseFloat(document.getElementById('notifDist').value)||0,
+      minMag: notifNum('notifMag',3),
+      maxDist: notifNum('notifDist',0),
       province: document.getElementById('notifProv').value.trim().toUpperCase(),
-      maxDepth: parseFloat(document.getElementById('notifMaxDepth').value)||0,
+      maxDepth: notifNum('notifMaxDepth',0),
       autoRefresh: document.getElementById('autoRefreshSel').value,
       userLat: userLat||null,
       userLon: userLon||null,
