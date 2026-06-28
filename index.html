@@ -2204,7 +2204,10 @@ function shouldNotif(ev){
   const p=document.getElementById('notifProv').value.trim().toUpperCase();
   if(p){const ep=extractProv(ev.place);if(!ep||ep!==p)return false;}
   const maxDist=notifNum('notifDist',0);
-  if(maxDist>0&&userLat!=null){
+  if(maxDist>0){
+    /* Se l'utente ha impostato un raggio ma il GPS non è disponibile,
+       non notifichiamo: meglio silenzio che notifiche fuori zona. */
+    if(userLat==null)return false;
     const d=haverDist(userLat,userLon,ev.lat,ev.lon);
     if(d>maxDist)return false;
   }
@@ -3303,7 +3306,15 @@ function initFirebase(){
     _fb=firebase.initializeApp(FIREBASE_CONFIG);
     _fbAuth=firebase.auth();
     _fbDb=firebase.firestore();
-    try{ _fbMsg=firebase.messaging(); }catch(e){ console.log('FCM non supportato in questo browser.'); }
+    try{
+      _fbMsg=firebase.messaging();
+      /* Foreground handler: quando l'app è aperta mostra un toast invece
+         della notifica nativa (evita il doppio avviso con il service worker). */
+      _fbMsg.onMessage(payload=>{
+        const n=payload.notification||{};
+        if(n.title) showToast(`<strong>${n.title}</strong>${n.body?'<br>'+n.body:''}`,6000);
+      });
+    }catch(e){ console.log('FCM non supportato in questo browser.'); }
     _fbAuth.onAuthStateChanged(user=>{
       _currentUser=user;
       updateAuthUI();
@@ -3483,7 +3494,7 @@ async function toggleFcm(enabled){
       const token=await _fbMsg.getToken({vapidKey:FCM_VAPID_KEY,serviceWorkerRegistration:swReg});
       localStorage.setItem('itq_fcmToken',token);
       if(fcmStatus) fcmStatus.textContent='✅ Push attive. Token registrato.';
-      syncPrefsToFirestore();
+      await syncPrefsToFirestore();
     }catch(e){
       console.error('FCM error:',e);
       if(fcmStatus) fcmStatus.textContent='❌ Errore: '+e.message;
@@ -3499,22 +3510,9 @@ async function toggleFcm(enabled){
   }
 }
 
-/* FCM foreground message handler */
-if(typeof firebase!=='undefined'&&firebase.messaging&&firebase.messaging.isSupported&&firebase.messaging.isSupported()){
-  try{
-    const msg=firebase.messaging();
-    msg.onMessage(payload=>{
-      const n=payload.notification||{};
-      /* Quando il tab è aperto, il service worker può comunque mostrare
-         la notifica nativa per lo stesso messaggio (comportamento noto
-         delle push web): per evitare di vederla due volte, qui mostriamo
-         solo un avviso interno all'app (toast), non una seconda Notification. */
-      if(n.title){
-        showToast(`<strong>${n.title}</strong>${n.body?'<br>'+n.body:''}`, 6000);
-      }
-    });
-  }catch(e){}
-}
+/* FCM foreground message handler — usa _fbMsg già inizializzato in initFirebase()
+   per evitare di creare una seconda istanza separata che potrebbe non agganciarsi
+   correttamente in alcuni browser. Il setup viene fatto dentro initFirebase(). */
 
 </script>
 </body>
