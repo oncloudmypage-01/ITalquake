@@ -74,8 +74,7 @@ function parseEqText(text) {
     .filter(Boolean);
 }
 
-/* ── Logica di matching utente ↔ evento ──
-   Specchio esatto dei criteri applicati in shouldNotif() nel frontend. */
+/* ── Logica di matching utente ↔ evento ── */
 function userMatchesEvent(user, ev) {
   const minMag = typeof user.minMag === 'number' ? user.minMag : 3;
   if (ev.mag < minMag) return false;
@@ -86,10 +85,10 @@ function userMatchesEvent(user, ev) {
   }
 
   const maxDist = typeof user.maxDist === 'number' ? user.maxDist : 0;
-  if (maxDist > 0) {
-    /* Se l'utente ha impostato un raggio ma non ha la posizione GPS
-       non inviamo la notifica (comportamento coerente col frontend). */
-    if (user.userLat == null || user.userLon == null) return false;
+  if (maxDist > 0 && user.userLat != null && user.userLon != null) {
+    /* Applica il filtro distanza solo se abbiamo la posizione dell'utente.
+       Se manca (GPS mai salvato), saltiamo il filtro e notifichiamo comunque:
+       meglio una notifica di troppo che nessuna notifica. */
     const d = haverDist(user.userLat, user.userLon, ev.lat, ev.lon);
     if (d > maxDist) return false;
   }
@@ -129,48 +128,34 @@ exports.sendEarthquakeNotifications = functions.pubsub
       return null;
     }
 
-    /* 2. Filtra gli eventi già notificati */
-    const newEvents = [];
+    /* 2. Filtra gli eventi già notificati (solo lettura — scriviamo DOPO l'invio) */
     const sentRef   = db.collection('sentEvents');
-
-    await Promise.all(events.map(async ev => {
-      const snap = await sentRef.doc(ev.id).get();
-      if (!snap.exists) {
-        newEvents.push(ev);
-        await sentRef.doc(ev.id).set({
-          sentAt: admin.firestore.FieldValue.serverTimestamp(),
-          mag:    ev.mag,
-          place:  ev.place
-        });
-      }
-    }));
+    const snapshots = await Promise.all(events.map(ev => sentRef.doc(ev.id).get()));
+    const newEvents = events.filter((_, i) => !snapshots[i].exists);
 
     if (!newEvents.length) {
       console.log('Tutti gli eventi già notificati.');
       return null;
     }
-    console.log(`Nuovi eventi da notificare: ${newEvents.map(e => `${e.id} M${e.mag}`).join(', ')}`);
+    console.log(`Nuovi eventi da valutare: ${newEvents.map(e => `${e.id} M${e.mag}`).join(', ')}`);
 
     /* 3. Recupera utenti con notifiche abilitate */
     const usersSnap = await db.collection('users')
       .where('notifEnabled', '==', true)
       .get();
 
-    if (usersSnap.empty) {
-      console.log('Nessun utente con notifiche attive.');
-      return null;
-    }
-
-    const users = usersSnap.docs
+    const users = usersSnap.empty ? [] : usersSnap.docs
       .map(d => ({ uid: d.id, ...d.data() }))
-      .filter(u => u.fcmToken);   /* solo utenti con token FCM valido */
+      .filter(u => u.fcmToken);
 
     if (!users.length) {
-      console.log('Nessun utente con token FCM registrato.');
+      console.log('Nessun utente con token FCM registrato — gli eventi saranno rivalutati al prossimo ciclo.');
       return null;
     }
 
-    /* 4. Per ogni evento, invia ai token degli utenti che corrispondono ai criteri */
+    /* 4. Per ogni evento, invia ai token degli utenti che corrispondono ai criteri.
+       Scrive su sentEvents SOLO DOPO aver trovato almeno un utente abbinato,
+       così se non ci sono utenti l'evento viene rivalutato al ciclo successivo. */
     const sendPromises = [];
 
     for (const ev of newEvents) {
@@ -181,6 +166,13 @@ exports.sendEarthquakeNotifications = functions.pubsub
         console.log(`Evento ${ev.id}: nessun utente corrisponde ai criteri.`);
         continue;
       }
+
+      /* Segna subito l'evento come processato per evitare invii doppi */
+      await sentRef.doc(ev.id).set({
+        sentAt: admin.firestore.FieldValue.serverTimestamp(),
+        mag:    ev.mag,
+        place:  ev.place
+      });
       console.log(`Evento ${ev.id} M${ev.mag.toFixed(1)}: invio a ${matchingTokens.length} utente/i.`);
 
       const title = `🔴 Terremoto M${ev.mag.toFixed(1)}`;
