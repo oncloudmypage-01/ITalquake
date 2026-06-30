@@ -334,7 +334,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .leaflet-tile{backface-visibility:hidden;-webkit-backface-visibility:hidden;}
 
 /* ── EQ LIST ── */
-.eq-list{max-height:600px;overflow-y:auto;}
+.eq-list{max-height:630px;overflow-y:auto;}
 .eq-item{display:flex;align-items:center;gap:11px;padding:9px 16px;
   border-bottom:1px solid var(--border);transition:background .15s;}
 .eq-item:hover{background:rgba(255,255,255,0.03);}
@@ -454,7 +454,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
   .choice-card h2{font-size:14px;}
   .choice-card p{font-size:11px;}
   .mapbox{min-height:260px!important;height:48vw!important;}
-  .eq-list{max-height:420px;}
+  .eq-list{max-height:440px;}
   .container{margin:12px auto;width:calc(100% - 24px);}
   .header{margin-bottom:12px;flex-wrap:wrap;}
   .title-wrap h1{font-size:22px;}
@@ -1979,7 +1979,8 @@ async function fetchEarthquakes(){
     const end=new Date(),start=new Date(end-hours*3600000);
     const fmt=d=>d.toISOString().slice(0,19);
     const url=buildUrl({start:fmt(start),end:fmt(end),minMag,geo,limit:2000});
-    const resp=await fetch(url);
+    const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),30000);
+    let resp;try{resp=await fetch(url,{signal:ctrl.signal});}finally{clearTimeout(tid);}
     if(resp.status===204){eqData=[];renderEqView();st.textContent='Nessun evento.';st.className='status warn';btn.disabled=false;return;}
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const text=await resp.text();
