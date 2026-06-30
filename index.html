@@ -1972,6 +1972,7 @@ async function fetchEarthquakes(){
   st.textContent='Caricamento...';st.className='status';
   document.getElementById('eqList').innerHTML='<div class="lo"><span class="spin"></span>Scarico da INGV...</div>';
   document.getElementById('eqSumRow').style.display='none';
+  const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),30000);
   try{
     const hours=Number(document.getElementById('eqPeriod').value);
     const minMag=Number(document.getElementById('eqMinMag').value);
@@ -1979,9 +1980,8 @@ async function fetchEarthquakes(){
     const end=new Date(),start=new Date(end-hours*3600000);
     const fmt=d=>d.toISOString().slice(0,19);
     const url=buildUrl({start:fmt(start),end:fmt(end),minMag,geo,limit:2000});
-    const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),30000);
-    let resp;try{resp=await fetch(url,{signal:ctrl.signal});}finally{clearTimeout(tid);}
-    if(resp.status===204){eqData=[];renderEqView();st.textContent='Nessun evento.';st.className='status warn';btn.disabled=false;return;}
+    const resp=await fetch(url,{signal:ctrl.signal});
+    if(resp.status===204){eqData=[];renderEqView();st.textContent='Nessun evento.';st.className='status warn';return;}
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const text=await resp.text();
     eqData=parseEqText(text,maxD);
@@ -1995,7 +1995,7 @@ async function fetchEarthquakes(){
     st.textContent='Errore: '+err.message;st.className='status err';
     console.error('fetchEarthquakes:',err);
   }
-  finally{btn.disabled=false;}
+  finally{clearTimeout(tid);btn.disabled=false;}
 }
 
 /* ================================================================
@@ -2176,6 +2176,7 @@ function setAutoRefresh(sec){
 
 async function quietRefresh(){
   if(!eqMapInited||!eqMap)return;/* mappa non pronta */
+  const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),20000);
   try{
     const maxD=Number(document.getElementById('eqMaxDepth').value);
     const hours=Number(document.getElementById('eqPeriod').value);
@@ -2184,8 +2185,7 @@ async function quietRefresh(){
     const end=new Date(),start=new Date(end-hours*3600000);
     const fmt=d=>d.toISOString().slice(0,19);
     const url=buildUrl({start:fmt(start),end:fmt(end),minMag,geo,limit:2000});
-    const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),20000);
-    let resp;try{resp=await fetch(url,{signal:ctrl.signal});}finally{clearTimeout(tid);}
+    const resp=await fetch(url,{signal:ctrl.signal});
     if(!resp||!resp.ok)return;
     const evs=parseEqText(await resp.text(),maxD);
     const newEvs=evs.filter(ev=>!knownIds.has(ev.id));
@@ -2209,6 +2209,7 @@ async function quietRefresh(){
     const s=document.getElementById('eqStatus');
     s.textContent='Auto-aggiornato — '+newEvs.length+' nuovi';s.className='status ok';
   }catch(e){}
+  finally{clearTimeout(tid);}
 }
 
 function shouldNotif(ev){
