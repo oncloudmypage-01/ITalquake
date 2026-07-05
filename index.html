@@ -2085,7 +2085,6 @@ async function fetchStorico(){
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const text=await resp.text();
     let raw=parseEqText(text,maxD);
-    const provF=document.getElementById('stProvFilter').value.trim().toUpperCase();
     storicoData=provF?raw.filter(ev=>extractProv(ev.place)===provF):raw;
     renderMarkers(storicoData,stMap,stMarkers,'openSeisForSt');
     renderList(storicoData,'stList','openSeisForSt');
