@@ -181,7 +181,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .btab.t-map .btab-icon{color:color-mix(in srgb,#60a5fa 72%,#94a3b8);}
 .btab.t-seis .btab-icon{color:color-mix(in srgb,#34d399 72%,#94a3b8);}
 .btab.t-fm .btab-icon{color:color-mix(in srgb,#fb923c 72%,#94a3b8);}
-.btab.t-live .btab-icon{color:color-mix(in srgb,#ef4444 72%,#94a3b8);}
+.btab.t-stor .btab-icon{color:color-mix(in srgb,#c084fc 72%,#94a3b8);}
 .btab.active .btab-icon{filter:saturate(1.4) brightness(1.12);}
 #gpsHdrBtn .ic{color:color-mix(in srgb,#60a5fa 66%,#94a3b8);}
 .profile-row:nth-of-type(1) .ic{color:color-mix(in srgb,#f472b6 66%,#94a3b8);}
@@ -1276,6 +1276,8 @@ body{padding-bottom:64px;}
       <span class="btab-icon ic" data-ic="seismo"></span>Sismogrammi</button>
     <button class="btab t-fm" id="btFm" onclick="goSection('focali')">
       <span class="btab-icon ic" data-ic="focal"></span>Focali</button>
+    <button class="btab t-stor" id="btStor" onclick="goSection('storico')">
+      <span class="btab-icon ic" data-ic="storico"></span>Storico</button>
   </nav>
 
 </div><!-- /appContainer -->
@@ -1322,6 +1324,7 @@ function goSection(sec){
   } else if(sec==='storico'){
     document.getElementById('sectionStorico').classList.add('active');
     document.getElementById('tabStor').classList.add('a-stor');
+    document.getElementById('btStor').classList.add('active');
     if(!stMapInited){initStMap();stMapInited=true;initStDates();}
   } else if(sec==='focali'){
     document.getElementById('sectionFocali').classList.add('active');

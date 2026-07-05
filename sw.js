@@ -39,7 +39,7 @@ self.addEventListener('notificationclick', e => {
    è il modo in cui il Service Worker rileva l'aggiornamento e
    mostra il banner "Nuova versione disponibile" agli utenti
    che hanno già installato l'app. */
-const CACHE = 'italquake-v11';
+const CACHE = 'italquake-v12';
 const PRECACHE = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e =>
