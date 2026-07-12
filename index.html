@@ -518,6 +518,18 @@ body{padding-bottom:64px;}
   cursor:pointer;color:var(--text);transition:background .15s;}
 .hdr-btn:hover{background:rgba(255,255,255,0.12);}
 
+/* ── BANNER "STIMA PROVVISORIA" (testo reale pubblicato da INGV) ── */
+.prov-banner{position:sticky;top:0;z-index:99;display:flex;align-items:center;gap:10px;
+  padding:10px 16px;background:rgba(249,115,22,.14);border-bottom:1px solid rgba(249,115,22,.4);
+  backdrop-filter:blur(12px);}
+.prov-banner .dot{width:8px;height:8px;border-radius:50%;background:#f97316;
+  animation:pulse 1.2s infinite;flex-shrink:0;}
+.prov-banner-text{flex:1;min-width:0;font-size:12.5px;color:#fdba74;}
+.prov-banner-text b{color:#fed7aa;letter-spacing:.03em;margin-right:6px;}
+.prov-banner-close{flex-shrink:0;background:transparent;border:none;color:#fdba74;
+  font-size:14px;cursor:pointer;padding:2px 6px;}
+.prov-banner-close:hover{color:#fed7aa;}
+
 /* ── SEARCH BAR (Provincia/Regione/Località) ── */
 .search-bar{padding:10px 16px 4px;position:relative;}
 .search-bar input{padding-right:38px;}
@@ -680,6 +692,16 @@ body{padding-bottom:64px;}
       <button class="hdr-btn" id="authBtn" onclick="handleAuth()" title="Account"><span class="ic" data-ic="user"></span></button>
       <button class="hdr-btn" onclick="goSection('terremoti')" title="Terremoti recenti"><span class="ic" data-ic="quake" style="font-size:20px;"></span></button>
     </div>
+  </div>
+
+  <!-- BANNER "STIMA PROVVISORIA" — dicitura pubblicata da INGV, non calcolata da noi -->
+  <div id="provBanner" class="prov-banner" style="display:none;">
+    <span class="dot"></span>
+    <div class="prov-banner-text">
+      <b>STIMA PROVVISORIA</b>
+      <span id="provBannerDetail"></span>
+    </div>
+    <button class="prov-banner-close" onclick="dismissProvBanner()" title="Chiudi">✕</button>
   </div>
 
   <!-- FILTER DRAWER (terremoti) -->
@@ -1376,7 +1398,43 @@ window.addEventListener('load',()=>{
       if(eqData.length) renderEqView();
     },()=>{},{enableHighAccuracy:false,timeout:8000});
   }
+  /* 5. Avvia il controllo della "stima provvisoria" pubblicata da INGV */
+  startProvBannerPoll();
 });
+
+/* ── STIMA PROVVISORIA (banner) — legge l'endpoint del backend, che a sua
+   volta legge il testo REALE pubblicato da INGV su terremoti.ingv.it.
+   Non è una stima calcolata dal client. ── */
+const STIMA_PROV_URL='https://us-central1-italquake.cloudfunctions.net/getStimaProvvisoria';
+let _provBannerDismissedRaw=null,_provBannerTimer=null;
+async function pollStimaProvBanner(){
+  const banner=document.getElementById('provBanner');
+  if(!banner)return;
+  try{
+    const r=await fetch(STIMA_PROV_URL,{signal:AbortSignal.timeout(10000)});
+    if(!r.ok)return;
+    const d=await r.json();
+    if(d.active&&d.raw!==_provBannerDismissedRaw){
+      document.getElementById('provBannerDetail').textContent=
+        [d.prov,d.mag?'M ~'+d.mag:null,d.ora?'ore '+d.ora:null].filter(Boolean).join(' · ');
+      banner.dataset.raw=d.raw||'';
+      banner.style.display='flex';
+    } else if(!d.active){
+      banner.style.display='none';
+      _provBannerDismissedRaw=null;
+    }
+  }catch(e){}
+}
+function dismissProvBanner(){
+  const banner=document.getElementById('provBanner');
+  _provBannerDismissedRaw=banner.dataset.raw||null;
+  banner.style.display='none';
+}
+function startProvBannerPoll(){
+  if(_provBannerTimer)return;
+  pollStimaProvBanner();
+  _provBannerTimer=setInterval(pollStimaProvBanner,60000);
+}
 
 function _bootLoadPrefs(){
   try{
