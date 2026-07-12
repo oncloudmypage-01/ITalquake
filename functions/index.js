@@ -13,6 +13,9 @@ const messaging = admin.messaging();
 const INGV_BASE      = 'https://webservices.ingv.it/fdsnws/event/1/query';
 const WINDOW_MINUTES = 6;   // finestra di lookback in minuti
 const MAX_EVENT_AGE  = 24;  // ore: dopo queste ore puliamo sentEvents
+const PROV_WINDOW_MIN = 30; // minuti entro cui l'evento è marcato "stima provvisoria"
+                             // (come su terremoti.ingv.it/Twitter: dato automatico
+                             // non ancora revisionato da un sismologo)
 
 /* ── Utilità geografica ── */
 function haverDist(la1, lo1, la2, lo2) {
@@ -175,8 +178,11 @@ exports.sendEarthquakeNotifications = functions.pubsub
       });
       console.log(`Evento ${ev.id} M${ev.mag.toFixed(1)}: invio a ${matchingTokens.length} utente/i.`);
 
-      const title = `🔴 Terremoto M${ev.mag.toFixed(1)}`;
-      const body  = `${ev.place}\n${ev.time.replace('T', ' ').slice(0, 19)} UTC · ${ev.depth.toFixed(0)} km`;
+      const ageMin      = (now - new Date(ev.time)) / 60000;
+      const isProvisional = ageMin < PROV_WINDOW_MIN;
+      const title = `🔴 Terremoto M${ev.mag.toFixed(1)}${isProvisional ? ' · Stima provvisoria' : ''}`;
+      const body  = `${ev.place}\n${ev.time.replace('T', ' ').slice(0, 19)} UTC · ${ev.depth.toFixed(0)} km`
+        + (isProvisional ? '\n⚠️ Dato non ancora revisionato da INGV' : '');
 
       /* FCM supporta max 500 token per chiamata */
       for (let i = 0; i < matchingTokens.length; i += 500) {
@@ -186,8 +192,9 @@ exports.sendEarthquakeNotifications = functions.pubsub
             tokens: chunk,
             notification: { title, body },
             data: {
-              eventId: ev.id,
-              url:     'https://italquake.firebaseapp.com/'
+              eventId:     ev.id,
+              provisional: String(isProvisional),
+              url:         'https://italquake.firebaseapp.com/'
             },
             webpush: {
               notification: { icon: '/icon-192.png', tag: ev.id },
