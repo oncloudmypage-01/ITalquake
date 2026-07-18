@@ -239,3 +239,108 @@ exports.sendEarthquakeNotifications = functions.pubsub
 
     return null;
   });
+
+/* ================================================================
+   STIMA PROVVISORIA — dicitura pubblicata DA INGV (sito/Twitter),
+   non calcolata da noi. La leggiamo dalla home di terremoti.ingv.it
+   lato server (niente CORS, a differenza del client) e la esponiamo
+   sia come notifica push sia come endpoint HTTP che la webapp legge.
+================================================================ */
+const INGV_HOME = 'https://terremoti.ingv.it/';
+
+function parseStimaProvvisoria(html) {
+  if (!html) return { active: false };
+  const m = html.match(/STIMA\s+PROVVISORIA[^<]{0,300}?(?:prov\/zona|prov\.|zona)\s+([A-Za-zÀ-ɏ'\s]{3,30}?)(?:\s*[-<]|$)/i);
+  if (!m) return { active: false };
+  const mag = html.match(/magnitud[ei][^2-9]*([2-9][.,]\d)/i);
+  const ora = html.match(/ore\s+(\d{2}:\d{2})/i);
+  return {
+    active: true,
+    prov:   m[1].trim().replace(/\s+/g, ' '),
+    mag:    mag ? mag[1] : null,
+    ora:    ora ? ora[1] : null,
+    raw:    m[0].slice(0, 160)
+  };
+}
+
+/* Eseguita ogni 2 minuti: legge la home INGV e, se compare per la prima
+   volta un nuovo avviso "stima provvisoria", notifica gli utenti abilitati. */
+exports.checkStimaProvvisoria = functions.pubsub
+  .schedule('every 2 minutes')
+  .onRun(async () => {
+    const statusRef = db.collection('system').doc('stimaProvvisoria');
+
+    let result;
+    try {
+      const html = await fetchText(INGV_HOME);
+      result = parseStimaProvvisoria(html);
+    } catch (e) {
+      console.error('Errore fetch home INGV:', e.message);
+      return null;
+    }
+
+    const prev = await statusRef.get();
+    const prevRaw = prev.exists ? prev.data().raw : null;
+    const isNew = result.active && result.raw !== prevRaw;
+
+    await statusRef.set({
+      ...result,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    if (!isNew) return null;
+    console.log('Nuova STIMA PROVVISORIA rilevata su terremoti.ingv.it:', result.raw);
+
+    const usersSnap = await db.collection('users')
+      .where('notifEnabled', '==', true)
+      .get();
+    const tokens = usersSnap.empty ? [] : usersSnap.docs
+      .map(d => d.data().fcmToken)
+      .filter(Boolean);
+    if (!tokens.length) return null;
+
+    const title = '⚠️ Stima provvisoria INGV';
+    const body  = `${result.prov}${result.mag ? ' · M ~' + result.mag : ''}${result.ora ? ' · ore ' + result.ora : ''}\nDato appena pubblicato, non ancora confermato.`;
+
+    for (let i = 0; i < tokens.length; i += 500) {
+      const chunk = tokens.slice(i, i + 500);
+      try {
+        const res = await messaging.sendEachForMulticast({
+          tokens: chunk,
+          notification: { title, body },
+          data: { url: 'https://italquake.firebaseapp.com/' },
+          webpush: {
+            notification: { icon: '/icon-192.png', tag: 'stima_prov_' + Date.now() },
+            fcmOptions:   { link: 'https://italquake.firebaseapp.com/' }
+          }
+        });
+        console.log(`  ✅ OK: ${res.successCount}  ❌ Fail: ${res.failureCount}`);
+      } catch (e) {
+        console.error('Errore invio notifica stima provvisoria:', e.message);
+      }
+    }
+
+    return null;
+  });
+
+/* Endpoint pubblico letto dalla webapp: restituisce l'ultimo stato noto
+   (scritto dalla funzione schedulata sopra) come JSON, con CORS aperto
+   perché è un nostro endpoint, non quello di INGV. */
+exports.getStimaProvvisoria = functions.https.onRequest(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  try {
+    const doc = await db.collection('system').doc('stimaProvvisoria').get();
+    if (!doc.exists) return res.json({ active: false });
+    const data = doc.data();
+    res.json({
+      active: !!data.active,
+      prov:   data.prov || null,
+      mag:    data.mag || null,
+      ora:    data.ora || null,
+      raw:    data.raw || null,
+      updatedAt: data.updatedAt ? data.updatedAt.toDate().toISOString() : null
+    });
+  } catch (e) {
+    res.status(500).json({ active: false, error: e.message });
+  }
+});

@@ -100,7 +100,8 @@ window.IC=(function(){
     refresh:W('<path d="M3 12a9 9 0 0 1 15-6.6L21 8"/><path d="M21 3.5V8h-4.5"/><path d="M21 12a9 9 0 0 1-15 6.6L3 16"/><path d="M3 20.5V16h4.5"/>'),
     youtube:W('<rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10.5 9.2v5.6l5-2.8z" fill="currentColor" stroke="none"/>'),
     download:W('<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>'),
-    expand:W('<path d="M9 4H4v5"/><path d="M4 4l6 6"/><path d="M15 4h5v5"/><path d="M20 4l-6 6"/><path d="M9 20H4v-5"/><path d="M4 20l6-6"/><path d="M15 20h5v-5"/><path d="M20 20l-6-6"/>')
+    expand:W('<path d="M9 4H4v5"/><path d="M4 4l6 6"/><path d="M15 4h5v5"/><path d="M20 4l-6 6"/><path d="M9 20H4v-5"/><path d="M4 20l6-6"/><path d="M15 20h5v-5"/><path d="M20 20l-6-6"/>'),
+    swarm:W('<circle cx="12" cy="11" r="2.6"/><circle cx="5.5" cy="7" r="1.6"/><circle cx="18.5" cy="7.5" r="1.4"/><circle cx="5" cy="16.5" r="1.4"/><circle cx="18" cy="16" r="1.7"/><circle cx="12" cy="20" r="1.3"/>')
   };
 })();
 document.addEventListener('DOMContentLoaded',function(){
@@ -331,6 +332,20 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .sc .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
 .sc .v{font-size:20px;font-weight:800;}
 
+/* ── SCIAMI SISMICI: card cluster ── */
+.sw-list{padding:8px 16px 16px;display:flex;flex-direction:column;gap:10px;}
+.sw-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;
+  padding:13px 15px;cursor:pointer;transition:background .15s;}
+.sw-card:hover{background:rgba(255,255,255,.06);}
+.sw-card .sw-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.sw-card .sw-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+  padding:2px 8px;border-radius:6px;}
+.sw-card .sw-label.swarm{background:rgba(249,115,22,.14);color:#fdba74;border:1px solid rgba(249,115,22,.4);}
+.sw-card .sw-label.seq{background:rgba(239,68,68,.14);color:#fca5a5;border:1px solid rgba(239,68,68,.4);}
+.sw-card .sw-mag{font-size:16px;font-weight:800;color:#fca5a5;}
+.sw-card .sw-place{font-size:14.5px;font-weight:700;margin-top:6px;}
+.sw-card .sw-meta{font-size:12px;color:var(--muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:10px;}
+
 /* region table */
 .tbl-wrap{padding:16px;overflow-x:auto;}
 .rtbl{width:100%;border-collapse:collapse;font-size:13px;}
@@ -518,6 +533,18 @@ body{padding-bottom:64px;}
   cursor:pointer;color:var(--text);transition:background .15s;}
 .hdr-btn:hover{background:rgba(255,255,255,0.12);}
 
+/* ── BANNER "STIMA PROVVISORIA" (testo reale pubblicato da INGV) ── */
+.prov-banner{position:sticky;top:0;z-index:99;display:flex;align-items:center;gap:10px;
+  padding:10px 16px;background:rgba(249,115,22,.14);border-bottom:1px solid rgba(249,115,22,.4);
+  backdrop-filter:blur(12px);}
+.prov-banner .dot{width:8px;height:8px;border-radius:50%;background:#f97316;
+  animation:pulse 1.2s infinite;flex-shrink:0;}
+.prov-banner-text{flex:1;min-width:0;font-size:12.5px;color:#fdba74;}
+.prov-banner-text b{color:#fed7aa;letter-spacing:.03em;margin-right:6px;}
+.prov-banner-close{flex-shrink:0;background:transparent;border:none;color:#fdba74;
+  font-size:14px;cursor:pointer;padding:2px 6px;}
+.prov-banner-close:hover{color:#fed7aa;}
+
 /* ── SEARCH BAR (Provincia/Regione/Località) ── */
 .search-bar{padding:10px 16px 4px;position:relative;}
 .search-bar input{padding-right:38px;}
@@ -540,19 +567,19 @@ body{padding-bottom:64px;}
 
 /* ── INGV-STYLE EQ LIST ── */
 .eq-list{max-height:none;overflow-y:visible;}
-.eq-item{display:flex;align-items:center;gap:12px;padding:14px 16px;
+.eq-item{display:flex;align-items:center;gap:14px;padding:18px 16px;
   border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
 .eq-item:active{background:rgba(255,255,255,0.05);}
 .eq-info{flex:1;min-width:0;}
-.eq-info .pl{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.eq-info .dt{font-size:12px;color:var(--muted);margin-top:3px;display:flex;flex-direction:column;gap:2px;}
-.eq-mag{min-width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
-  justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;order:2;margin-left:auto;}
-.seis-btn{flex-shrink:0;padding:6px 8px;border-radius:8px;font-size:16px;
+.eq-info .pl{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.eq-info .dt{font-size:13.5px;color:var(--muted);margin-top:4px;display:flex;flex-direction:column;gap:3px;}
+.eq-mag{min-width:58px;height:58px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;font-size:22px;font-weight:800;flex-shrink:0;order:2;margin-left:auto;}
+.seis-btn{flex-shrink:0;padding:7px 9px;border-radius:9px;font-size:18px;
   background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
   color:#93c5fd;cursor:pointer;transition:all .18s;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;line-height:1;min-width:50px;}
+  text-align:center;line-height:1;min-width:56px;}
 
 /* ── FILTER DRAWER ── */
 .filter-drawer{position:fixed;top:0;right:0;bottom:60px;width:min(340px,85vw);z-index:300;
@@ -566,6 +593,51 @@ body{padding-bottom:64px;}
 .filter-drawer h3{margin:0 0 16px;font-size:16px;color:var(--text);}
 .filter-drawer .close-x{position:absolute;top:12px;right:14px;font-size:22px;
   cursor:pointer;color:var(--muted);background:none;border:none;}
+
+/* ── SCHEDA TERREMOTO (dettaglio evento) ── */
+.eqd-overlay{position:fixed;inset:0;z-index:399;background:rgba(0,0,0,.55);
+  display:none;}
+.eqd-overlay.open{display:block;}
+.eqd-sheet{position:fixed;left:0;right:0;bottom:0;z-index:400;max-height:88vh;
+  background:var(--panel);border-radius:20px 20px 0 0;border:1px solid var(--border);border-bottom:none;
+  display:flex;flex-direction:column;transform:translateY(100%);transition:transform .25s ease;
+  overflow:hidden;box-shadow:0 -8px 30px rgba(0,0,0,.4);}
+.eqd-sheet.open{transform:translateY(0);}
+.eqd-header{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.eqd-title{font-size:15px;font-weight:700;line-height:1.3;}
+.eqd-close{flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid var(--border);
+  border-radius:8px;width:30px;height:30px;color:var(--text);cursor:pointer;font-size:14px;}
+.eqd-map{height:170px;width:100%;flex-shrink:0;}
+.eqd-tabs{display:flex;gap:0;padding:10px 16px 0;flex-shrink:0;}
+.eqd-tab{flex:1;padding:9px;border:none;background:rgba(255,255,255,.05);color:var(--muted);
+  font-size:13px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;}
+.eqd-tab.active{color:#fff;border-bottom-color:#3b82f6;background:rgba(59,130,246,.1);}
+.eqd-tab:first-child{border-radius:10px 0 0 0;}
+.eqd-tab:last-child{border-radius:0 10px 0 0;}
+.eqd-body{flex:1;overflow-y:auto;padding:14px 16px;-webkit-overflow-scrolling:touch;}
+.eqd-pane{display:none;}
+.eqd-pane.active{display:block;}
+.eqd-footer{padding:12px 16px calc(12px + env(safe-area-inset-bottom,0));
+  border-top:1px solid var(--border);flex-shrink:0;}
+.eqd-seis-btn{width:100%;padding:11px;border:none;border-radius:10px;background:#2563eb;
+  color:#fff;font-weight:700;font-size:14px;cursor:pointer;}
+.eqd-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.eqd-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:9px 12px;}
+.eqd-box .k{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
+.eqd-box .v{font-size:17px;font-weight:800;}
+.eqd-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;
+  border-bottom:1px solid var(--border);font-size:13px;}
+.eqd-row:last-child{border-bottom:none;}
+.eqd-row .k{color:var(--muted);}
+.eqd-row .v{font-weight:600;text-align:right;}
+.eqd-loc-band{padding:10px 14px;font-size:11px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.04em;color:#3b82f6;background:rgba(59,130,246,.08);border-radius:8px;margin:12px 0 6px;}
+.eqd-loc-band:first-child{margin-top:0;}
+.eqd-loc-row{display:flex;justify-content:space-between;padding:8px 4px;font-size:13.5px;
+  border-bottom:1px solid var(--border);}
+.eqd-loc-row:last-child{border-bottom:none;}
+.eqd-loc-row .d{color:var(--muted);font-size:12.5px;flex-shrink:0;margin-left:10px;}
 
 /* ── MAPPA SECTION ── */
 #sectionMappa .mapbox{height:calc(100vh - 180px)!important;min-height:300px!important;}
@@ -614,8 +686,8 @@ body{padding-bottom:64px;}
 .profile-btn-logout:hover{background:rgba(239,68,68,0.18);}
 
 @media(max-width:640px){
-  .eq-item{padding:12px 14px;gap:10px;}
-  .eq-mag{min-width:44px;height:44px;font-size:16px;}
+  .eq-item{padding:15px 14px;gap:11px;}
+  .eq-mag{min-width:52px;height:52px;font-size:19px;}
   #sectionMappa .mapbox{height:calc(100vh - 140px)!important;}
 }
 </style>
@@ -656,6 +728,11 @@ body{padding-bottom:64px;}
       <div class="icon ic" data-ic="locate" style="color:#5eead4;"></div><h2>Localizzazione</h2>
       <p>Stima sperimentale epicentro da tempi S-P su stazioni vicine</p>
     </div>
+    <div class="choice-card" style="border-color:rgba(249,115,22,0.4);"
+         onclick="goSection('sciami')">
+      <div class="icon ic" data-ic="swarm" style="color:#fdba74;"></div><h2>Sciami Sismici</h2>
+      <p>Individua sciami e sequenze sismiche per provincia e periodo</p>
+    </div>
   </div>
 </div>
 
@@ -680,6 +757,16 @@ body{padding-bottom:64px;}
       <button class="hdr-btn" id="authBtn" onclick="handleAuth()" title="Account"><span class="ic" data-ic="user"></span></button>
       <button class="hdr-btn" onclick="goSection('terremoti')" title="Terremoti recenti"><span class="ic" data-ic="quake" style="font-size:20px;"></span></button>
     </div>
+  </div>
+
+  <!-- BANNER "STIMA PROVVISORIA" — dicitura pubblicata da INGV, non calcolata da noi -->
+  <div id="provBanner" class="prov-banner" style="display:none;">
+    <span class="dot"></span>
+    <div class="prov-banner-text">
+      <b>STIMA PROVVISORIA</b>
+      <span id="provBannerDetail"></span>
+    </div>
+    <button class="prov-banner-close" onclick="dismissProvBanner()" title="Chiudi">✕</button>
   </div>
 
   <!-- FILTER DRAWER (terremoti) -->
@@ -749,6 +836,7 @@ body{padding-bottom:64px;}
     <button class="nav-tab" id="tabFm"   onclick="goSection('focali')"><span class="ic" data-ic="focal"></span>Meccanismi Focali</button>
     <button class="nav-tab" id="tabNotif" onclick="goSection('notifiche')"><span class="ic" data-ic="bell"></span>Notifiche</button>
     <button class="nav-tab" id="tabLoc" onclick="goSection('localizzazione')"><span class="ic" data-ic="locate"></span>Localizzazione</button>
+    <button class="nav-tab" id="tabSw" onclick="goSection('sciami')"><span class="ic" data-ic="swarm"></span>Sciami Sismici</button>
     <div class="nav-spacer"></div>
     <button class="nav-home" onclick="goHome()"><span class="ic" data-ic="home"></span>Home</button>
   </nav>
@@ -945,6 +1033,116 @@ body{padding-bottom:64px;}
         </div>
       </div>
       <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code></div>
+    </div>
+  </div>
+
+  <!-- ═══ SCIAMI SISMICI ═══ -->
+  <div class="section" id="sectionSciami">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Sciami Sismici</h1>
+          <p>Raggruppamento automatico degli eventi INGV per individuare sciami e sequenze sismiche.</p></div>
+        <span class="badge badge-purple">Analisi cluster</span>
+      </div>
+      <div class="field" style="max-width:340px;margin-bottom:16px;">
+        <label>Strumento</label>
+        <select id="swTool">
+          <option value="sciami" selected>🌊 Sciami sismici</option>
+          <option value="_soon" disabled>➕ Altri strumenti in arrivo…</option>
+        </select>
+      </div>
+      <div class="eq-grid">
+        <section class="panel">
+          <div class="panel-header"><h2>Ricerca</h2></div>
+          <div class="controls">
+            <div class="field"><label>Provincia</label>
+              <select id="swProv">
+                <option value="">-- Seleziona provincia --</option>
+                <option value="AG">AG — Agrigento</option><option value="AL">AL — Alessandria</option>
+                <option value="AN">AN — Ancona</option><option value="AO">AO — Aosta</option>
+                <option value="AP">AP — Ascoli Piceno</option><option value="AQ">AQ — L'Aquila</option>
+                <option value="AR">AR — Arezzo</option><option value="AT">AT — Asti</option>
+                <option value="AV">AV — Avellino</option><option value="BA">BA — Bari</option>
+                <option value="BG">BG — Bergamo</option><option value="BI">BI — Biella</option>
+                <option value="BL">BL — Belluno</option><option value="BN">BN — Benevento</option>
+                <option value="BO">BO — Bologna</option><option value="BR">BR — Brindisi</option>
+                <option value="BS">BS — Brescia</option><option value="BT">BT — Barletta-Andria-Trani</option>
+                <option value="BZ">BZ — Bolzano</option><option value="CA">CA — Cagliari</option>
+                <option value="CB">CB — Campobasso</option><option value="CE">CE — Caserta</option>
+                <option value="CH">CH — Chieti</option><option value="CL">CL — Caltanissetta</option>
+                <option value="CN">CN — Cuneo</option><option value="CO">CO — Como</option>
+                <option value="CR">CR — Cremona</option><option value="CS">CS — Cosenza</option>
+                <option value="CT">CT — Catania</option><option value="CZ">CZ — Catanzaro</option>
+                <option value="EN">EN — Enna</option><option value="FC">FC — Forlì-Cesena</option>
+                <option value="FE">FE — Ferrara</option><option value="FG">FG — Foggia</option>
+                <option value="FI">FI — Firenze</option><option value="FM">FM — Fermo</option>
+                <option value="FR">FR — Frosinone</option><option value="GE">GE — Genova</option>
+                <option value="GO">GO — Gorizia</option><option value="GR">GR — Grosseto</option>
+                <option value="IM">IM — Imperia</option><option value="IS">IS — Isernia</option>
+                <option value="KR">KR — Crotone</option><option value="LC">LC — Lecco</option>
+                <option value="LE">LE — Lecce</option><option value="LI">LI — Livorno</option>
+                <option value="LO">LO — Lodi</option><option value="LT">LT — Latina</option>
+                <option value="LU">LU — Lucca</option><option value="MB">MB — Monza-Brianza</option>
+                <option value="MC">MC — Macerata</option><option value="ME">ME — Messina</option>
+                <option value="MI">MI — Milano</option><option value="MN">MN — Mantova</option>
+                <option value="MO">MO — Modena</option><option value="MS">MS — Massa-Carrara</option>
+                <option value="MT">MT — Matera</option><option value="NA">NA — Napoli</option>
+                <option value="NO">NO — Novara</option><option value="NU">NU — Nuoro</option>
+                <option value="OR">OR — Oristano</option><option value="PA">PA — Palermo</option>
+                <option value="PC">PC — Piacenza</option><option value="PD">PD — Padova</option>
+                <option value="PE">PE — Pescara</option><option value="PG">PG — Perugia</option>
+                <option value="PI">PI — Pisa</option><option value="PN">PN — Pordenone</option>
+                <option value="PO">PO — Prato</option><option value="PR">PR — Parma</option>
+                <option value="PT">PT — Pistoia</option><option value="PU">PU — Pesaro-Urbino</option>
+                <option value="PV">PV — Pavia</option><option value="PZ">PZ — Potenza</option>
+                <option value="RA">RA — Ravenna</option><option value="RC">RC — Reggio Calabria</option>
+                <option value="RE">RE — Reggio Emilia</option><option value="RG">RG — Ragusa</option>
+                <option value="RI">RI — Rieti</option><option value="RM">RM — Roma</option>
+                <option value="RN">RN — Rimini</option><option value="RO">RO — Rovigo</option>
+                <option value="SA">SA — Salerno</option><option value="SI">SI — Siena</option>
+                <option value="SO">SO — Sondrio</option><option value="SP">SP — La Spezia</option>
+                <option value="SR">SR — Siracusa</option><option value="SS">SS — Sassari</option>
+                <option value="SU">SU — Sud Sardegna</option><option value="SV">SV — Savona</option>
+                <option value="TA">TA — Taranto</option><option value="TE">TE — Teramo</option>
+                <option value="TN">TN — Trento</option><option value="TO">TO — Torino</option>
+                <option value="TP">TP — Trapani</option><option value="TR">TR — Terni</option>
+                <option value="TS">TS — Trieste</option><option value="TV">TV — Treviso</option>
+                <option value="UD">UD — Udine</option><option value="VA">VA — Varese</option>
+                <option value="VB">VB — Verbano-Cusio-Ossola</option><option value="VC">VC — Vercelli</option>
+                <option value="VE">VE — Venezia</option><option value="VI">VI — Vicenza</option>
+                <option value="VR">VR — Verona</option><option value="VT">VT — Viterbo</option>
+                <option value="VV">VV — Vibo Valentia</option>
+              </select></div>
+            <div class="row-2">
+              <div class="field"><label>Anno da</label>
+                <select id="swYearFrom"></select></div>
+              <div class="field"><label>Anno a</label>
+                <select id="swYearTo"></select></div>
+            </div>
+            <div class="field"><label>Mag. minima</label>
+              <input id="swMinMag" type="number" min="-1" max="9" step="0.1" value="0"/></div>
+            <button class="btn btn-purple" id="swFetchBtn" onclick="fetchSwarms()">🔍 Analizza sciami sismici</button>
+            <div id="swStatus" class="status">Seleziona provincia e periodo.</div>
+            <div class="hint">Un cluster è uno <b>sciame sismico</b> se raggruppa ≥5 eventi entro 15&nbsp;km l'uno dall'altro, con non più di 7 giorni tra un evento e il successivo. Cluster molto estesi (≥200 eventi o oltre 40 giorni) vengono riassunti come <b>sequenza sismica</b>, un cluster per ogni mese. Regola euristica, non una classificazione sismologica ufficiale.</div>
+          </div>
+        </section>
+        <div class="main">
+          <section class="panel panel-map">
+            <div class="panel-header"><h2>Mappa cluster</h2><p>Dimensione ∝ numero eventi</p></div>
+            <div id="swMap" class="mapbox"></div>
+          </section>
+          <div id="swSumRow" class="summary-row" style="display:none">
+            <div class="sc"><div class="k">Eventi analizzati</div><div class="v" id="swTotEv">—</div></div>
+            <div class="sc"><div class="k">Sciami sismici</div><div class="v" id="swTotSwarm" style="color:#fdba74">—</div></div>
+            <div class="sc"><div class="k">Sequenze sismiche</div><div class="v" id="swTotSeq" style="color:#fca5a5">—</div></div>
+          </div>
+          <section class="panel">
+            <div class="panel-header"><h2>Cluster individuati</h2></div>
+            <div id="swList" class="sw-list"><div class="lo" style="padding:40px 16px;text-align:center;color:var(--muted);">Nessuna ricerca ancora eseguita.</div></div>
+          </section>
+        </div>
+      </div>
+      <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> · Clustering spazio-temporale calcolato lato client.</div>
     </div>
   </div>
 
@@ -1280,6 +1478,27 @@ body{padding-bottom:64px;}
       <span class="btab-icon ic" data-ic="storico"></span>Storico</button>
   </nav>
 
+  <!-- SCHEDA TERREMOTO (dettaglio evento, stile app INGV) -->
+  <div class="eqd-overlay" id="eqdOverlay" onclick="closeEqDetail()"></div>
+  <div class="eqd-sheet" id="eqdSheet">
+    <div class="eqd-header">
+      <div class="eqd-title" id="eqdTitle">—</div>
+      <button class="eqd-close" onclick="closeEqDetail()" title="Chiudi">✕</button>
+    </div>
+    <div class="eqd-map" id="eqdMap"></div>
+    <div class="eqd-tabs">
+      <button class="eqd-tab active" id="eqdTabDati" onclick="eqdSwitchTab('dati')">Dati</button>
+      <button class="eqd-tab" id="eqdTabLoc" onclick="eqdSwitchTab('localita')">Località</button>
+    </div>
+    <div class="eqd-body">
+      <div class="eqd-pane active" id="eqdPaneDati"></div>
+      <div class="eqd-pane" id="eqdPaneLoc"></div>
+    </div>
+    <div class="eqd-footer">
+      <button class="eqd-seis-btn" id="eqdSeisBtn" onclick="eqdGoSeismo()">📈 Vai al sismogramma</button>
+    </div>
+  </div>
+
 </div><!-- /appContainer -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1306,7 +1525,7 @@ function goSection(sec){
   /* top header context */
   const titles={terremoti:['quake','Terremoti'],mappa:['map','Mappa'],sismogrammi:['seismo','Sismogrammi'],
     focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],
-    localizzazione:['locate','Localizzazione']};
+    localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici']};
   const _tt=titles[sec];
   document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
   document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
@@ -1340,6 +1559,11 @@ function goSection(sec){
     document.getElementById('tabLoc').classList.add('a-loc');
     if(!locMapInited){initLocMap();locMapInited=true;}
     else setTimeout(()=>locMap&&locMap.invalidateSize(),80);
+  } else if(sec==='sciami'){
+    document.getElementById('sectionSciami').classList.add('active');
+    document.getElementById('tabSw').classList.add('a-sw');
+    if(!swMapInited){initSwarmYearSelect();initSwMap();swMapInited=true;}
+    else setTimeout(()=>swMap&&swMap.invalidateSize(),80);
   } else {
     document.getElementById('sectionSismogrammi').classList.add('active');
     document.getElementById('tabSeis').classList.add('a-seis');
@@ -1376,7 +1600,43 @@ window.addEventListener('load',()=>{
       if(eqData.length) renderEqView();
     },()=>{},{enableHighAccuracy:false,timeout:8000});
   }
+  /* 5. Avvia il controllo della "stima provvisoria" pubblicata da INGV */
+  startProvBannerPoll();
 });
+
+/* ── STIMA PROVVISORIA (banner) — legge l'endpoint del backend, che a sua
+   volta legge il testo REALE pubblicato da INGV su terremoti.ingv.it.
+   Non è una stima calcolata dal client. ── */
+const STIMA_PROV_URL='https://us-central1-italquake.cloudfunctions.net/getStimaProvvisoria';
+let _provBannerDismissedRaw=null,_provBannerTimer=null;
+async function pollStimaProvBanner(){
+  const banner=document.getElementById('provBanner');
+  if(!banner)return;
+  try{
+    const r=await fetch(STIMA_PROV_URL,{signal:AbortSignal.timeout(10000)});
+    if(!r.ok)return;
+    const d=await r.json();
+    if(d.active&&d.raw!==_provBannerDismissedRaw){
+      document.getElementById('provBannerDetail').textContent=
+        [d.prov,d.mag?'M ~'+d.mag:null,d.ora?'ore '+d.ora:null].filter(Boolean).join(' · ');
+      banner.dataset.raw=d.raw||'';
+      banner.style.display='flex';
+    } else if(!d.active){
+      banner.style.display='none';
+      _provBannerDismissedRaw=null;
+    }
+  }catch(e){}
+}
+function dismissProvBanner(){
+  const banner=document.getElementById('provBanner');
+  _provBannerDismissedRaw=banner.dataset.raw||null;
+  banner.style.display='none';
+}
+function startProvBannerPoll(){
+  if(_provBannerTimer)return;
+  pollStimaProvBanner();
+  _provBannerTimer=setInterval(pollStimaProvBanner,60000);
+}
 
 function _bootLoadPrefs(){
   try{
@@ -1700,10 +1960,10 @@ function renderList(events,containerId,onSeis){
       html+=`<div class="time-section">${secLabel}</div>`;
       lastSection=secLabel;
     }
-    const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic" style="font-size:17px;">${IC.seismo}</span><span style="font-size:8px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
+    const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic" style="font-size:19px;">${IC.seismo}</span><span style="font-size:9px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
     const _distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
     const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
-    html+=`<div class="eq-item" onclick="focusMarker('${containerId}',${i})">
+    html+=`<div class="eq-item" onclick="openEqDetail('${containerId}',${i})">
       <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;">
         ${sb}
       </div>
@@ -1971,6 +2231,123 @@ function focusMarker(listId,i){
 }
 
 /* ================================================================
+   SCHEDA TERREMOTO (dettaglio evento, stile app INGV)
+================================================================ */
+let _eqdCtx=null, eqdMap=null, eqdMapInited=false, eqdMarker=null;
+/* Comuni italiani (nome, sigla provincia, lat, lon) — dataset compattato da
+   opendatasicilia/comuni-italiani, usato solo per calcolare le località
+   vicine all'epicentro nella tab "Località". */
+let comuniData=null, comuniLoading=null;
+
+function openEqDetail(containerId,i){
+  const arr=containerId==='eqList'?eqData:storicoData;
+  const ev=arr[i];if(!ev)return;
+  _eqdCtx={containerId,i,ev};
+
+  document.getElementById('eqdTitle').textContent=ev.place;
+  renderEqdDati(ev);
+  document.getElementById('eqdPaneLoc').innerHTML='';
+  eqdSwitchTab('dati');
+
+  document.getElementById('eqdOverlay').classList.add('open');
+  document.getElementById('eqdSheet').classList.add('open');
+
+  setTimeout(()=>{
+    if(!eqdMapInited){
+      eqdMap=L.map('eqdMap',{zoomControl:false,attributionControl:false}).setView([ev.lat,ev.lon],8);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{subdomains:'abcd',maxZoom:19}).addTo(eqdMap);
+      eqdMapInited=true;
+    } else {
+      eqdMap.invalidateSize();
+      eqdMap.setView([ev.lat,ev.lon],8);
+    }
+    if(eqdMarker)eqdMap.removeLayer(eqdMarker);
+    eqdMarker=L.circleMarker([ev.lat,ev.lon],{radius:Math.max(6,Math.min(20,ev.mag*4)),
+      color:depthCol(ev.depth),fillColor:depthCol(ev.depth),fillOpacity:.75,weight:1.5}).addTo(eqdMap);
+  },150);
+}
+
+function closeEqDetail(){
+  document.getElementById('eqdOverlay').classList.remove('open');
+  document.getElementById('eqdSheet').classList.remove('open');
+}
+
+function eqdSwitchTab(tab){
+  document.getElementById('eqdTabDati').classList.toggle('active',tab==='dati');
+  document.getElementById('eqdTabLoc').classList.toggle('active',tab==='localita');
+  document.getElementById('eqdPaneDati').classList.toggle('active',tab==='dati');
+  document.getElementById('eqdPaneLoc').classList.toggle('active',tab==='localita');
+  if(tab==='localita'&&_eqdCtx) renderEqdLocalita(_eqdCtx.ev);
+}
+
+function renderEqdDati(ev){
+  const t=new Date(ev.time);
+  const localStr=t.toLocaleString('it-IT',{timeZone:'Europe/Rome',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})+' IT';
+  const utcStr=ev.time.replace('T',' ').slice(0,16)+' UTC';
+  const distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
+  document.getElementById('eqdPaneDati').innerHTML=`
+    <div class="eqd-grid">
+      <div class="eqd-box"><div class="k">Magnitudo</div><div class="v" style="color:#fca5a5;">${ev.mag.toFixed(1)}</div></div>
+      <div class="eqd-box"><div class="k">Profondità</div><div class="v">${ev.depth.toFixed(1)} km</div></div>
+    </div>
+    <div class="eqd-row"><span class="k">Data e ora (locale)</span><span class="v">${localStr}</span></div>
+    <div class="eqd-row"><span class="k">Data e ora (UTC)</span><span class="v">${utcStr}</span></div>
+    <div class="eqd-row"><span class="k">Coordinate</span><span class="v">${ev.lat.toFixed(4)}, ${ev.lon.toFixed(4)}</span></div>
+    <div class="eqd-row"><span class="k">Tipo magnitudo</span><span class="v">${ev.magType||'—'}</span></div>
+    ${distVal!=null?`<div class="eqd-row"><span class="k">Distanza da te</span><span class="v">${distVal.toFixed(0)} km</span></div>`:''}
+    <div class="eqd-row"><span class="k">ID evento INGV</span><span class="v" style="font-size:11px;">${ev.id}</span></div>
+  `;
+}
+
+function loadComuniData(){
+  if(comuniData)return Promise.resolve(comuniData);
+  if(comuniLoading)return comuniLoading;
+  comuniLoading=fetch('./comuni.json').then(r=>r.json()).then(d=>{comuniData=d;return d;}).catch(()=>{comuniData=[];return comuniData;});
+  return comuniLoading;
+}
+
+async function renderEqdLocalita(ev){
+  const pane=document.getElementById('eqdPaneLoc');
+  pane.innerHTML='<div class="lo" style="padding:24px 0;text-align:center;color:var(--muted);"><span class="spin"></span> Calcolo località vicine...</div>';
+  const comuni=await loadComuniData();
+  /* la tab può essere stata chiusa/cambiata nel frattempo */
+  if(!_eqdCtx||_eqdCtx.ev!==ev)return;
+  if(!comuni.length){
+    pane.innerHTML='<div class="lo" style="padding:24px 0;text-align:center;color:var(--muted);">Elenco località non disponibile al momento.</div>';
+    return;
+  }
+  const withDist=comuni
+    .map(c=>({name:c[0],prov:c[1],d:haverDist(ev.lat,ev.lon,c[2],c[3])}))
+    .filter(c=>c.d<=30)
+    .sort((a,b)=>a.d-b.d);
+  if(!withDist.length){
+    pane.innerHTML='<div class="lo" style="padding:24px 0;text-align:center;color:var(--muted);">Nessuna località entro 30 km dall\'epicentro (probabile evento offshore o in area remota).</div>';
+    return;
+  }
+  const b0=withDist.filter(c=>c.d<=10);
+  const b1=withDist.filter(c=>c.d>10&&c.d<=20);
+  const b2=withDist.filter(c=>c.d>20&&c.d<=30);
+  const renderBand=(label,items)=>{
+    if(!items.length)return '';
+    let h=`<div class="eqd-loc-band">${label}</div>`;
+    items.forEach(c=>{h+=`<div class="eqd-loc-row"><span>${c.name} (${c.prov})</span><span class="d">${c.d.toFixed(1)} km</span></div>`;});
+    return h;
+  };
+  pane.innerHTML=
+    renderBand("Entro 10 km dall'epicentro",b0)+
+    renderBand('Tra 10 e 20 km dall\'epicentro',b1)+
+    renderBand('Tra 20 e 30 km dall\'epicentro',b2);
+}
+
+function eqdGoSeismo(){
+  if(!_eqdCtx)return;
+  const{containerId,i}=_eqdCtx;
+  closeEqDetail();
+  if(containerId==='eqList') openSeisForEq(i);
+  else openSeisForSt(i);
+}
+
+/* ================================================================
    TERREMOTI RECENTI
 ================================================================ */
 let eqData=[],eqMarkers=[],eqMap;
@@ -2096,6 +2473,209 @@ async function fetchStorico(){
     st.textContent=`Trovati ${storicoData.length} eventi${provLabel}.`;st.className='status ok';
   }catch(err){st.textContent='Errore: '+err.message;st.className='status err';}
   finally{btn.disabled=false;}
+}
+
+/* ================================================================
+   SCIAMI SISMICI — clustering spazio-temporale lato client
+================================================================ */
+let swMapInited=false, swMap=null, swMarkers=[], swarmResults=[];
+
+function initSwMap(){
+  swMap=L.map('swMap').setView([42.5,12.5],6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(swMap);
+}
+
+function initSwarmYearSelect(){
+  const from=document.getElementById('swYearFrom'), to=document.getElementById('swYearTo');
+  if(from.options.length)return;
+  const nowY=new Date().getFullYear();
+  let opts='';
+  for(let y=nowY;y>=1985;y--) opts+=`<option value="${y}">${y}</option>`;
+  from.innerHTML=opts; to.innerHTML=opts;
+  from.value=String(nowY); to.value=String(nowY);
+}
+
+/* Regole di clustering — euristiche, non una classificazione sismologica ufficiale:
+   - SW_GAP_DAYS: oltre questo numero di giorni senza eventi vicini, il cluster si chiude
+   - SW_RADIUS_KM: raggio massimo dal centroide "mobile" del cluster
+   - SW_MIN_EVENTS: eventi minimi perché un cluster sia considerato uno sciame
+   - cluster molto estesi (per numero di eventi o durata) vengono riassunti mese per mese
+     come "sequenza sismica" invece di un unico blocco enorme (es. Amatrice 2016) */
+const SW_GAP_DAYS=7, SW_RADIUS_KM=15, SW_MIN_EVENTS=5;
+const SW_SEQ_EVENTS=200, SW_SEQ_DAYS=40;
+
+function clusterSeismicSwarms(events){
+  const sorted=events.slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
+  const raw=[];
+  let cur=null;
+  for(const ev of sorted){
+    const evT=new Date(ev.time).getTime();
+    if(cur){
+      const gapDays=(evT-cur.lastT)/86400000;
+      const d=haverDist(cur.clat,cur.clon,ev.lat,ev.lon);
+      if(gapDays<=SW_GAP_DAYS&&d<=SW_RADIUS_KM){
+        cur.events.push(ev);
+        cur.lastT=evT;
+        cur.clat=cur.events.reduce((s,e)=>s+e.lat,0)/cur.events.length;
+        cur.clon=cur.events.reduce((s,e)=>s+e.lon,0)/cur.events.length;
+        continue;
+      }
+      raw.push(cur);
+    }
+    cur={events:[ev],lastT:evT,clat:ev.lat,clon:ev.lon};
+  }
+  if(cur)raw.push(cur);
+
+  const swarms=raw.filter(c=>c.events.length>=SW_MIN_EVENTS);
+  const out=[];
+  for(const c of swarms){
+    const t0=new Date(c.events[0].time),t1=new Date(c.events[c.events.length-1].time);
+    const spanDays=(t1-t0)/86400000;
+    if(c.events.length>=SW_SEQ_EVENTS||spanDays>SW_SEQ_DAYS){
+      const byMonth=new Map();
+      for(const ev of c.events){
+        const key=ev.time.slice(0,7);
+        if(!byMonth.has(key))byMonth.set(key,[]);
+        byMonth.get(key).push(ev);
+      }
+      for(const[ym,evs] of byMonth){
+        if(evs.length<SW_MIN_EVENTS)continue;
+        out.push(buildSwarmSummary(evs,true,ym));
+      }
+    } else {
+      out.push(buildSwarmSummary(c.events,false,null));
+    }
+  }
+  return out.sort((a,b)=>new Date(b.start)-new Date(a.start));
+}
+
+const MESI_IT=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+
+function buildSwarmSummary(evs,isSeq,ym){
+  const sorted=evs.slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
+  const mags=evs.map(e=>e.mag);
+  const lat=evs.reduce((s,e)=>s+e.lat,0)/evs.length;
+  const lon=evs.reduce((s,e)=>s+e.lon,0)/evs.length;
+  const strongest=evs.reduce((a,b)=>b.mag>a.mag?b:a);
+  let monthLabel=null;
+  if(ym){const[y,m]=ym.split('-');monthLabel=MESI_IT[parseInt(m,10)-1]+' '+y;}
+  return{
+    isSeq,
+    label:isSeq?'Sequenza sismica':'Sciame sismico',
+    count:evs.length,
+    start:sorted[0].time,
+    end:sorted[sorted.length-1].time,
+    maxMag:Math.max(...mags),
+    minMag:Math.min(...mags),
+    lat,lon,
+    place:strongest.place,
+    monthLabel,
+    events:sorted
+  };
+}
+
+async function fetchSwarms(){
+  const btn=document.getElementById('swFetchBtn');
+  const st=document.getElementById('swStatus');
+  const prov=document.getElementById('swProv').value;
+  const yFrom=document.getElementById('swYearFrom').value;
+  const yTo=document.getElementById('swYearTo').value;
+  const minMag=parseFloat(document.getElementById('swMinMag').value)||0;
+  if(!prov){st.textContent='Seleziona una provincia.';st.className='status err';return;}
+  if(!PROV_CENTER[prov]){st.textContent='Provincia non riconosciuta.';st.className='status err';return;}
+  if(parseInt(yFrom,10)>parseInt(yTo,10)){st.textContent='"Anno da" successivo ad "Anno a".';st.className='status err';return;}
+
+  btn.disabled=true;
+  st.textContent='Ricerca nel catalogo INGV...';st.className='status';
+  document.getElementById('swList').innerHTML='<div class="lo"><span class="spin"></span>Analisi in corso...</div>';
+  document.getElementById('swSumRow').style.display='none';
+
+  try{
+    const[clat,clon,rkm]=PROV_CENTER[prov];
+    const maxR=(rkm/111).toFixed(3);
+    const start=yFrom+'-01-01T00:00:00';
+    const end=yTo+'-12-31T23:59:59';
+    /* limit alto: province ad alta sismicità (es. Rieti nel 2016-2017)
+       possono avere decine di migliaia di eventi in un anno */
+    const url=`${EQ_BASE}?format=text&starttime=${start}&endtime=${end}&orderby=time&limit=20000`
+      +`&minmagnitude=${minMag}&latitude=${clat}&longitude=${clon}&maxradius=${maxR}`;
+    const resp=await fetch(url,{signal:AbortSignal.timeout(30000)});
+    if(resp.status===204){
+      swarmResults=[];
+      renderSwarmList([]);
+      st.textContent='Nessun evento trovato nel periodo selezionato.';st.className='status warn';
+      return;
+    }
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const text=await resp.text();
+    const raw=parseEqText(text,999).filter(ev=>extractProv(ev.place)===prov);
+
+    swarmResults=clusterSeismicSwarms(raw);
+    renderSwarmList(swarmResults);
+
+    document.getElementById('swTotEv').textContent=raw.length;
+    document.getElementById('swTotSwarm').textContent=swarmResults.filter(s=>!s.isSeq).length;
+    document.getElementById('swTotSeq').textContent=swarmResults.filter(s=>s.isSeq).length;
+    document.getElementById('swSumRow').style.display='flex';
+
+    st.textContent=`${raw.length} eventi analizzati in provincia di ${PROV_NAMES[prov]||prov} — ${swarmResults.length} cluster individuati.`;
+    st.className='status ok';
+  }catch(err){
+    st.textContent='Errore: '+err.message;st.className='status err';
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+function renderSwarmList(swarms){
+  if(swMap)swMarkers.forEach(m=>swMap.removeLayer(m));
+  swMarkers.length=0;
+  const el=document.getElementById('swList');
+  if(!swarms.length){
+    el.innerHTML='<div class="lo" style="padding:40px 16px;text-align:center;color:var(--muted);">Nessuno sciame o sequenza sismica individuata con i criteri attuali.</div>';
+    return;
+  }
+  const bounds=[];
+  let html='';
+  swarms.forEach((s,i)=>{
+    const r=Math.max(6,Math.min(30,Math.sqrt(s.count)*4));
+    const marker=L.circleMarker([s.lat,s.lon],{
+      radius:r,color:s.isSeq?'#ef4444':'#f97316',fillColor:s.isSeq?'#ef4444':'#f97316',
+      fillOpacity:0.55,weight:1.5
+    });
+    marker.bindTooltip(`${s.label}${s.monthLabel?' · '+s.monthLabel:''}<br>${s.count} eventi · M ${s.minMag.toFixed(1)}–${s.maxMag.toFixed(1)}`);
+    marker.addTo(swMap);
+    swMarkers.push(marker);
+    bounds.push([s.lat,s.lon]);
+
+    const d0=new Date(s.start),d1=new Date(s.end);
+    const dateRange=s.monthLabel
+      ? s.monthLabel
+      : (d0.toDateString()===d1.toDateString()
+          ? d0.toLocaleDateString('it-IT')
+          : d0.toLocaleDateString('it-IT')+' → '+d1.toLocaleDateString('it-IT'));
+    html+=`<div class="sw-card" onclick="focusSwarm(${i})">
+      <div class="sw-top">
+        <span class="sw-label ${s.isSeq?'seq':'swarm'}">${s.label}</span>
+        <span class="sw-mag">M ${s.minMag.toFixed(1)}–${s.maxMag.toFixed(1)}</span>
+      </div>
+      <div class="sw-place">${s.place}</div>
+      <div class="sw-meta">
+        <span>📅 ${dateRange}</span>
+        <span>🔢 ${s.count} eventi</span>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+  if(bounds.length>1)swMap.fitBounds(bounds,{padding:[28,28]});
+  else if(bounds.length===1)swMap.setView(bounds[0],9);
+}
+
+function focusSwarm(i){
+  const s=swarmResults[i];if(!s)return;
+  swMap.setView([s.lat,s.lon],9,{animate:true});
+  if(swMarkers[i])swMarkers[i].openTooltip();
 }
 
 /* ================================================================
