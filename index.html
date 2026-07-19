@@ -102,7 +102,8 @@ window.IC=(function(){
     download:W('<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>'),
     expand:W('<path d="M9 4H4v5"/><path d="M4 4l6 6"/><path d="M15 4h5v5"/><path d="M20 4l-6 6"/><path d="M9 20H4v-5"/><path d="M4 20l6-6"/><path d="M15 20h5v-5"/><path d="M20 20l-6-6"/>'),
     swarm:W('<circle cx="12" cy="11" r="2.6"/><circle cx="5.5" cy="7" r="1.6"/><circle cx="18.5" cy="7.5" r="1.4"/><circle cx="5" cy="16.5" r="1.4"/><circle cx="18" cy="16" r="1.7"/><circle cx="12" cy="20" r="1.3"/>'),
-    menu:W('<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>')
+    menu:W('<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>'),
+    analogy:W('<path d="M4 17V7l8 5 8-5v10"/><path d="M4 7l8 5 8-5"/>')
   };
 })();
 document.addEventListener('DOMContentLoaded',function(){
@@ -568,19 +569,19 @@ body{padding-bottom:64px;}
 
 /* ── INGV-STYLE EQ LIST ── */
 .eq-list{max-height:none;overflow-y:visible;}
-.eq-item{display:flex;align-items:center;gap:14px;padding:28px 16px;min-height:96px;
+.eq-item{display:flex;align-items:center;gap:12px;padding:16px;
   border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
 .eq-item:active{background:rgba(255,255,255,0.05);}
 .eq-info{flex:1;min-width:0;}
-.eq-info .pl{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.eq-info .dt{font-size:13.5px;color:var(--muted);margin-top:8px;display:flex;flex-direction:column;gap:5px;}
-.eq-mag{min-width:64px;height:64px;border-radius:14px;display:flex;align-items:center;
-  justify-content:center;font-size:23px;font-weight:800;flex-shrink:0;order:2;margin-left:auto;}
-.seis-btn{flex-shrink:0;padding:9px 9px;border-radius:9px;font-size:18px;
+.eq-info .pl{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.eq-info .dt{font-size:12.5px;color:var(--muted);margin-top:5px;display:flex;flex-direction:column;gap:3px;}
+.eq-mag{min-width:52px;height:52px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:20px;font-weight:800;flex-shrink:0;order:2;margin-left:auto;}
+.seis-btn{flex-shrink:0;padding:7px 8px;border-radius:9px;font-size:17px;
   background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
   color:#93c5fd;cursor:pointer;transition:all .18s;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;line-height:1;min-width:60px;min-height:60px;}
+  text-align:center;line-height:1;min-width:54px;}
 
 /* ── FILTER DRAWER ── */
 .filter-drawer{position:fixed;top:0;right:0;bottom:60px;width:min(340px,85vw);z-index:300;
@@ -622,6 +623,38 @@ body{padding-bottom:64px;}
 .side-menu-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.35;}
 .side-menu-hint{padding:14px 12px;font-size:12px;color:var(--muted);font-style:italic;
   text-align:center;border:1px dashed var(--border);border-radius:10px;margin-top:4px;}
+.side-badge{display:inline-block;font-size:9px;font-weight:800;padding:1px 6px;border-radius:5px;
+  background:rgba(165,180,252,.16);color:#a5b4fc;border:1px solid rgba(165,180,252,.35);
+  text-transform:uppercase;letter-spacing:.04em;margin-left:6px;vertical-align:1px;}
+
+/* ── ANALOGIA SISMICA (sezione sperimentale) ── */
+.an-window-picker{display:flex;gap:8px;flex-wrap:wrap;}
+.an-window-btn{flex:1;min-width:100px;padding:12px 10px;border-radius:10px;font-weight:700;
+  font-size:13px;background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--text);cursor:pointer;transition:all .15s;}
+.an-window-btn:hover{background:rgba(255,255,255,.08);}
+.an-window-btn.active{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.5);color:#a5b4fc;}
+.an-result{display:flex;flex-direction:column;gap:14px;margin-top:16px;}
+.an-block{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
+.an-block h3{margin:0 0 10px;font-size:13.5px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.05em;color:#a5b4fc;}
+.an-block.match h3{color:#fdba74;}
+.an-block.next h3{color:#fca5a5;}
+.an-block .sig-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;
+  border-bottom:1px solid var(--border);}
+.an-block .sig-row:last-child{border-bottom:none;}
+.an-block .sig-row .k{color:var(--muted);}
+.an-block .sig-row .v{font-weight:700;}
+.an-big-event{margin-top:6px;padding:14px;border-radius:12px;
+  background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.35);}
+.an-big-event .m{font-size:32px;font-weight:800;color:#fca5a5;line-height:1;}
+.an-big-event .p{font-size:14px;font-weight:600;margin-top:6px;}
+.an-big-event .t{font-size:12px;color:var(--muted);margin-top:4px;}
+.an-none{padding:14px;text-align:center;color:var(--muted);font-size:13px;
+  background:rgba(255,255,255,.02);border:1px dashed var(--border);border-radius:10px;}
+.an-progress{font-size:12.5px;color:var(--muted);}
+.an-warn{padding:11px 14px;font-size:12px;color:#fbbf24;background:rgba(251,191,36,.08);
+  border:1px solid rgba(251,191,36,.3);border-radius:10px;margin-top:12px;}
 
 /* ── SCHEDA TERREMOTO (dettaglio evento) ── */
 .eqd-overlay{position:fixed;inset:0;z-index:399;background:rgba(0,0,0,.55);
@@ -715,8 +748,8 @@ body{padding-bottom:64px;}
 .profile-btn-logout:hover{background:rgba(239,68,68,0.18);}
 
 @media(max-width:640px){
-  .eq-item{padding:24px 14px;gap:12px;min-height:92px;}
-  .eq-mag{min-width:58px;height:58px;font-size:20px;}
+  .eq-item{padding:14px 14px;gap:10px;}
+  .eq-mag{min-width:48px;height:48px;font-size:18px;}
   #sectionMappa .mapbox{height:calc(100vh - 140px)!important;}
 }
 </style>
@@ -797,6 +830,13 @@ body{padding-bottom:64px;}
         <div class="side-menu-text">
           <div class="side-menu-title">Sciami Sismici</div>
           <div class="side-menu-desc">Individua sciami e sequenze sismiche per provincia e periodo</div>
+        </div>
+      </button>
+      <button class="side-menu-item" onclick="closeSideMenu();goSection('analogia')">
+        <span class="ic side-menu-icon" data-ic="analogy" style="color:#a5b4fc;"></span>
+        <div class="side-menu-text">
+          <div class="side-menu-title">Analogia Sismica <span class="side-badge">Sperimentale</span></div>
+          <div class="side-menu-desc">Cerca il periodo storico più simile a quello attuale e mostra cosa è successo dopo</div>
         </div>
       </button>
       <div class="side-menu-hint">Altri strumenti in arrivo…</div>
@@ -1189,6 +1229,45 @@ body{padding-bottom:64px;}
     </div>
   </div>
 
+  <!-- ═══ ANALOGIA SISMICA (sperimentale) ═══ -->
+  <div class="section" id="sectionAnalogia">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Analogia Sismica</h1>
+          <p>Cerca nel catalogo INGV il periodo storico più simile al periodo attuale e mostra qual è stato l'evento più forte nel periodo successivo.</p></div>
+        <span class="badge" style="background:rgba(165,180,252,.14);color:#a5b4fc;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
+      </div>
+      <section class="panel">
+        <div class="panel-header"><h2>Finestra temporale</h2><p>Su quale intervallo del periodo attuale eseguire il confronto</p></div>
+        <div style="padding:14px 16px 4px;">
+          <div class="an-window-picker">
+            <button class="an-window-btn active" data-hours="24" onclick="anSelectWindow(24)">Ultime 24 ore</button>
+            <button class="an-window-btn" data-hours="48" onclick="anSelectWindow(48)">Ultime 48 ore</button>
+            <button class="an-window-btn" data-hours="168" onclick="anSelectWindow(168)">Ultima settimana</button>
+          </div>
+          <button class="btn btn-purple" id="anRunBtn" onclick="fetchAnalogia()" style="margin-top:14px;">🔍 Cerca analogia</button>
+          <div id="anStatus" class="status">Scegli la finestra e avvia la ricerca.</div>
+          <div class="an-warn">⚠️ Analisi <b>puramente sperimentale</b>. Il "periodo più simile" è calcolato su numero di eventi, magnitudo massima ed energia rilasciata. L'evento successivo non è una previsione: è solo cosa accadde storicamente nel periodo successivo alla situazione più simile trovata.</div>
+        </div>
+      </section>
+      <div id="anResult" class="an-result" style="display:none;">
+        <div class="an-block current">
+          <h3>Periodo attuale</h3>
+          <div id="anCurrentBody"></div>
+        </div>
+        <div class="an-block match">
+          <h3>Periodo storico più simile</h3>
+          <div id="anMatchBody"></div>
+        </div>
+        <div class="an-block next">
+          <h3>Cosa successe nel periodo successivo</h3>
+          <div id="anNextBody"></div>
+        </div>
+      </div>
+      <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> · Ricerca analogia calcolata lato client sul catalogo Italia.</div>
+    </div>
+  </div>
+
   <!-- ═══ SISMOGRAMMI ═══ -->
   <div class="section" id="sectionSismogrammi">
     <div class="container">
@@ -1568,7 +1647,7 @@ function goSection(sec){
   /* top header context */
   const titles={terremoti:['quake','Terremoti'],mappa:['map','Mappa'],sismogrammi:['seismo','Sismogrammi'],
     focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],
-    localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici']};
+    localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],analogia:['analogy','Analogia Sismica']};
   const _tt=titles[sec];
   document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
   document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
@@ -1606,6 +1685,8 @@ function goSection(sec){
     document.getElementById('sectionSciami').classList.add('active');
     if(!swMapInited){initSwarmYearSelect();initSwMap();swMapInited=true;}
     else setTimeout(()=>swMap&&swMap.invalidateSize(),80);
+  } else if(sec==='analogia'){
+    document.getElementById('sectionAnalogia').classList.add('active');
   } else {
     document.getElementById('sectionSismogrammi').classList.add('active');
     document.getElementById('tabSeis').classList.add('a-seis');
@@ -2730,6 +2811,201 @@ function focusSwarm(i){
   const s=swarmResults[i];if(!s)return;
   swMap.setView([s.lat,s.lon],9,{animate:true});
   if(swMarkers[i])swMarkers[i].openTooltip();
+}
+
+/* ================================================================
+   ANALOGIA SISMICA (sperimentale) — trova il periodo storico più
+   simile a quello attuale confrontando "firme" sismiche (n. eventi,
+   magnitudo massima, energia rilasciata) e mostra l'evento più
+   forte avvenuto nella finestra IMMEDIATAMENTE SUCCESSIVA.
+   Non è una previsione: è pura analisi retrospettiva del catalogo.
+================================================================ */
+let _anHours=24, _anRunning=false;
+
+function anSelectWindow(h){
+  _anHours=h;
+  document.querySelectorAll('.an-window-btn').forEach(b=>{
+    b.classList.toggle('active', Number(b.dataset.hours)===h);
+  });
+}
+
+/* Firma sismica: caratteristiche aggregate del periodo, indipendenti
+   dalla posizione (l'analogia è sull'intensità/attività complessiva). */
+function _anSignature(events){
+  const n=events.length;
+  if(!n) return {n:0,maxMag:0,logEnergy:0};
+  let maxMag=-Infinity, sumE=0;
+  for(const ev of events){
+    if(ev.mag>maxMag)maxMag=ev.mag;
+    /* Formula energia sismica: log10(E) = 1.5*M + 4.8 (Gutenberg-Richter) */
+    sumE += Math.pow(10, 1.5*ev.mag);
+  }
+  return {n, maxMag, logEnergy: Math.log10(sumE+1)};
+}
+
+/* Distanza normalizzata tra due firme (0=identiche, ~1=molto diverse) */
+function _anDistance(a,b){
+  const nMax=Math.max(a.n,b.n,1);
+  const dn=Math.abs(a.n-b.n)/nMax;
+  const dm=Math.abs(a.maxMag-b.maxMag)/3;    // scala tipica 0..3 magnitudo
+  const de=Math.abs(a.logEnergy-b.logEnergy)/3; // scala tipica ~3 decadi
+  return dn*0.30 + dm*0.35 + de*0.35;
+}
+
+async function _anFetchYear(year, minMag, statusEl){
+  const start=`${year}-01-01T00:00:00`;
+  const end=`${year}-12-31T23:59:59`;
+  const url=`${EQ_BASE}?format=text&starttime=${start}&endtime=${end}&orderby=time&limit=20000`
+    +`&minmagnitude=${minMag}&minlat=33&maxlat=49&minlon=4&maxlon=21`;
+  if(statusEl){statusEl.textContent=`Scarico catalogo INGV ${year}…`;statusEl.className='status';}
+  const resp=await fetch(url,{signal:AbortSignal.timeout(30000)});
+  if(resp.status===204)return [];
+  if(!resp.ok)throw new Error('HTTP '+resp.status+' anno '+year);
+  return parseEqText(await resp.text(),999);
+}
+
+async function fetchAnalogia(){
+  if(_anRunning)return;
+  const btn=document.getElementById('anRunBtn');
+  const st=document.getElementById('anStatus');
+  const resultBox=document.getElementById('anResult');
+  _anRunning=true;
+  btn.disabled=true;
+  resultBox.style.display='none';
+  st.textContent='Preparo l\'analisi…';st.className='status';
+
+  try{
+    const windowMs=_anHours*3600000;
+    const now=new Date();
+    const currentStart=new Date(now.getTime()-windowMs);
+    const fmt=d=>d.toISOString().slice(0,19);
+
+    /* 1. Finestra attuale */
+    st.textContent='Scarico eventi del periodo attuale…';
+    const curUrl=`${EQ_BASE}?format=text&starttime=${fmt(currentStart)}&endtime=${fmt(now)}`
+      +`&orderby=time&limit=5000&minmagnitude=0&minlat=33&maxlat=49&minlon=4&maxlon=21`;
+    const curResp=await fetch(curUrl,{signal:AbortSignal.timeout(20000)});
+    const curEvents = curResp.status===204 ? [] : (curResp.ok ? parseEqText(await curResp.text(),999) : []);
+    const curSig=_anSignature(curEvents);
+
+    /* 2. Catalogo storico: ultimi 8 anni, minMag 2.0 (mantiene il payload gestibile).
+       L'analogia si basa sulla firma aggregata, per cui filtrare gli eventi
+       piccolissimi non altera il segnale (contano soprattutto energia + max). */
+    const HIST_YEARS=8, HIST_MIN_MAG=2.0;
+    const endHistYear=now.getFullYear()-1; // escludiamo l'anno corrente per evitare overlap
+    const years=[];
+    for(let y=endHistYear-HIST_YEARS+1; y<=endHistYear; y++) years.push(y);
+
+    let histEvents=[];
+    for(const y of years){
+      const yEv=await _anFetchYear(y, HIST_MIN_MAG, st);
+      histEvents=histEvents.concat(yEv);
+    }
+    /* pre-ordina e pre-calcola i timestamp in millisecondi */
+    histEvents.sort((a,b)=>new Date(a.time)-new Date(b.time));
+    const times=histEvents.map(e=>new Date(e.time).getTime());
+
+    if(histEvents.length<20){
+      st.textContent='Catalogo storico troppo piccolo per l\'analisi.';st.className='status warn';
+      return;
+    }
+
+    st.textContent=`Confronto la firma attuale con ${histEvents.length.toLocaleString('it-IT')} eventi storici…`;
+
+    /* 3. Slide della finestra sul catalogo storico (step giornaliero).
+       Uso due puntatori per evitare filter() ripetuti in O(N). */
+    const stepMs=86400000;
+    const tStart=times[0], tEnd=times[times.length-1]-windowMs;
+    let best=null;
+    let iL=0, iR=0;
+    for(let t=tStart; t<=tEnd; t+=stepMs){
+      const wEnd=t+windowMs;
+      while(iL<times.length && times[iL]<t) iL++;
+      while(iR<times.length && times[iR]<wEnd) iR++;
+      const winEv=histEvents.slice(iL,iR);
+      if(!winEv.length) continue;
+      const sig=_anSignature(winEv);
+      const d=_anDistance(curSig,sig);
+      if(!best || d<best.dist){
+        best={dist:d, start:t, end:wEnd, events:winEv, sig};
+      }
+    }
+
+    if(!best){
+      st.textContent='Nessun periodo storico confrontabile trovato.';st.className='status warn';
+      return;
+    }
+
+    /* 4. Cosa accadde nel periodo IMMEDIATAMENTE SUCCESSIVO, stessa durata.
+       Servono i micro-terremoti pure qui: interroghiamo direttamente INGV
+       senza soglia di magnitudo, così non manchiamo eventi piccoli. */
+    st.textContent='Scarico il periodo storico successivo…';
+    const nextStart=new Date(best.end);
+    const nextEnd=new Date(best.end+windowMs);
+    const nextUrl=`${EQ_BASE}?format=text&starttime=${fmt(nextStart)}&endtime=${fmt(nextEnd)}`
+      +`&orderby=time&limit=5000&minmagnitude=0&minlat=33&maxlat=49&minlon=4&maxlon=21`;
+    const nextResp=await fetch(nextUrl,{signal:AbortSignal.timeout(20000)});
+    const nextEvents = nextResp.status===204 ? [] : (nextResp.ok ? parseEqText(await nextResp.text(),999) : []);
+    const largest = nextEvents.length ? nextEvents.reduce((a,b)=>b.mag>a.mag?b:a) : null;
+
+    /* 5. Render */
+    renderAnalogia({
+      hours:_anHours,
+      curRange:[currentStart,now],
+      curSig, curCount:curEvents.length,
+      matchStart:new Date(best.start), matchEnd:new Date(best.end),
+      matchSig:best.sig, matchDist:best.dist,
+      nextRange:[nextStart,nextEnd],
+      nextEvents, largest
+    });
+    resultBox.style.display='flex';
+    st.textContent=`Analogia trovata. Similarità ≈ ${((1-Math.min(best.dist,1))*100).toFixed(0)}%.`;
+    st.className='status ok';
+  }catch(err){
+    st.textContent='Errore: '+err.message;st.className='status err';
+  }finally{
+    _anRunning=false;btn.disabled=false;
+  }
+}
+
+function _anFmtDateRange(d0,d1){
+  const dtFmt=d=>d.toLocaleString('it-IT',{timeZone:'Europe/Rome',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  return `${dtFmt(d0)} → ${dtFmt(d1)}`;
+}
+function _anSigRows(sig,count){
+  const rows=[
+    ['Eventi rilevati', (count!=null?count:sig.n).toLocaleString('it-IT')],
+    ['Magnitudo massima', sig.maxMag>-Infinity ? 'M '+sig.maxMag.toFixed(1) : '—'],
+    ['Energia rilasciata (log₁₀)', sig.logEnergy.toFixed(2)]
+  ];
+  return rows.map(r=>`<div class="sig-row"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('');
+}
+
+function renderAnalogia(r){
+  document.getElementById('anCurrentBody').innerHTML=
+    `<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.curRange[0],r.curRange[1])}</span></div>`
+    +_anSigRows(r.curSig,r.curCount);
+
+  document.getElementById('anMatchBody').innerHTML=
+    `<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.matchStart,r.matchEnd)}</span></div>`
+    +_anSigRows(r.matchSig)
+    +`<div class="sig-row"><span class="k">Similarità</span><span class="v">${((1-Math.min(r.matchDist,1))*100).toFixed(1)}%</span></div>`;
+
+  const next=document.getElementById('anNextBody');
+  const rangeRow=`<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.nextRange[0],r.nextRange[1])}</span></div>`
+    +`<div class="sig-row"><span class="k">Eventi totali</span><span class="v">${r.nextEvents.length.toLocaleString('it-IT')}</span></div>`;
+  if(r.largest){
+    const t=new Date(r.largest.time);
+    const localStr=t.toLocaleString('it-IT',{timeZone:'Europe/Rome',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    next.innerHTML=rangeRow+`
+      <div class="an-big-event">
+        <div class="m">M ${r.largest.mag.toFixed(1)}</div>
+        <div class="p">${r.largest.place}</div>
+        <div class="t">${localStr} · profondità ${r.largest.depth.toFixed(0)} km</div>
+      </div>`;
+  } else {
+    next.innerHTML=rangeRow+`<div class="an-none">Nessun evento significativo registrato nel periodo successivo.</div>`;
+  }
 }
 
 /* ================================================================
