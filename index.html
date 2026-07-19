@@ -655,6 +655,24 @@ body{padding-bottom:64px;}
 .an-progress{font-size:12.5px;color:var(--muted);}
 .an-warn{padding:11px 14px;font-size:12px;color:#fbbf24;background:rgba(251,191,36,.08);
   border:1px solid rgba(251,191,36,.3);border-radius:10px;margin-top:12px;}
+#anMatches{display:flex;flex-direction:column;gap:14px;}
+.an-match-card{background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;}
+.an-match-header{display:flex;align-items:center;gap:10px;padding:11px 14px;
+  border-bottom:1px solid var(--border);background:rgba(253,186,116,.06);}
+.an-match-header h3{margin:0;font-size:13px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.05em;color:#fdba74;flex:1;min-width:0;}
+.an-rank{font-size:12px;font-weight:800;padding:3px 9px;border-radius:8px;
+  background:rgba(253,186,116,.15);color:#fdba74;border:1px solid rgba(253,186,116,.4);flex-shrink:0;}
+.an-rank-1{color:#fbbf24;background:rgba(251,191,36,.18);border-color:rgba(251,191,36,.55);}
+.an-rank-2{color:#e5e7eb;background:rgba(229,231,235,.12);border-color:rgba(229,231,235,.35);}
+.an-rank-3{color:#fca5a5;background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.30);}
+.an-rank-4{color:var(--muted);}
+.an-sim{font-size:14px;font-weight:800;color:#a5b4fc;flex-shrink:0;}
+.an-match-body{padding:12px 15px;}
+.an-next-divider{margin-top:14px;padding-top:10px;border-top:1px dashed var(--border);
+  font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+  color:#fca5a5;margin-bottom:8px;}
 
 /* ── SCHEDA TERREMOTO (dettaglio evento) ── */
 .eqd-overlay{position:fixed;inset:0;z-index:399;background:rgba(0,0,0,.55);
@@ -1234,7 +1252,7 @@ body{padding-bottom:64px;}
     <div class="container">
       <div class="header">
         <div class="title-wrap"><h1>Analogia Sismica</h1>
-          <p>Cerca nel catalogo INGV il periodo storico che ha colpito <b>le stesse zone geografiche</b> del periodo attuale (o zone limitrofe, entro celle di ~30 km) e mostra qual è stato l'evento più forte nel periodo successivo.</p></div>
+          <p>Cerca nel catalogo INGV <b>dal 2000 in poi</b> i periodi storici che hanno colpito <b>le stesse zone geografiche</b> del periodo attuale (o zone limitrofe, entro celle di ~30 km) e mostra i primi 4 più simili in ordine, con l'evento più forte accaduto nel periodo successivo a ciascuno.</p></div>
         <span class="badge" style="background:rgba(165,180,252,.14);color:#a5b4fc;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
       </div>
       <section class="panel">
@@ -1246,8 +1264,8 @@ body{padding-bottom:64px;}
             <button class="an-window-btn" data-hours="168" onclick="anSelectWindow(168)">Ultima settimana</button>
           </div>
           <button class="btn btn-purple" id="anRunBtn" onclick="fetchAnalogia()" style="margin-top:14px;">🔍 Cerca analogia</button>
-          <div id="anStatus" class="status">Scegli la finestra e avvia la ricerca.</div>
-          <div class="an-warn">⚠️ Analisi <b>puramente sperimentale</b>. Il "periodo più simile" è calcolato con una <b>similarità spaziale</b> (indice di Jaccard pesato sui conteggi per cella): sono considerati simili i periodi che hanno interessato le stesse zone (o zone vicine, entro ~30 km) con intensità di attività confrontabile. L'evento successivo non è una previsione: è solo cosa accadde storicamente nel periodo successivo alla situazione geograficamente più simile trovata.</div>
+          <div id="anStatus" class="status">Scegli la finestra e avvia la ricerca. La prima analisi può richiedere qualche decina di secondi (scarica il catalogo dal 2000 in poi).</div>
+          <div class="an-warn">⚠️ Analisi <b>puramente sperimentale</b>. I "periodi più simili" sono calcolati con una <b>similarità spaziale</b> (indice di Jaccard pesato sui conteggi per cella): sono considerati simili i periodi che hanno interessato le stesse zone (o zone vicine, entro ~30 km) con intensità di attività confrontabile. Gli eventi successivi mostrati per ciascun match non sono previsioni: sono solo cosa accadde storicamente in quei periodi.</div>
         </div>
       </section>
       <div id="anResult" class="an-result" style="display:none;">
@@ -1255,14 +1273,7 @@ body{padding-bottom:64px;}
           <h3>Periodo attuale</h3>
           <div id="anCurrentBody"></div>
         </div>
-        <div class="an-block match">
-          <h3>Periodo storico più simile</h3>
-          <div id="anMatchBody"></div>
-        </div>
-        <div class="an-block next">
-          <h3>Cosa successe nel periodo successivo</h3>
-          <div id="anNextBody"></div>
-        </div>
+        <div id="anMatches"></div>
       </div>
       <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> · Ricerca analogia calcolata lato client sul catalogo Italia.</div>
     </div>
@@ -2902,17 +2913,58 @@ async function _anTopAreas(sig, maxN=5){
   });
 }
 
-async function _anFetchYear(year, minMag, statusEl){
-  const start=`${year}-01-01T00:00:00`;
-  const end=`${year}-12-31T23:59:59`;
+/* Scarica un semestre INGV. Split per semestre (invece che per anno intero):
+   il limite INGV è 20000 eventi per query, e gli anni ad alta attività
+   (Amatrice 2016, L'Aquila 2009) rischiano di essere troncati se presi
+   in un colpo solo. Con i semestri restiamo sotto la soglia. */
+async function _anFetchHalfYear(year, half, minMag){
+  const start = half===1 ? `${year}-01-01T00:00:00` : `${year}-07-01T00:00:00`;
+  const end   = half===1 ? `${year}-06-30T23:59:59` : `${year}-12-31T23:59:59`;
   const url=`${EQ_BASE}?format=text&starttime=${start}&endtime=${end}&orderby=time&limit=20000`
     +`&minmagnitude=${minMag}&minlat=33&maxlat=49&minlon=4&maxlon=21`;
-  if(statusEl){statusEl.textContent=`Scarico catalogo INGV ${year}…`;statusEl.className='status';}
   const resp=await fetch(url,{signal:AbortSignal.timeout(30000)});
   if(resp.status===204)return [];
-  if(!resp.ok)throw new Error('HTTP '+resp.status+' anno '+year);
+  if(!resp.ok)throw new Error('HTTP '+resp.status+' '+year+' H'+half);
   return parseEqText(await resp.text(),999);
 }
+
+/* Scarica tutti i semestri [startYear, endYear] con concorrenza limitata
+   per non aspettare 50+ fetch sequenziali. */
+async function _anFetchHistorical(startYear, endYear, minMag, statusEl){
+  const tasks=[];
+  for(let y=startYear; y<=endYear; y++){
+    tasks.push({year:y, half:1});
+    tasks.push({year:y, half:2});
+  }
+  const results=new Array(tasks.length);
+  const total=tasks.length;
+  let next=0, done=0;
+  const CONCURRENCY=4;
+  async function worker(){
+    while(true){
+      const my=next++;
+      if(my>=total) return;
+      const t=tasks[my];
+      try{
+        results[my]=await _anFetchHalfYear(t.year, t.half, minMag);
+      }catch(e){
+        console.warn('Errore fetch', t.year, 'H'+t.half, e.message);
+        results[my]=[];
+      }
+      done++;
+      if(statusEl){
+        statusEl.textContent=`Scarico catalogo INGV… ${done}/${total} semestri (dal ${startYear} al ${endYear})`;
+        statusEl.className='status';
+      }
+    }
+  }
+  await Promise.all(Array(CONCURRENCY).fill(0).map(()=>worker()));
+  return results.flat();
+}
+
+const AN_TOP_N=4;         // numero di match da restituire
+const AN_HIST_MIN_MAG=2.0;
+const AN_HIST_START=2000; // catalogo dal 2000 in poi
 
 async function fetchAnalogia(){
   if(_anRunning)return;
@@ -2938,20 +2990,13 @@ async function fetchAnalogia(){
     const curEvents = curResp.status===204 ? [] : (curResp.ok ? parseEqText(await curResp.text(),999) : []);
     const curSig=_anSignature(curEvents);
 
-    /* 2. Catalogo storico: ultimi 8 anni, minMag 2.0 (mantiene il payload gestibile).
-       L'analogia si basa sulla firma aggregata, per cui filtrare gli eventi
-       piccolissimi non altera il segnale (contano soprattutto energia + max). */
-    const HIST_YEARS=8, HIST_MIN_MAG=2.0;
-    const endHistYear=now.getFullYear()-1; // escludiamo l'anno corrente per evitare overlap
-    const years=[];
-    for(let y=endHistYear-HIST_YEARS+1; y<=endHistYear; y++) years.push(y);
+    /* 2. Catalogo storico dal 2000 (compreso), filtrato a M≥2.0.
+       Escludiamo l'anno corrente per evitare che la finestra attuale
+       si trovi da sola nel catalogo. Scaricato a semestri in parallelo. */
+    const endHistYear=now.getFullYear()-1;
+    const startHistYear=AN_HIST_START;
+    let histEvents=await _anFetchHistorical(startHistYear, endHistYear, AN_HIST_MIN_MAG, st);
 
-    let histEvents=[];
-    for(const y of years){
-      const yEv=await _anFetchYear(y, HIST_MIN_MAG, st);
-      histEvents=histEvents.concat(yEv);
-    }
-    /* pre-ordina e pre-calcola i timestamp in millisecondi */
     histEvents.sort((a,b)=>new Date(a.time)-new Date(b.time));
     const times=histEvents.map(e=>new Date(e.time).getTime());
 
@@ -2960,57 +3005,85 @@ async function fetchAnalogia(){
       return;
     }
 
-    st.textContent=`Confronto la firma attuale con ${histEvents.length.toLocaleString('it-IT')} eventi storici…`;
+    st.textContent=`Confronto la firma attuale con ${histEvents.length.toLocaleString('it-IT')} eventi storici (dal ${startHistYear})…`;
+    /* Sospendiamo brevemente per consentire il repaint della UI prima
+       di un ciclo potenzialmente lungo. */
+    await new Promise(r=>setTimeout(r,0));
 
-    /* 3. Slide della finestra sul catalogo storico (step giornaliero).
-       Uso due puntatori per evitare filter() ripetuti in O(N). */
+    /* 3. Slide della finestra sul catalogo storico (step giornaliero),
+       raccogliamo TUTTI i candidati, poi ordiniamo per distanza. */
     const stepMs=86400000;
     const tStart=times[0], tEnd=times[times.length-1]-windowMs;
-    let best=null;
+    const candidates=[];
     let iL=0, iR=0;
     for(let t=tStart; t<=tEnd; t+=stepMs){
       const wEnd=t+windowMs;
       while(iL<times.length && times[iL]<t) iL++;
       while(iR<times.length && times[iR]<wEnd) iR++;
+      if(iR<=iL) continue;
       const winEv=histEvents.slice(iL,iR);
-      if(!winEv.length) continue;
       const sig=_anSignature(winEv);
+      if(!sig.kept) continue;
       const d=_anDistance(curSig,sig);
-      if(!best || d<best.dist){
-        best={dist:d, start:t, end:wEnd, events:winEv, sig};
-      }
+      candidates.push({dist:d, start:t, end:wEnd, sig});
     }
 
-    if(!best){
+    if(!candidates.length){
       st.textContent='Nessun periodo storico confrontabile trovato.';st.className='status warn';
       return;
     }
+    candidates.sort((a,b)=>a.dist-b.dist);
 
-    /* 4. Cosa accadde nel periodo IMMEDIATAMENTE SUCCESSIVO, stessa durata.
-       Servono i micro-terremoti pure qui: interroghiamo direttamente INGV
-       senza soglia di magnitudo, così non manchiamo eventi piccoli. */
-    st.textContent='Scarico il periodo storico successivo…';
-    const nextStart=new Date(best.end);
-    const nextEnd=new Date(best.end+windowMs);
-    const nextUrl=`${EQ_BASE}?format=text&starttime=${fmt(nextStart)}&endtime=${fmt(nextEnd)}`
-      +`&orderby=time&limit=5000&minmagnitude=0&minlat=33&maxlat=49&minlon=4&maxlon=21`;
-    const nextResp=await fetch(nextUrl,{signal:AbortSignal.timeout(20000)});
-    const nextEvents = nextResp.status===204 ? [] : (nextResp.ok ? parseEqText(await nextResp.text(),999) : []);
-    const largest = nextEvents.length ? nextEvents.reduce((a,b)=>b.mag>a.mag?b:a) : null;
+    /* 4. Non-max suppression temporale: due candidati troppo ravvicinati
+       nel tempo condividono la maggior parte degli eventi, quindi sono
+       essenzialmente lo stesso "periodo storico". Ne teniamo uno solo
+       (il migliore) e chiediamo che gli altri distino almeno 1.5 finestre
+       l'uno dall'altro. Così i top-N mostrati sono periodi realmente diversi. */
+    const minGapMs=windowMs*1.5;
+    const topMatches=[];
+    for(const c of candidates){
+      if(topMatches.length>=AN_TOP_N) break;
+      if(topMatches.some(m=>Math.abs(m.start-c.start)<minGapMs)) continue;
+      topMatches.push(c);
+    }
 
-    /* 5. Render */
+    /* 5. Per ognuno dei top-N: scarichiamo il periodo IMMEDIATAMENTE
+       SUCCESSIVO (stessa durata) e identifichiamo l'evento più forte
+       realmente accaduto. Nessuna soglia mag, così non perdiamo
+       nessun evento significativo. */
+    for(let i=0;i<topMatches.length;i++){
+      st.textContent=`Scarico periodo successivo del match #${i+1}/${topMatches.length}…`;
+      const m=topMatches[i];
+      const nStart=new Date(m.end);
+      const nEnd=new Date(m.end+windowMs);
+      const nUrl=`${EQ_BASE}?format=text&starttime=${fmt(nStart)}&endtime=${fmt(nEnd)}`
+        +`&orderby=time&limit=5000&minmagnitude=0&minlat=33&maxlat=49&minlon=4&maxlon=21`;
+      try{
+        const nResp=await fetch(nUrl,{signal:AbortSignal.timeout(20000)});
+        const nEvents = nResp.status===204 ? [] : (nResp.ok ? parseEqText(await nResp.text(),999) : []);
+        m.nextEvents=nEvents;
+        m.largest = nEvents.length ? nEvents.reduce((a,b)=>b.mag>a.mag?b:a) : null;
+      }catch(e){
+        m.nextEvents=[];m.largest=null;
+      }
+    }
+
+    /* 6. Render */
     st.textContent='Identifico le aree principali…';
     await renderAnalogia({
       hours:_anHours,
       curRange:[currentStart,now],
       curSig, curCount:curEvents.length,
-      matchStart:new Date(best.start), matchEnd:new Date(best.end),
-      matchSig:best.sig, matchDist:best.dist,
-      nextRange:[nextStart,nextEnd],
-      nextEvents, largest
+      matches: topMatches.map(m=>({
+        start:new Date(m.start), end:new Date(m.end),
+        sig:m.sig, dist:m.dist,
+        nextRange:[new Date(m.end), new Date(m.end+windowMs)],
+        nextEvents:m.nextEvents, largest:m.largest
+      }))
     });
     resultBox.style.display='flex';
-    st.textContent=`Analogia trovata. Similarità spaziale ≈ ${((1-Math.min(best.dist,1))*100).toFixed(0)}%.`;
+    const bestSim=((1-Math.min(topMatches[0].dist,1))*100).toFixed(0);
+    st.textContent=`Trovati ${topMatches.length} periodi analoghi (miglior similarità ≈ ${bestSim}%, catalogo dal ${startHistYear}).`;
     st.className='status ok';
   }catch(err){
     st.textContent='Errore: '+err.message;st.className='status err';
@@ -3045,10 +3118,30 @@ function _anAreasHtml(title,areas){
   </div>`;
 }
 
+function _anNextHtml(match){
+  const rangeRow=`<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(match.nextRange[0],match.nextRange[1])}</span></div>`
+    +`<div class="sig-row"><span class="k">Eventi totali</span><span class="v">${match.nextEvents.length.toLocaleString('it-IT')}</span></div>`;
+  if(match.largest){
+    const t=new Date(match.largest.time);
+    const localStr=t.toLocaleString('it-IT',{timeZone:'Europe/Rome',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    return rangeRow+`
+      <div class="an-big-event">
+        <div class="m">M ${match.largest.mag.toFixed(1)}</div>
+        <div class="p">${match.largest.place}</div>
+        <div class="t">${localStr} · profondità ${match.largest.depth.toFixed(0)} km</div>
+      </div>`;
+  }
+  return rangeRow+`<div class="an-none">Nessun evento significativo registrato nel periodo successivo.</div>`;
+}
+
 async function renderAnalogia(r){
-  const [curAreas, matchAreas] = await Promise.all([
+  /* pre-carica comuni.json una sola volta */
+  await loadComuniData();
+
+  /* aree principali per ogni firma coinvolta (attuale + top-N) */
+  const [curAreas, ...matchAreasList] = await Promise.all([
     _anTopAreas(r.curSig,5),
-    _anTopAreas(r.matchSig,5)
+    ...r.matches.map(m=>_anTopAreas(m.sig,3))
   ]);
 
   document.getElementById('anCurrentBody').innerHTML=
@@ -3056,27 +3149,26 @@ async function renderAnalogia(r){
     +_anSigRows(r.curSig,r.curCount)
     +_anAreasHtml('Aree principali colpite',curAreas);
 
-  document.getElementById('anMatchBody').innerHTML=
-    `<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.matchStart,r.matchEnd)}</span></div>`
-    +_anSigRows(r.matchSig)
-    +`<div class="sig-row"><span class="k">Similarità spaziale</span><span class="v">${((1-Math.min(r.matchDist,1))*100).toFixed(1)}%</span></div>`
-    +_anAreasHtml('Aree principali colpite',matchAreas);
-
-  const next=document.getElementById('anNextBody');
-  const rangeRow=`<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.nextRange[0],r.nextRange[1])}</span></div>`
-    +`<div class="sig-row"><span class="k">Eventi totali</span><span class="v">${r.nextEvents.length.toLocaleString('it-IT')}</span></div>`;
-  if(r.largest){
-    const t=new Date(r.largest.time);
-    const localStr=t.toLocaleString('it-IT',{timeZone:'Europe/Rome',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    next.innerHTML=rangeRow+`
-      <div class="an-big-event">
-        <div class="m">M ${r.largest.mag.toFixed(1)}</div>
-        <div class="p">${r.largest.place}</div>
-        <div class="t">${localStr} · profondità ${r.largest.depth.toFixed(0)} km</div>
-      </div>`;
-  } else {
-    next.innerHTML=rangeRow+`<div class="an-none">Nessun evento significativo registrato nel periodo successivo.</div>`;
-  }
+  const container=document.getElementById('anMatches');
+  container.innerHTML=r.matches.map((m,i)=>{
+    const areas=matchAreasList[i]||[];
+    const sim=((1-Math.min(m.dist,1))*100).toFixed(1);
+    const rankCls=i===0?'an-rank-1':(i===1?'an-rank-2':(i===2?'an-rank-3':'an-rank-4'));
+    return `<div class="an-match-card">
+      <div class="an-match-header">
+        <span class="an-rank ${rankCls}">#${i+1}</span>
+        <h3>Periodo storico simile</h3>
+        <span class="an-sim">${sim}%</span>
+      </div>
+      <div class="an-match-body">
+        <div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(m.start,m.end)}</span></div>
+        ${_anSigRows(m.sig)}
+        ${_anAreasHtml('Aree principali colpite',areas)}
+        <div class="an-next-divider">Cosa successe nel periodo successivo</div>
+        ${_anNextHtml(m)}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 /* ================================================================
