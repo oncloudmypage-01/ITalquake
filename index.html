@@ -836,7 +836,7 @@ body{padding-bottom:64px;}
         <span class="ic side-menu-icon" data-ic="analogy" style="color:#a5b4fc;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Analogia Sismica <span class="side-badge">Sperimentale</span></div>
-          <div class="side-menu-desc">Cerca il periodo storico più simile a quello attuale e mostra cosa è successo dopo</div>
+          <div class="side-menu-desc">Cerca il periodo storico che ha colpito le stesse zone del periodo attuale e mostra cosa è successo dopo</div>
         </div>
       </button>
       <div class="side-menu-hint">Altri strumenti in arrivo…</div>
@@ -1234,7 +1234,7 @@ body{padding-bottom:64px;}
     <div class="container">
       <div class="header">
         <div class="title-wrap"><h1>Analogia Sismica</h1>
-          <p>Cerca nel catalogo INGV il periodo storico più simile al periodo attuale e mostra qual è stato l'evento più forte nel periodo successivo.</p></div>
+          <p>Cerca nel catalogo INGV il periodo storico che ha colpito <b>le stesse zone geografiche</b> del periodo attuale (o zone limitrofe, entro celle di ~30 km) e mostra qual è stato l'evento più forte nel periodo successivo.</p></div>
         <span class="badge" style="background:rgba(165,180,252,.14);color:#a5b4fc;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
       </div>
       <section class="panel">
@@ -1247,7 +1247,7 @@ body{padding-bottom:64px;}
           </div>
           <button class="btn btn-purple" id="anRunBtn" onclick="fetchAnalogia()" style="margin-top:14px;">🔍 Cerca analogia</button>
           <div id="anStatus" class="status">Scegli la finestra e avvia la ricerca.</div>
-          <div class="an-warn">⚠️ Analisi <b>puramente sperimentale</b>. Il "periodo più simile" è calcolato su numero di eventi, magnitudo massima ed energia rilasciata. L'evento successivo non è una previsione: è solo cosa accadde storicamente nel periodo successivo alla situazione più simile trovata.</div>
+          <div class="an-warn">⚠️ Analisi <b>puramente sperimentale</b>. Il "periodo più simile" è calcolato con una <b>similarità spaziale</b> (indice di Jaccard pesato sui conteggi per cella): sono considerati simili i periodi che hanno interessato le stesse zone (o zone vicine, entro ~30 km) con intensità di attività confrontabile. L'evento successivo non è una previsione: è solo cosa accadde storicamente nel periodo successivo alla situazione geograficamente più simile trovata.</div>
         </div>
       </section>
       <div id="anResult" class="an-result" style="display:none;">
@@ -2829,27 +2829,77 @@ function anSelectWindow(h){
   });
 }
 
-/* Firma sismica: caratteristiche aggregate del periodo, indipendenti
-   dalla posizione (l'analogia è sull'intensità/attività complessiva). */
-function _anSignature(events){
-  const n=events.length;
-  if(!n) return {n:0,maxMag:0,logEnergy:0};
-  let maxMag=-Infinity, sumE=0;
-  for(const ev of events){
-    if(ev.mag>maxMag)maxMag=ev.mag;
-    /* Formula energia sismica: log10(E) = 1.5*M + 4.8 (Gutenberg-Richter) */
-    sumE += Math.pow(10, 1.5*ev.mag);
-  }
-  return {n, maxMag, logEnergy: Math.log10(sumE+1)};
+/* Firma sismica SPAZIALE: mappa "cella geografica → n. eventi".
+   L'analogia si basa sulle zone effettivamente colpite (celle di ~30 km
+   di lato), non sull'energia. Per ogni cella teniamo anche il centroide
+   e la magnitudo massima, così possiamo mostrare le "aree principali"
+   agganciandole al comune più vicino tramite comuni.json. */
+const AN_CELL_DEG=0.3;   // ~30 km a latitudini italiane
+const AN_SIG_MIN_MAG=2.0; // eventi < M2 esclusi dalla firma (rumore/mal-localizzati)
+
+function _anCellKey(lat,lon){
+  return Math.floor(lat/AN_CELL_DEG)+','+Math.floor(lon/AN_CELL_DEG);
 }
 
-/* Distanza normalizzata tra due firme (0=identiche, ~1=molto diverse) */
+function _anSignature(events){
+  const cells=new Map();
+  let maxMag=-Infinity, kept=0;
+  for(const ev of events){
+    if(ev.mag<AN_SIG_MIN_MAG) continue;
+    kept++;
+    if(ev.mag>maxMag) maxMag=ev.mag;
+    const k=_anCellKey(ev.lat,ev.lon);
+    let c=cells.get(k);
+    if(!c){c={count:0,latSum:0,lonSum:0,maxMag:-Infinity};cells.set(k,c);}
+    c.count++;
+    c.latSum+=ev.lat;
+    c.lonSum+=ev.lon;
+    if(ev.mag>c.maxMag) c.maxMag=ev.mag;
+  }
+  return {n:events.length, kept, maxMag, cells};
+}
+
+/* Distanza spaziale (Jaccard pesata sui conteggi per cella):
+   sim = Σ min(a[c],b[c]) / Σ max(a[c],b[c])
+   Alta se le stesse aree sono state attivate con intensità simile,
+   bassa se le zone sono diverse. Distanza = 1 - sim. */
 function _anDistance(a,b){
-  const nMax=Math.max(a.n,b.n,1);
-  const dn=Math.abs(a.n-b.n)/nMax;
-  const dm=Math.abs(a.maxMag-b.maxMag)/3;    // scala tipica 0..3 magnitudo
-  const de=Math.abs(a.logEnergy-b.logEnergy)/3; // scala tipica ~3 decadi
-  return dn*0.30 + dm*0.35 + de*0.35;
+  if(!a.cells.size||!b.cells.size) return 1;
+  const keys=new Set([...a.cells.keys(),...b.cells.keys()]);
+  let sMin=0, sMax=0;
+  for(const k of keys){
+    const va=a.cells.get(k)?.count||0;
+    const vb=b.cells.get(k)?.count||0;
+    sMin+=Math.min(va,vb);
+    sMax+=Math.max(va,vb);
+  }
+  return sMax===0 ? 1 : (1 - sMin/sMax);
+}
+
+/* Estrae le N aree più attive dalla firma e le denomina col comune più vicino
+   (tramite comuni.json, già usato dalla scheda terremoto). */
+async function _anTopAreas(sig, maxN=5){
+  if(!sig.cells.size) return [];
+  const arr=[...sig.cells.values()].map(c=>({
+    count:c.count,
+    lat:c.latSum/c.count,
+    lon:c.lonSum/c.count,
+    maxMag:c.maxMag
+  })).sort((a,b)=>b.count-a.count).slice(0,maxN);
+  const comuni=await loadComuniData();
+  return arr.map(a=>{
+    let best=null,bestD=Infinity;
+    if(comuni&&comuni.length){
+      for(const c of comuni){
+        const d=haverDist(a.lat,a.lon,c[2],c[3]);
+        if(d<bestD){bestD=d;best=c;}
+      }
+    }
+    return {...a,
+      name: best ? `${best[0]} (${best[1]})` : `${a.lat.toFixed(2)}, ${a.lon.toFixed(2)}`,
+      nearbyKm: best ? bestD : null
+    };
+  });
 }
 
 async function _anFetchYear(year, minMag, statusEl){
@@ -2949,7 +2999,8 @@ async function fetchAnalogia(){
     const largest = nextEvents.length ? nextEvents.reduce((a,b)=>b.mag>a.mag?b:a) : null;
 
     /* 5. Render */
-    renderAnalogia({
+    st.textContent='Identifico le aree principali…';
+    await renderAnalogia({
       hours:_anHours,
       curRange:[currentStart,now],
       curSig, curCount:curEvents.length,
@@ -2959,7 +3010,7 @@ async function fetchAnalogia(){
       nextEvents, largest
     });
     resultBox.style.display='flex';
-    st.textContent=`Analogia trovata. Similarità ≈ ${((1-Math.min(best.dist,1))*100).toFixed(0)}%.`;
+    st.textContent=`Analogia trovata. Similarità spaziale ≈ ${((1-Math.min(best.dist,1))*100).toFixed(0)}%.`;
     st.className='status ok';
   }catch(err){
     st.textContent='Errore: '+err.message;st.className='status err';
@@ -2975,21 +3026,41 @@ function _anFmtDateRange(d0,d1){
 function _anSigRows(sig,count){
   const rows=[
     ['Eventi rilevati', (count!=null?count:sig.n).toLocaleString('it-IT')],
-    ['Magnitudo massima', sig.maxMag>-Infinity ? 'M '+sig.maxMag.toFixed(1) : '—'],
-    ['Energia rilasciata (log₁₀)', sig.logEnergy.toFixed(2)]
+    ['Aree geografiche attivate', sig.cells.size.toLocaleString('it-IT')+' celle ~30 km'],
+    ['Eventi ≥ M'+AN_SIG_MIN_MAG.toFixed(1)+' (firma)', sig.kept.toLocaleString('it-IT')],
+    ['Magnitudo massima', sig.maxMag>-Infinity ? 'M '+sig.maxMag.toFixed(1) : '—']
   ];
   return rows.map(r=>`<div class="sig-row"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('');
 }
 
-function renderAnalogia(r){
+function _anAreasHtml(title,areas){
+  if(!areas.length) return '';
+  const rows=areas.map(a=>{
+    const nearby=a.nearbyKm!=null&&a.nearbyKm>0.5 ? ` <span style="color:var(--muted);font-size:11px;">(~${a.nearbyKm.toFixed(0)} km)</span>` : '';
+    return `<div class="sig-row"><span class="k">${a.name}${nearby}</span><span class="v">${a.count} ev · M ${a.maxMag.toFixed(1)}</span></div>`;
+  }).join('');
+  return `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px;">${title}</div>
+    ${rows}
+  </div>`;
+}
+
+async function renderAnalogia(r){
+  const [curAreas, matchAreas] = await Promise.all([
+    _anTopAreas(r.curSig,5),
+    _anTopAreas(r.matchSig,5)
+  ]);
+
   document.getElementById('anCurrentBody').innerHTML=
     `<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.curRange[0],r.curRange[1])}</span></div>`
-    +_anSigRows(r.curSig,r.curCount);
+    +_anSigRows(r.curSig,r.curCount)
+    +_anAreasHtml('Aree principali colpite',curAreas);
 
   document.getElementById('anMatchBody').innerHTML=
     `<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.matchStart,r.matchEnd)}</span></div>`
     +_anSigRows(r.matchSig)
-    +`<div class="sig-row"><span class="k">Similarità</span><span class="v">${((1-Math.min(r.matchDist,1))*100).toFixed(1)}%</span></div>`;
+    +`<div class="sig-row"><span class="k">Similarità spaziale</span><span class="v">${((1-Math.min(r.matchDist,1))*100).toFixed(1)}%</span></div>`
+    +_anAreasHtml('Aree principali colpite',matchAreas);
 
   const next=document.getElementById('anNextBody');
   const rangeRow=`<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.nextRange[0],r.nextRange[1])}</span></div>`
