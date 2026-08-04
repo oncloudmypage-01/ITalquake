@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#a5cf94"/>
+<meta name="theme-color" content="#0f172a"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
 <script>
 if('serviceWorker' in navigator){
@@ -120,19 +120,18 @@ document.addEventListener('DOMContentLoaded',function(){
   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
 :root{
-  color-scheme:light;
-  --bg:#a5cf94;--panel:#ffffff;--text:#1c3a2e;--muted:#5b7568;
-  --accent:#16a34a;--accent-2:#2563eb;--danger:#dc2626;
-  --border:rgba(28,58,46,0.12);--shadow:0 10px 30px rgba(28,58,46,0.10);
+  --bg:#0f172a;--panel:#111827;--text:#e5e7eb;--muted:#94a3b8;
+  --accent:#22c55e;--accent-2:#3b82f6;--danger:#ef4444;
+  --border:rgba(255,255,255,0.08);--shadow:0 10px 30px rgba(0,0,0,0.28);
 }
 *{box-sizing:border-box;}
 body{margin:0;font-family:Inter,system-ui,sans-serif;
-  background:#a5cf94;
+  background:linear-gradient(180deg,#0b1120 0%,#111827 100%);
   color:var(--text);min-height:100vh;overflow-x:hidden;}
 
 /* ── LANDING ── */
 #landing{position:fixed;inset:0;z-index:9999;
-  background:linear-gradient(160deg,#9dc98c 0%,#a5cf94 50%,#b4d9a3 100%);
+  background:linear-gradient(160deg,#06091a 0%,#0d1a2e 50%,#0b1120 100%);
   display:none;flex-direction:column;align-items:center;justify-content:center;
   gap:48px;padding:24px;}
 .brand h1{margin:0;font-size:clamp(28px,5vw,48px);
@@ -140,11 +139,11 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .brand p{margin:10px 0 0;color:var(--muted);font-size:16px;text-align:center;}
 .choices{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
-.choice-card{width:240px;border-radius:22px;border:1px solid rgba(28,58,46,0.12);
-  background:rgba(28,58,46,0.05);padding:30px 22px;cursor:pointer;
+.choice-card{width:240px;border-radius:22px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);padding:30px 22px;cursor:pointer;
   transition:transform .2s,border-color .2s,background .2s;
   text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;}
-.choice-card:hover{transform:translateY(-4px);background:rgba(28,58,46,0.10);}
+.choice-card:hover{transform:translateY(-4px);background:rgba(255,255,255,0.08);}
 .choice-card.eq{border-color:rgba(239,68,68,0.4);}
 .choice-card.eq:hover{border-color:rgba(239,68,68,0.8);}
 .choice-card.stor{border-color:rgba(168,85,247,0.4);}
@@ -159,7 +158,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .ic{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:0 0 auto;}
 .ic svg{width:1em;height:1em;display:block;}
 .nav-brand{display:inline-flex;align-items:center;gap:8px;}
-.nav-brand .ic{font-size:18px;color:#15803d;}
+.nav-brand .ic{font-size:18px;color:#86efac;}
 .nav-tab{display:inline-flex;align-items:center;gap:7px;}
 .nav-tab .ic{font-size:17px;}
 .nav-home{display:inline-flex;align-items:center;gap:7px;}
@@ -172,7 +171,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .profile-row .ic{font-size:16px;color:var(--muted);}
 .profile-avatar-placeholder .ic{font-size:26px;}
 .hdr-btn .ic{font-size:18px;}
-.seis-btn .ic{font-size:17px;color:#15803d;}
+.seis-btn .ic{font-size:17px;color:#86efac;}
 /* ── tocco di colore leggero sulle icone (smorzato verso lo slate) ── */
 #tabEq .ic{color:color-mix(in srgb,#f87171 70%,#94a3b8);}
 #tabStor .ic{color:color-mix(in srgb,#c084fc 70%,#94a3b8);}
@@ -196,7 +195,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 /* ── APP / NAV ── */
 #appContainer{display:block;}
 #appContainer.visible{display:block;}
-.nav-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.92);
+.nav-bar{position:sticky;top:0;z-index:100;background:rgba(11,17,32,0.92);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
   display:flex;align-items:center;padding:0 20px;gap:0;}
 .nav-brand{font-weight:700;font-size:15px;padding:15px 18px 15px 0;
@@ -208,14 +207,14 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
   background:none;border-top:none;border-left:none;border-right:none;
   transition:color .18s,border-color .18s;white-space:nowrap;}
 .nav-tab:hover{color:var(--text);}
-.nav-tab.a-eq{color:#b91c1c;border-bottom-color:#ef4444;}
-.nav-tab.a-stor{color:#7e22ce;border-bottom-color:#a855f7;}
-.nav-tab.a-seis{color:#15803d;border-bottom-color:#22c55e;}
-.nav-tab.a-fm{color:#c2410c;border-bottom-color:#fb923c;}
+.nav-tab.a-eq{color:#f87171;border-bottom-color:#ef4444;}
+.nav-tab.a-stor{color:#c084fc;border-bottom-color:#a855f7;}
+.nav-tab.a-seis{color:#86efac;border-bottom-color:#22c55e;}
+.nav-tab.a-fm{color:#fdba74;border-bottom-color:#fb923c;}
 .nav-spacer{flex:1;}
 .nav-home{padding:7px 13px;border-radius:9px;font-size:14px;font-weight:600;
   background:rgba(34,197,94,0.10);border:1px solid rgba(34,197,94,0.30);
-  color:#15803d;cursor:pointer;transition:all .18s;}
+  color:#86efac;cursor:pointer;transition:all .18s;}
 .nav-home:hover{background:rgba(34,197,94,0.22);color:#bbf7d0;border-color:rgba(34,197,94,0.55);}
 .section{display:none;}
 .section.active{display:block;}
@@ -227,12 +226,12 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .title-wrap h1{margin:0;font-size:clamp(20px,4vw,34px);line-height:1.1;}
 .title-wrap p{margin:8px 0 0;color:var(--muted);}
 .badge{padding:9px 14px;border-radius:999px;font-weight:600;font-size:13px;}
-.badge-green{background:rgba(34,197,94,0.15);color:#15803d;border:1px solid rgba(34,197,94,0.40);}
-.badge-red{background:rgba(239,68,68,0.14);color:#b91c1c;border:1px solid rgba(239,68,68,0.40);}
-.badge-purple{background:rgba(168,85,247,0.14);color:#7e22ce;border:1px solid rgba(168,85,247,0.40);}
+.badge-green{background:rgba(34,197,94,0.12);color:#86efac;border:1px solid rgba(34,197,94,0.35);}
+.badge-red{background:rgba(239,68,68,0.12);color:#fca5a5;border:1px solid rgba(239,68,68,0.35);}
+.badge-purple{background:rgba(168,85,247,0.12);color:#d8b4fe;border:1px solid rgba(168,85,247,0.35);}
 
 /* panel — NO overflow:hidden globale; solo i panel-map lo hanno */
-.panel{background:rgba(255,255,255,0.92);border:1px solid var(--border);
+.panel{background:rgba(17,24,39,0.92);border:1px solid var(--border);
   border-radius:22px;box-shadow:var(--shadow);}
 .panel-map{overflow:hidden;} /* solo le mappe ne hanno bisogno */
 .panel-header{padding:18px 18px 10px;}
@@ -248,8 +247,8 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .controls{padding:16px;display:grid;gap:12px;}
 .field{display:grid;gap:5px;}
 label{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
-select,input{width:100%;border-radius:12px;border:1px solid rgba(28,58,46,0.12);
-  background:#f6faf3;color:var(--text);padding:11px 13px;font-size:14px;outline:none;}
+select,input{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,0.1);
+  background:#0b1220;color:var(--text);padding:11px 13px;font-size:14px;outline:none;}
 input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .btn{width:100%;border-radius:13px;border:none;padding:12px 14px;
@@ -259,9 +258,9 @@ input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
 .btn-green{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;}
 .btn-red{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;}
 .btn-purple{background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;}
-.btn-outline{background:rgba(28,58,46,0.06);color:var(--text);
+.btn-outline{background:rgba(255,255,255,0.05);color:var(--text);
   border:1px solid var(--border)!important;}
-.btn-outline:hover{background:rgba(28,58,46,0.12);}
+.btn-outline:hover{background:rgba(255,255,255,0.1);}
 .status{font-size:13px;color:var(--muted);margin-top:4px;}
 .hint{font-size:12px;color:var(--muted);line-height:1.5;
   background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.22);
@@ -292,13 +291,13 @@ details.nd[open] summary::before{transform:rotate(90deg);}
 details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .npb{padding:9px 13px;border-radius:11px;font-size:13px;font-weight:700;width:auto;
   background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);
-  color:#1d4ed8;cursor:pointer;transition:all .18s;}
+  color:#93c5fd;cursor:pointer;transition:all .18s;}
 .npb:hover{background:rgba(59,130,246,0.25);}
 .ri{font-size:11px;color:var(--muted);text-align:right;}
 
 /* ── MAPS ── */
 .mapbox{width:100%;height:480px;border-radius:0 0 22px 22px;}
-.leaflet-container{background:#dfeadb!important;}
+.leaflet-container{background:#0b1120!important;}
 .leaflet-container:focus,.leaflet-container:focus-visible{outline:none!important;}
 .leaflet-tile{backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform;}
 .leaflet-tile-pane{-webkit-transform:translateZ(0);transform:translateZ(0);will-change:transform;}
@@ -310,42 +309,42 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .eq-list{max-height:630px;overflow-y:auto;}
 .eq-item{display:flex;align-items:center;gap:11px;padding:9px 16px;
   border-bottom:1px solid var(--border);transition:background .15s;}
-.eq-item:hover{background:rgba(28,58,46,0.04);}
+.eq-item:hover{background:rgba(255,255,255,0.03);}
 .eq-item:last-child{border-bottom:none;}
 .eq-mag{min-width:44px;height:44px;border-radius:10px;display:flex;align-items:center;
   justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;}
-.m0{background:rgba(148,163,184,.18);color:#475569;}
-.m1{background:rgba(34,197,94,.18);color:#15803d;}
-.m2{background:rgba(234,179,8,.22);color:#a16207;}
-.m3{background:rgba(249,115,22,.18);color:#c2410c;}
-.m4{background:rgba(239,68,68,.18);color:#b91c1c;}
+.m0{background:rgba(148,163,184,.15);color:#94a3b8;}
+.m1{background:rgba(34,197,94,.15);color:#86efac;}
+.m2{background:rgba(234,179,8,.15);color:#fde047;}
+.m3{background:rgba(249,115,22,.15);color:#fdba74;}
+.m4{background:rgba(239,68,68,.15);color:#fca5a5;}
 .eq-info{flex:1;min-width:0;cursor:pointer;}
 .eq-info .pl{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .eq-info .dt{font-size:11px;color:var(--muted);margin-top:2px;}
 .eq-depth{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
 .seis-btn{flex-shrink:0;padding:5px 9px;border-radius:8px;font-size:13px;
-  background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.30);
-  color:#15803d;cursor:pointer;transition:all .18s;width:auto;}
+  background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
+  color:#93c5fd;cursor:pointer;transition:all .18s;width:auto;}
 .seis-btn:hover{background:rgba(59,130,246,.25);}
 
 /* summary cards */
 .summary-row{display:flex;gap:11px;flex-wrap:wrap;}
-.sc{flex:1;min-width:100px;background:rgba(28,58,46,0.04);
+.sc{flex:1;min-width:100px;background:rgba(255,255,255,.03);
   border:1px solid var(--border);border-radius:14px;padding:11px 14px;}
 .sc .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
 .sc .v{font-size:20px;font-weight:800;}
 
 /* ── SCIAMI SISMICI: card cluster ── */
 .sw-list{padding:8px 16px 16px;display:flex;flex-direction:column;gap:10px;}
-.sw-card{background:rgba(28,58,46,0.04);border:1px solid var(--border);border-radius:14px;
+.sw-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;
   padding:13px 15px;cursor:pointer;transition:background .15s;}
-.sw-card:hover{background:rgba(28,58,46,0.07);}
+.sw-card:hover{background:rgba(255,255,255,.06);}
 .sw-card .sw-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .sw-card .sw-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
   padding:2px 8px;border-radius:6px;}
-.sw-card .sw-label.swarm{background:rgba(249,115,22,.14);color:#c2410c;border:1px solid rgba(249,115,22,.4);}
-.sw-card .sw-label.seq{background:rgba(239,68,68,.14);color:#b91c1c;border:1px solid rgba(239,68,68,.4);}
-.sw-card .sw-mag{font-size:16px;font-weight:800;color:#b91c1c;}
+.sw-card .sw-label.swarm{background:rgba(249,115,22,.14);color:#fdba74;border:1px solid rgba(249,115,22,.4);}
+.sw-card .sw-label.seq{background:rgba(239,68,68,.14);color:#fca5a5;border:1px solid rgba(239,68,68,.4);}
+.sw-card .sw-mag{font-size:16px;font-weight:800;color:#fca5a5;}
 .sw-card .sw-place{font-size:14.5px;font-weight:700;margin-top:6px;}
 .sw-card .sw-meta{font-size:12px;color:var(--muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:10px;}
 
@@ -355,10 +354,10 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .rtbl th{padding:8px 12px;text-align:left;font-size:11px;font-weight:700;
   color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);}
 .rtbl th.r{text-align:right;}
-.rtbl td{padding:8px 12px;border-bottom:1px solid rgba(28,58,46,0.05);}
+.rtbl td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04);}
 .rtbl td.r{text-align:right;font-variant-numeric:tabular-nums;}
 .rtbl tr:last-child td{border-bottom:none;}
-.rtbl tr:hover td{background:rgba(28,58,46,0.03);}
+.rtbl tr:hover td{background:rgba(255,255,255,.02);}
 .rbar{display:inline-block;height:6px;border-radius:3px;
   background:linear-gradient(90deg,#3b82f6,#22c55e);vertical-align:middle;margin-left:7px;}
 .mpill{display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:700;}
@@ -368,20 +367,20 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .tl-header label{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;}
 .tl-header select{width:auto;padding:6px 10px;font-size:13px;border-radius:9px;}
 #timelineTooltip,#storicoTimelineTooltip{
-  position:fixed;background:rgba(255,255,255,.97);border:1px solid rgba(28,58,46,0.18);
+  position:fixed;background:rgba(11,17,32,.97);border:1px solid rgba(255,255,255,.15);
   border-radius:9px;padding:7px 11px;font-size:13px;pointer-events:none;
   display:none;z-index:9999;max-width:270px;line-height:1.5;}
 
 /* sismogrammi canvas */
-.canvas-box{background:#f4f9f1;border:1px solid rgba(28,58,46,0.10);
+.canvas-box{background:#08101c;border:1px solid rgba(255,255,255,.08);
   border-radius:16px;padding:12px;overflow-x:auto;}
 .log-box{padding:16px;max-height:180px;overflow:auto;color:#d1d5db;
-  font-family:ui-monospace,monospace;font-size:12px;line-height:1.5;background:#f4f9f1;
+  font-family:ui-monospace,monospace;font-size:12px;line-height:1.5;background:#08101c;
   border-radius:0 0 22px 22px;}
 
 /* meta grid */
 .meta-grid{padding:16px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.mc{background:rgba(28,58,46,0.04);border:1px solid rgba(28,58,46,0.07);
+.mc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
   border-radius:13px;padding:12px;}
 .mc .k{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
 .mc .v{font-size:15px;font-weight:700;word-break:break-word;}
@@ -390,7 +389,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 /* loading */
 .lo{padding:36px;text-align:center;color:var(--muted);font-size:14px;}
 .spin{display:inline-block;width:20px;height:20px;margin-right:7px;
-  border:3px solid rgba(28,58,46,0.12);border-top-color:var(--accent-2);
+  border:3px solid rgba(255,255,255,.1);border-top-color:var(--accent-2);
   border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;}
 @keyframes sp{to{transform:rotate(360deg);}}
 
@@ -398,13 +397,13 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .bb-icon{border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.6);cursor:pointer;display:block;}
 .fm-list-item{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:12px;
   padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
-.fm-list-item:hover{background:rgba(28,58,46,0.05);}
-.fm-mag{font-size:22px;font-weight:800;color:#b91c1c;}
+.fm-list-item:hover{background:rgba(255,255,255,.04);}
+.fm-mag{font-size:22px;font-weight:800;color:#fca5a5;}
 .fm-meta{font-size:12px;color:var(--muted);margin-top:2px;}
 
 /* toast */
 #seisToast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  background:rgba(255,255,255,.97);border:1px solid rgba(59,130,246,.4);
+  background:rgba(11,17,32,.97);border:1px solid rgba(59,130,246,.4);
   border-radius:13px;padding:11px 18px;font-size:14px;z-index:9998;
   display:none;max-width:460px;text-align:center;line-height:1.5;
   box-shadow:0 8px 28px rgba(0,0,0,.5);}
@@ -412,7 +411,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 /* update banner */
 .update-banner{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);
   display:none;align-items:center;gap:10px;
-  background:rgba(255,255,255,.97);border:1px solid rgba(34,197,94,.45);
+  background:rgba(11,17,32,.97);border:1px solid rgba(34,197,94,.45);
   border-radius:13px;padding:10px 10px 10px 16px;font-size:13px;font-weight:600;
   color:var(--text);z-index:10000;max-width:min(92vw,420px);
   box-shadow:0 8px 28px rgba(0,0,0,.5);}
@@ -474,16 +473,16 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .gps-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;
   border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;
   background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);
-  color:#1d4ed8;transition:all .18s;}
+  color:#93c5fd;transition:all .18s;}
 .gps-btn:hover{background:rgba(59,130,246,0.28);}
-.gps-btn.active{background:rgba(59,130,246,0.3);color:#1d4ed8;}
+.gps-btn.active{background:rgba(59,130,246,0.3);color:#60a5fa;}
 /* ── NOTIFICHE SECTION ── */
-.nav-tab.a-notif{color:#be185d;border-bottom-color:#ec4899;}
+.nav-tab.a-notif{color:#f9a8d4;border-bottom-color:#ec4899;}
 .notif-grid{display:grid;gap:18px;max-width:560px;margin:0 auto;}
 .toggle-row{display:flex;align-items:center;gap:12px;padding:4px 0;}
 
 /* ── SEZIONE LOCALIZZAZIONE ── */
-.nav-tab.a-loc{color:#047857;border-bottom-color:#10b981;}
+.nav-tab.a-loc{color:#6ee7b7;border-bottom-color:#10b981;}
 .loc-alert{border-radius:14px;padding:14px 18px;background:rgba(251,146,60,0.12);
   border:1px solid rgba(251,146,60,0.4);color:#fed7aa;font-size:14px;line-height:1.6;}
 .loc-alert b{color:#fb923c;}
@@ -492,14 +491,14 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .sta-card{display:grid;grid-template-columns:80px 1fr;gap:10px;align-items:center;
   padding:10px 14px;border-bottom:1px solid var(--border);}
 .sta-card:last-child{border-bottom:none;}
-.sta-canvas{border-radius:6px;background:#f4f9f1;display:block;}
+.sta-canvas{border-radius:6px;background:#08101c;display:block;}
 .sta-info{font-size:12px;}
-.sta-code{font-weight:700;font-size:14px;color:#047857;}
+.sta-code{font-weight:700;font-size:14px;color:#6ee7b7;}
 .sta-pick{color:var(--muted);margin-top:2px;}
 .loc-result{border-radius:14px;padding:16px 20px;
   background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.35);margin-top:18px;}
-.loc-result h3{margin:0 0 8px;color:#047857;font-size:15px;}
-.loc-result .coords{font-size:22px;font-weight:700;color:#065f46;letter-spacing:.02em;}
+.loc-result h3{margin:0 0 8px;color:#6ee7b7;font-size:15px;}
+.loc-result .coords{font-size:22px;font-weight:700;color:#d1fae5;letter-spacing:.02em;}
 .loc-result .uncer{font-size:12px;color:var(--muted);margin-top:4px;}
 .poll-dot{display:inline-block;width:8px;height:8px;border-radius:50%;
   background:#94a3b8;margin-right:6px;vertical-align:middle;}
@@ -510,38 +509,31 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 /* ── BOTTOM TAB BAR ── */
 .nav-bar{display:none!important;}
 .bottom-tabs{position:fixed;bottom:0;left:0;right:0;z-index:200;
-  background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);
+  background:rgba(11,17,32,0.97);backdrop-filter:blur(14px);
   border-top:1px solid var(--border);display:flex;
   padding:0 0 env(safe-area-inset-bottom,0);height:60px;}
 .btab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:3px;border:none;background:none;color:var(--muted);font-size:10px;font-weight:600;
   cursor:pointer;transition:color .15s;padding:6px 0;}
 .btab .btab-icon{font-size:22px;line-height:1;}
-/* Ogni tab conserva il proprio colore identificativo (rosso terremoti,
-   blu mappa, verde sismogrammi, arancio focali, viola storico). Il tab
-   attivo si evidenzia con lo stesso colore ma più saturo (via filter). */
-.btab.active{color:#16a34a;}
-.btab.active.t-eq{color:#b91c1c;}
-.btab.active.t-map{color:#1d4ed8;}
-.btab.active.t-seis{color:#15803d;}
-.btab.active.t-fm{color:#c2410c;}
-.btab.active.t-live{color:#b91c1c;}
-.btab.active.t-stor{color:#7e22ce;}
+.btab.active{color:#3b82f6;}
+.btab.active.t-eq{color:#f87171;}
+.btab.active.t-map{color:#60a5fa;}
+.btab.active.t-seis{color:#86efac;}
+.btab.active.t-fm{color:#fdba74;}
+.btab.active.t-live{color:#f87171;}
 body{padding-bottom:64px;}
 
 /* ── TOP HEADER BAR ── */
-.top-header{position:sticky;top:0;z-index:100;background:#ffffff;
-  border-bottom:1px solid rgba(28,58,46,0.10);
-  display:flex;align-items:center;justify-content:space-between;padding:12px 16px;
-  box-shadow:0 1px 3px rgba(28,58,46,.06);}
+.top-header{position:sticky;top:0;z-index:100;background:rgba(11,17,32,0.95);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
 .top-header h1{margin:0;font-size:20px;font-weight:700;color:var(--text);}
 .top-header .hdr-actions{display:flex;gap:8px;align-items:center;}
-/* Pulsanti dell'header: pill bianche con bordo verde tenue, coerenti con
-   la sort-bar e il resto della UI (niente più look scuro). */
-.hdr-btn{padding:7px 10px;border-radius:10px;font-size:18px;
-  background:#f0f7ec;border:1px solid rgba(28,58,46,0.12);
-  cursor:pointer;color:var(--text);transition:all .15s;line-height:1;}
-.hdr-btn:hover{background:#dcefd0;border-color:rgba(22,163,74,.35);}
+.hdr-btn{padding:6px 10px;border-radius:8px;font-size:18px;
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  cursor:pointer;color:var(--text);transition:background .15s;}
+.hdr-btn:hover{background:rgba(255,255,255,0.12);}
 
 /* ── BANNER "STIMA PROVVISORIA" (testo reale pubblicato da INGV) ── */
 .prov-banner{position:sticky;top:0;z-index:99;display:flex;align-items:center;gap:10px;
@@ -549,9 +541,9 @@ body{padding-bottom:64px;}
   backdrop-filter:blur(12px);}
 .prov-banner .dot{width:8px;height:8px;border-radius:50%;background:#f97316;
   animation:pulse 1.2s infinite;flex-shrink:0;}
-.prov-banner-text{flex:1;min-width:0;font-size:12.5px;color:#c2410c;}
+.prov-banner-text{flex:1;min-width:0;font-size:12.5px;color:#fdba74;}
 .prov-banner-text b{color:#fed7aa;letter-spacing:.03em;margin-right:6px;}
-.prov-banner-close{flex-shrink:0;background:transparent;border:none;color:#c2410c;
+.prov-banner-close{flex-shrink:0;background:transparent;border:none;color:#fdba74;
   font-size:14px;cursor:pointer;padding:2px 6px;}
 .prov-banner-close:hover{color:#fed7aa;}
 
@@ -561,44 +553,35 @@ body{padding-bottom:64px;}
 .search-clear{display:none;position:absolute;right:24px;top:50%;transform:translateY(-50%);
   background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;
   width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;}
-.search-clear:active{background:rgba(28,58,46,0.10);}
+.search-clear:active{background:rgba(255,255,255,0.08);}
 .search-clear.show{display:flex;}
 .search-info{padding:6px 16px 0;font-size:12px;color:var(--muted);}
 
-/* ── SORT TABS (Data/Magnitudo/Distanza) — pill in stile INGV ── */
-.sort-bar{margin:10px 12px 8px;padding:4px;background:rgba(255,255,255,0.85);border-radius:999px;
-  display:flex;gap:2px;box-shadow:0 1px 3px rgba(28,58,46,.10);}
-.sort-btn{flex:1;padding:9px 8px;border:none;border-radius:999px;font-size:13px;font-weight:600;
-  background:transparent;color:#4b6b5a;cursor:pointer;transition:all .15s;text-align:center;}
-.sort-btn.active{background:#16a34a;color:#ffffff;box-shadow:0 1px 3px rgba(21,128,61,.35);}
-.sort-btn:not(.active):hover{background:rgba(22,163,74,.10);color:#14532d;}
+/* ── SORT TABS (Data/Magnitudo/Distanza) ── */
+.sort-bar{display:flex;gap:0;padding:8px 16px 4px;background:rgba(11,17,32,0.6);}
+.sort-btn{flex:1;padding:8px;border:none;border-radius:20px;font-size:13px;font-weight:600;
+  background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;text-align:center;}
+.sort-btn.active{background:rgba(59,130,246,0.15);color:#93c5fd;}
 
-/* ── TIME-SECTION LABELS — leggibili sul verde di sfondo ── */
-.time-section{padding:14px 16px 6px;font-size:12px;font-weight:800;
-  text-transform:uppercase;letter-spacing:.08em;color:#0f4826;}
+/* ── TIME-SECTION LABELS ── */
+.time-section{padding:10px 16px 4px;font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#3b82f6;}
 
-/* ── INGV-STYLE EQ LIST — card bianche, chevron sulla destra ── */
-.eq-list{max-height:none;overflow-y:visible;padding:4px 12px 12px;}
-.eq-item{display:flex;align-items:center;gap:12px;padding:14px;
-  background:#ffffff;border:1px solid rgba(28,58,46,0.08);border-radius:14px;
-  margin-bottom:10px;transition:all .15s;cursor:pointer;
-  box-shadow:0 1px 2px rgba(28,58,46,.03);}
-.eq-item:last-child{border-bottom:1px solid rgba(28,58,46,0.08);}
-.eq-item:hover{border-color:rgba(22,163,74,0.35);box-shadow:0 3px 10px rgba(28,58,46,.08);transform:translateY(-1px);}
-.eq-item:active{transform:translateY(0);}
-.eq-item::after{content:'›';color:var(--muted);font-size:26px;line-height:1;
-  flex-shrink:0;order:3;align-self:center;margin-left:2px;}
-.eq-info{flex:1;min-width:0;order:1;}
-.eq-info .pl{font-size:16px;font-weight:700;color:#14532d;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* ── INGV-STYLE EQ LIST ── */
+.eq-list{max-height:none;overflow-y:visible;}
+.eq-item{display:flex;align-items:center;gap:12px;padding:16px;
+  border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
+.eq-item:active{background:rgba(255,255,255,0.05);}
+.eq-info{flex:1;min-width:0;}
+.eq-info .pl{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .eq-info .dt{font-size:12.5px;color:var(--muted);margin-top:5px;display:flex;flex-direction:column;gap:3px;}
 .eq-mag{min-width:52px;height:52px;border-radius:12px;display:flex;align-items:center;
   justify-content:center;font-size:20px;font-weight:800;flex-shrink:0;order:2;margin-left:auto;}
 .seis-btn{flex-shrink:0;padding:7px 8px;border-radius:9px;font-size:17px;
-  background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.30);
-  color:#15803d;cursor:pointer;transition:all .18s;
+  background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
+  color:#93c5fd;cursor:pointer;transition:all .18s;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;line-height:1;min-width:54px;order:0;}
+  text-align:center;line-height:1;min-width:54px;}
 
 /* ── FILTER DRAWER ── */
 .filter-drawer{position:fixed;top:0;right:0;bottom:60px;width:min(340px,85vw);z-index:300;
@@ -627,13 +610,13 @@ body{padding-bottom:64px;}
 .side-menu-header{display:flex;align-items:center;justify-content:space-between;
   padding:16px 18px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .side-menu-header h3{margin:0;font-size:16px;color:var(--text);letter-spacing:.02em;}
-.side-menu-close{background:rgba(28,58,46,0.07);border:1px solid var(--border);
+.side-menu-close{background:rgba(255,255,255,.06);border:1px solid var(--border);
   border-radius:8px;width:30px;height:30px;color:var(--text);cursor:pointer;font-size:14px;}
 .side-menu-body{flex:1;overflow-y:auto;padding:12px;}
 .side-menu-item{width:100%;display:flex;align-items:flex-start;gap:12px;padding:14px 12px;
-  background:rgba(28,58,46,0.04);border:1px solid var(--border);border-radius:12px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;
   color:var(--text);cursor:pointer;text-align:left;transition:background .15s;margin-bottom:8px;}
-.side-menu-item:hover{background:rgba(28,58,46,0.09);}
+.side-menu-item:hover{background:rgba(255,255,255,.07);}
 .side-menu-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
 .side-menu-text{min-width:0;flex:1;}
 .side-menu-title{font-size:14.5px;font-weight:700;}
@@ -641,22 +624,22 @@ body{padding-bottom:64px;}
 .side-menu-hint{padding:14px 12px;font-size:12px;color:var(--muted);font-style:italic;
   text-align:center;border:1px dashed var(--border);border-radius:10px;margin-top:4px;}
 .side-badge{display:inline-block;font-size:9px;font-weight:800;padding:1px 6px;border-radius:5px;
-  background:rgba(165,180,252,.16);color:#4338ca;border:1px solid rgba(165,180,252,.35);
+  background:rgba(165,180,252,.16);color:#a5b4fc;border:1px solid rgba(165,180,252,.35);
   text-transform:uppercase;letter-spacing:.04em;margin-left:6px;vertical-align:1px;}
 
 /* ── ANALOGIA SISMICA (sezione sperimentale) ── */
 .an-window-picker{display:flex;gap:8px;flex-wrap:wrap;}
 .an-window-btn{flex:1;min-width:100px;padding:12px 10px;border-radius:10px;font-weight:700;
-  font-size:13px;background:rgba(28,58,46,0.05);border:1px solid var(--border);
+  font-size:13px;background:rgba(255,255,255,.04);border:1px solid var(--border);
   color:var(--text);cursor:pointer;transition:all .15s;}
-.an-window-btn:hover{background:rgba(28,58,46,0.10);}
-.an-window-btn.active{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.5);color:#4338ca;}
+.an-window-btn:hover{background:rgba(255,255,255,.08);}
+.an-window-btn.active{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.5);color:#a5b4fc;}
 .an-result{display:flex;flex-direction:column;gap:14px;margin-top:16px;}
-.an-block{background:rgba(28,58,46,0.04);border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
+.an-block{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
 .an-block h3{margin:0 0 10px;font-size:13.5px;font-weight:800;text-transform:uppercase;
-  letter-spacing:.05em;color:#4338ca;}
-.an-block.match h3{color:#c2410c;}
-.an-block.next h3{color:#b91c1c;}
+  letter-spacing:.05em;color:#a5b4fc;}
+.an-block.match h3{color:#fdba74;}
+.an-block.next h3{color:#fca5a5;}
 .an-block .sig-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;
   border-bottom:1px solid var(--border);}
 .an-block .sig-row:last-child{border-bottom:none;}
@@ -664,32 +647,32 @@ body{padding-bottom:64px;}
 .an-block .sig-row .v{font-weight:700;}
 .an-big-event{margin-top:6px;padding:14px;border-radius:12px;
   background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.35);}
-.an-big-event .m{font-size:32px;font-weight:800;color:#b91c1c;line-height:1;}
+.an-big-event .m{font-size:32px;font-weight:800;color:#fca5a5;line-height:1;}
 .an-big-event .p{font-size:14px;font-weight:600;margin-top:6px;}
 .an-big-event .t{font-size:12px;color:var(--muted);margin-top:4px;}
 .an-none{padding:14px;text-align:center;color:var(--muted);font-size:13px;
-  background:rgba(28,58,46,0.03);border:1px dashed var(--border);border-radius:10px;}
+  background:rgba(255,255,255,.02);border:1px dashed var(--border);border-radius:10px;}
 .an-progress{font-size:12.5px;color:var(--muted);}
-.an-warn{padding:11px 14px;font-size:12px;color:#a16207;background:rgba(251,191,36,.08);
+.an-warn{padding:11px 14px;font-size:12px;color:#fbbf24;background:rgba(251,191,36,.08);
   border:1px solid rgba(251,191,36,.3);border-radius:10px;margin-top:12px;}
 #anMatches{display:flex;flex-direction:column;gap:14px;}
-.an-match-card{background:rgba(28,58,46,0.04);border:1px solid var(--border);
+.an-match-card{background:rgba(255,255,255,.03);border:1px solid var(--border);
   border-radius:14px;overflow:hidden;}
 .an-match-header{display:flex;align-items:center;gap:10px;padding:11px 14px;
   border-bottom:1px solid var(--border);background:rgba(253,186,116,.06);}
 .an-match-header h3{margin:0;font-size:13px;font-weight:800;text-transform:uppercase;
-  letter-spacing:.05em;color:#c2410c;flex:1;min-width:0;}
+  letter-spacing:.05em;color:#fdba74;flex:1;min-width:0;}
 .an-rank{font-size:12px;font-weight:800;padding:3px 9px;border-radius:8px;
-  background:rgba(253,186,116,.15);color:#c2410c;border:1px solid rgba(253,186,116,.4);flex-shrink:0;}
-.an-rank-1{color:#a16207;background:rgba(251,191,36,.18);border-color:rgba(251,191,36,.55);}
-.an-rank-2{color:#475569;background:rgba(100,116,139,.12);border-color:rgba(100,116,139,.4);}
-.an-rank-3{color:#b91c1c;background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.30);}
+  background:rgba(253,186,116,.15);color:#fdba74;border:1px solid rgba(253,186,116,.4);flex-shrink:0;}
+.an-rank-1{color:#fbbf24;background:rgba(251,191,36,.18);border-color:rgba(251,191,36,.55);}
+.an-rank-2{color:#e5e7eb;background:rgba(229,231,235,.12);border-color:rgba(229,231,235,.35);}
+.an-rank-3{color:#fca5a5;background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.30);}
 .an-rank-4{color:var(--muted);}
-.an-sim{font-size:14px;font-weight:800;color:#4338ca;flex-shrink:0;}
+.an-sim{font-size:14px;font-weight:800;color:#a5b4fc;flex-shrink:0;}
 .an-match-body{padding:12px 15px;}
 .an-next-divider{margin-top:14px;padding-top:10px;border-top:1px dashed var(--border);
   font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
-  color:#b91c1c;margin-bottom:8px;}
+  color:#fca5a5;margin-bottom:8px;}
 
 /* ── SCHEDA TERREMOTO (dettaglio evento) ── */
 /* Scheda evento a pagina intera (occupa tutto il viewport, sopra ogni cosa) */
@@ -701,15 +684,15 @@ body{padding-bottom:64px;}
 .eqd-sheet.open{transform:translateY(0);}
 .eqd-header{display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
-  background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);}
+  background:rgba(11,17,32,0.95);backdrop-filter:blur(12px);}
 .eqd-title{font-size:16px;font-weight:700;line-height:1.3;flex:1;min-width:0;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.eqd-close{flex-shrink:0;background:rgba(28,58,46,0.07);border:1px solid var(--border);
+.eqd-close{flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid var(--border);
   border-radius:8px;width:34px;height:34px;color:var(--text);cursor:pointer;font-size:15px;}
 .eqd-map{height:280px;width:100%;flex-shrink:0;}
 @media(max-width:640px){.eqd-map{height:220px;}}
 .eqd-tabs{display:flex;gap:0;padding:10px 16px 0;flex-shrink:0;}
-.eqd-tab{flex:1;padding:9px;border:none;background:rgba(28,58,46,0.06);color:var(--muted);
+.eqd-tab{flex:1;padding:9px;border:none;background:rgba(255,255,255,.05);color:var(--muted);
   font-size:13px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;}
 .eqd-tab.active{color:#fff;border-bottom-color:#3b82f6;background:rgba(59,130,246,.1);}
 .eqd-tab:first-child{border-radius:10px 0 0 0;}
@@ -722,7 +705,7 @@ body{padding-bottom:64px;}
 .eqd-seis-btn{width:100%;padding:11px;border:none;border-radius:10px;background:#2563eb;
   color:#fff;font-weight:700;font-size:14px;cursor:pointer;}
 .eqd-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
-.eqd-box{background:rgba(28,58,46,0.04);border:1px solid var(--border);border-radius:10px;padding:9px 12px;}
+.eqd-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:9px 12px;}
 .eqd-box .k{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
 .eqd-box .v{font-size:17px;font-weight:800;}
 .eqd-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;
@@ -777,11 +760,11 @@ body{padding-bottom:64px;}
 .profile-actions{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px;}
 .profile-btn-notif{width:100%;padding:10px;border-radius:10px;font-size:14px;font-weight:600;
   background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.3);
-  color:#be185d;cursor:pointer;transition:background .15s;}
+  color:#f9a8d4;cursor:pointer;transition:background .15s;}
 .profile-btn-notif:hover{background:rgba(236,72,153,0.2);}
 .profile-btn-logout{width:100%;padding:10px;border-radius:10px;font-size:14px;font-weight:600;
   background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);
-  color:#b91c1c;cursor:pointer;transition:background .15s;}
+  color:#fca5a5;cursor:pointer;transition:background .15s;}
 .profile-btn-logout:hover{background:rgba(239,68,68,0.18);}
 
 @media(max-width:640px){
@@ -801,30 +784,30 @@ body{padding-bottom:64px;}
   </div>
   <div class="choices">
     <div class="choice-card eq" onclick="goSection('terremoti')">
-      <div class="icon ic" data-ic="quake" style="color:#b91c1c;"></div><h2>Terremoti Recenti</h2>
+      <div class="icon ic" data-ic="quake" style="color:#f87171;"></div><h2>Terremoti Recenti</h2>
       <p>Mappa e lista degli ultimi eventi con statistiche per regione</p>
     </div>
     <div class="choice-card stor" onclick="goSection('storico')">
-      <div class="icon ic" data-ic="storico" style="color:#7e22ce;"></div><h2>Storico</h2>
+      <div class="icon ic" data-ic="storico" style="color:#c084fc;"></div><h2>Storico</h2>
       <p>Ricerca libera per intervallo di date su tutto il catalogo INGV</p>
     </div>
     <div class="choice-card seis" onclick="goSection('sismogrammi')">
-      <div class="icon ic" data-ic="seismo" style="color:#15803d;"></div><h2>Sismogrammi</h2>
+      <div class="icon ic" data-ic="seismo" style="color:#86efac;"></div><h2>Sismogrammi</h2>
       <p>Terremoti, sismogrammi e meccanismi focali INGV in tempo reale</p>
     </div>
     <div class="choice-card" style="border-color:rgba(251,146,60,0.4);"
          onclick="goSection('focali')">
-      <div class="icon ic" data-ic="focal" style="color:#c2410c;"></div><h2>Meccanismi Focali</h2>
+      <div class="icon ic" data-ic="focal" style="color:#fdba74;"></div><h2>Meccanismi Focali</h2>
       <p>Beach ball TDMT su mappa — geometria delle faglie attivatrici</p>
     </div>
     <div class="choice-card" style="border-color:rgba(236,72,153,0.4);"
          onclick="goSection('notifiche')">
-      <div class="icon ic" data-ic="bell" style="color:#be185d;"></div><h2>Notifiche</h2>
+      <div class="icon ic" data-ic="bell" style="color:#f9a8d4;"></div><h2>Notifiche</h2>
       <p>Avvisi push per terremoti nella tua provincia e auto-aggiornamento</p>
     </div>
     <div class="choice-card" style="border-color:rgba(16,185,129,0.4);"
          onclick="goSection('localizzazione')">
-      <div class="icon ic" data-ic="locate" style="color:#0f766e;"></div><h2>Localizzazione</h2>
+      <div class="icon ic" data-ic="locate" style="color:#5eead4;"></div><h2>Localizzazione</h2>
       <p>Stima sperimentale epicentro da tempi S-P su stazioni vicine</p>
     </div>
   </div>
@@ -863,21 +846,21 @@ body{padding-bottom:64px;}
     </div>
     <div class="side-menu-body">
       <button class="side-menu-item" onclick="closeSideMenu();goSection('terremoti')">
-        <span class="ic side-menu-icon" data-ic="home" style="color:#1d4ed8;"></span>
+        <span class="ic side-menu-icon" data-ic="home" style="color:#93c5fd;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Home</div>
           <div class="side-menu-desc">Torna alla lista dei terremoti recenti</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('sciami')">
-        <span class="ic side-menu-icon" data-ic="swarm" style="color:#c2410c;"></span>
+        <span class="ic side-menu-icon" data-ic="swarm" style="color:#fdba74;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Sciami Sismici</div>
           <div class="side-menu-desc">Individua sciami e sequenze sismiche per provincia e periodo</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('analogia')">
-        <span class="ic side-menu-icon" data-ic="analogy" style="color:#4338ca;"></span>
+        <span class="ic side-menu-icon" data-ic="analogy" style="color:#a5b4fc;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Analogia Sismica <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Cerca il periodo storico che ha colpito le stesse zone del periodo attuale e mostra cosa è successo dopo</div>
@@ -952,7 +935,7 @@ body{padding-bottom:64px;}
       <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes();toggleFilters();" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="refresh" style="font-size:17px;"></span>Aggiorna</button>
       <div id="eqStatus" class="status">Pronto.</div>
       <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
-      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#be185d;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="bell" style="font-size:16px;"></span>Notifiche &amp; Auto-aggiornamento →</button>
+      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="bell" style="font-size:16px;"></span>Notifiche &amp; Auto-aggiornamento →</button>
     </div>
   </div>
 
@@ -989,8 +972,8 @@ body{padding-bottom:64px;}
       </div>
       <div id="eqSumRow" class="summary-row" style="display:none;padding:8px 16px;">
         <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="sTot">—</div></div>
-        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#b91c1c">—</div></div>
-        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#15803d">—</div></div>
+        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#fca5a5">—</div></div>
+        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#86efac">—</div></div>
         <div class="sc"><div class="k">Prof. media</div><div class="v" id="sAvgD">—</div></div>
       </div>
       <div style="padding:0 16px 4px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Per Regione</div>
@@ -1133,8 +1116,8 @@ body{padding-bottom:64px;}
           </section>
           <div id="stSumRow" class="summary-row" style="display:none">
             <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="stTot">—</div></div>
-            <div class="sc"><div class="k">Mag. max</div><div class="v" id="stMaxV" style="color:#b91c1c">—</div></div>
-            <div class="sc"><div class="k">Mag. min</div><div class="v" id="stMinV" style="color:#15803d">—</div></div>
+            <div class="sc"><div class="k">Mag. max</div><div class="v" id="stMaxV" style="color:#fca5a5">—</div></div>
+            <div class="sc"><div class="k">Mag. min</div><div class="v" id="stMinV" style="color:#86efac">—</div></div>
             <div class="sc"><div class="k">Prof. media</div><div class="v" id="stAvgD">—</div></div>
           </div>
           <section class="panel">
@@ -1142,11 +1125,11 @@ body{padding-bottom:64px;}
             <div class="tl-header">
               <label>Filtra provincia:</label>
               <select id="stTlProv" onchange="applyTlFilter('st')"
-                style="background:#f6faf3;color:var(--text);border:1px solid rgba(28,58,46,0.12);">
+                style="background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
                 <option value="">Tutta Italia</option></select>
             </div>
             <div style="padding:10px 16px 16px">
-              <canvas id="stTlCanvas" width="1200" height="175" style="width:100%;display:block;background:#f4f9f1;cursor:crosshair;border-radius:10px;"></canvas>
+              <canvas id="stTlCanvas" width="1200" height="175" style="width:100%;display:block;background:#08101c;cursor:crosshair;border-radius:10px;"></canvas>
             </div>
           </section>
           <section class="panel">
@@ -1260,8 +1243,8 @@ body{padding-bottom:64px;}
           </section>
           <div id="swSumRow" class="summary-row" style="display:none">
             <div class="sc"><div class="k">Eventi analizzati</div><div class="v" id="swTotEv">—</div></div>
-            <div class="sc"><div class="k">Sciami sismici</div><div class="v" id="swTotSwarm" style="color:#c2410c">—</div></div>
-            <div class="sc"><div class="k">Sequenze sismiche</div><div class="v" id="swTotSeq" style="color:#b91c1c">—</div></div>
+            <div class="sc"><div class="k">Sciami sismici</div><div class="v" id="swTotSwarm" style="color:#fdba74">—</div></div>
+            <div class="sc"><div class="k">Sequenze sismiche</div><div class="v" id="swTotSeq" style="color:#fca5a5">—</div></div>
           </div>
           <section class="panel">
             <div class="panel-header"><h2>Cluster individuati</h2></div>
@@ -1279,7 +1262,7 @@ body{padding-bottom:64px;}
       <div class="header">
         <div class="title-wrap"><h1>Analogia Sismica</h1>
           <p>Cerca nel catalogo INGV <b>dal 2000 in poi</b> i periodi storici che hanno colpito <b>le stesse zone geografiche</b> del periodo attuale (o zone limitrofe, entro celle di ~30 km) e mostra i primi 4 più simili in ordine, con l'evento più forte accaduto nel periodo successivo a ciascuno.</p></div>
-        <span class="badge" style="background:rgba(165,180,252,.14);color:#4338ca;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
+        <span class="badge" style="background:rgba(165,180,252,.14);color:#a5b4fc;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
       </div>
       <section class="panel">
         <div class="panel-header"><h2>Finestra temporale</h2><p>Su quale intervallo del periodo attuale eseguire il confronto</p></div>
@@ -1382,23 +1365,23 @@ body{padding-bottom:64px;}
             <div class="panel-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;">
               <div><h2 id="plotTitle">Waveform</h2><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Grafico traccia selezionata.</p></div>
               <div class="seis-view-ctrl" style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
-                <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#f6faf3;color:var(--text);border:1px solid rgba(28,58,46,0.12);">
+                <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
                   <option value="waveform">Waveform</option>
                   <option value="dayplot">Dayplot</option></select>
                 <div id="dayplotControls" style="display:none;align-items:center;gap:7px;">
                   <label style="font-size:11px;color:var(--muted);white-space:nowrap;">Min/riga</label>
                   <input id="dayplotInterval" type="number" min="1" max="120" value="30"
-                    style="width:60px;padding:7px 9px;font-size:13px;border-radius:9px;background:#f6faf3;color:var(--text);border:1px solid rgba(28,58,46,0.12);"/>
+                    style="width:60px;padding:7px 9px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);"/>
                 </div>
                 <button id="downloadSeisBtn" onclick="downloadSeisImage()" title="Scarica come immagine"
-                  style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:13px;font-weight:600;border-radius:9px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#15803d;cursor:pointer;">
+                  style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:13px;font-weight:600;border-radius:9px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#86efac;cursor:pointer;">
                   <span class="ic" data-ic="download" style="font-size:15px;"></span>PNG
                 </button>
               </div>
             </div>
             <div style="padding:16px">
               <div class="canvas-box">
-                <canvas id="waveCanvas" width="1200" height="320" style="width:100%;height:320px;display:block;background:#f4f9f1;border-radius:10px;"></canvas>
+                <canvas id="waveCanvas" width="1200" height="320" style="width:100%;height:320px;display:block;background:#08101c;border-radius:10px;"></canvas>
               </div>
             </div>
           </section>
@@ -1420,7 +1403,7 @@ body{padding-bottom:64px;}
       <div class="header">
         <div class="title-wrap"><h1>Meccanismi Focali</h1>
           <p>Soluzioni TDMT (Time Domain Moment Tensor) — INGV.</p></div>
-        <span class="badge" style="background:rgba(251,146,60,.12);color:#c2410c;border:1px solid rgba(251,146,60,.35);">INGV TDMT</span>
+        <span class="badge" style="background:rgba(251,146,60,.12);color:#fdba74;border:1px solid rgba(251,146,60,.35);">INGV TDMT</span>
       </div>
       <div class="eq-grid">
         <!-- filtri -->
@@ -1451,8 +1434,8 @@ body{padding-bottom:64px;}
             <div id="fmSumRow" style="display:none;margin-top:12px;">
               <div class="summary-row">
                 <div class="sc"><div class="k">Soluzioni</div><div class="v" id="fmTot">—</div></div>
-                <div class="sc"><div class="k">Mag. max</div><div class="v" id="fmMaxM" style="color:#b91c1c">—</div></div>
-                <div class="sc"><div class="k">Mag. min</div><div class="v" id="fmMinM" style="color:#15803d">—</div></div>
+                <div class="sc"><div class="k">Mag. max</div><div class="v" id="fmMaxM" style="color:#fca5a5">—</div></div>
+                <div class="sc"><div class="k">Mag. min</div><div class="v" id="fmMinM" style="color:#86efac">—</div></div>
               </div>
             </div>
           </div>
@@ -1479,14 +1462,14 @@ body{padding-bottom:64px;}
   <div class="section" id="sectionNotifiche">
     <div class="container">
       <div class="header">
-        <div class="title-wrap"><h1><span class="ic" data-ic="bell" style="color:#be185d;"></span>Notifiche</h1>
+        <div class="title-wrap"><h1><span class="ic" data-ic="bell" style="color:#f9a8d4;"></span>Notifiche</h1>
           <p>Configura avvisi push personalizzati per la tua area.</p></div>
-        <span class="badge" style="background:rgba(236,72,153,0.12);color:#be185d;border:1px solid rgba(236,72,153,0.35);">Firebase</span>
+        <span class="badge" style="background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.35);">Firebase</span>
       </div>
 
       <!-- ACCOUNT -->
       <section class="panel" style="margin-bottom:18px;">
-        <div class="panel-header"><h2 style="display:inline-flex;align-items:center;gap:9px;"><span class="ic" data-ic="user" style="font-size:0.9em;color:#1d4ed8;"></span>Account</h2>
+        <div class="panel-header"><h2 style="display:inline-flex;align-items:center;gap:9px;"><span class="ic" data-ic="user" style="font-size:0.9em;color:#93c5fd;"></span>Account</h2>
           <p>Accedi per salvare le tue preferenze nel cloud e ricevere notifiche push.</p></div>
         <div class="controls">
           <div id="authStatus" style="padding:8px 0;font-size:14px;color:var(--muted);">Non collegato.</div>
@@ -1562,10 +1545,10 @@ body{padding-bottom:64px;}
     <div class="container">
       <div class="header">
         <div class="title-wrap">
-          <h1><span class="ic" data-ic="locate" style="color:#0f766e;"></span>Localizzazione Sperimentale</h1>
+          <h1><span class="ic" data-ic="locate" style="color:#5eead4;"></span>Localizzazione Sperimentale</h1>
           <p>Stima dell'area epicentrale da tempi S-P su stazioni vicine. Solo indicativa — errori dell'ordine delle decine di km.</p>
         </div>
-        <span class="badge" style="background:rgba(16,185,129,0.12);color:#047857;border:1px solid rgba(16,185,129,0.35);">⚗️ SPERIMENTALE</span>
+        <span class="badge" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border:1px solid rgba(16,185,129,0.35);">⚗️ SPERIMENTALE</span>
       </div>
 
       <!-- Monitor + controlli -->
@@ -1576,8 +1559,8 @@ body{padding-bottom:64px;}
             <p>Controlla automaticamente terremoti.ingv.it ogni 30 secondi.</p>
           </div>
           <div class="loc-monitor-btns" style="display:flex;gap:8px;">
-            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#047857;" onclick="startLocMonitor()">▶ Avvia monitor</button>
-            <button class="btn" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#b91c1c;" onclick="stopLocMonitor()">⏹ Ferma</button>
+            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="startLocMonitor()">▶ Avvia monitor</button>
+            <button class="btn" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#fca5a5;" onclick="stopLocMonitor()">⏹ Ferma</button>
           </div>
         </div>
         <div style="padding:0 18px 16px;">
@@ -1585,9 +1568,9 @@ body{padding-bottom:64px;}
           <!-- Analisi manuale -->
           <div class="loc-manual">
             <span style="font-size:12px;color:var(--muted);">Oppure analisi manuale:</span>
-            <input id="locProvInput" type="text" placeholder="Provincia (es. Palermo)" style="width:180px;padding:7px 11px;border-radius:9px;border:1px solid rgba(28,58,46,0.12);background:#f6faf3;color:var(--text);font-size:13px;"/>
-            <input id="locTimeInput" type="datetime-local" style="padding:7px 11px;border-radius:9px;border:1px solid rgba(28,58,46,0.12);background:#f6faf3;color:var(--text);font-size:13px;"/>
-            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#047857;" onclick="runLocAnalysis(document.getElementById('locProvInput').value, document.getElementById('locTimeInput').value||null)">🔍 Analizza</button>
+            <input id="locProvInput" type="text" placeholder="Provincia (es. Palermo)" style="width:180px;padding:7px 11px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:var(--text);font-size:13px;"/>
+            <input id="locTimeInput" type="datetime-local" style="padding:7px 11px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:var(--text);font-size:13px;"/>
+            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="runLocAnalysis(document.getElementById('locProvInput').value, document.getElementById('locTimeInput').value||null)">🔍 Analizza</button>
           </div>
         </div>
       </section>
@@ -2122,7 +2105,7 @@ function renderList(events,containerId,onSeis){
     }
     const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic" style="font-size:19px;">${IC.seismo}</span><span style="font-size:9px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
     const _distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
-    const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#5b7568;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
+    const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
     html+=`<div class="eq-item" onclick="openEqDetail('${containerId}',${i})">
       <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;">
         ${sb}
@@ -2130,7 +2113,7 @@ function renderList(events,containerId,onSeis){
       <div class="eq-info">
         <div class="pl">${ev.place}</div>
         <div class="dt">
-          <span><span class="ic" style="font-size:12px;vertical-align:-2px;color:#5b7568;">${IC.clock}</span> ${agoStr}</span>
+          <span><span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.clock}</span> ${agoStr}</span>
           ${distStr?`<span>⊙ ${distStr}</span>`:''}
         </div>
       </div>
@@ -2295,7 +2278,7 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
   const ctx=canvas.getContext('2d');
   const W=canvas.width,H=canvas.height;
   const evs=provFilter?events.filter(ev=>extractProv(ev.place)===provFilter):events;
-  ctx.fillStyle='#f4f9f1';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#08101c';ctx.fillRect(0,0,W,H);
   TL_HITS[hitsKey]=[];
   if(!evs.length){
     ctx.fillStyle='#94a3b8';ctx.font='14px sans-serif';ctx.textAlign='center';
@@ -2308,7 +2291,7 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
   /* grid */
   for(let gm=1;gm<=Math.ceil(mMax);gm++){
     const y=pT+plotH-((gm/mMax)*plotH);
-    ctx.strokeStyle='rgba(28,58,46,0.07)';ctx.lineWidth=1;
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+plotW,y);ctx.stroke();
     ctx.fillStyle='#475569';ctx.font='10px sans-serif';ctx.textAlign='right';
     ctx.fillText('M'+gm,pL-3,y+4);
@@ -2333,7 +2316,7 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
     const lb=`${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')} `
             +`${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}`;
     ctx.fillText(lb,x,H-5);
-    ctx.strokeStyle='rgba(28,58,46,0.05)';ctx.lineWidth=0.5;
+    ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=0.5;
     ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+plotH);ctx.stroke();
   }
 }
@@ -2372,7 +2355,7 @@ function updateProvSelect(events,selectId){
         c.style.cursor='pointer';tt.style.display='block';
         tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-38)+'px';
         const dt=h.ev.time.replace('T',' ').slice(0,19);
-        tt.innerHTML=`<strong>M${h.ev.mag.toFixed(1)}</strong> — ${h.ev.place}<br><small style="color:#5b7568;">${dt} UTC · ${h.ev.depth.toFixed(0)} km</small>`;
+        tt.innerHTML=`<strong>M${h.ev.mag.toFixed(1)}</strong> — ${h.ev.place}<br><small style="color:#94a3b8;">${dt} UTC · ${h.ev.depth.toFixed(0)} km</small>`;
       }else{c.style.cursor='crosshair';tt.style.display='none';}
     }
   });
@@ -2427,7 +2410,7 @@ function openEqDetail(containerId,i){
   setTimeout(()=>{
     if(!eqdMapInited){
       eqdMap=L.map('eqdMap',{zoomControl:false,attributionControl:false}).setView([ev.lat,ev.lon],8);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{subdomains:'abcd',maxZoom:19}).addTo(eqdMap);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{subdomains:'abcd',maxZoom:19}).addTo(eqdMap);
       eqdMapInited=true;
     } else {
       eqdMap.invalidateSize();
@@ -2459,7 +2442,7 @@ function renderEqdDati(ev){
   const distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
   document.getElementById('eqdPaneDati').innerHTML=`
     <div class="eqd-grid">
-      <div class="eqd-box"><div class="k">Magnitudo</div><div class="v" style="color:#b91c1c;">${ev.mag.toFixed(1)}</div></div>
+      <div class="eqd-box"><div class="k">Magnitudo</div><div class="v" style="color:#fca5a5;">${ev.mag.toFixed(1)}</div></div>
       <div class="eqd-box"><div class="k">Profondità</div><div class="v">${ev.depth.toFixed(1)} km</div></div>
     </div>
     <div class="eqd-row"><span class="k">Data e ora (locale)</span><span class="v">${localStr}</span></div>
@@ -2526,7 +2509,7 @@ let eqData=[],eqMarkers=[],eqMap;
 
 function initEqMap(){
   eqMap=L.map('eqMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(eqMap);
   addLegend(eqMap);
   /* DISS rimosso */
@@ -2535,8 +2518,8 @@ function initEqMap(){
 function addLegend(m){
   const lg=L.control({position:'bottomright'});
   lg.onAdd=()=>{const d=L.DomUtil.create('div');
-    d.style.cssText='background:rgba(255,255,255,.92);border:1px solid rgba(28,58,46,0.18);border-radius:11px;padding:9px 13px;color:#1c3a2e;font-size:12px;line-height:1.9;box-shadow:0 4px 12px rgba(28,58,46,.15);';
-    d.innerHTML='<b style="font-size:10px;color:#5b7568;text-transform:uppercase">Profondità</b><br>'
+    d.style.cssText='background:rgba(11,17,32,.88);border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:9px 13px;color:#e5e7eb;font-size:12px;line-height:1.9;';
+    d.innerHTML='<b style="font-size:10px;color:#94a3b8;text-transform:uppercase">Profondità</b><br>'
       +'<span style="color:#ef4444">●</span> 0–10 km<br>'
       +'<span style="color:#f97316">●</span> 10–30 km<br>'
       +'<span style="color:#eab308">●</span> 30–70 km<br>'
@@ -2586,7 +2569,7 @@ let storicoData=[],stMarkers=[],stMap;
 
 function initStMap(){
   stMap=L.map('stMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(stMap);
   addLegend(stMap);
   /* DISS rimosso */
@@ -2654,7 +2637,7 @@ let swMapInited=false, swMap=null, swMarkers=[], swarmResults=[];
 
 function initSwMap(){
   swMap=L.map('swMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(swMap);
 }
 
@@ -3581,23 +3564,23 @@ function updateDefaultRange(){
 function getSta(){return stations.find(s=>s.code===stationSelect.value)||null;}
 
 function drawEmpty(msg='Nessun dato'){
-  wCtx.fillStyle='#f4f9f1';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  wCtx.fillStyle='#08101c';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
   wCtx.fillStyle='#94a3b8';wCtx.font='22px sans-serif';wCtx.textAlign='center';
   wCtx.fillText(msg,waveCanvas.width/2,waveCanvas.height/2);
 }
 
 function drawWaveform(samples,title){
-  wCtx.fillStyle='#f4f9f1';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  wCtx.fillStyle='#08101c';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
   if(!samples||!samples.length){drawEmpty('Nessun campione');return;}
   const pL=60,pR=20,pT=30,pB=35,W=waveCanvas.width,H=waveCanvas.height;
   const pW=W-pL-pR,pH=H-pT-pB;
   const amp=Math.max(Math.abs(Math.min(...samples)),Math.abs(Math.max(...samples)))||1;
-  wCtx.strokeStyle='rgba(28,58,46,0.11)';wCtx.lineWidth=1;
+  wCtx.strokeStyle='rgba(255,255,255,.09)';wCtx.lineWidth=1;
   for(let i=0;i<=4;i++){const y=pT+(pH/4)*i;wCtx.beginPath();wCtx.moveTo(pL,y);wCtx.lineTo(pL+pW,y);wCtx.stroke();}
   wCtx.strokeStyle='#22c55e';wCtx.lineWidth=1.3;wCtx.beginPath();
   samples.forEach((v,i)=>{const x=pL+(i/(samples.length-1||1))*pW,y=pT+pH/2-(v/amp)*(pH/2-6);i===0?wCtx.moveTo(x,y):wCtx.lineTo(x,y);});
   wCtx.stroke();
-  wCtx.fillStyle='#1c3a2e';wCtx.font='15px sans-serif';wCtx.textAlign='left';wCtx.fillText(title,16,20);
+  wCtx.fillStyle='#e5e7eb';wCtx.font='15px sans-serif';wCtx.textAlign='left';wCtx.fillText(title,16,20);
   wCtx.fillStyle='#94a3b8';wCtx.font='11px sans-serif';wCtx.fillText('amp max: '+amp.toFixed(2),16,H-10);
 }
 
@@ -3605,8 +3588,8 @@ function drawDayplot(samples,eSR,startMs,title,intMin=30){
   const spr=Math.round(eSR*intMin*60),numR=Math.ceil(samples.length/spr);
   const pL=72,pR=16,pT=34,pB=26,rH=28;
   waveCanvas.width=1200;waveCanvas.height=Math.max(pT+numR*rH+pB,200);
-  wCtx.fillStyle='#f4f9f1';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
-  wCtx.fillStyle='#1c3a2e';wCtx.font='bold 13px sans-serif';wCtx.textAlign='center';
+  wCtx.fillStyle='#08101c';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  wCtx.fillStyle='#e5e7eb';wCtx.font='bold 13px sans-serif';wCtx.textAlign='center';
   wCtx.fillText(title,waveCanvas.width/2,22);
   const pW=waveCanvas.width-pL-pR;
   let amp=0;for(const v of samples){const a=Math.abs(v);if(a>amp)amp=a;}if(!amp)amp=1;
@@ -3614,7 +3597,7 @@ function drawDayplot(samples,eSR,startMs,title,intMin=30){
   for(let row=0;row<numR;row++){
     const rs=row*spr,re=Math.min(rs+spr,samples.length),rS=samples.slice(rs,re);
     const yC=pT+row*rH+rH/2;
-    wCtx.strokeStyle='rgba(28,58,46,0.06)';wCtx.lineWidth=.5;
+    wCtx.strokeStyle='rgba(255,255,255,.05)';wCtx.lineWidth=.5;
     wCtx.beginPath();wCtx.moveTo(pL,yC);wCtx.lineTo(pL+pW,yC);wCtx.stroke();
     const rMs=startMs+(rs/eSR)*1000,d=new Date(rMs);
     const hh=String(d.getUTCHours()).padStart(2,'0'),mm=String(d.getUTCMinutes()).padStart(2,'0');
@@ -3630,7 +3613,7 @@ function drawDayplot(samples,eSR,startMs,title,intMin=30){
   for(let m=0;m<=intMin;m+=ts){
     const x=pL+(m/intMin)*pW;if(x>waveCanvas.width-pR)break;
     wCtx.fillText(m,x,waveCanvas.height-8);
-    wCtx.strokeStyle='rgba(28,58,46,0.07)';wCtx.lineWidth=.5;
+    wCtx.strokeStyle='rgba(255,255,255,.06)';wCtx.lineWidth=.5;
     wCtx.beginPath();wCtx.moveTo(x,pT);wCtx.lineTo(x,waveCanvas.height-pB);wCtx.stroke();
   }
   wCtx.fillStyle='#64748b';wCtx.font='10px sans-serif';wCtx.textAlign='center';
@@ -3650,7 +3633,7 @@ function updateMeta(extra={}){
 
 function initMap(){
   map=L.map('map').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(map);
 }
 function renderMapStations(){
@@ -3874,7 +3857,7 @@ function drawBeachball(canvas,strike,dip,rake){
   }
   ctx.putImageData(img,0,0);
   ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);
-  ctx.strokeStyle='rgba(28,58,46,0.4)';ctx.lineWidth=1;ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=1;ctx.stroke();
 }
 
 function makeBeachBallIcon(strike,dip,rake,size){
@@ -3889,7 +3872,7 @@ function makeBeachBallIcon(strike,dip,rake,size){
 
 function initFmMap(){
   fmMap=L.map('fmMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(fmMap);
 }
 
@@ -3980,7 +3963,7 @@ async function fetchFocalMechanisms(){
       st.textContent='Proxy non disponibile.';st.className='status err';
       renderFmEmpty('<b>Connessione bloccata (CORS)</b><br>'
         +'<small style="color:var(--muted)">Consulta direttamente '
-        +'<a href="https://terremoti.ingv.it/tdmt" target="_blank" style="color:#b91c1c">terremoti.ingv.it/tdmt</a>.</small>');
+        +'<a href="https://terremoti.ingv.it/tdmt" target="_blank" style="color:#f87171">terremoti.ingv.it/tdmt</a>.</small>');
     }else{
       st.textContent='Errore: '+err.message;st.className='status err';
     }
@@ -4137,7 +4120,7 @@ const PROV_COORDS={
 
 function initLocMap(){
   locMap=L.map('locMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
     {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(locMap);
 }
 
@@ -4413,7 +4396,7 @@ function gridSearchEpicenter(results){
 function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
   const W=canvas.width,H=canvas.height;
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#f4f9f1';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#08101c';ctx.fillRect(0,0,W,H);
   const n=samples.length;
   if(!n) return;
   const mi=Math.min(...samples),ma=Math.max(...samples),range=ma-mi||1;
@@ -4438,7 +4421,7 @@ function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
 }
 function drawLocEmpty(canvas,msg){
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#f4f9f1';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#08101c';ctx.fillRect(0,0,canvas.width,canvas.height);
   ctx.fillStyle='#64748b';ctx.font='11px sans-serif';ctx.textAlign='center';
   ctx.fillText(msg,canvas.width/2,canvas.height/2+4);
 }
