@@ -689,6 +689,15 @@ body{padding-bottom:64px;}
 .pl-eq{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);}
 .pl-eq-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
   color:#fdba74;margin-bottom:6px;}
+.pl-eq-list{max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;
+  -webkit-overflow-scrolling:touch;}
+.pl-eq-row{display:flex;align-items:center;gap:9px;padding:5px 7px;border-radius:8px;
+  background:rgba(28,58,46,0.04);font-size:12.5px;}
+.pl-eq-row.pl-eq-strong{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.25);}
+.pl-eq-mag{min-width:34px;height:26px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:12.5px;font-weight:800;flex-shrink:0;}
+.pl-eq-place{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pl-eq-time{color:var(--muted);font-size:11px;white-space:nowrap;flex-shrink:0;}
 
 /* ── SCHEDA TERREMOTO (dettaglio evento) ── */
 /* Scheda evento a pagina intera (occupa tutto il viewport, sopra ogni cosa) */
@@ -1321,7 +1330,7 @@ body{padding-bottom:64px;}
     <div class="container">
       <div class="header">
         <div class="title-wrap"><h1>Configurazioni Planetarie</h1>
-          <p>Inserisci una data: l'app calcola la posizione dei pianeti in quel giorno, cerca nel passato (dal 1985) e nei prossimi 150 anni le date con la configurazione più simile, e mostra i terremoti registrati in quelle date.</p></div>
+          <p>Inserisci una data: l'app calcola la posizione di Sole, Luna e pianeti in quel giorno, cerca nel passato e nel futuro (dal 1750 al 2250) le date con la configurazione più simile, e mostra tutti i terremoti registrati in Italia in quelle date (dove il catalogo INGV le copre, cioè dal 1985 a oggi).</p></div>
         <span class="badge" style="background:rgba(196,181,253,.14);color:#c4b5fd;border:1px solid rgba(196,181,253,.4);">Gioco</span>
       </div>
       <section class="panel">
@@ -1348,14 +1357,15 @@ body{padding-bottom:64px;}
         <div id="plFuture"></div>
       </div>
       <div class="footer-note">
-        La somiglianza è calcolata sulle <b>separazioni angolari fra ogni coppia di corpi</b> (gli "aspetti"), non sulle
-        longitudini assolute: è la geometria relativa a definire una configurazione, ed è l'unica che possa davvero
-        ripresentarsi — le longitudini assolute dei pianeti esterni derivano così lentamente che, confrontando quelle,
-        risulterebbero "più simili" sempre e solo le date più vicine nel tempo. Sono escluse le date entro 3 anni dalla data
-        scelta e fra un risultato e l'altro, per saltare i ritorni annuali banali.
+        La somiglianza è calcolata sulle <b>separazioni angolari fra ogni coppia di corpi</b> (Sole, Luna e 7 pianeti — gli
+        "aspetti"), non sulle longitudini assolute: è la geometria relativa a definire una configurazione, ed è l'unica che
+        possa davvero ripresentarsi — le longitudini assolute dei pianeti esterni derivano così lentamente che, confrontando
+        quelle, risulterebbero "più simili" sempre e solo le date più vicine nel tempo. Sono escluse le date entro 3 anni
+        dalla data scelta e fra un risultato e l'altro, per saltare i ritorni annuali banali.
         <br><br>
-        Effemeridi calcolate lato client con gli elementi kepleriani medi JPL (tabella 1800–2050: in quell'intervallo l'errore
-        tipico è sotto il decimo di grado, fuori cresce progressivamente). Le longitudini mostrate sono
+        Effemeridi calcolate lato client con gli elementi kepleriani medi JPL (tabella 1800–2050) e, per la Luna, il metodo a
+        bassa precisione di Schlyter: nell'intervallo 1800–2050 l'errore tipico è di frazioni di grado, fuori cresce
+        progressivamente (per questo la ricerca è limitata al 1750–2250). Le longitudini mostrate sono
         <b>eclittiche geocentriche</b> riferite all'eclittica J2000.
         Eventi sismici: <code>webservices.ingv.it/fdsnws/event/1/query</code>.
       </div>
@@ -3331,8 +3341,55 @@ function _plHelio(p,T){
   };
 }
 
-/* Longitudini eclittiche GEOCENTRICHE (°) di Sole e pianeti per la data.
-   Restituisce {sun:…, bodies:{Mercurio:…, …}} */
+/* Longitudine eclittica GEOCENTRICA della Luna (°).
+   Metodo a bassa precisione di Paul Schlyter (stjarnhimlen.se): elementi
+   orbitali medi + i 12 termini di perturbazione principali (evezione,
+   variazione, equazione annua, …). Precisione tipica ~0,1–0,2°, più che
+   sufficiente per un gioco. Epoca degli elementi: 1999-12-31 0:00 UT
+   (JD 2451543.5). */
+function _plMoonLon(date){
+  const d=_plJD(date)-2451543.5;
+  const r=_plD2R;
+  /* Sole (serve per le perturbazioni lunari) */
+  const ws=282.9404+4.70935e-5*d;
+  const Ms=_plNorm360(356.0470+0.9856002585*d);
+  const Ls=_plNorm360(ws+Ms);
+  /* Luna */
+  const N=_plNorm360(125.1228-0.0529538083*d);   /* nodo ascendente */
+  const iM=5.1454;                                /* inclinazione */
+  const w=_plNorm360(318.0634+0.1643573223*d);    /* argomento del perigeo */
+  const a=60.2666, e=0.054900;
+  const M=_plNorm360(115.3654+13.0649929509*d);   /* anomalia media */
+  /* eccentrica */
+  let E=M+_plR2D*e*Math.sin(M*r)*(1+e*Math.cos(M*r));
+  for(let k=0;k<6;k++) E=E-(E-_plR2D*e*Math.sin(E*r)-M)/(1-e*Math.cos(E*r));
+  const xv=a*(Math.cos(E*r)-e), yv=a*Math.sqrt(1-e*e)*Math.sin(E*r);
+  const v=_plNorm360(Math.atan2(yv,xv)*_plR2D);
+  const rr=Math.sqrt(xv*xv+yv*yv);
+  const xh=rr*(Math.cos(N*r)*Math.cos((v+w)*r)-Math.sin(N*r)*Math.sin((v+w)*r)*Math.cos(iM*r));
+  const yh=rr*(Math.sin(N*r)*Math.cos((v+w)*r)+Math.cos(N*r)*Math.sin((v+w)*r)*Math.cos(iM*r));
+  let lon=_plNorm360(Math.atan2(yh,xh)*_plR2D);
+  /* perturbazioni principali (gradi) */
+  const Lm=_plNorm360(N+w+M);   /* long. media Luna */
+  const D=_plNorm360(Lm-Ls);    /* elongazione media */
+  const F=_plNorm360(Lm-N);     /* argomento di latitudine */
+  lon+=-1.274*Math.sin((M-2*D)*r);
+  lon+= 0.658*Math.sin((2*D)*r);
+  lon+=-0.186*Math.sin(Ms*r);
+  lon+=-0.059*Math.sin((2*M-2*D)*r);
+  lon+=-0.057*Math.sin((M-2*D+Ms)*r);
+  lon+= 0.053*Math.sin((M+2*D)*r);
+  lon+= 0.046*Math.sin((2*D-Ms)*r);
+  lon+= 0.041*Math.sin((M-Ms)*r);
+  lon+=-0.035*Math.sin(D*r);
+  lon+=-0.031*Math.sin((M+Ms)*r);
+  lon+=-0.015*Math.sin((2*F-2*D)*r);
+  lon+= 0.011*Math.sin((M-4*D)*r);
+  return _plNorm360(lon);
+}
+
+/* Longitudini eclittiche GEOCENTRICHE (°) di Sole, Luna e pianeti per la data.
+   Restituisce {sun:…, moon:…, bodies:{Mercurio:…, …}} */
 function plLongitudes(date){
   const T=(_plJD(date)-2451545.0)/36525;
   const earth=_plHelio(PL_BODIES.find(b=>b.n==='Terra'),T);
@@ -3344,11 +3401,11 @@ function plLongitudes(date){
   }
   /* Sole visto dalla Terra = direzione opposta alla Terra vista dal Sole */
   const sun=_plNorm360(Math.atan2(-earth.y,-earth.x)*_plR2D);
-  return {sun,bodies:out};
+  return {sun,moon:_plMoonLon(date),bodies:out};
 }
 
-const PL_NAMES=['Sole','Mercurio','Venere','Marte','Giove','Saturno','Urano','Nettuno'];
-const PL_WEIGHTS={Sole:PL_SUN_WEIGHT,Mercurio:0.3,Venere:0.5,Marte:0.8,Giove:1.5,Saturno:1.6,Urano:1.4,Nettuno:1.4};
+const PL_NAMES=['Sole','Luna','Mercurio','Venere','Marte','Giove','Saturno','Urano','Nettuno'];
+const PL_WEIGHTS={Sole:PL_SUN_WEIGHT,Luna:0.8,Mercurio:0.3,Venere:0.5,Marte:0.8,Giove:1.5,Saturno:1.6,Urano:1.4,Nettuno:1.4};
 /* Tutte le coppie di corpi, con peso = media geometrica dei pesi dei due */
 const PL_PAIRS=(()=>{
   const out=[];
@@ -3370,7 +3427,7 @@ const PL_PAIRS=(()=>{
    confrontandole vincerebbero sempre e solo le date più vicine nel tempo. */
 function plSignature(date){
   const L=plLongitudes(date);
-  const lons=[L.sun,...PL_NAMES.slice(1).map(n=>L.bodies[n])];
+  const lons=PL_NAMES.map(n=> n==='Sole'?L.sun : (n==='Luna'?L.moon : L.bodies[n]));
   const seps=PL_PAIRS.map(p=>_plAngDiff(lons[p.i],lons[p.j]));
   return {lons,seps};
 }
@@ -3391,12 +3448,11 @@ function plDistance(a,b){
    sarebbero banalmente i più simili) e le date troppo vicine fra loro. */
 function plSearch(refSig, fromDate, toDate, topN, minGapDays, refDate){
   const DAY=86400000;
-  const coarseStep=2;
+  const coarseStep=3;   /* con la Luna nel confronto la rifinitura ±3 gg recupera l'allineamento esatto */
   const cands=[];
   for(let t=fromDate.getTime(); t<=toDate.getTime(); t+=coarseStep*DAY){
-    const d=new Date(t);
     if(Math.abs(t-refDate.getTime())<minGapDays*DAY) continue;
-    cands.push({t,dist:plDistance(refSig,plSignature(d))});
+    cands.push({t,dist:plDistance(refSig,plSignature(new Date(t)))});
   }
   if(!cands.length)return [];
   cands.sort((a,b)=>a.dist-b.dist);
@@ -3406,9 +3462,9 @@ function plSearch(refSig, fromDate, toDate, topN, minGapDays, refDate){
   for(const c of cands){
     if(picked.length>=topN)break;
     if(picked.some(p=>Math.abs(p.t-c.t)<minGapDays*DAY))continue;
-    /* rifinisci ±2 giorni a passo giornaliero attorno al candidato */
+    /* rifinisci ±3 giorni a passo giornaliero (per centrare bene la Luna) */
     let best={t:c.t,dist:c.dist};
-    for(let k=-2;k<=2;k++){
+    for(let k=-3;k<=3;k++){
       const tt=c.t+k*DAY;
       if(tt<fromDate.getTime()||tt>toDate.getTime())continue;
       if(Math.abs(tt-refDate.getTime())<minGapDays*DAY)continue;
@@ -3417,6 +3473,9 @@ function plSearch(refSig, fromDate, toDate, topN, minGapDays, refDate){
     }
     picked.push(best);
   }
+  /* riordina per distanza REALE dopo la rifinitura, così il ranking mostrato
+     è corretto anche se il campione grezzo aveva la Luna leggermente sfasata */
+  picked.sort((a,b)=>a.dist-b.dist);
   return picked;
 }
 
@@ -3435,12 +3494,24 @@ async function plFetchQuakes(date){
   }catch(e){ return null; }   /* null = dato non disponibile */
 }
 
+/* Copertura del catalogo sismico INGV: eventi mostrabili solo in questo
+   intervallo. La RICERCA delle configurazioni, invece, spazia molto più
+   ampiamente (PL_SEARCH_FLOOR..PL_SEARCH_CEIL), così funziona anche con
+   date molto vecchie o molto future — semplicemente per quelle fuori
+   copertura non ci saranno eventi sismici da mostrare. */
 const PL_INGV_START=new Date(Date.UTC(1985,0,1));
-const PL_FUTURE_YEARS=150;
+const PL_SEARCH_FLOOR=new Date(Date.UTC(1750,0,1));
+const PL_SEARCH_CEIL=new Date(Date.UTC(2250,11,31));
 /* 3 anni: esclude sia i giorni adiacenti sia i "ritorni" annuali banali
    (stessa data del calendario, in cui il Sole torna dov'era e i pianeti
    esterni si sono mossi di poco), lasciando emergere le ricorrenze vere. */
 const PL_MIN_GAP_DAYS=3*365;
+
+/* La data ha eventi sismici mostrabili? (dentro la copertura INGV e non futura) */
+function _plHasQuakeData(d){
+  const t=d.getTime();
+  return t>=PL_INGV_START.getTime() && t<=Date.now();
+}
 
 function initPlDate(){
   const el=document.getElementById('plDate');
@@ -3463,12 +3534,15 @@ async function fetchPianeti(){
     const refDate=new Date(val+'T12:00:00Z');
     const refSig=plSignature(refDate);
 
-    /* Passato: solo dal 1985, così il catalogo INGV copre le date trovate */
-    const pastTo=new Date(refDate.getTime()-PL_MIN_GAP_DAYS*86400000);
-    const pastFrom=PL_INGV_START;
-    /* Futuro: da +1 anno fino a +150 anni */
-    const futFrom=new Date(refDate.getTime()+PL_MIN_GAP_DAYS*86400000);
-    const futTo=new Date(refDate.getTime()+PL_FUTURE_YEARS*365.25*86400000);
+    /* Passato: dalla data scelta indietro fino al 1750.
+       Futuro: dalla data scelta in avanti fino al 2250.
+       (La ricerca è indipendente dalla copertura sismica: gli eventi
+       verranno mostrati solo per le date che ricadono nel catalogo INGV.) */
+    const gapMs=PL_MIN_GAP_DAYS*86400000;
+    const pastTo=new Date(refDate.getTime()-gapMs);
+    const pastFrom=PL_SEARCH_FLOOR;
+    const futFrom=new Date(refDate.getTime()+gapMs);
+    const futTo=PL_SEARCH_CEIL;
 
     st.textContent='Cerco nel passato le configurazioni più simili…';
     await new Promise(r=>setTimeout(r,0));
@@ -3478,18 +3552,20 @@ async function fetchPianeti(){
 
     st.textContent='Cerco le prossime ricorrenze future…';
     await new Promise(r=>setTimeout(r,0));
-    const future=plSearch(refSig,futFrom,futTo,3,PL_MIN_GAP_DAYS,refDate);
+    const future = futFrom<futTo
+      ? plSearch(refSig,futFrom,futTo,3,PL_MIN_GAP_DAYS,refDate)
+      : [];
 
-    /* Eventi sismici: data scelta + date passate trovate */
+    /* Eventi sismici: data scelta + tutte le date trovate che ricadono
+       nella copertura INGV (1985 → oggi). Per le altre restano "undefined". */
     st.textContent='Scarico gli eventi sismici delle date individuate…';
-    const refQuakes=await plFetchQuakes(refDate);
-    for(const m of past) m.quakes=await plFetchQuakes(new Date(m.t));
+    const refQuakes = _plHasQuakeData(refDate) ? await plFetchQuakes(refDate) : undefined;
+    for(const m of past){   const d=new Date(m.t); m.quakes = _plHasQuakeData(d) ? await plFetchQuakes(d) : undefined; }
+    for(const m of future){ const d=new Date(m.t); m.quakes = _plHasQuakeData(d) ? await plFetchQuakes(d) : undefined; }
 
     renderPianeti({refDate,refSig,refQuakes,past,future});
     box.style.display='block';
-    st.textContent=past.length
-      ? `Trovate ${past.length} date passate e ${future.length} ricorrenze future.`
-      : `Nessuna data passata nel periodo coperto da INGV (dal 1985); trovate ${future.length} ricorrenze future.`;
+    st.textContent=`Trovate ${past.length} date passate e ${future.length} ricorrenze future con configurazione simile.`;
     st.className='status ok';
   }catch(err){
     st.textContent='Errore: '+err.message;st.className='status err';
@@ -3527,21 +3603,30 @@ function _plChips(sig,refSig){
 }
 
 function _plQuakesHtml(quakes){
+  if(quakes===undefined){
+    return `<div class="an-none">Data fuori dalla copertura del catalogo INGV (eventi disponibili dal 1985 a oggi).</div>`;
+  }
   if(quakes===null){
     return `<div class="an-none">Dati sismici non disponibili per questa data.</div>`;
   }
   if(!quakes.length){
     return `<div class="an-none">Nessun evento sismico registrato in Italia in questa data.</div>`;
   }
-  const largest=quakes.reduce((a,b)=>b.mag>a.mag?b:a);
-  const t=new Date(largest.time);
-  const hh=t.toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit'});
-  return `<div class="sig-row"><span class="k">Eventi registrati</span><span class="v">${quakes.length.toLocaleString('it-IT')}</span></div>
-    <div class="an-big-event">
-      <div class="m">M ${largest.mag.toFixed(1)}</div>
-      <div class="p">${largest.place}</div>
-      <div class="t">ore ${hh} · profondità ${largest.depth.toFixed(0)} km</div>
+  const maxMag=quakes.reduce((a,b)=>Math.max(a,b.mag),-Infinity);
+  /* tutti gli eventi in ordine cronologico */
+  const sorted=quakes.slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
+  const rows=sorted.map(ev=>{
+    const t=new Date(ev.time);
+    const hh=t.toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit'});
+    const strong=ev.mag===maxMag?' pl-eq-strong':'';
+    return `<div class="pl-eq-row${strong}">
+      <span class="pl-eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</span>
+      <span class="pl-eq-place">${ev.place}</span>
+      <span class="pl-eq-time">${hh} · ${ev.depth.toFixed(0)} km</span>
     </div>`;
+  }).join('');
+  return `<div class="sig-row"><span class="k">Eventi registrati</span><span class="v">${quakes.length.toLocaleString('it-IT')} · max M ${maxMag.toFixed(1)}</span></div>
+    <div class="pl-eq-list">${rows}</div>`;
 }
 
 function renderPianeti(r){
@@ -3575,6 +3660,11 @@ function renderPianeti(r){
     +r.future.map((m,i)=>{
       const d=new Date(m.t), sig=plSignature(d);
       const sim=((1-Math.min(m.dist,1))*100).toFixed(1);
+      /* per le date future coperte da INGV (caso di date di riferimento
+         antiche) mostriamo comunque la sismicità di quel giorno */
+      const eqBlock = (m.quakes!==undefined)
+        ? `<div class="pl-eq"><div class="pl-eq-title">Sismicità in Italia quel giorno</div>${_plQuakesHtml(m.quakes)}</div>`
+        : '';
       return `<div class="an-match-card">
         <div class="an-match-header">
           <span class="an-rank ${i===0?'an-rank-1':(i===1?'an-rank-2':'an-rank-3')}">#${i+1}</span>
@@ -3584,6 +3674,7 @@ function renderPianeti(r){
         <div class="an-match-body">
           <div class="sig-row"><span class="k">Scarto medio pesato</span><span class="v">${(m.dist*180).toFixed(1)}°</span></div>
           ${_plChips(sig,r.refSig)}
+          ${eqBlock}
         </div>
       </div>`;
     }).join('');
