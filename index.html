@@ -103,7 +103,8 @@ window.IC=(function(){
     expand:W('<path d="M9 4H4v5"/><path d="M4 4l6 6"/><path d="M15 4h5v5"/><path d="M20 4l-6 6"/><path d="M9 20H4v-5"/><path d="M4 20l6-6"/><path d="M15 20h5v-5"/><path d="M20 20l-6-6"/>'),
     swarm:W('<circle cx="12" cy="11" r="2.6"/><circle cx="5.5" cy="7" r="1.6"/><circle cx="18.5" cy="7.5" r="1.4"/><circle cx="5" cy="16.5" r="1.4"/><circle cx="18" cy="16" r="1.7"/><circle cx="12" cy="20" r="1.3"/>'),
     menu:W('<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>'),
-    analogy:W('<path d="M4 17V7l8 5 8-5v10"/><path d="M4 7l8 5 8-5"/>')
+    analogy:W('<path d="M4 17V7l8 5 8-5v10"/><path d="M4 7l8 5 8-5"/>'),
+    planets:W('<circle cx="12" cy="12" r="3.2"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(-22 12 12)"/><circle cx="20.2" cy="8.4" r="1.1" fill="currentColor" stroke="none"/>')
   };
 })();
 document.addEventListener('DOMContentLoaded',function(){
@@ -674,14 +675,34 @@ body{padding-bottom:64px;}
   font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
   color:#fca5a5;margin-bottom:8px;}
 
+/* ── CONFIGURAZIONI PLANETARIE ── */
+#plPast,#plFuture{display:flex;flex-direction:column;gap:14px;margin-top:14px;}
+.pl-group-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+  color:#c4b5fd;margin:4px 2px -2px;}
+.pl-planets{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px;margin-top:10px;}
+.pl-chip{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px;
+  padding:7px 9px;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.pl-chip .n{color:var(--muted);}
+.pl-chip .v{font-weight:700;font-variant-numeric:tabular-nums;}
+.pl-chip.off .v{color:#fca5a5;}
+.pl-chip.near .v{color:#86efac;}
+.pl-eq{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);}
+.pl-eq-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+  color:#fdba74;margin-bottom:6px;}
+
 /* ── SCHEDA TERREMOTO (dettaglio evento) ── */
 /* Scheda evento a pagina intera (occupa tutto il viewport, sopra ogni cosa) */
 .eqd-overlay{display:none;}
 .eqd-sheet{position:fixed;inset:0;z-index:400;
   background:var(--bg);
-  display:flex;flex-direction:column;transform:translateY(100%);transition:transform .25s ease;
-  overflow:hidden;padding-top:env(safe-area-inset-top,0);}
-.eqd-sheet.open{transform:translateY(0);}
+  display:flex;flex-direction:column;transform:translateY(100%);
+  transition:transform .25s ease,visibility .25s;
+  overflow:hidden;padding-top:env(safe-area-inset-top,0);
+  /* quando è chiusa dev'essere completamente inerte: la sola traslazione
+     la sposta fuori schermo ma la lascia raggiungibile da tastiera/screen
+     reader e visibile nelle catture a pagina intera */
+  visibility:hidden;}
+.eqd-sheet.open{transform:translateY(0);visibility:visible;}
 .eqd-header{display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
   background:rgba(11,17,32,0.95);backdrop-filter:blur(12px);}
@@ -864,6 +885,13 @@ body{padding-bottom:64px;}
         <div class="side-menu-text">
           <div class="side-menu-title">Analogia Sismica <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Cerca il periodo storico che ha colpito le stesse zone del periodo attuale e mostra cosa è successo dopo</div>
+        </div>
+      </button>
+      <button class="side-menu-item" onclick="closeSideMenu();goSection('pianeti')">
+        <span class="ic side-menu-icon" data-ic="planets" style="color:#c4b5fd;"></span>
+        <div class="side-menu-text">
+          <div class="side-menu-title">Configurazioni Planetarie <span class="side-badge">Gioco</span></div>
+          <div class="side-menu-desc">Trova le date con la configurazione planetaria più simile e confronta gli eventi sismici</div>
         </div>
       </button>
       <div class="side-menu-hint">Altri strumenti in arrivo…</div>
@@ -1288,6 +1316,52 @@ body{padding-bottom:64px;}
     </div>
   </div>
 
+  <!-- ═══ CONFIGURAZIONI PLANETARIE (gioco) ═══ -->
+  <div class="section" id="sectionPianeti">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Configurazioni Planetarie</h1>
+          <p>Inserisci una data: l'app calcola la posizione dei pianeti in quel giorno, cerca nel passato (dal 1985) e nei prossimi 150 anni le date con la configurazione più simile, e mostra i terremoti registrati in quelle date.</p></div>
+        <span class="badge" style="background:rgba(196,181,253,.14);color:#c4b5fd;border:1px solid rgba(196,181,253,.4);">Gioco</span>
+      </div>
+      <section class="panel">
+        <div class="panel-header"><h2>Data di riferimento</h2><p>Configurazione planetaria calcolata a mezzogiorno UTC</p></div>
+        <div style="padding:14px 16px 4px;">
+          <div class="field" style="max-width:280px;"><label>Data</label>
+            <input id="plDate" type="date"/></div>
+          <button class="btn btn-purple" id="plRunBtn" onclick="fetchPianeti()" style="margin-top:14px;">🔭 Cerca configurazioni simili</button>
+          <div id="plStatus" class="status">Scegli una data e avvia la ricerca.</div>
+          <div class="an-warn" style="color:#f9a8d4;background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.3);">
+            🎲 <b>Questo è un gioco, non uno strumento di previsione.</b> Non esiste alcuna correlazione scientifica dimostrata
+            tra le configurazioni planetarie e i terremoti: le maree gravitazionali indotte dai pianeti sulla crosta terrestre
+            sono di ordini di grandezza inferiori a quelle lunisolari, a loro volta troppo deboli per innescare un sisma.
+            Le coincidenze che vedrai sono esattamente questo: coincidenze.
+          </div>
+        </div>
+      </section>
+      <div id="plResult" style="display:none;">
+        <div class="an-block current" style="margin-top:14px;">
+          <h3>Data scelta</h3>
+          <div id="plCurrentBody"></div>
+        </div>
+        <div id="plPast"></div>
+        <div id="plFuture"></div>
+      </div>
+      <div class="footer-note">
+        La somiglianza è calcolata sulle <b>separazioni angolari fra ogni coppia di corpi</b> (gli "aspetti"), non sulle
+        longitudini assolute: è la geometria relativa a definire una configurazione, ed è l'unica che possa davvero
+        ripresentarsi — le longitudini assolute dei pianeti esterni derivano così lentamente che, confrontando quelle,
+        risulterebbero "più simili" sempre e solo le date più vicine nel tempo. Sono escluse le date entro 3 anni dalla data
+        scelta e fra un risultato e l'altro, per saltare i ritorni annuali banali.
+        <br><br>
+        Effemeridi calcolate lato client con gli elementi kepleriani medi JPL (tabella 1800–2050: in quell'intervallo l'errore
+        tipico è sotto il decimo di grado, fuori cresce progressivamente). Le longitudini mostrate sono
+        <b>eclittiche geocentriche</b> riferite all'eclittica J2000.
+        Eventi sismici: <code>webservices.ingv.it/fdsnws/event/1/query</code>.
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ SISMOGRAMMI ═══ -->
   <div class="section" id="sectionSismogrammi">
     <div class="container">
@@ -1667,7 +1741,8 @@ function goSection(sec){
   /* top header context */
   const titles={terremoti:['quake','Terremoti'],mappa:['map','Mappa'],sismogrammi:['seismo','Sismogrammi'],
     focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],
-    localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],analogia:['analogy','Analogia Sismica']};
+    localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],analogia:['analogy','Analogia Sismica'],
+    pianeti:['planets','Configurazioni Planetarie']};
   const _tt=titles[sec];
   document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
   document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
@@ -1707,6 +1782,9 @@ function goSection(sec){
     else setTimeout(()=>swMap&&swMap.invalidateSize(),80);
   } else if(sec==='analogia'){
     document.getElementById('sectionAnalogia').classList.add('active');
+  } else if(sec==='pianeti'){
+    document.getElementById('sectionPianeti').classList.add('active');
+    initPlDate();
   } else {
     document.getElementById('sectionSismogrammi').classList.add('active');
     document.getElementById('tabSeis').classList.add('a-seis');
@@ -3178,6 +3256,337 @@ async function renderAnalogia(r){
       </div>
     </div>`;
   }).join('');
+}
+
+/* ================================================================
+   CONFIGURAZIONI PLANETARIE (gioco)
+
+   Effemeridi a bassa precisione dagli elementi kepleriani medi JPL
+   ("Approximate Positions of the Major Planets", tabella 1800–2050).
+   Per ogni pianeta: elemento al J2000 + variazione per secolo giuliano.
+   a  = semiasse maggiore (AU)      e = eccentricità
+   I  = inclinazione (°)            L = longitudine media (°)
+   wb = longitudine del perielio(°) Om = longitudine del nodo asc. (°)
+
+   NB: nessuna correlazione dimostrata tra configurazioni planetarie e
+   sismicità — questa sezione è dichiaratamente un gioco.
+================================================================ */
+const PL_BODIES=[
+  /* nome        a0,        adot,        e0,        edot,       I0,        Idot,      L0,          Ldot,          wb0,        wbdot,     Om0,        Omdot,     peso */
+  {n:'Mercurio', a:0.38709927, ad:0.00000037, e:0.20563593, ed:0.00001906, I:7.00497902, Id:-0.00594749, L:252.25032350, Ld:149472.67411175, w:77.45779628,  wd:0.16047689, O:48.33076593, Od:-0.12534081, wt:0.4},
+  {n:'Venere',   a:0.72333566, ad:0.00000390, e:0.00677672, ed:-0.00004107,I:3.39467605, Id:-0.00078890, L:181.97909950, Ld:58517.81538729,  w:131.60246718, wd:0.00268329, O:76.67984255, Od:-0.27769418, wt:0.6},
+  {n:'Terra',    a:1.00000261, ad:0.00000562, e:0.01671123, ed:-0.00004392,I:-0.00001531,Id:-0.01294668, L:100.46457166, Ld:35999.37244981,  w:102.93768193, wd:0.32327364, O:0.0,         Od:0.0,         wt:0.0},
+  {n:'Marte',    a:1.52371034, ad:0.00001847, e:0.09339410, ed:0.00007882, I:1.84969142, Id:-0.00813131, L:-4.55343205,  Ld:19140.30268499,  w:-23.94362959, wd:0.44441088, O:49.55953891, Od:-0.29257343, wt:0.9},
+  {n:'Giove',    a:5.20288700, ad:-0.00011607,e:0.04838624, ed:-0.00013253,I:1.30439695, Id:-0.00183714, L:34.39644051,  Ld:3034.74612775,   w:14.72847983,  wd:0.21252668, O:100.47390909,Od:0.20469106,  wt:1.3},
+  {n:'Saturno',  a:9.53667594, ad:-0.00125060,e:0.05386179, ed:-0.00050991,I:2.48599187, Id:0.00193609,  L:49.95424423,  Ld:1222.49362201,   w:92.59887831,  wd:-0.41897216,O:113.66242448,Od:-0.28867794, wt:1.4},
+  {n:'Urano',    a:19.18916464,ad:-0.00196176,e:0.04725744, ed:-0.00004397,I:0.77263783, Id:-0.00242939, L:313.23810451, Ld:428.48202785,    w:170.95427630, wd:0.40805281, O:74.01692503, Od:0.04240589,  wt:1.2},
+  {n:'Nettuno',  a:30.06992276,ad:0.00026291, e:0.00859048, ed:0.00005105, I:1.77004347, Id:0.00035372,  L:-55.12002969, Ld:218.45945325,    w:44.96476227,  wd:-0.32241464,O:131.78422574,Od:-0.00508664, wt:1.2}
+];
+/* Il Sole non è un corpo della tabella: la sua longitudine geocentrica è
+   quella eliocentrica della Terra + 180°. Peso alto perché fissa il
+   periodo dell'anno (quindi il giorno del calendario). */
+const PL_SUN_WEIGHT=1.0;
+
+const _plD2R=Math.PI/180, _plR2D=180/Math.PI;
+function _plNorm360(x){x=x%360;return x<0?x+360:x;}
+/* differenza angolare minima fra due angoli, 0..180 */
+function _plAngDiff(a,b){const d=Math.abs(_plNorm360(a)-_plNorm360(b));return d>180?360-d:d;}
+
+/* Giorno giuliano a 12:00 UTC della data indicata */
+function _plJD(date){
+  return Math.floor(date.getTime()/86400000)+2440587.5+0.5;
+}
+
+/* Equazione di Keplero: E - e*sinE = M  (gradi, e adimensionale) */
+function _plKepler(M,e){
+  const eStar=_plR2D*e;
+  let E=M+eStar*Math.sin(M*_plD2R);
+  for(let k=0;k<8;k++){
+    const dM=M-(E-eStar*Math.sin(E*_plD2R));
+    const dE=dM/(1-e*Math.cos(E*_plD2R));
+    E+=dE;
+    if(Math.abs(dE)<1e-9)break;
+  }
+  return E;
+}
+
+/* Posizione eliocentrica (AU) nel piano dell'eclittica J2000 */
+function _plHelio(p,T){
+  const a=p.a+p.ad*T, e=p.e+p.ed*T, I=p.I+p.Id*T;
+  const L=p.L+p.Ld*T, wb=p.w+p.wd*T, Om=p.O+p.Od*T;
+  const argPeri=wb-Om;
+  let M=L-wb;
+  M=((M+180)%360+360)%360-180;   /* riporta in -180..180 */
+  const E=_plKepler(M,e);
+  /* coordinate nel piano orbitale */
+  const xo=a*(Math.cos(E*_plD2R)-e);
+  const yo=a*Math.sqrt(1-e*e)*Math.sin(E*_plD2R);
+  const cw=Math.cos(argPeri*_plD2R), sw=Math.sin(argPeri*_plD2R);
+  const cO=Math.cos(Om*_plD2R),      sO=Math.sin(Om*_plD2R);
+  const cI=Math.cos(I*_plD2R),       sI=Math.sin(I*_plD2R);
+  return {
+    x:(cw*cO-sw*sO*cI)*xo+(-sw*cO-cw*sO*cI)*yo,
+    y:(cw*sO+sw*cO*cI)*xo+(-sw*sO+cw*cO*cI)*yo,
+    z:(sw*sI)*xo+(cw*sI)*yo
+  };
+}
+
+/* Longitudini eclittiche GEOCENTRICHE (°) di Sole e pianeti per la data.
+   Restituisce {sun:…, bodies:{Mercurio:…, …}} */
+function plLongitudes(date){
+  const T=(_plJD(date)-2451545.0)/36525;
+  const earth=_plHelio(PL_BODIES.find(b=>b.n==='Terra'),T);
+  const out={};
+  for(const p of PL_BODIES){
+    if(p.n==='Terra')continue;
+    const h=_plHelio(p,T);
+    out[p.n]=_plNorm360(Math.atan2(h.y-earth.y,h.x-earth.x)*_plR2D);
+  }
+  /* Sole visto dalla Terra = direzione opposta alla Terra vista dal Sole */
+  const sun=_plNorm360(Math.atan2(-earth.y,-earth.x)*_plR2D);
+  return {sun,bodies:out};
+}
+
+const PL_NAMES=['Sole','Mercurio','Venere','Marte','Giove','Saturno','Urano','Nettuno'];
+const PL_WEIGHTS={Sole:PL_SUN_WEIGHT,Mercurio:0.3,Venere:0.5,Marte:0.8,Giove:1.5,Saturno:1.6,Urano:1.4,Nettuno:1.4};
+/* Tutte le coppie di corpi, con peso = media geometrica dei pesi dei due */
+const PL_PAIRS=(()=>{
+  const out=[];
+  for(let i=0;i<PL_NAMES.length;i++)
+    for(let j=i+1;j<PL_NAMES.length;j++)
+      out.push({i,j,wt:Math.sqrt(PL_WEIGHTS[PL_NAMES[i]]*PL_WEIGHTS[PL_NAMES[j]])});
+  return out;
+})();
+
+/* Firma della configurazione.
+   lons = longitudini assolute (solo per la visualizzazione)
+   seps = separazioni angolari fra ogni coppia di corpi (gli "aspetti").
+
+   Il confronto usa le SEPARAZIONI, non le longitudini assolute: è la
+   geometria relativa a definire una "configurazione planetaria", ed è
+   invariante per rotazione. È anche l'unico modo perché una configurazione
+   possa davvero ripresentarsi: le longitudini assolute dei pianeti esterni
+   derivano lentamente e non tornano mai identiche in pochi secoli, per cui
+   confrontandole vincerebbero sempre e solo le date più vicine nel tempo. */
+function plSignature(date){
+  const L=plLongitudes(date);
+  const lons=[L.sun,...PL_NAMES.slice(1).map(n=>L.bodies[n])];
+  const seps=PL_PAIRS.map(p=>_plAngDiff(lons[p.i],lons[p.j]));
+  return {lons,seps};
+}
+
+/* Distanza fra due configurazioni: media pesata degli scarti fra le
+   separazioni di coppia, normalizzata 0 (identiche) → 1 */
+function plDistance(a,b){
+  let num=0,den=0;
+  for(let k=0;k<PL_PAIRS.length;k++){
+    num+=PL_PAIRS[k].wt*Math.abs(a.seps[k]-b.seps[k]);
+    den+=PL_PAIRS[k].wt;
+  }
+  return (num/den)/180;
+}
+
+/* Scansione: trova le date con la firma più vicina a quella di riferimento.
+   minGapDays evita di restituire i giorni immediatamente adiacenti (che
+   sarebbero banalmente i più simili) e le date troppo vicine fra loro. */
+function plSearch(refSig, fromDate, toDate, topN, minGapDays, refDate){
+  const DAY=86400000;
+  const coarseStep=2;
+  const cands=[];
+  for(let t=fromDate.getTime(); t<=toDate.getTime(); t+=coarseStep*DAY){
+    const d=new Date(t);
+    if(Math.abs(t-refDate.getTime())<minGapDays*DAY) continue;
+    cands.push({t,dist:plDistance(refSig,plSignature(d))});
+  }
+  if(!cands.length)return [];
+  cands.sort((a,b)=>a.dist-b.dist);
+
+  /* soppressione dei duplicati temporali + rifinitura giorno per giorno */
+  const picked=[];
+  for(const c of cands){
+    if(picked.length>=topN)break;
+    if(picked.some(p=>Math.abs(p.t-c.t)<minGapDays*DAY))continue;
+    /* rifinisci ±2 giorni a passo giornaliero attorno al candidato */
+    let best={t:c.t,dist:c.dist};
+    for(let k=-2;k<=2;k++){
+      const tt=c.t+k*DAY;
+      if(tt<fromDate.getTime()||tt>toDate.getTime())continue;
+      if(Math.abs(tt-refDate.getTime())<minGapDays*DAY)continue;
+      const dd=plDistance(refSig,plSignature(new Date(tt)));
+      if(dd<best.dist)best={t:tt,dist:dd};
+    }
+    picked.push(best);
+  }
+  return picked;
+}
+
+/* Terremoti registrati in Italia in un dato giorno (00:00–23:59 UTC) */
+async function plFetchQuakes(date){
+  const d0=new Date(Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),0,0,0));
+  const d1=new Date(d0.getTime()+86399000);
+  const fmt=x=>x.toISOString().slice(0,19);
+  const url=`${EQ_BASE}?format=text&starttime=${fmt(d0)}&endtime=${fmt(d1)}`
+    +`&orderby=time&limit=5000&minmagnitude=0&minlat=33&maxlat=49&minlon=4&maxlon=21`;
+  try{
+    const r=await fetch(url,{signal:AbortSignal.timeout(20000)});
+    if(r.status===204)return [];
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return parseEqText(await r.text(),999);
+  }catch(e){ return null; }   /* null = dato non disponibile */
+}
+
+const PL_INGV_START=new Date(Date.UTC(1985,0,1));
+const PL_FUTURE_YEARS=150;
+/* 3 anni: esclude sia i giorni adiacenti sia i "ritorni" annuali banali
+   (stessa data del calendario, in cui il Sole torna dov'era e i pianeti
+   esterni si sono mossi di poco), lasciando emergere le ricorrenze vere. */
+const PL_MIN_GAP_DAYS=3*365;
+
+function initPlDate(){
+  const el=document.getElementById('plDate');
+  if(el&&!el.value) el.value=new Date().toISOString().slice(0,10);
+}
+
+let _plRunning=false;
+async function fetchPianeti(){
+  if(_plRunning)return;
+  const btn=document.getElementById('plRunBtn');
+  const st=document.getElementById('plStatus');
+  const box=document.getElementById('plResult');
+  const val=document.getElementById('plDate').value;
+  if(!val){st.textContent='Seleziona una data.';st.className='status err';return;}
+
+  _plRunning=true;btn.disabled=true;box.style.display='none';
+  st.textContent='Calcolo la configurazione planetaria…';st.className='status';
+
+  try{
+    const refDate=new Date(val+'T12:00:00Z');
+    const refSig=plSignature(refDate);
+
+    /* Passato: solo dal 1985, così il catalogo INGV copre le date trovate */
+    const pastTo=new Date(refDate.getTime()-PL_MIN_GAP_DAYS*86400000);
+    const pastFrom=PL_INGV_START;
+    /* Futuro: da +1 anno fino a +150 anni */
+    const futFrom=new Date(refDate.getTime()+PL_MIN_GAP_DAYS*86400000);
+    const futTo=new Date(refDate.getTime()+PL_FUTURE_YEARS*365.25*86400000);
+
+    st.textContent='Cerco nel passato le configurazioni più simili…';
+    await new Promise(r=>setTimeout(r,0));
+    const past = pastTo>pastFrom
+      ? plSearch(refSig,pastFrom,pastTo,3,PL_MIN_GAP_DAYS,refDate)
+      : [];
+
+    st.textContent='Cerco le prossime ricorrenze future…';
+    await new Promise(r=>setTimeout(r,0));
+    const future=plSearch(refSig,futFrom,futTo,3,PL_MIN_GAP_DAYS,refDate);
+
+    /* Eventi sismici: data scelta + date passate trovate */
+    st.textContent='Scarico gli eventi sismici delle date individuate…';
+    const refQuakes=await plFetchQuakes(refDate);
+    for(const m of past) m.quakes=await plFetchQuakes(new Date(m.t));
+
+    renderPianeti({refDate,refSig,refQuakes,past,future});
+    box.style.display='block';
+    st.textContent=past.length
+      ? `Trovate ${past.length} date passate e ${future.length} ricorrenze future.`
+      : `Nessuna data passata nel periodo coperto da INGV (dal 1985); trovate ${future.length} ricorrenze future.`;
+    st.className='status ok';
+  }catch(err){
+    st.textContent='Errore: '+err.message;st.className='status err';
+  }finally{
+    _plRunning=false;btn.disabled=false;
+  }
+}
+
+function _plFmtDate(d){
+  return d.toLocaleDateString('it-IT',{timeZone:'UTC',weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+}
+/* Longitudine in gradi → "123,4° Leone" */
+const PL_SIGNS=['Ariete','Toro','Gemelli','Cancro','Leone','Vergine','Bilancia','Scorpione','Sagittario','Capricorno','Acquario','Pesci'];
+function _plFmtLon(v){
+  return v.toFixed(1).replace('.',',')+'° '+PL_SIGNS[Math.floor(_plNorm360(v)/30)];
+}
+
+/* Chip con la longitudine di ogni corpo. Se passata una configurazione di
+   riferimento, evidenzia in verde/rosso quanto la geometria attorno a quel
+   corpo si discosta (media degli scarti delle sue coppie). */
+function _plChips(sig,refSig){
+  return '<div class="pl-planets">'+sig.lons.map((v,i)=>{
+    let cls='';
+    if(refSig){
+      let num=0,den=0;
+      PL_PAIRS.forEach((p,k)=>{
+        if(p.i!==i&&p.j!==i)return;
+        num+=Math.abs(sig.seps[k]-refSig.seps[k]);den++;
+      });
+      const d=den?num/den:0;
+      cls=d<=10?' near':(d>=35?' off':'');
+    }
+    return `<div class="pl-chip${cls}"><span class="n">${PL_NAMES[i]}</span><span class="v">${v.toFixed(0)}°</span></div>`;
+  }).join('')+'</div>';
+}
+
+function _plQuakesHtml(quakes){
+  if(quakes===null){
+    return `<div class="an-none">Dati sismici non disponibili per questa data.</div>`;
+  }
+  if(!quakes.length){
+    return `<div class="an-none">Nessun evento sismico registrato in Italia in questa data.</div>`;
+  }
+  const largest=quakes.reduce((a,b)=>b.mag>a.mag?b:a);
+  const t=new Date(largest.time);
+  const hh=t.toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit'});
+  return `<div class="sig-row"><span class="k">Eventi registrati</span><span class="v">${quakes.length.toLocaleString('it-IT')}</span></div>
+    <div class="an-big-event">
+      <div class="m">M ${largest.mag.toFixed(1)}</div>
+      <div class="p">${largest.place}</div>
+      <div class="t">ore ${hh} · profondità ${largest.depth.toFixed(0)} km</div>
+    </div>`;
+}
+
+function renderPianeti(r){
+  document.getElementById('plCurrentBody').innerHTML=
+    `<div class="sig-row"><span class="k">Data</span><span class="v">${_plFmtDate(r.refDate)}</span></div>`
+    +`<div class="sig-row"><span class="k">Sole</span><span class="v">${_plFmtLon(r.refSig.lons[0])}</span></div>`
+    +_plChips(r.refSig,null)
+    +`<div class="pl-eq"><div class="pl-eq-title">Sismicità in Italia quel giorno</div>${_plQuakesHtml(r.refQuakes)}</div>`;
+
+  document.getElementById('plPast').innerHTML=
+    (r.past.length?`<div class="pl-group-title">Date passate con configurazione più simile</div>`:'')
+    +r.past.map((m,i)=>{
+      const d=new Date(m.t), sig=plSignature(d);
+      const sim=((1-Math.min(m.dist,1))*100).toFixed(1);
+      return `<div class="an-match-card">
+        <div class="an-match-header">
+          <span class="an-rank ${i===0?'an-rank-1':(i===1?'an-rank-2':'an-rank-3')}">#${i+1}</span>
+          <h3>${_plFmtDate(d)}</h3>
+          <span class="an-sim">${sim}%</span>
+        </div>
+        <div class="an-match-body">
+          <div class="sig-row"><span class="k">Scarto medio pesato</span><span class="v">${(m.dist*180).toFixed(1)}°</span></div>
+          ${_plChips(sig,r.refSig)}
+          <div class="pl-eq"><div class="pl-eq-title">Sismicità in Italia quel giorno</div>${_plQuakesHtml(m.quakes)}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+  document.getElementById('plFuture').innerHTML=
+    (r.future.length?`<div class="pl-group-title">Prossime ricorrenze della stessa configurazione</div>`:'')
+    +r.future.map((m,i)=>{
+      const d=new Date(m.t), sig=plSignature(d);
+      const sim=((1-Math.min(m.dist,1))*100).toFixed(1);
+      return `<div class="an-match-card">
+        <div class="an-match-header">
+          <span class="an-rank ${i===0?'an-rank-1':(i===1?'an-rank-2':'an-rank-3')}">#${i+1}</span>
+          <h3>${_plFmtDate(d)}</h3>
+          <span class="an-sim">${sim}%</span>
+        </div>
+        <div class="an-match-body">
+          <div class="sig-row"><span class="k">Scarto medio pesato</span><span class="v">${(m.dist*180).toFixed(1)}°</span></div>
+          ${_plChips(sig,r.refSig)}
+        </div>
+      </div>`;
+    }).join('');
 }
 
 /* ================================================================
