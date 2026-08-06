@@ -1330,7 +1330,7 @@ body{padding-bottom:64px;}
     <div class="container">
       <div class="header">
         <div class="title-wrap"><h1>Configurazioni Planetarie</h1>
-          <p>Inserisci una data: l'app calcola la posizione di Sole, Luna e pianeti in quel giorno, cerca nel passato e nel futuro (dal 1750 al 2250) le date con la configurazione più simile, e mostra tutti i terremoti registrati in Italia in quelle date (dove il catalogo INGV le copre, cioè dal 1985 a oggi).</p></div>
+          <p>Inserisci una data: l'app calcola la posizione di Sole, Luna e pianeti in quel giorno, cerca nel passato e nel futuro (dal 1750 al 2250) le date con la configurazione più simile, e mostra i terremoti di quelle date — dal catalogo strumentale INGV per le date dal 1985, dal catalogo storico CPTI15 (per anno) per quelle precedenti.</p></div>
         <span class="badge" style="background:rgba(196,181,253,.14);color:#c4b5fd;border:1px solid rgba(196,181,253,.4);">Gioco</span>
       </div>
       <section class="panel">
@@ -1367,7 +1367,11 @@ body{padding-bottom:64px;}
         bassa precisione di Schlyter: nell'intervallo 1800–2050 l'errore tipico è di frazioni di grado, fuori cresce
         progressivamente (per questo la ricerca è limitata al 1750–2250). Le longitudini mostrate sono
         <b>eclittiche geocentriche</b> riferite all'eclittica J2000.
-        Eventi sismici: <code>webservices.ingv.it/fdsnws/event/1/query</code>.
+        <br><br>
+        Eventi sismici: catalogo strumentale <code>webservices.ingv.it/fdsnws/event/1/query</code> (dal 1985) e catalogo
+        storico <b>CPTI15 v4.0</b> (Rovida et al., INGV) per le date precedenti. Per le date storiche il confronto è
+        <b>per anno</b> — il giorno e il mese nel catalogo storico sono spesso incerti — quindi vengono mostrati tutti gli
+        eventi di quell'anno (es. per il 1688 compare il terremoto del Sannio, Mw&nbsp;7.1).
       </div>
     </div>
   </div>
@@ -3405,7 +3409,10 @@ function plLongitudes(date){
 }
 
 const PL_NAMES=['Sole','Luna','Mercurio','Venere','Marte','Giove','Saturno','Urano','Nettuno'];
-const PL_WEIGHTS={Sole:PL_SUN_WEIGHT,Luna:0.8,Mercurio:0.3,Venere:0.5,Marte:0.8,Giove:1.5,Saturno:1.6,Urano:1.4,Nettuno:1.4};
+/* Più peso alla Luna e ai corpi fino a Saturno; Urano e Nettuno pesano meno
+   (sono anche i più incerti nell'effemeride e i più lenti, quindi poco
+   discriminanti). */
+const PL_WEIGHTS={Sole:1.1,Luna:1.5,Mercurio:0.6,Venere:0.9,Marte:1.1,Giove:1.6,Saturno:1.6,Urano:0.6,Nettuno:0.5};
 /* Tutte le coppie di corpi, con peso = media geometrica dei pesi dei due */
 const PL_PAIRS=(()=>{
   const out=[];
@@ -3479,6 +3486,35 @@ function plSearch(refSig, fromDate, toDate, topN, minGapDays, refDate){
   return picked;
 }
 
+/* ── Catalogo storico CPTI15 (INGV) ── caricato on-demand.
+   Struttura per evento: [anno, mese, giorno, area, lat, lon, Mw, Io]
+   (mese/giorno/Mw/Io possono essere null). Usato per le date storiche
+   (prima del 1985, dove il catalogo strumentale FDSN non arriva). */
+let cptiData=null, cptiLoading=null, cptiByYear=null;
+function loadCptiData(){
+  if(cptiData)return Promise.resolve(cptiData);
+  if(cptiLoading)return cptiLoading;
+  cptiLoading=fetch('./cpti.json').then(r=>r.json()).then(d=>{
+    cptiData=d;
+    cptiByYear=new Map();
+    for(const ev of d){
+      if(!cptiByYear.has(ev[0]))cptiByYear.set(ev[0],[]);
+      cptiByYear.get(ev[0]).push(ev);
+    }
+    return d;
+  }).catch(()=>{cptiData=[];cptiByYear=new Map();return cptiData;});
+  return cptiLoading;
+}
+/* Eventi CPTI di un intero ANNO, ordinati per magnitudo decrescente.
+   Il match è per anno (non per giorno esatto): le date storiche hanno
+   spesso giorno/mese incerti, quindi se la configurazione simile cade
+   nel 1688 mostriamo comunque il terremoto del Sannio di quell'anno. */
+async function plFetchQuakesCPTI(year){
+  await loadCptiData();
+  const list=(cptiByYear&&cptiByYear.get(year))||[];
+  return list.slice().sort((a,b)=>(b[6]||0)-(a[6]||0));
+}
+
 /* Terremoti registrati in Italia in un dato giorno (00:00–23:59 UTC) */
 async function plFetchQuakes(date){
   const d0=new Date(Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),0,0,0));
@@ -3507,10 +3543,18 @@ const PL_SEARCH_CEIL=new Date(Date.UTC(2250,11,31));
    esterni si sono mossi di poco), lasciando emergere le ricorrenze vere. */
 const PL_MIN_GAP_DAYS=3*365;
 
-/* La data ha eventi sismici mostrabili? (dentro la copertura INGV e non futura) */
-function _plHasQuakeData(d){
-  const t=d.getTime();
-  return t>=PL_INGV_START.getTime() && t<=Date.now();
+/* Risolve la sismicità da mostrare per una data, scegliendo la fonte giusta:
+   - futuro       → nessun dato
+   - dal 1985 a oggi → catalogo strumentale INGV (FDSN), giorno esatto
+   - prima del 1985  → catalogo storico CPTI15, per ANNO */
+async function plResolveSeismicity(date){
+  const t=date.getTime();
+  if(t>Date.now()) return {kind:'future'};
+  if(t>=PL_INGV_START.getTime()){
+    return {kind:'fdsn', quakes:await plFetchQuakes(date)};
+  }
+  const y=date.getUTCFullYear();
+  return {kind:'cpti', year:y, events:await plFetchQuakesCPTI(y)};
 }
 
 function initPlDate(){
@@ -3556,14 +3600,14 @@ async function fetchPianeti(){
       ? plSearch(refSig,futFrom,futTo,3,PL_MIN_GAP_DAYS,refDate)
       : [];
 
-    /* Eventi sismici: data scelta + tutte le date trovate che ricadono
-       nella copertura INGV (1985 → oggi). Per le altre restano "undefined". */
-    st.textContent='Scarico gli eventi sismici delle date individuate…';
-    const refQuakes = _plHasQuakeData(refDate) ? await plFetchQuakes(refDate) : undefined;
-    for(const m of past){   const d=new Date(m.t); m.quakes = _plHasQuakeData(d) ? await plFetchQuakes(d) : undefined; }
-    for(const m of future){ const d=new Date(m.t); m.quakes = _plHasQuakeData(d) ? await plFetchQuakes(d) : undefined; }
+    /* Sismicità: per la data scelta e per ogni data trovata scegliamo la
+       fonte adatta (strumentale INGV dal 1985, storico CPTI15 prima). */
+    st.textContent='Carico gli eventi sismici delle date individuate…';
+    const refSeis = await plResolveSeismicity(refDate);
+    for(const m of past)   m.seis = await plResolveSeismicity(new Date(m.t));
+    for(const m of future) m.seis = await plResolveSeismicity(new Date(m.t));
 
-    renderPianeti({refDate,refSig,refQuakes,past,future});
+    renderPianeti({refDate,refSig,refSeis,past,future});
     box.style.display='block';
     st.textContent=`Trovate ${past.length} date passate e ${future.length} ricorrenze future con configurazione simile.`;
     st.className='status ok';
@@ -3629,12 +3673,47 @@ function _plQuakesHtml(quakes){
     <div class="pl-eq-list">${rows}</div>`;
 }
 
+/* Eventi storici (CPTI15) di un anno: località + magnitudo Mw + intensità.
+   Il match è per anno, quindi mostriamo tutti gli eventi di quell'anno
+   ordinati per magnitudo (il più forte in evidenza). */
+function _plCptiHtml(res){
+  const evs=res.events||[];
+  if(!evs.length){
+    return `<div class="an-none">Nessun terremoto nel catalogo storico CPTI15 per il ${res.year}.</div>`;
+  }
+  const maxMw=evs.reduce((a,e)=>Math.max(a,e[6]||0),0);
+  const rows=evs.map(e=>{
+    const mw=e[6];
+    const dd=e[1]?((e[2]?String(e[2]).padStart(2,'0')+'/':'')+String(e[1]).padStart(2,'0')):'—';
+    const io=e[7]?' · Io '+e[7]:'';
+    const strong=(mw&&mw===maxMw)?' pl-eq-strong':'';
+    return `<div class="pl-eq-row${strong}">
+      <span class="pl-eq-mag ${mw?magCls(mw):'m0'}">${mw?mw.toFixed(1):'?'}</span>
+      <span class="pl-eq-place">${e[3]||'—'}</span>
+      <span class="pl-eq-time">${dd}${io}</span>
+    </div>`;
+  }).join('');
+  return `<div class="sig-row"><span class="k">Eventi nel ${res.year} (CPTI15)</span><span class="v">${evs.length} · max Mw ${maxMw?maxMw.toFixed(1):'—'}</span></div>
+    <div class="pl-eq-list">${rows}</div>`;
+}
+
+/* Blocco sismicità completo (titolo + contenuto) in base alla fonte.
+   Ritorna '' per le date future (niente da mostrare). */
+function _plSeismicBlock(res){
+  if(!res||res.kind==='future') return '';
+  const title = res.kind==='cpti'
+    ? 'Terremoti storici di quell\'anno (CPTI15)'
+    : 'Sismicità in Italia quel giorno';
+  const inner = res.kind==='cpti' ? _plCptiHtml(res) : _plQuakesHtml(res.quakes);
+  return `<div class="pl-eq"><div class="pl-eq-title">${title}</div>${inner}</div>`;
+}
+
 function renderPianeti(r){
   document.getElementById('plCurrentBody').innerHTML=
     `<div class="sig-row"><span class="k">Data</span><span class="v">${_plFmtDate(r.refDate)}</span></div>`
     +`<div class="sig-row"><span class="k">Sole</span><span class="v">${_plFmtLon(r.refSig.lons[0])}</span></div>`
     +_plChips(r.refSig,null)
-    +`<div class="pl-eq"><div class="pl-eq-title">Sismicità in Italia quel giorno</div>${_plQuakesHtml(r.refQuakes)}</div>`;
+    +_plSeismicBlock(r.refSeis);
 
   document.getElementById('plPast').innerHTML=
     (r.past.length?`<div class="pl-group-title">Date passate con configurazione più simile</div>`:'')
@@ -3650,7 +3729,7 @@ function renderPianeti(r){
         <div class="an-match-body">
           <div class="sig-row"><span class="k">Scarto medio pesato</span><span class="v">${(m.dist*180).toFixed(1)}°</span></div>
           ${_plChips(sig,r.refSig)}
-          <div class="pl-eq"><div class="pl-eq-title">Sismicità in Italia quel giorno</div>${_plQuakesHtml(m.quakes)}</div>
+          ${_plSeismicBlock(m.seis)}
         </div>
       </div>`;
     }).join('');
@@ -3660,11 +3739,8 @@ function renderPianeti(r){
     +r.future.map((m,i)=>{
       const d=new Date(m.t), sig=plSignature(d);
       const sim=((1-Math.min(m.dist,1))*100).toFixed(1);
-      /* per le date future coperte da INGV (caso di date di riferimento
-         antiche) mostriamo comunque la sismicità di quel giorno */
-      const eqBlock = (m.quakes!==undefined)
-        ? `<div class="pl-eq"><div class="pl-eq-title">Sismicità in Italia quel giorno</div>${_plQuakesHtml(m.quakes)}</div>`
-        : '';
+      /* per le date "future" che però ricadono nel passato/copertura
+         (caso di una data di riferimento antica) mostriamo la sismicità */
       return `<div class="an-match-card">
         <div class="an-match-header">
           <span class="an-rank ${i===0?'an-rank-1':(i===1?'an-rank-2':'an-rank-3')}">#${i+1}</span>
@@ -3674,7 +3750,7 @@ function renderPianeti(r){
         <div class="an-match-body">
           <div class="sig-row"><span class="k">Scarto medio pesato</span><span class="v">${(m.dist*180).toFixed(1)}°</span></div>
           ${_plChips(sig,r.refSig)}
-          ${eqBlock}
+          ${_plSeismicBlock(m.seis)}
         </div>
       </div>`;
     }).join('');
