@@ -104,7 +104,8 @@ window.IC=(function(){
     swarm:W('<circle cx="12" cy="11" r="2.6"/><circle cx="5.5" cy="7" r="1.6"/><circle cx="18.5" cy="7.5" r="1.4"/><circle cx="5" cy="16.5" r="1.4"/><circle cx="18" cy="16" r="1.7"/><circle cx="12" cy="20" r="1.3"/>'),
     menu:W('<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>'),
     analogy:W('<path d="M4 17V7l8 5 8-5v10"/><path d="M4 7l8 5 8-5"/>'),
-    planets:W('<circle cx="12" cy="12" r="3.2"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(-22 12 12)"/><circle cx="20.2" cy="8.4" r="1.1" fill="currentColor" stroke="none"/>')
+    planets:W('<circle cx="12" cy="12" r="3.2"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(-22 12 12)"/><circle cx="20.2" cy="8.4" r="1.1" fill="currentColor" stroke="none"/>'),
+    forecast:W('<path d="M4 19V5"/><path d="M4 19h16"/><path d="M6 15l4-4 3 3 6-7"/><path d="M17 7h3v3"/>')
   };
 })();
 document.addEventListener('DOMContentLoaded',function(){
@@ -699,6 +700,18 @@ body{padding-bottom:64px;}
 .pl-eq-place{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pl-eq-time{color:var(--muted);font-size:11px;white-space:nowrap;flex-shrink:0;}
 
+/* ── PROSPETTIVA SISMICA: badge di stato ── */
+.pr-state{border-radius:14px;padding:16px 18px;text-align:center;border:1px solid var(--border);}
+.pr-state-lab{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+.pr-state-val{font-size:30px;font-weight:800;letter-spacing:.01em;margin-top:4px;line-height:1;}
+.pr-state-sub{font-size:12.5px;margin-top:6px;color:var(--muted);}
+.pr-state.pr-lo{background:rgba(34,197,94,.10);border-color:rgba(34,197,94,.35);}
+.pr-state.pr-lo .pr-state-val{color:#86efac;}
+.pr-state.pr-mid{background:rgba(251,191,36,.10);border-color:rgba(251,191,36,.4);}
+.pr-state.pr-mid .pr-state-val{color:#fbbf24;}
+.pr-state.pr-hi{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.45);}
+.pr-state.pr-hi .pr-state-val{color:#fca5a5;}
+
 /* ── SCHEDA TERREMOTO (dettaglio evento) ── */
 /* Scheda evento a pagina intera (occupa tutto il viewport, sopra ogni cosa) */
 .eqd-overlay{display:none;}
@@ -894,6 +907,13 @@ body{padding-bottom:64px;}
         <div class="side-menu-text">
           <div class="side-menu-title">Analogia Sismica <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Cerca il periodo storico che ha colpito le stesse zone del periodo attuale e mostra cosa è successo dopo</div>
+        </div>
+      </button>
+      <button class="side-menu-item" onclick="closeSideMenu();goSection('prospettiva')">
+        <span class="ic side-menu-icon" data-ic="forecast" style="color:#7dd3fc;"></span>
+        <div class="side-menu-text">
+          <div class="side-menu-title">Prospettiva Sismica <span class="side-badge">Sperimentale</span></div>
+          <div class="side-menu-desc">Probabilità a breve termine (clustering/Omori) e ricorrenza storica per zona</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('pianeti')">
@@ -1322,6 +1342,44 @@ body{padding-bottom:64px;}
         <div id="anMatches"></div>
       </div>
       <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> · Ricerca analogia calcolata lato client sul catalogo Italia.</div>
+    </div>
+  </div>
+
+  <!-- ═══ PROSPETTIVA SISMICA (sperimentale) ═══ -->
+  <div class="section" id="sectionProspettiva">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Prospettiva Sismica</h1>
+          <p>Stima statistica della probabilità sismica: a breve termine dai terremoti recenti (clustering e legge di Omori), a lungo termine dalla ricorrenza storica per zona.</p></div>
+        <span class="badge" style="background:rgba(125,211,252,.14);color:#7dd3fc;border:1px solid rgba(125,211,252,.4);">Sperimentale</span>
+      </div>
+      <div class="an-warn" style="color:#fbbf24;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
+        ⚠️ <b>Non è una previsione ufficiale né un allarme.</b> I terremoti <b>non si possono predire</b> (data, ora, luogo esatti).
+        Qui si stima solo come varia la <b>probabilità</b>, con gli stessi principi statistici dell'Operational Earthquake
+        Forecasting dell'INGV: numeri piccoli, che salgono dopo un evento forte e poi ricalano. Per la pericolosità ufficiale
+        vedi <b>INGV</b> (mappa MPS04) e la Protezione Civile.
+      </div>
+
+      <section class="panel" style="margin-top:16px;">
+        <div class="panel-header"><h2>Breve termine — prossimi 7 giorni</h2><p>In Italia, probabilità di un evento M≥5 alla luce dell'attività recente</p></div>
+        <div style="padding:14px 16px;">
+          <button class="btn btn-purple" id="prRunBtn" onclick="fetchProspettiva()">📈 Calcola la prospettiva</button>
+          <div id="prStatus" class="status">Premi per calcolare con i dati INGV più recenti.</div>
+          <div id="prShort" style="display:none;margin-top:14px;"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Lungo termine — ricorrenza per zona</h2><p>Tasso storico di M≥5.5 (CPTI15, dal 1650) e probabilità nei prossimi 10 e 30 anni</p></div>
+        <div id="prLong" style="padding:8px 16px 16px;"><div class="lo" style="color:var(--muted);padding:20px 0;text-align:center;">—</div></div>
+      </section>
+
+      <div class="footer-note">
+        Breve termine: modello aftershock generico di Reasenberg-Jones (legge di Omori-Utsu) alimentato dagli eventi INGV
+        degli ultimi 60 giorni. Lungo termine: modello di Poisson sui tassi del catalogo storico CPTI15. Entrambi sono
+        approssimazioni statistiche a scopo illustrativo, non sostituiscono le stime ufficiali INGV.
+        Fonti: <code>webservices.ingv.it/fdsnws/event/1/query</code> · CPTI15 v4.0.
+      </div>
     </div>
   </div>
 
@@ -1756,7 +1814,7 @@ function goSection(sec){
   const titles={terremoti:['quake','Terremoti'],mappa:['map','Mappa'],sismogrammi:['seismo','Sismogrammi'],
     focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],
     localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],analogia:['analogy','Analogia Sismica'],
-    pianeti:['planets','Configurazioni Planetarie']};
+    pianeti:['planets','Configurazioni Planetarie'],prospettiva:['forecast','Prospettiva Sismica']};
   const _tt=titles[sec];
   document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
   document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
@@ -1799,6 +1857,9 @@ function goSection(sec){
   } else if(sec==='pianeti'){
     document.getElementById('sectionPianeti').classList.add('active');
     initPlDate();
+  } else if(sec==='prospettiva'){
+    document.getElementById('sectionProspettiva').classList.add('active');
+    renderProspettivaLong();
   } else {
     document.getElementById('sectionSismogrammi').classList.add('active');
     document.getElementById('tabSeis').classList.add('a-seis');
@@ -3754,6 +3815,170 @@ function renderPianeti(r){
         </div>
       </div>`;
     }).join('');
+}
+
+/* ================================================================
+   PROSPETTIVA SISMICA (sperimentale)
+   - Breve termine: modello aftershock generico di Reasenberg-Jones
+     (legge di Omori-Utsu) alimentato dagli eventi INGV recenti.
+   - Lungo termine: Poisson sui tassi storici del CPTI15 per zona.
+   Solo statistica: NON è previsione né allarme.
+================================================================ */
+
+/* Parametri generici di Reasenberg-Jones (Omori-Utsu). Il tasso di eventi
+   ≥M al tempo t (giorni) dopo un evento di magnitudo Mm è
+      λ(t) = 10^(a + b(Mm − M)) · (t + c)^(−p)   [eventi/giorno]
+   Valori generici largamente usati in letteratura (California/Italia). */
+const PR_RJ={a:-1.67,b:0.91,p:1.08,c:0.05};
+const PR_TARGET=5.0;   // magnitudo bersaglio del pronostico a breve
+const PR_WIN=7;        // giorni della finestra di previsione
+const PR_LOOKBACK=60;  // giorni di storia che alimentano il modello
+const PR_MIN_TRIG=3.5; // sotto questa magnitudo il contributo è trascurabile
+
+/* Numero atteso di eventi ≥PR_TARGET fra T1 e T2 giorni dopo un evento Mm */
+function _prOmoriN(Mm,T1,T2){
+  const {a,b,p,c}=PR_RJ;
+  const prod=Math.pow(10, a+b*(Mm-PR_TARGET));
+  const integ=(Math.pow(T2+c,1-p)-Math.pow(T1+c,1-p))/(1-p);
+  return prod*Math.max(0,integ);
+}
+
+/* Tasso di fondo di M≥PR_TARGET in Italia (eventi/giorno) dal CPTI15, 1650→2020 */
+async function _prBackgroundDaily(){
+  await loadCptiData();
+  const since=1650, until=2020;
+  let n=0;
+  for(const e of (cptiData||[])) if(e[0]>=since && (e[6]||0)>=PR_TARGET) n++;
+  return n/((until-since)*365.25);
+}
+
+let _prRunning=false;
+async function fetchProspettiva(){
+  if(_prRunning)return;
+  const btn=document.getElementById('prRunBtn');
+  const st=document.getElementById('prStatus');
+  const box=document.getElementById('prShort');
+  _prRunning=true;btn.disabled=true;box.style.display='none';
+  st.textContent='Scarico l\'attività sismica recente…';st.className='status';
+  try{
+    const now=new Date();
+    const start=new Date(now.getTime()-PR_LOOKBACK*86400000);
+    const fmt=d=>d.toISOString().slice(0,19);
+    const url=`${EQ_BASE}?format=text&starttime=${fmt(start)}&endtime=${fmt(now)}`
+      +`&orderby=time&limit=20000&minmagnitude=${PR_MIN_TRIG}&minlat=33&maxlat=49&minlon=4&maxlon=21`;
+    const resp=await fetch(url,{signal:AbortSignal.timeout(25000)});
+    const recent = resp.status===204 ? [] : (resp.ok ? parseEqText(await resp.text(),999) : []);
+    if(!resp.ok && resp.status!==204) throw new Error('HTTP '+resp.status);
+
+    /* somma dei contributi di Omori di ogni evento recente sulla finestra
+       [ora, ora+7gg] → numero atteso di M≥5 innescati */
+    let Ntrig=0, strongest=null;
+    for(const ev of recent){
+      const tdays=(now-new Date(ev.time))/86400000;
+      if(tdays<0) continue;
+      Ntrig += _prOmoriN(ev.mag, tdays, tdays+PR_WIN);
+      if(!strongest || ev.mag>strongest.mag) strongest=ev;
+    }
+    const bgDaily=await _prBackgroundDaily();
+    const Nbg=bgDaily*PR_WIN;
+    const Ntot=Ntrig+Nbg;
+    const P=(1-Math.exp(-Ntot))*100;
+    const Pbg=(1-Math.exp(-Nbg))*100;
+    const gain=Nbg>0?Ntot/Nbg:1;
+
+    let state,cls;
+    if(gain>=5){state='ELEVATA';cls='pr-hi';}
+    else if(gain>=1.8){state='MODERATA';cls='pr-mid';}
+    else{state='ORDINARIA';cls='pr-lo';}
+
+    const big=recent.filter(e=>e.mag>=PR_MIN_TRIG).sort((a,b)=>b.mag-a.mag).slice(0,5);
+    const bigHtml = big.length
+      ? `<div class="pl-eq-title" style="margin-top:12px;">Eventi recenti che alimentano il modello</div>
+         <div class="pl-eq-list">`+big.map(ev=>{
+            const t=new Date(ev.time);
+            const g=t.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'});
+            const dd=((now-t)/86400000).toFixed(0);
+            return `<div class="pl-eq-row"><span class="pl-eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</span>
+              <span class="pl-eq-place">${ev.place}</span>
+              <span class="pl-eq-time">${g} · ${dd} gg fa</span></div>`;
+          }).join('')+`</div>`
+      : `<div class="an-none">Nessun evento M≥${PR_MIN_TRIG} negli ultimi ${PR_LOOKBACK} giorni: prospettiva ai valori di fondo.</div>`;
+
+    box.innerHTML=`
+      <div class="pr-state ${cls}">
+        <div class="pr-state-lab">Probabilità attuale</div>
+        <div class="pr-state-val">${state}</div>
+        <div class="pr-state-sub">${gain>=1.5?('≈ '+gain.toFixed(1)+'× rispetto al fondo'):'in linea col fondo'}</div>
+      </div>
+      <div class="eqd-grid" style="margin-top:12px;">
+        <div class="eqd-box"><div class="k">P(M≥5) prossimi 7 gg</div><div class="v">${P.toFixed(1)}%</div></div>
+        <div class="eqd-box"><div class="k">Livello di fondo</div><div class="v" style="color:var(--muted);">${Pbg.toFixed(1)}%</div></div>
+      </div>
+      ${bigHtml}
+      <div class="hint" style="margin-top:10px;">Il valore è per <b>tutta Italia</b> e per i <b>prossimi 7 giorni</b>. Anche in stato
+      "ELEVATA" la probabilità assoluta resta bassa: significa solo che, dopo un evento forte, per qualche giorno un altro
+      evento è più probabile del solito (aftershock). Poi torna ai valori di fondo.</div>`;
+    box.style.display='block';
+    st.textContent=`Attività recente: ${recent.length} eventi M≥${PR_MIN_TRIG} negli ultimi ${PR_LOOKBACK} giorni.`;
+    st.className='status ok';
+  }catch(err){
+    st.textContent='Errore: '+err.message;st.className='status err';
+  }finally{
+    _prRunning=false;btn.disabled=false;
+  }
+}
+
+/* ── Lungo termine: ricorrenza per macro-area dal CPTI15 ── */
+const PR_ZONES=[
+  {n:'Appennino centrale',        lat:42.6, lon:13.3, r:80},
+  {n:'Appennino meridionale',     lat:40.9, lon:15.2, r:80},
+  {n:'Calabria e Stretto',        lat:38.8, lon:16.1, r:90},
+  {n:'Sicilia orientale',         lat:37.4, lon:15.0, r:80},
+  {n:'Appennino settentrionale',  lat:44.2, lon:11.3, r:80},
+  {n:'Friuli e Alpi orientali',   lat:46.3, lon:13.1, r:70}
+];
+const PR_ZONE_SINCE=1650, PR_ZONE_MINMAG=5.5;
+
+async function renderProspettivaLong(){
+  const el=document.getElementById('prLong');
+  if(el.dataset.done)return;   /* calcola una volta sola */
+  el.innerHTML='<div class="lo" style="color:var(--muted);padding:20px 0;text-align:center;"><span class="spin"></span> Calcolo dai dati storici…</div>';
+  await loadCptiData();
+  const nowY=new Date().getFullYear();
+  const span=nowY-PR_ZONE_SINCE;
+  const rows=PR_ZONES.map(z=>{
+    let n=0,last=null;
+    for(const e of (cptiData||[])){
+      if(e[0]<PR_ZONE_SINCE || (e[6]||0)<PR_ZONE_MINMAG || e[4]==null) continue;
+      if(haverDist(z.lat,z.lon,e[4],e[5])<=z.r){ n++; if(last===null||e[0]>last) last=e[0]; }
+    }
+    const rate=n/span;                        /* eventi/anno */
+    const p10=(1-Math.exp(-rate*10))*100;
+    const p30=(1-Math.exp(-rate*30))*100;
+    const recur=n?Math.round(span/n):null;
+    const since=last?(nowY-last):null;
+    return {z,n,recur,last,since,p10,p30};
+  }).sort((a,b)=>b.p30-a.p30);
+
+  el.innerHTML=rows.map(r=>{
+    const cls=r.p30>=85?'an-rank-1':(r.p30>=65?'an-rank-2':'an-rank-3');
+    return `<div class="an-match-card" style="margin-bottom:10px;">
+      <div class="an-match-header">
+        <span class="an-rank ${cls}">${r.p30.toFixed(0)}%</span>
+        <h3 style="color:#7dd3fc;">${r.z.n}</h3>
+      </div>
+      <div class="an-match-body">
+        <div class="sig-row"><span class="k">Eventi M≥${PR_ZONE_MINMAG} dal ${PR_ZONE_SINCE}</span><span class="v">${r.n} · ~1 ogni ${r.recur||'—'} anni</span></div>
+        <div class="sig-row"><span class="k">Ultimo forte evento</span><span class="v">${r.last||'—'}${r.since!=null?` (${r.since} anni fa)`:''}</span></div>
+        <div class="sig-row"><span class="k">Probabilità 10 anni</span><span class="v">${r.p10.toFixed(0)}%</span></div>
+        <div class="sig-row"><span class="k">Probabilità 30 anni</span><span class="v">${r.p30.toFixed(0)}%</span></div>
+      </div>
+    </div>`;
+  }).join('')
+  +`<div class="hint" style="margin-top:4px;">Modello di Poisson (eventi indipendenti nel tempo): dà la probabilità media di
+    almeno un M≥${PR_ZONE_MINMAG} nella finestra indicata, dato il tasso storico della zona. Non "sa" da quanto tempo manca
+    l'ultimo evento — i modelli ufficiali INGV usano anche quello.</div>`;
+  el.dataset.done='1';
 }
 
 /* ================================================================
