@@ -302,6 +302,10 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .mapbox{width:100%;height:480px;border-radius:0 0 22px 22px;}
 .leaflet-container{background:#0b1120!important;}
 .leaflet-container:focus,.leaflet-container:focus-visible{outline:none!important;}
+/* Le tile OpenStreetMap sono chiare: le rendiamo scure via filtro per
+   restare in tema (il filtro tocca solo le immagini delle tile, non i
+   marker/etichette che stanno in pane separati). */
+.leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);}
 .leaflet-tile{backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform;}
 .leaflet-tile-pane{-webkit-transform:translateZ(0);transform:translateZ(0);will-change:transform;}
 .leaflet-container:focus,.leaflet-container:focus-visible{outline:none!important;}
@@ -2631,7 +2635,7 @@ function openEqDetail(containerId,i){
   setTimeout(()=>{
     if(!eqdMapInited){
       eqdMap=L.map('eqdMap',{zoomControl:false,attributionControl:false}).setView([ev.lat,ev.lon],8);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{subdomains:'abcd',maxZoom:19}).addTo(eqdMap);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{subdomains:'abc',maxZoom:19}).addTo(eqdMap);
       eqdMapInited=true;
     } else {
       eqdMap.invalidateSize();
@@ -2730,8 +2734,8 @@ let eqData=[],eqMarkers=[],eqMap;
 
 function initEqMap(){
   eqMap=L.map('eqMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(eqMap);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(eqMap);
   addLegend(eqMap);
   /* DISS rimosso */
 }
@@ -2790,8 +2794,8 @@ let storicoData=[],stMarkers=[],stMap;
 
 function initStMap(){
   stMap=L.map('stMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(stMap);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(stMap);
   addLegend(stMap);
   /* DISS rimosso */
 }
@@ -2858,8 +2862,8 @@ let swMapInited=false, swMap=null, swMarkers=[], swarmResults=[];
 
 function initSwMap(){
   swMap=L.map('swMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(swMap);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(swMap);
 }
 
 function initSwarmYearSelect(){
@@ -4075,8 +4079,8 @@ const _romanCent=['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XI
 
 function initHcMap(){
   hcMap=L.map('hcMap').setView([42.2,12.5],5);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(hcMap);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(hcMap);
 }
 
 async function initCatalogo(){
@@ -4656,8 +4660,8 @@ function updateMeta(extra={}){
 
 function initMap(){
   map=L.map('map').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(map);
 }
 function renderMapStations(){
   stationMarkers.forEach(m=>map.removeLayer(m));stationMarkers=[];
@@ -4895,8 +4899,8 @@ function makeBeachBallIcon(strike,dip,rake,size){
 
 function initFmMap(){
   fmMap=L.map('fmMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(fmMap);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(fmMap);
 }
 
 function initFmDates(){
@@ -5143,8 +5147,8 @@ const PROV_COORDS={
 
 function initLocMap(){
   locMap=L.map('locMap').setView([42.5,12.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-    {attribution:'&copy; CARTO &copy; OSM',subdomains:'abcd',maxZoom:19}).addTo(locMap);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(locMap);
 }
 
 /* ── STA/LTA ── */
@@ -5484,6 +5488,15 @@ function initFirebase(){
     }
     _fb=firebase.initializeApp(FIREBASE_CONFIG);
     _fbAuth=firebase.auth();
+    /* Persistenza LOCALE esplicita: la sessione resta salvata sul dispositivo
+       e sopravvive alla chiusura/riapertura dell'app. La disconnessione
+       avviene SOLO quando l'utente preme "Esci". */
+    try{ _fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); }catch(e){}
+    /* Completa un eventuale accesso avvenuto via redirect (mobile / PWA
+       installata), dove il popup non manterrebbe la sessione. */
+    _fbAuth.getRedirectResult().catch(e=>{
+      if(e && e.code && e.code!=='auth/no-auth-event') console.warn('Redirect login:',e.message);
+    });
     _fbDb=firebase.firestore();
     try{
       _fbMsg=firebase.messaging();
@@ -5574,10 +5587,28 @@ function handleAuth(){
 
 async function signInWithGoogle(){
   try{
+    try{ await _fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); }catch(e){}
     const provider=new firebase.auth.GoogleAuthProvider();
-    await _fbAuth.signInWithPopup(provider);
+    provider.setCustomParameters({prompt:'select_account'});
+    /* Su mobile o app installata (PWA standalone) il popup spesso NON mantiene
+       la sessione al ritorno: usiamo il redirect, molto più affidabile.
+       Su desktop resta il popup, meno invadente. */
+    const standalone = window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone===true;
+    const mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    if(standalone || mobile){
+      await _fbAuth.signInWithRedirect(provider);   /* torna e getRedirectResult() completa */
+    } else {
+      await _fbAuth.signInWithPopup(provider);
+    }
   }catch(e){
-    if(e.code!=='auth/popup-closed-by-user') alert('Errore login: '+e.message);
+    if(e.code!=='auth/popup-closed-by-user' && e.code!=='auth/cancelled-popup-request'){
+      /* se il popup è bloccato, ripiega sul redirect */
+      if(e.code==='auth/popup-blocked'){
+        try{ await _fbAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); return; }catch(_){}
+      }
+      alert('Errore login: '+e.message);
+    }
   }
 }
 
