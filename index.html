@@ -5587,26 +5587,17 @@ function handleAuth(){
 
 async function signInWithGoogle(){
   try{
+    /* Persistenza locale: la sessione resta salvata e sopravvive a
+       chiusura/riapertura (è questa la correzione per lo "sconnesso al
+       rientro", non il tipo di login). */
     try{ await _fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); }catch(e){}
     const provider=new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({prompt:'select_account'});
-    /* Su mobile o app installata (PWA standalone) il popup spesso NON mantiene
-       la sessione al ritorno: usiamo il redirect, molto più affidabile.
-       Su desktop resta il popup, meno invadente. */
-    const standalone = window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches
-      || window.navigator.standalone===true;
-    const mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-    if(standalone || mobile){
-      await _fbAuth.signInWithRedirect(provider);   /* torna e getRedirectResult() completa */
-    } else {
-      await _fbAuth.signInWithPopup(provider);
-    }
+    /* Popup: è il metodo che funzionava. Il redirect, su alcune PWA/mobile,
+       non riporta la sessione e lasciava l'utente disconnesso. */
+    await _fbAuth.signInWithPopup(provider);
   }catch(e){
     if(e.code!=='auth/popup-closed-by-user' && e.code!=='auth/cancelled-popup-request'){
-      /* se il popup è bloccato, ripiega sul redirect */
-      if(e.code==='auth/popup-blocked'){
-        try{ await _fbAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); return; }catch(_){}
-      }
       alert('Errore login: '+e.message);
     }
   }
