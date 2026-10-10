@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#0f172a"/>
+<meta name="theme-color" content="#070b16"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
 <script>
 if('serviceWorker' in navigator){
@@ -819,6 +822,264 @@ body{padding-bottom:64px;}
   .eq-item{padding:14px 14px;gap:10px;}
   .eq-mag{min-width:48px;height:48px;font-size:18px;}
   #sectionMappa .mapbox{height:calc(100vh - 140px)!important;}
+}
+
+/* =====================================================================
+   DESIGN LAYER "Aurora Night" — restyling visivo.
+   Solo override di aspetto: nessun ID, classe o comportamento cambia.
+===================================================================== */
+:root{
+  --bg:#070b16;--bg-2:#0b1222;--panel:#0e1527;--panel-2:#121b30;
+  --surface:rgba(255,255,255,.035);--surface-2:rgba(255,255,255,.06);
+  --text:#eef2fb;--muted:#8d9ab5;--faint:#5d6a86;
+  --accent:#34d399;--accent-2:#60a5fa;--brand-a:#ff6b6b;--brand-b:#ffb547;--brand-c:#7c9cff;
+  --danger:#f87171;
+  --border:rgba(148,163,209,.12);--border-strong:rgba(148,163,209,.22);
+  --shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -18px rgba(0,0,0,.65);
+  --ring:0 0 0 3px rgba(96,165,250,.35);
+  --r-lg:20px;--r-md:14px;--r-sm:10px;
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-display:'Space Grotesk','Inter',system-ui,sans-serif;
+}
+html{background:var(--bg);color-scheme:dark;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  font-feature-settings:"cv11","ss01";letter-spacing:-.005em;}
+/* aurora di sfondo, fissa e discreta */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 8% -8%,rgba(255,107,107,.13),transparent 60%),
+    radial-gradient(800px 520px at 100% 0%,rgba(124,156,255,.14),transparent 62%),
+    radial-gradient(700px 600px at 50% 110%,rgba(52,211,153,.07),transparent 60%),
+    linear-gradient(180deg,#070b16 0%,#0a1020 100%);}
+::selection{background:rgba(124,156,255,.35);}
+*{scrollbar-width:thin;scrollbar-color:rgba(148,163,209,.25) transparent;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:rgba(148,163,209,.22);border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.015em;}
+button,input,select{font-family:inherit;}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:none;box-shadow:var(--ring);}
+
+/* ── HEADER ── */
+.top-header{background:linear-gradient(180deg,rgba(7,11,22,.92),rgba(7,11,22,.78));
+  -webkit-backdrop-filter:saturate(1.4) blur(18px);backdrop-filter:saturate(1.4) blur(18px);
+  border-bottom:1px solid var(--border);padding:10px 14px;
+  padding-top:calc(10px + env(safe-area-inset-top,0));}
+.top-header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,107,107,.55),rgba(255,181,71,.45),rgba(124,156,255,.55),transparent);opacity:.7;}
+.top-header h1{font-size:19px;font-weight:700;flex:1;min-width:0;white-space:nowrap;}
+.top-header h1 .ic{width:32px;height:32px;border-radius:10px;font-size:17px;color:#fff;
+  background:linear-gradient(135deg,var(--brand-a),var(--brand-b));
+  box-shadow:0 6px 18px -6px rgba(255,107,107,.6);}
+.hdr-btn{width:38px;height:38px;padding:0;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);
+  transition:background .2s,border-color .2s,transform .15s;}
+.hdr-btn:hover{background:var(--surface-2);border-color:var(--border-strong);}
+.hdr-btn:active{transform:scale(.94);}
+.hdr-btn img{border-radius:50%;}
+
+/* ── BOTTOM TABS ── */
+.bottom-tabs{left:50%;right:auto;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0));
+  width:min(560px,calc(100% - 20px));height:64px;padding:6px;gap:4px;border-radius:22px;
+  background:rgba(14,21,39,.82);border:1px solid var(--border-strong);
+  -webkit-backdrop-filter:saturate(1.5) blur(20px);backdrop-filter:saturate(1.5) blur(20px);
+  box-shadow:0 20px 40px -12px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.06) inset;}
+.btab{border-radius:16px;font-size:10.5px;letter-spacing:.01em;color:var(--muted);gap:4px;
+  transition:color .2s,background .2s,transform .15s;position:relative;}
+.btab:active{transform:scale(.95);}
+.btab .btab-icon{font-size:21px;transition:transform .2s;}
+.btab.active{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset;}
+.btab.active .btab-icon{transform:translateY(-1px);}
+.btab.active::after{content:"";position:absolute;bottom:5px;width:16px;height:3px;border-radius:3px;
+  background:currentColor;opacity:.9;}
+.btab.active.t-stor{color:#d8b4fe;}
+body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0));}
+#seisToast{bottom:96px!important;}
+.update-banner{bottom:96px;}
+
+/* ── SIDE MENU ── */
+.side-menu{background:linear-gradient(180deg,#0e1527,#0a1020);border-right:1px solid var(--border-strong);
+  box-shadow:24px 0 60px -20px rgba(0,0,0,.8);border-radius:0 24px 24px 0;}
+.side-menu-header{padding:20px 18px 16px;padding-top:calc(20px + env(safe-area-inset-top,0));}
+.side-menu-header h3{font-size:20px;font-weight:700;
+  background:linear-gradient(90deg,#fff,#c7d2fe);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.side-menu-close,.eqd-close{border-radius:11px;background:var(--surface);border:1px solid var(--border);
+  transition:background .2s;}
+.side-menu-close:hover,.eqd-close:hover{background:var(--surface-2);}
+.side-menu-item{border-radius:16px;padding:13px 12px;align-items:center;background:var(--surface);
+  border:1px solid var(--border);transition:background .2s,border-color .2s,transform .15s;}
+.side-menu-item:hover{background:var(--surface-2);border-color:var(--border-strong);transform:translateX(2px);}
+.side-menu-icon{width:42px;height:42px;border-radius:13px;font-size:20px;margin-top:0;
+  background:color-mix(in srgb,currentColor 13%,transparent);border:1px solid color-mix(in srgb,currentColor 26%,transparent);}
+.side-menu-title{font-size:14.5px;}
+.side-menu-overlay,.filter-overlay,.profile-overlay{background:rgba(3,6,14,.6);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+
+/* ── SEARCH + SORT ── */
+.search-bar{padding:14px 14px 6px;}
+.search-bar input{border-radius:16px;padding:13px 40px 13px 16px;background:var(--surface);
+  border:1px solid var(--border);font-size:14.5px;transition:border-color .2s,background .2s,box-shadow .2s;}
+.search-bar input:focus{background:rgba(255,255,255,.055);border-color:rgba(124,156,255,.5);box-shadow:var(--ring);}
+.search-clear{right:22px;}
+.sort-bar{margin:6px 14px 8px;padding:4px;gap:4px;border-radius:14px;background:var(--surface);border:1px solid var(--border);}
+.sort-btn{border-radius:10px;padding:8px;font-size:13px;transition:background .2s,color .2s;}
+.sort-btn:hover{color:var(--text);}
+.sort-btn.active{background:linear-gradient(180deg,rgba(124,156,255,.28),rgba(124,156,255,.14));color:#fff;
+  box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 6px 14px -8px rgba(124,156,255,.7);}
+.time-section{padding:16px 18px 6px;font-size:11px;letter-spacing:.12em;color:#a5b4fc;display:flex;align-items:center;gap:10px;}
+.time-section::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border-strong),transparent);}
+
+/* ── LISTA TERREMOTI: card ── */
+#sectionTerremoti .eq-list{padding:0 12px 8px;display:flex;flex-direction:column;gap:8px;}
+#sectionTerremoti .eq-item{border:1px solid var(--border);border-radius:18px;background:var(--surface);
+  padding:14px;transition:background .2s,border-color .2s,transform .15s;}
+#sectionTerremoti .eq-item:last-child{border-bottom:1px solid var(--border);}
+#sectionTerremoti .eq-item:hover{background:var(--surface-2);border-color:var(--border-strong);}
+#sectionTerremoti .eq-item:active{transform:scale(.99);}
+.eq-info .pl{font-family:var(--font-display);letter-spacing:-.01em;}
+.eq-mag{border-radius:15px;font-family:var(--font-display);font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+  box-shadow:0 1px 0 rgba(255,255,255,.08) inset;}
+.m0{background:linear-gradient(160deg,rgba(148,163,184,.22),rgba(148,163,184,.08));color:#cbd5e1;border:1px solid rgba(148,163,184,.25);}
+.m1{background:linear-gradient(160deg,rgba(52,211,153,.24),rgba(52,211,153,.08));color:#6ee7b7;border:1px solid rgba(52,211,153,.3);}
+.m2{background:linear-gradient(160deg,rgba(250,204,21,.24),rgba(250,204,21,.07));color:#fde047;border:1px solid rgba(250,204,21,.3);}
+.m3{background:linear-gradient(160deg,rgba(251,146,60,.28),rgba(251,146,60,.08));color:#fdba74;border:1px solid rgba(251,146,60,.35);}
+.m4{background:linear-gradient(160deg,rgba(248,113,113,.34),rgba(248,113,113,.1));color:#fecaca;border:1px solid rgba(248,113,113,.45);
+  box-shadow:0 8px 22px -10px rgba(248,113,113,.7),0 1px 0 rgba(255,255,255,.1) inset;}
+.seis-btn{border-radius:12px;background:rgba(124,156,255,.1);border:1px solid rgba(124,156,255,.28);color:#c7d2fe;}
+.seis-btn:hover{background:rgba(124,156,255,.2);}
+
+/* ── LAYOUT, PANEL, CONTROLLI ── */
+.container{margin:20px auto;}
+.title-wrap h1{font-weight:700;}
+.panel{background:linear-gradient(180deg,rgba(18,27,48,.78),rgba(12,19,36,.78));border:1px solid var(--border);
+  border-radius:var(--r-lg);box-shadow:var(--shadow);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);}
+.panel-header h2{font-size:16.5px;font-weight:700;}
+.panel-header p{font-size:12.5px;}
+label{font-size:11px;color:var(--muted);letter-spacing:.07em;}
+select,input{border-radius:12px;background:rgba(7,11,22,.6);border:1px solid var(--border-strong);
+  transition:border-color .2s,box-shadow .2s,background .2s;}
+select:focus,input:focus{border-color:rgba(124,156,255,.55);box-shadow:var(--ring);}
+select{-webkit-appearance:none;appearance:none;padding-right:34px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238d9ab5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;}
+select option{background:#0e1527;color:var(--text);}
+.btn{border-radius:14px;padding:12.5px 16px;font-weight:700;letter-spacing:.005em;
+  box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 10px 22px -12px rgba(0,0,0,.8);
+  transition:transform .15s,filter .2s,opacity .2s,box-shadow .2s;}
+.btn:hover{filter:brightness(1.08);}
+.btn:active{transform:translateY(0) scale(.98);}
+.btn-green{background:linear-gradient(135deg,#34d399,#059669);}
+.btn-red{background:linear-gradient(135deg,#ff6b6b,#e2364e);box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 12px 26px -12px rgba(255,80,100,.75);}
+.btn-purple{background:linear-gradient(135deg,#8b7cff,#6d4aff);box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 12px 26px -12px rgba(124,92,255,.75);}
+.btn-outline{background:var(--surface);}
+.hint{background:rgba(124,156,255,.07);border:1px solid rgba(124,156,255,.2);border-radius:14px;}
+.sl{background:#26304a;}
+input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
+.sc,.mc,.eqd-box,.an-block,.sw-card,.an-match-card,.pl-chip{background:var(--surface);border-color:var(--border);}
+.sc,.mc{border-radius:14px;}
+.sc .v,.mc .v,.eqd-box .v{font-family:var(--font-display);font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+.sw-card{border-radius:16px;transition:background .2s,border-color .2s;}
+.sw-card:hover{border-color:var(--border-strong);}
+.an-window-btn{border-radius:12px;background:var(--surface);}
+.an-window-btn.active{background:linear-gradient(180deg,rgba(124,156,255,.25),rgba(124,156,255,.1));border-color:rgba(124,156,255,.55);color:#e0e7ff;}
+.canvas-box,.log-box,.sta-canvas{background:#060a14;}
+.rtbl tr:hover td{background:rgba(255,255,255,.03);}
+.spin{border-color:rgba(255,255,255,.1);border-top-color:#7c9cff;}
+
+/* ── DRAWER FILTRI / PROFILO ── */
+.filter-drawer{background:linear-gradient(180deg,#0e1527,#0a1020);border-left:1px solid var(--border-strong);
+  border-radius:24px 0 0 24px;box-shadow:-24px 0 60px -20px rgba(0,0,0,.8);bottom:0;
+  padding-top:calc(20px + env(safe-area-inset-top,0));}
+.filter-drawer h3{font-size:19px;font-weight:700;}
+.profile-panel{background:linear-gradient(180deg,#121b30,#0c1324);border:1px solid var(--border-strong);border-radius:22px;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.85);}
+.profile-avatar,.profile-avatar-placeholder{border:2px solid transparent;
+  background:linear-gradient(#0e1527,#0e1527) padding-box,linear-gradient(135deg,var(--brand-a),var(--brand-c)) border-box;}
+.profile-avatar-placeholder{color:#c7d2fe;}
+.profile-btn-notif,.profile-btn-logout{border-radius:13px;}
+
+/* ── SCHEDA EVENTO ── */
+.eqd-sheet{background:var(--bg);}
+.eqd-header{background:rgba(7,11,22,.85);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);}
+.eqd-title{font-family:var(--font-display);font-size:17px;}
+.eqd-tabs{padding:12px 16px 0;gap:4px;}
+.eqd-tab{border-radius:12px!important;background:var(--surface);border:1px solid var(--border);border-bottom:1px solid var(--border);
+  transition:background .2s,color .2s;}
+.eqd-tab.active{background:linear-gradient(180deg,rgba(124,156,255,.26),rgba(124,156,255,.1));color:#fff;border-color:rgba(124,156,255,.45);}
+.eqd-box{border-radius:13px;}
+.eqd-loc-band{color:#a5b4fc;background:rgba(124,156,255,.08);border-radius:10px;}
+.eqd-seis-btn{border-radius:14px;padding:13px;background:linear-gradient(135deg,#7c9cff,#4f6bff);
+  box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 14px 28px -14px rgba(79,107,255,.8);}
+
+/* ── BANNER STIMA PROVVISORIA ── */
+.prov-banner{background:linear-gradient(90deg,rgba(251,146,60,.2),rgba(251,146,60,.08));
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);}
+
+/* ── MAPPE ── */
+.leaflet-container{background:#070b16!important;font-family:var(--font);}
+.leaflet-tile{filter:invert(1) hue-rotate(195deg) brightness(.86) contrast(.92) saturate(.55);}
+.leaflet-bar{border:1px solid var(--border-strong)!important;border-radius:12px!important;overflow:hidden;
+  box-shadow:0 10px 24px -10px rgba(0,0,0,.7)!important;}
+.leaflet-bar a{background:rgba(14,21,39,.9)!important;color:var(--text)!important;border-bottom-color:var(--border)!important;
+  width:34px!important;height:34px!important;line-height:34px!important;}
+.leaflet-bar a:hover{background:rgba(30,41,70,.95)!important;}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:rgba(14,21,39,.96)!important;color:var(--text)!important;
+  border:1px solid var(--border-strong);box-shadow:0 18px 40px -12px rgba(0,0,0,.8)!important;}
+.leaflet-popup-content-wrapper{border-radius:14px!important;}
+.leaflet-popup-content{font-size:13px;line-height:1.55;}
+.leaflet-container a.leaflet-popup-close-button{color:var(--muted)!important;}
+.leaflet-control-attribution{background:rgba(7,11,22,.7)!important;color:var(--faint)!important;border-radius:8px 0 0 0;}
+.leaflet-control-attribution a{color:var(--muted)!important;}
+#sectionMappa .mapbox{height:calc(100vh - 228px)!important;height:calc(100dvh - 228px)!important;}
+#sectionMappa .panel-header{background:linear-gradient(180deg,rgba(7,11,22,.6),transparent);}
+
+/* ── TOGGLE SORGENTI SISMOGENICHE ── */
+.src-toggle{background:rgba(14,21,39,.9);border:1px solid var(--border-strong);border-radius:14px;
+  padding:8px 11px;color:var(--text);font-size:12.5px;font-weight:600;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 24px -10px rgba(0,0,0,.7);
+  max-width:240px;user-select:none;}
+.src-toggle-row{display:flex;align-items:center;gap:8px;cursor:pointer;margin:0;
+  font-size:12.5px;color:var(--text);text-transform:none;letter-spacing:0;font-weight:600;}
+.src-toggle-row input{position:absolute;opacity:0;width:0;height:0;}
+.src-check{width:18px;height:18px;border-radius:6px;border:1.5px solid rgba(148,163,209,.5);flex-shrink:0;
+  display:inline-flex;align-items:center;justify-content:center;transition:all .18s;}
+.src-toggle-row input:checked+.src-check{background:linear-gradient(135deg,#ff6b6b,#ffb547);border-color:transparent;}
+.src-toggle-row input:checked+.src-check::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;
+  transform:rotate(45deg) translate(-1px,-1px);}
+.src-toggle-row input:focus-visible+.src-check{box-shadow:var(--ring);}
+.src-legend{margin-top:8px;padding-top:7px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;
+  font-size:11px;font-weight:500;color:var(--muted);}
+.src-legend span{display:flex;align-items:center;gap:6px;}
+.src-legend i{width:14px;height:3px;border-radius:2px;display:inline-block;}
+.src-note{grid-column:1/-1;font-size:9.5px;color:var(--faint);margin-top:2px;}
+
+/* ── LANDING ── */
+#landing{background:var(--bg);}
+.brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
+  -webkit-background-clip:text;background-clip:text;}
+.choice-card{border-radius:22px;background:var(--surface);}
+
+/* ── animazione di ingresso sezioni ── */
+@keyframes sectionIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.section.active{animation:sectionIn .28s ease both;}
+@media (prefers-reduced-motion:reduce){
+  .section.active{animation:none;}
+  *{transition-duration:.01ms!important;}
+}
+
+@media(max-width:640px){
+  .top-header h1{font-size:17px;}
+  .hdr-btn{width:36px;height:36px;}
+  .top-header .hdr-actions{gap:6px;}
+  .btab{font-size:9.5px;}
+  #sectionTerremoti .eq-list{padding:0 10px 8px;}
+  #sectionTerremoti .eq-item{padding:12px;}
+  .src-toggle{max-width:200px;padding:7px 9px;}
+  .src-legend{grid-template-columns:1fr;}
+  #sectionMappa .mapbox{height:calc(100vh - 222px)!important;height:calc(100dvh - 222px)!important;}
 }
 </style>
 </head>
@@ -2219,7 +2480,68 @@ function magCol(m){
 }
 function depthCol(d){return d<=10?'#ef4444':d<=30?'#f97316':d<=70?'#eab308':'#3b82f6';}
 
-/* DISS rimosso — CORS blocca l'integrazione WMS */
+/* ================================================================
+   SORGENTI SISMOGENICHE (toggle sulla mappa)
+   Il WMS del DISS non è integrabile (CORS), quindi usiamo un file statico
+   sorgenti.json: tracce superficiali delle sorgenti sismogeniche composite
+   europee (SHARE/EDSF, per l'Italia derivate dal DISS INGV) estratte dal
+   GEM Global Active Faults (CC BY-SA 4.0).
+   Formato: [id, cinematica, dip°, prof.min km, prof.max km, slip mm/a, [[lon,lat],...]]
+================================================================ */
+let srcData=null,srcLoading=null;
+function loadSorgenti(){
+  if(srcData)return Promise.resolve(srcData);
+  if(!srcLoading)srcLoading=fetch('./sorgenti.json').then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(d=>{srcData=d;return d;}).catch(e=>{srcLoading=null;throw e;});
+  return srcLoading;
+}
+function srcKind(t){
+  t=t||'';
+  if(/Subduction/.test(t))return['Subduzione','#c084fc'];
+  if(/Normal/.test(t))return['Normale','#38bdf8'];
+  if(/Reverse|Thrust/.test(t))return['Inversa','#fb7185'];
+  return['Trascorrente','#facc15'];
+}
+function addSourcesToggle(map){
+  let layer=null;
+  const ctl=L.control({position:'topright'});
+  ctl.onAdd=()=>{
+    const d=L.DomUtil.create('div','src-toggle');
+    d.innerHTML='<label class="src-toggle-row"><input type="checkbox"/><span class="src-check"></span><span>Sorgenti sismogeniche</span></label>'
+      +'<div class="src-legend" style="display:none;">'
+      +'<span><i style="background:#38bdf8"></i>Normale</span><span><i style="background:#fb7185"></i>Inversa</span>'
+      +'<span><i style="background:#facc15"></i>Trascorrente</span><span><i style="background:#c084fc"></i>Subduzione</span>'
+      +'<div class="src-note">Fonte: DISS/EDSF via GEM GAF</div></div>';
+    L.DomEvent.disableClickPropagation(d);L.DomEvent.disableScrollPropagation(d);
+    const cb=d.querySelector('input'),lg=d.querySelector('.src-legend');
+    cb.addEventListener('change',async()=>{
+      if(!cb.checked){if(layer)map.removeLayer(layer);lg.style.display='none';return;}
+      lg.style.display='';
+      if(!layer){
+        try{
+          const data=await loadSorgenti();
+          if(!map.getPane('srcPane')){const pn=map.createPane('srcPane');pn.style.zIndex=390;}
+          layer=L.layerGroup();
+          data.forEach(s=>{
+            const[id,typ,dip,z1,z2,sr,coords]=s;const[kn,col]=srcKind(typ);
+            const ll=coords.map(c=>[c[1],c[0]]);
+            const pop=`<b>Sorgente sismogenica</b><br><span style="color:${col}">●</span> ${kn} <span style="color:#94a3b8">(${typ.replace(/_/g,' ')})</span>`
+              +`<br>ID: ${id}`+(dip!=null?`<br>Inclinazione: ${dip}°`:'')
+              +(z1!=null&&z2!=null?`<br>Profondità: ${z1}–${z2} km`:'')
+              +(sr!=null?`<br>Slip rate: ${sr} mm/anno`:'');
+            L.polyline(ll,{pane:'srcPane',color:'#070b16',weight:5.5,opacity:.6,interactive:false}).addTo(layer);
+            L.polyline(ll,{pane:'srcPane',color:col,weight:2.6,opacity:.95}).bindPopup(pop).addTo(layer);
+          });
+        }catch(e){cb.checked=false;lg.style.display='none';
+          if(typeof showToast==='function')showToast('Sorgenti sismogeniche non disponibili: '+e.message);return;}
+      }
+      /* il pane 'srcPane' (z 390) tiene le sorgenti sotto agli epicentri */
+      if(cb.checked)layer.addTo(map);
+    });
+    return d;
+  };
+  ctl.addTo(map);
+}
 
 /* ================================================================
    EQ SHARED RENDERING
@@ -2737,7 +3059,7 @@ function initEqMap(){
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(eqMap);
   addLegend(eqMap);
-  /* DISS rimosso */
+  addSourcesToggle(eqMap);
 }
 
 function addLegend(m){
@@ -2797,7 +3119,7 @@ function initStMap(){
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(stMap);
   addLegend(stMap);
-  /* DISS rimosso */
+  addSourcesToggle(stMap);
 }
 
 function initStDates(){
@@ -4081,6 +4403,7 @@ function initHcMap(){
   hcMap=L.map('hcMap').setView([42.2,12.5],5);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(hcMap);
+  addSourcesToggle(hcMap);
 }
 
 async function initCatalogo(){
@@ -4901,6 +5224,7 @@ function initFmMap(){
   fmMap=L.map('fmMap').setView([42.5,12.5],6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(fmMap);
+  addSourcesToggle(fmMap);
 }
 
 function initFmDates(){
