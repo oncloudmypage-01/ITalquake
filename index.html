@@ -1067,30 +1067,26 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
 
 /* ── CARD TERREMOTO stile app INGV: nome in alto a tutta larghezza, divisore, dettagli + magnitudo ── */
 #sectionTerremoti .eq-item.eq-card,.eq-item.eq-card{display:block;padding:0;overflow:hidden;}
-.eq-card .eqc-head{display:flex;align-items:center;gap:10px;padding:14px 14px 12px 16px;
+.eq-card .eqc-head{display:flex;align-items:center;gap:8px;padding:10px 10px 8px 13px;
   border-bottom:1px solid var(--border);}
-.eq-card .eqc-head .pl{flex:1;min-width:0;font-size:17px;font-weight:700;line-height:1.25;
+.eq-card .eqc-head .pl{flex:1;min-width:0;font-size:15px;font-weight:700;line-height:1.25;
   white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;color:var(--text);}
-.eq-card .eqc-chev{width:22px;height:22px;flex-shrink:0;color:var(--faint);transition:transform .2s,color .2s;}
+.eq-card .eqc-chev{width:18px;height:18px;flex-shrink:0;color:var(--faint);transition:transform .2s,color .2s;}
 .eq-card .eqc-chev svg{width:100%;height:100%;display:block;}
 .eq-card:hover .eqc-chev{color:var(--muted);transform:translateX(2px);}
-.eq-card .eqc-body{display:flex;align-items:center;gap:10px;padding:12px 14px 14px 16px;}
-.eq-card .eqc-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px;}
-.eq-card .eqc-row{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);opacity:.88;white-space:nowrap;}
-.eq-card .eqc-row .ic{font-size:16px;color:var(--faint);}
+.eq-card .eqc-body{display:flex;align-items:center;gap:8px;padding:8px 10px 10px 13px;}
+.eq-card .eqc-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.eq-card .eqc-row{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text);opacity:.88;white-space:nowrap;}
+.eq-card .eqc-row .ic{font-size:13px;color:var(--faint);}
 .eq-card .eqc-near{color:#fca5a5;font-weight:700;}
-.eq-card .eqc-seis{flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  height:56px;padding:0 10px;border-radius:13px;cursor:pointer;
-  background:rgba(124,156,255,.1);border:1px solid rgba(124,156,255,.28);color:#c7d2fe;transition:background .2s;}
+.eq-card .eqc-seis{flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  width:40px;height:40px;padding:0;border-radius:11px;cursor:pointer;
+  background:rgba(124,156,255,.1);border:1px solid rgba(124,156,255,.28);transition:background .2s;}
 .eq-card .eqc-seis:hover{background:rgba(124,156,255,.2);}
 .eq-card .eqc-seis .ic{font-size:19px;color:#6ee7b7;}
-.eq-card .eqc-seis span:last-child{font-size:9.5px;font-weight:600;}
-.eq-card .eq-mag{order:0;margin-left:0;min-width:74px;height:56px;border-radius:13px;font-size:24px;}
-@media(max-width:640px){
-  .eq-card .eqc-head .pl{font-size:16px;}
-  .eq-card .eq-mag{min-width:66px;height:52px;font-size:22px;}
-  .eq-card .eqc-seis{height:52px;padding:0 8px;}
-}
+.eq-card .eq-mag{order:0;margin-left:0;min-width:52px;height:40px;border-radius:11px;font-size:18px;}
+#sectionTerremoti .eq-item.eq-card{border-radius:15px;}
+#sectionTerremoti .eq-list{gap:7px;}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -2750,7 +2746,7 @@ function renderList(events,containerId,onSeis){
     const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic" style="font-size:19px;">${IC.seismo}</span><span style="font-size:9px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
     const _distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
     const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
-    const sbc=onSeis?`<button class="eqc-seis" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic">${IC.seismo}</span><span>Sismogramma</span></button>`:'';
+    const sbc=onSeis?`<button class="eqc-seis" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic">${IC.seismo}</span></button>`:'';
     html+=`<div class="eq-item eq-card" onclick="openEqDetail('${containerId}',${i})">
       <div class="eqc-head">
         <div class="pl">${ev.place}</div>
