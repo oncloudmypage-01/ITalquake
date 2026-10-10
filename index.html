@@ -109,6 +109,7 @@ window.IC=(function(){
     analogy:W('<path d="M4 17V7l8 5 8-5v10"/><path d="M4 7l8 5 8-5"/>'),
     planets:W('<circle cx="12" cy="12" r="3.2"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(-22 12 12)"/><circle cx="20.2" cy="8.4" r="1.1" fill="currentColor" stroke="none"/>'),
     forecast:W('<path d="M4 19V5"/><path d="M4 19h16"/><path d="M6 15l4-4 3 3 6-7"/><path d="M17 7h3v3"/>'),
+    neural:W('<circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 6.8l3.3 4M7 17.2l3.3-4M13.7 10.8 17 6.8M13.7 13.2l3.3 4"/>'),
     archive:W('<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/>')
   };
 })();
@@ -866,8 +867,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{ou
   -webkit-backdrop-filter:saturate(1.4) blur(18px);backdrop-filter:saturate(1.4) blur(18px);
   border-bottom:1px solid var(--border);padding:10px 14px;
   padding-top:calc(10px + env(safe-area-inset-top,0));}
-.top-header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(255,107,107,.55),rgba(255,181,71,.45),rgba(124,156,255,.55),transparent);opacity:.7;}
+.top-header{border-bottom:none;}
 .top-header h1{font-size:19px;font-weight:700;flex:1;min-width:0;white-space:nowrap;}
 .top-header h1 .ic{width:32px;height:32px;border-radius:10px;font-size:17px;color:#fff;
   background:linear-gradient(135deg,var(--brand-a),var(--brand-b));
@@ -939,6 +939,8 @@ body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0));}
 #sectionTerremoti .eq-item:hover{background:var(--surface-2);border-color:var(--border-strong);}
 #sectionTerremoti .eq-item:active{transform:scale(.99);}
 .eq-info .pl{font-family:var(--font-display);letter-spacing:-.01em;}
+/* nome località + provincia sempre leggibile per intero (va a capo, niente "…") */
+.eq-info .pl{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;overflow-wrap:anywhere;}
 .eq-mag{border-radius:15px;font-family:var(--font-display);font-variant-numeric:tabular-nums;letter-spacing:-.02em;
   box-shadow:0 1px 0 rgba(255,255,255,.08) inset;}
 .m0{background:linear-gradient(160deg,rgba(148,163,184,.22),rgba(148,163,184,.08));color:#cbd5e1;border:1px solid rgba(148,163,184,.25);}
@@ -1056,6 +1058,12 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
 .src-legend i{width:14px;height:3px;border-radius:2px;display:inline-block;}
 .src-note{grid-column:1/-1;font-size:9.5px;color:var(--faint);margin-top:2px;}
 
+.nn-prog{height:6px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden;}
+.nn-prog>div{height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#8b7cff,#f0abfc);transition:width .2s;}
+.nn-chart-title{margin:16px 0 6px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#c7d2fe;}
+.nn-chart-title span{font-weight:500;text-transform:none;letter-spacing:0;color:var(--faint);}
+.nn-chart{background:rgba(6,10,20,.6);border:1px solid var(--border);border-radius:14px;padding:6px 4px 2px;}
+.nn-chart canvas{display:block;}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -1187,6 +1195,13 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
         <div class="side-menu-text">
           <div class="side-menu-title">Prospettiva Sismica <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Probabilità a breve termine (clustering/Omori) e ricorrenza storica per zona</div>
+        </div>
+      </button>
+      <button class="side-menu-item" onclick="closeSideMenu();goSection('rete')">
+        <span class="ic side-menu-icon" data-ic="neural" style="color:#f0abfc;"></span>
+        <div class="side-menu-text">
+          <div class="side-menu-title">Rete Neurale <span class="side-badge">Sperimentale</span></div>
+          <div class="side-menu-desc">Una piccola rete neurale impara dall'ultimo anno di dati INGV e "prosegue" l'andamento degli eventi nei giorni successivi</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('pianeti')">
@@ -1710,6 +1725,58 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
     </div>
   </div>
 
+  <!-- ═══ RETE NEURALE (sperimentale) ═══ -->
+  <div class="section" id="sectionRete">
+    <div class="container">
+      <div class="header">
+        <div class="title-wrap"><h1>Rete Neurale</h1>
+          <p>Una rete neurale (ensemble di 5 percettroni multistrato) viene addestrata direttamente sul tuo dispositivo con l'ultimo anno di terremoti INGV della zona scelta, poi "prosegue" la serie: numero di eventi al giorno e magnitudo massima giornaliera.</p></div>
+        <span class="badge" style="background:rgba(240,171,252,.14);color:#f0abfc;border:1px solid rgba(240,171,252,.4);">Sperimentale</span>
+      </div>
+      <div class="an-warn" style="color:#fbbf24;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
+        ⚠️ <b>Non è una previsione dei terremoti.</b> La rete estrapola solo la tendenza statistica dell'attività
+        (quanti eventi, di che taglia tipica): <b>non può anticipare</b> un forte terremoto improvviso, e tende a riportarsi
+        verso la media man mano che si allontana da oggi. Usala come curiosità per vedere se uno sciame tende a calare o a crescere.
+      </div>
+
+      <section class="panel" style="margin-top:16px;">
+        <div class="panel-header"><h2>Impostazioni</h2><p>Zona, soglia di magnitudo e quanti giorni proseguire</p></div>
+        <div class="controls">
+          <div class="field"><label>Zona</label><select id="nnZone"></select></div>
+          <div class="row-2">
+            <div class="field"><label>Magnitudo min.</label>
+              <select id="nnMinMag"><option value="1.5">M≥1.5</option><option value="2" selected>M≥2.0</option><option value="2.5">M≥2.5</option></select></div>
+            <div class="field"><label>Prosegui per</label>
+              <select id="nnHorizon"><option value="7">7 giorni</option><option value="14" selected>14 giorni</option><option value="30">30 giorni</option></select></div>
+          </div>
+          <button class="btn btn-purple" id="nnRunBtn" onclick="runRete()" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="neural" style="font-size:17px;"></span>Addestra e prosegui</button>
+          <div class="nn-prog" id="nnProg" style="display:none;"><div id="nnProgBar"></div></div>
+          <div id="nnStatus" class="status">Premi per scaricare i dati e addestrare la rete.</div>
+        </div>
+      </section>
+
+      <section class="panel" id="nnOut" style="display:none;">
+        <div class="panel-header"><h2 id="nnOutTitle">Risultato</h2><p id="nnOutSub"></p></div>
+        <div style="padding:6px 16px 16px;">
+          <div id="nnState"></div>
+          <div class="eqd-grid" id="nnGrid" style="margin-top:12px;"></div>
+          <div class="nn-chart-title">Eventi al giorno <span>— barre: osservati · linea: rete neurale · fascia: incertezza</span></div>
+          <div class="nn-chart"><canvas id="nnChart"></canvas></div>
+          <div class="nn-chart-title">Magnitudo massima giornaliera</div>
+          <div class="nn-chart"><canvas id="nnMagChart"></canvas></div>
+          <div id="nnVal" class="hint" style="margin-top:12px;"></div>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        Modello: 5 reti neurali feed-forward (56 ingressi = ultimi 28 giorni di conteggio e magnitudo massima → 24 → 12 → 2 uscite,
+        attivazione tanh, ottimizzatore Adam), addestrate in JavaScript nel browser. La previsione è autoregressiva: ogni giorno
+        previsto diventa ingresso per il successivo. La fascia indica il disaccordo tra le 5 reti.
+        Fonte dati: <code>webservices.ingv.it/fdsnws/event/1/query</code>.
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ CONFIGURAZIONI PLANETARIE (gioco) ═══ -->
   <div class="section" id="sectionPianeti">
     <div class="container">
@@ -2142,7 +2209,7 @@ function goSection(sec){
     focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],
     localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],analogia:['analogy','Analogia Sismica'],
     pianeti:['planets','Configurazioni Planetarie'],prospettiva:['forecast','Prospettiva Sismica'],
-    catalogo:['archive','Catalogo Storico']};
+    catalogo:['archive','Catalogo Storico'],rete:['neural','Rete Neurale']};
   const _tt=titles[sec];
   document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
   document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
@@ -2188,6 +2255,9 @@ function goSection(sec){
   } else if(sec==='prospettiva'){
     document.getElementById('sectionProspettiva').classList.add('active');
     renderProspettivaLong();
+  } else if(sec==='rete'){
+    document.getElementById('sectionRete').classList.add('active');
+    initRete();
   } else if(sec==='catalogo'){
     document.getElementById('sectionCatalogo').classList.add('active');
     if(!hcMapInited){initHcMap();hcMapInited=true;}
@@ -2592,18 +2662,18 @@ function renderMarkers(events,leafletMap,markersArr,onSeis,autoZoom=true){
         :'';
       this.getPopup().setContent(`<div style="font-family:sans-serif;min-width:180px;">
       <b style="font-size:14px;">${_popupEv.place}</b><br>
-      <span style="color:#555;font-size:12px;">${_popupEv.time.replace('T',' ').slice(0,19)} UTC</span>
+      <span style="color:#8d9ab5;font-size:12px;">${_popupEv.time.replace('T',' ').slice(0,19)} UTC</span>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;">
-        <div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">
-          <div style="font-size:9px;color:#6b7280;text-transform:uppercase;">Magnitudo</div>
-          <div style="font-size:18px;font-weight:800;color:#dc2626;">${_popupEv.mag.toFixed(1)}</div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
+          <div style="font-size:9px;color:#8d9ab5;text-transform:uppercase;">Magnitudo</div>
+          <div style="font-size:18px;font-weight:800;color:#fca5a5;">${_popupEv.mag.toFixed(1)}</div>
         </div>
-        <div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">
-          <div style="font-size:9px;color:#6b7280;text-transform:uppercase;">Profondità</div>
-          <div style="font-size:18px;font-weight:800;">${_popupEv.depth.toFixed(0)} km</div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
+          <div style="font-size:9px;color:#8d9ab5;text-transform:uppercase;">Profondità</div>
+          <div style="font-size:18px;font-weight:800;color:#93c5fd;">${_popupEv.depth.toFixed(0)} km</div>
         </div>
       </div>
-      <div style="font-size:10px;color:#6b7280;margin-top:6px;">Lat ${_popupEv.lat.toFixed(3)} · Lon ${_popupEv.lon.toFixed(3)}</div>
+      <div style="font-size:10px;color:#8d9ab5;margin-top:6px;">Lat ${_popupEv.lat.toFixed(3)} · Lon ${_popupEv.lon.toFixed(3)}</div>
       ${distRow}
       ${_popupOnSeis?`<button onclick="${_popupOnSeis}(${_popupI})" style="margin-top:9px;width:100%;padding:7px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">📈 Sismogramma</button>`:''}
     </div>`);
@@ -5359,16 +5429,16 @@ function fmPopupHtml(ev){
   const np2=!isNaN(ev.strike2)?ev.strike2.toFixed(0)+'/'+ev.dip2.toFixed(0)+'/'+ev.rake2.toFixed(0):'N/D';
   return '<div style="font-family:sans-serif;min-width:200px;">'
     +'<b style="font-size:14px">'+ev.place+'</b><br>'
-    +'<span style="font-size:12px;color:#6b7280">'+ev.time.replace('T',' ').slice(0,19)+' UTC</span>'
+    +'<span style="font-size:12px;color:#8d9ab5">'+ev.time.replace('T',' ').slice(0,19)+' UTC</span>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;">'
-    +'<div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">'
-    +'<div style="font-size:9px;color:#6b7280;text-transform:uppercase">Magnitudo</div>'
-    +'<div style="font-size:18px;font-weight:800;color:#dc2626">'+ev.mag.toFixed(1)+' '+ev.magType+'</div></div>'
-    +'<div style="background:#f3f4f6;border-radius:7px;padding:5px 9px;">'
-    +'<div style="font-size:9px;color:#6b7280;text-transform:uppercase">Profondita</div>'
-    +'<div style="font-size:18px;font-weight:800;color:#2563eb">'+ev.depth.toFixed(0)+' km</div></div></div>'
-    +'<div style="margin-top:8px;font-size:12px;background:#f3f4f6;border-radius:7px;padding:7px 10px;">'
-    +'<div style="color:#6b7280;font-size:10px;text-transform:uppercase;margin-bottom:3px">Piani nodali (str/dip/rake)</div>'
+    +'<div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
+    +'<div style="font-size:9px;color:#8d9ab5;text-transform:uppercase">Magnitudo</div>'
+    +'<div style="font-size:18px;font-weight:800;color:#fca5a5">'+ev.mag.toFixed(1)+' '+ev.magType+'</div></div>'
+    +'<div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
+    +'<div style="font-size:9px;color:#8d9ab5;text-transform:uppercase">Profondita</div>'
+    +'<div style="font-size:18px;font-weight:800;color:#93c5fd">'+ev.depth.toFixed(0)+' km</div></div></div>'
+    +'<div style="margin-top:8px;font-size:12px;background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:7px 10px;">'
+    +'<div style="color:#8d9ab5;font-size:10px;text-transform:uppercase;margin-bottom:3px">Piani nodali (str/dip/rake)</div>'
     +'<div>NP1: <b>'+np1+'</b></div><div>NP2: <b>'+np2+'</b></div></div></div>';
 }
 
@@ -6044,6 +6114,251 @@ async function toggleFcm(enabled){
 /* FCM foreground message handler — usa _fbMsg già inizializzato in initFirebase()
    per evitare di creare una seconda istanza separata che potrebbe non agganciarsi
    correttamente in alcuni browser. Il setup viene fatto dentro initFirebase(). */
+
+
+/* ================================================================
+   RETE NEURALE — "prosegue" l'attività sismica (sperimentale)
+   Ensemble di MLP addestrati nel browser sulla serie giornaliera
+   (conteggio eventi + magnitudo massima) dell'ultimo anno INGV.
+================================================================ */
+const NN_ZONES=HC_ZONES.concat([
+  {n:'Campi Flegrei e Vesuvio', lat:40.83, lon:14.25, r:25},
+  {n:'Etna', lat:37.75, lon:15.0, r:35}
+]);
+const NN_DAYS=365, NN_WIN=28, NN_VAL=30, NN_ENS=5, NN_EPOCHS=90, NN_HID=[24,12];
+let _nnInited=false,_nnRunning=false,_nnCache=null,_nnLast=null;
+
+function initRete(){
+  if(_nnInited)return;_nnInited=true;
+  const sel=document.getElementById('nnZone');
+  sel.innerHTML=NN_ZONES.map((z,i)=>`<option value="${i}">${z.n}</option>`).join('');
+  window.addEventListener('resize',()=>{if(_nnLast&&document.getElementById('sectionRete').classList.contains('active'))_nnDraw(_nnLast);});
+}
+function _nnRng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function _nnInit(sizes,rng){
+  const L=[];
+  for(let i=0;i<sizes.length-1;i++){
+    const nin=sizes[i],nout=sizes[i+1],lim=Math.sqrt(6/(nin+nout)),n=nin*nout;
+    const W=new Float64Array(n);for(let k=0;k<n;k++)W[k]=(rng()*2-1)*lim;
+    L.push({nin,nout,W,b:new Float64Array(nout),gW:new Float64Array(n),gb:new Float64Array(nout),
+      mW:new Float64Array(n),vW:new Float64Array(n),mb:new Float64Array(nout),vb:new Float64Array(nout)});
+  }
+  return{L,t:0};
+}
+function _nnForward(net,x){
+  const acts=[x];let a=x;const last=net.L.length-1;
+  net.L.forEach((ly,li)=>{
+    const o=new Float64Array(ly.nout);
+    for(let j=0;j<ly.nout;j++){let s=ly.b[j];const off=j*ly.nin;
+      for(let i=0;i<ly.nin;i++)s+=ly.W[off+i]*a[i];
+      o[j]=li<last?Math.tanh(s):s;}
+    acts.push(o);a=o;
+  });
+  return acts;
+}
+function _nnBackward(net,acts,y){
+  const n=net.L.length,out=acts[n];
+  let d=new Float64Array(out.length);
+  for(let j=0;j<out.length;j++)d[j]=2*(out[j]-y[j]);
+  for(let li=n-1;li>=0;li--){
+    const ly=net.L[li],a=acts[li],dp=new Float64Array(ly.nin);
+    for(let j=0;j<ly.nout;j++){const off=j*ly.nin,dj=d[j];ly.gb[j]+=dj;
+      for(let i=0;i<ly.nin;i++){ly.gW[off+i]+=dj*a[i];dp[i]+=ly.W[off+i]*dj;}}
+    if(li>0)for(let i=0;i<ly.nin;i++)dp[i]*=1-a[i]*a[i];
+    d=dp;
+  }
+}
+function _nnStep(net,bs,lr,l2){
+  net.t++;const b1=.9,b2=.999,c1=1-Math.pow(b1,net.t),c2=1-Math.pow(b2,net.t);
+  const upd=(P,G,M,V,dec)=>{for(let k=0;k<P.length;k++){const g=G[k]/bs+(dec?l2*P[k]:0);
+    M[k]=b1*M[k]+(1-b1)*g;V[k]=b2*V[k]+(1-b2)*g*g;P[k]-=lr*(M[k]/c1)/(Math.sqrt(V[k]/c2)+1e-8);G[k]=0;}};
+  for(const ly of net.L){upd(ly.W,ly.gW,ly.mW,ly.vW,true);upd(ly.b,ly.gb,ly.mb,ly.vb,false);}
+}
+async function _nnFetch(minMag){
+  if(_nnCache&&_nnCache.minMag===minMag&&Date.now()-_nnCache.at<15*60000)return _nnCache;
+  const end=new Date(),start=new Date(end.getTime()-NN_DAYS*86400000);
+  start.setUTCHours(0,0,0,0);
+  const fmt=d=>d.toISOString().slice(0,19);
+  const url=`${EQ_BASE}?format=text&starttime=${fmt(start)}&endtime=${fmt(end)}&orderby=time&limit=20000`
+    +`&minmagnitude=${minMag}&minlat=35&maxlat=48&minlon=6&maxlon=19.5`;
+  const resp=await fetch(url,{signal:AbortSignal.timeout(45000)});
+  if(!resp.ok&&resp.status!==204)throw new Error('HTTP '+resp.status);
+  const evs=resp.status===204?[]:parseEqText(await resp.text(),999);
+  _nnCache={minMag,at:Date.now(),start:start.getTime(),evs,capped:evs.length>=20000};
+  return _nnCache;
+}
+/* serie giornaliera: n eventi e magnitudo massima per giorno (UTC) */
+function _nnSeries(data,zone,minMag){
+  const nd=Math.floor((Date.now()-data.start)/86400000)+1;
+  const n=new Array(nd).fill(0),mx=new Array(nd).fill(null);
+  for(const e of data.evs){
+    if(!zone.all&&haversine(e.lat,e.lon,zone.lat,zone.lon)>zone.r)continue;
+    const d=Math.floor((Date.parse(e.time)-data.start)/86400000);
+    if(d<0||d>=nd)continue;
+    n[d]++;if(mx[d]==null||e.mag>mx[d])mx[d]=e.mag;
+  }
+  /* l'ultimo giorno è parziale: lo scaliamo alle 24 h per non falsare la coda */
+  const frac=Math.max(.15,((Date.now()-data.start)/86400000)%1);
+  const nAdj=n.slice();nAdj[nd-1]=n[nd-1]/frac;
+  return{n,nAdj,mx,nd,frac,floor:minMag-0.4};
+}
+function _nnFeat(c,m,t){const x=new Float64Array(NN_WIN*2);
+  for(let k=0;k<NN_WIN;k++){x[k]=c[t-NN_WIN+k];x[NN_WIN+k]=m[t-NN_WIN+k];}return x;}
+
+async function runRete(){
+  if(_nnRunning)return;
+  const btn=document.getElementById('nnRunBtn'),st=document.getElementById('nnStatus');
+  const prog=document.getElementById('nnProg'),bar=document.getElementById('nnProgBar');
+  const zone=NN_ZONES[+document.getElementById('nnZone').value]||NN_ZONES[0];
+  const minMag=+document.getElementById('nnMinMag').value,H=+document.getElementById('nnHorizon').value;
+  _nnRunning=true;btn.disabled=true;prog.style.display='';bar.style.width='0%';
+  st.textContent='Scarico un anno di terremoti da INGV…';st.className='status';
+  try{
+    const data=await _nnFetch(minMag);
+    const S=_nnSeries(data,zone,minMag);
+    const tot=S.n.reduce((a,b)=>a+b,0);
+    if(tot<30)throw new Error(`troppi pochi eventi (${tot}) in "${zone.n}" con M≥${minMag}: prova una soglia più bassa o una zona più ampia`);
+    /* normalizzazione: log(1+n) standardizzato, magnitudo riscalata */
+    const lc=S.nAdj.map(v=>Math.log1p(v));
+    const mu=lc.reduce((a,b)=>a+b,0)/lc.length;
+    const sd=Math.sqrt(lc.reduce((a,b)=>a+(b-mu)**2,0)/lc.length)||1;
+    const c=lc.map(v=>(v-mu)/sd);
+    const m=S.mx.map(v=>((v==null?S.floor:v)-minMag)/2);
+    const unC=v=>Math.max(0,Math.expm1(v*sd+mu)),unM=v=>v*2+minMag;
+    const idx=[];for(let t=NN_WIN;t<S.nd;t++)idx.push(t);
+    const trainIdx=idx.filter(t=>t<S.nd-NN_VAL),valIdx=idx.filter(t=>t>=S.nd-NN_VAL);
+    const X=t=>_nnFeat(c,m,t),Y=t=>[c[t],m[t]];
+    const nets=[];
+    const totalSteps=NN_ENS*NN_EPOCHS*1.3;let done=0;
+    for(let k=0;k<NN_ENS;k++){
+      const rng=_nnRng(1234+k*977);
+      const net=_nnInit([NN_WIN*2,...NN_HID,2],rng);
+      const run=async(set,epochs)=>{
+        const ord=set.slice();
+        for(let ep=0;ep<epochs;ep++){
+          for(let i=ord.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]];}
+          for(let b=0;b<ord.length;b+=16){const bt=ord.slice(b,b+16);
+            for(const t of bt)_nnBackward(net,_nnForward(net,X(t)),Y(t));
+            _nnStep(net,bt.length,0.003,2e-3);}
+          done++;
+          if(done%8===0){bar.style.width=(100*done/totalSteps).toFixed(0)+'%';
+            st.textContent=`Addestro la rete ${k+1} di ${NN_ENS}…`;await new Promise(r=>setTimeout(r,0));}
+        }
+      };
+      await run(trainIdx,NN_EPOCHS);
+      net.val=valIdx.map(t=>_nnForward(net,X(t))[NN_HID.length+1]);
+      await run(idx,Math.round(NN_EPOCHS*.3));   /* rifinitura con anche gli ultimi 30 giorni */
+      nets.push(net);
+    }
+    /* validazione onesta sugli ultimi 30 giorni (reti non ancora rifinite) */
+    let maeNN=0,maePers=0;
+    valIdx.forEach((t,i)=>{
+      const pred=nets.reduce((a,nt)=>a+unC(nt.val[i][0]),0)/nets.length;
+      const pers=S.nAdj.slice(t-7,t).reduce((a,b)=>a+b,0)/7;
+      maeNN+=Math.abs(pred-S.nAdj[t]);maePers+=Math.abs(pers-S.nAdj[t]);
+    });
+    maeNN/=valIdx.length;maePers/=valIdx.length;
+    /* proiezione autoregressiva per H giorni, una traiettoria per rete */
+    const traj=nets.map(net=>{
+      const cc=c.slice(),mm=m.slice(),outN=[],outM=[];
+      for(let h=0;h<H;h++){
+        const t=cc.length,o=_nnForward(net,_nnFeat(cc,mm,t))[NN_HID.length+1];
+        const cv=Math.max((0-mu)/sd,o[0]),mv=Math.min(Math.max(o[1],(S.floor-minMag)/2),3);
+        cc.push(cv);mm.push(mv);outN.push(unC(cv));outM.push(unM(mv));
+      }
+      return{outN,outM};
+    });
+    const agg=(key)=>Array.from({length:H},(_,h)=>{const v=traj.map(tr=>tr[key][h]).sort((a,b)=>a-b);
+      return{mean:v.reduce((a,b)=>a+b,0)/v.length,lo:v[0],hi:v[v.length-1]};});
+    const fN=agg('outN'),fM=agg('outM');
+    bar.style.width='100%';
+    _nnLast={zone,minMag,H,S,fN,fM,maeNN,maePers,capped:data.capped,tot};
+    _nnRender(_nnLast);
+    st.textContent=`Fatto: ${tot} eventi analizzati, ${NN_ENS} reti addestrate.`;st.className='status ok';
+  }catch(e){
+    st.textContent='Errore: '+e.message;st.className='status err';console.error('runRete:',e);
+  }finally{_nnRunning=false;btn.disabled=false;setTimeout(()=>{prog.style.display='none';},600);}
+}
+function _nnRender(R){
+  const {zone,minMag,H,S,fN,fM}=R;
+  const out=document.getElementById('nnOut');out.style.display='';
+  document.getElementById('nnOutTitle').textContent=zone.n;
+  document.getElementById('nnOutSub').textContent=`Eventi M≥${minMag} · ultimi ${S.nd} giorni osservati + ${H} giorni proseguiti dalla rete`;
+  const past=S.nAdj.slice(-H).reduce((a,b)=>a+b,0);
+  const fut=fN.reduce((a,b)=>a+b.mean,0),futLo=fN.reduce((a,b)=>a+b.lo,0),futHi=fN.reduce((a,b)=>a+b.hi,0);
+  const ratio=past>0?fut/past:(fut>0?2:1);
+  let state,cls,sub;
+  if(ratio>=1.25){state='IN AUMENTO';cls='pr-hi';sub=`≈ +${((ratio-1)*100).toFixed(0)}% rispetto agli ultimi ${H} giorni`;}
+  else if(ratio<=0.8){state='IN CALO';cls='pr-lo';sub=`≈ −${((1-ratio)*100).toFixed(0)}% rispetto agli ultimi ${H} giorni`;}
+  else{state='STABILE';cls='pr-mid';sub=`simile agli ultimi ${H} giorni`;}
+  document.getElementById('nnState').innerHTML=`<div class="pr-state ${cls}"><div class="pr-state-lab">Tendenza prevista dalla rete</div>
+    <div class="pr-state-val">${state}</div><div class="pr-state-sub">${sub}</div></div>`;
+  const mxPast=Math.max(...S.mx.slice(-H).map(v=>v==null?0:v));
+  const mxFut=Math.max(...fM.map(v=>v.mean));
+  document.getElementById('nnGrid').innerHTML=`
+    <div class="eqd-box"><div class="k">Eventi attesi (${H} gg)</div><div class="v">${Math.round(fut)}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px;">range ${Math.round(futLo)}–${Math.round(futHi)}</div></div>
+    <div class="eqd-box"><div class="k">Osservati ultimi ${H} gg</div><div class="v" style="color:var(--muted);">${Math.round(past)}</div></div>
+    <div class="eqd-box"><div class="k">Mag. max giornaliera tipica</div><div class="v" style="color:#fdba74;">${mxFut.toFixed(1)}</div></div>
+    <div class="eqd-box"><div class="k">Mag. max ultimi ${H} gg</div><div class="v" style="color:var(--muted);">${mxPast?mxPast.toFixed(1):'—'}</div></div>`;
+  const better=R.maeNN<R.maePers;
+  document.getElementById('nnVal').innerHTML=`<b>Verifica sugli ultimi ${NN_VAL} giorni</b> (dati nascosti alla rete durante l'addestramento):
+    errore medio <b>${R.maeNN.toFixed(1)}</b> eventi/giorno, contro <b>${R.maePers.toFixed(1)}</b> del metodo banale "media degli ultimi 7 giorni".
+    ${better?'La rete ha fatto meglio del riferimento banale.':'La rete <b>non</b> ha battuto il riferimento banale: prendi la tendenza con molta cautela.'}
+    ${R.capped?'<br>⚠️ Raggiunto il limite di 20.000 eventi scaricati: alza la soglia di magnitudo per una serie completa.':''}`;
+  _nnDraw(R);
+}
+function _nnCanvas(id,h){
+  const cv=document.getElementById(id),w=cv.parentElement.clientWidth||320,dpr=window.devicePixelRatio||1;
+  cv.width=w*dpr;cv.height=h*dpr;cv.style.width=w+'px';cv.style.height=h+'px';
+  const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);return{ctx,w,h};
+}
+function _nnDraw(R){
+  const {S,fN,fM,H}=R,SHOW=Math.min(S.nd,Math.max(60,H*3));
+  const obsN=S.nAdj.slice(-SHOW),obsM=S.mx.slice(-SHOW),tot=SHOW+H;
+  const pad={l:34,r:8,t:10,b:22};
+  const axisDates=(ctx,w,h)=>{
+    ctx.fillStyle='#5d6a86';ctx.font='10px Inter,system-ui,sans-serif';ctx.textAlign='center';
+    const day0=Date.now()-(SHOW-1)*86400000,step=Math.ceil(tot/6);
+    for(let i=0;i<tot;i+=step){const x=pad.l+(i+.5)*(w-pad.l-pad.r)/tot;
+      ctx.fillText(new Date(day0+i*86400000).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'}),x,h-6);}
+  };
+  const today=(ctx,w,h)=>{const x=pad.l+SHOW*(w-pad.l-pad.r)/tot;
+    ctx.strokeStyle='rgba(240,171,252,.55)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#f0abfc';ctx.font='600 10px Inter,system-ui,sans-serif';ctx.textAlign='left';ctx.fillText('oggi',x+4,pad.t+9);};
+  const grid=(ctx,w,h,ymax,yfmt,ymin=0)=>{
+    ctx.strokeStyle='rgba(148,163,209,.1)';ctx.fillStyle='#5d6a86';ctx.font='10px Inter,system-ui,sans-serif';ctx.textAlign='right';
+    for(let g=0;g<=3;g++){const v=ymin+(ymax-ymin)*g/3,y=h-pad.b-(h-pad.t-pad.b)*g/3;
+      ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillText(yfmt(v),pad.l-5,y+3);}
+  };
+  /* --- conteggi --- */
+  {const {ctx,w,h}=_nnCanvas('nnChart',190);
+   const ymax=Math.max(1,...obsN,...fN.map(v=>v.hi))*1.1,bw=(w-pad.l-pad.r)/tot;
+   const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/ymax,Xc=i=>pad.l+(i+.5)*bw;
+   grid(ctx,w,h,ymax,v=>v.toFixed(0));
+   ctx.fillStyle='rgba(124,156,255,.55)';
+   obsN.forEach((v,i)=>{const y=Y(v);ctx.fillRect(pad.l+i*bw+bw*.12,y,Math.max(1,bw*.76),h-pad.b-y);});
+   ctx.fillStyle='rgba(240,171,252,.18)';ctx.beginPath();
+   fN.forEach((v,i)=>{const x=Xc(SHOW+i);i?ctx.lineTo(x,Y(v.hi)):ctx.moveTo(x,Y(v.hi));});
+   for(let i=fN.length-1;i>=0;i--)ctx.lineTo(Xc(SHOW+i),Y(fN[i].lo));ctx.closePath();ctx.fill();
+   ctx.strokeStyle='#f0abfc';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(Xc(SHOW-1),Y(obsN[SHOW-1]));
+   fN.forEach((v,i)=>ctx.lineTo(Xc(SHOW+i),Y(v.mean)));ctx.stroke();ctx.lineWidth=1;
+   today(ctx,w,h);axisDates(ctx,w,h);}
+  /* --- magnitudo massima --- */
+  {const {ctx,w,h}=_nnCanvas('nnMagChart',150);
+   const vals=obsM.filter(v=>v!=null);
+   const ymin=Math.floor(R.minMag-.5),ymax=Math.ceil(Math.max(ymin+2,...vals,...fM.map(v=>v.hi))+.2),bw=(w-pad.l-pad.r)/tot;
+   const Y=v=>h-pad.b-(h-pad.t-pad.b)*(v-ymin)/(ymax-ymin),Xc=i=>pad.l+(i+.5)*bw;
+   grid(ctx,w,h,ymax,v=>v.toFixed(1),ymin);
+   obsM.forEach((v,i)=>{if(v==null)return;ctx.fillStyle=magCol(v);ctx.beginPath();ctx.arc(Xc(i),Y(v),Math.max(1.6,Math.min(4,bw*.4)),0,7);ctx.fill();});
+   ctx.fillStyle='rgba(253,186,116,.16)';ctx.beginPath();
+   fM.forEach((v,i)=>{const x=Xc(SHOW+i);i?ctx.lineTo(x,Y(v.hi)):ctx.moveTo(x,Y(v.hi));});
+   for(let i=fM.length-1;i>=0;i--)ctx.lineTo(Xc(SHOW+i),Y(fM[i].lo));ctx.closePath();ctx.fill();
+   ctx.strokeStyle='#fdba74';ctx.lineWidth=2.2;ctx.beginPath();
+   fM.forEach((v,i)=>{const x=Xc(SHOW+i);i?ctx.lineTo(x,Y(v.mean)):ctx.moveTo(x,Y(v.mean));});ctx.stroke();ctx.lineWidth=1;
+   today(ctx,w,h);axisDates(ctx,w,h);}
+}
 
 </script>
 </body>
