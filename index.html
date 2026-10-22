@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#070b16"/>
+<meta name="theme-color" content="#080C18"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"/>
@@ -1087,6 +1087,44 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
 .eq-card .eq-mag{order:0;margin-left:0;min-width:52px;height:40px;border-radius:11px;font-size:18px;}
 #sectionTerremoti .eq-item.eq-card{border-radius:15px;}
 #sectionTerremoti .eq-list{gap:7px;}
+
+/* ── IDENTITÀ "Lava" (dalla tela di design) ── */
+:root{--bg:#080C18;--panel:#111A2E;--surface:#111A2E;--surface-2:#16213A;--border:#1F2A44;--border-strong:#2A3654;
+  --muted:#A3AFC8;--lava:#FF5A3C;--wave:#8FA8FF;}
+html,body{background:#080C18;}
+body::before{background:radial-gradient(700px 420px at 100% -10%,rgba(255,90,60,.10),transparent 60%),#080C18;}
+.top-header{background:rgba(8,12,24,.92);}
+.top-header h1 .ic{background:var(--lava);box-shadow:0 8px 20px -8px rgba(255,90,60,.6);}
+.hdr-btn{background:#111A2E;border-color:#1F2A44;width:44px;height:44px;}
+.sort-bar{background:#111A2E;border-color:#111A2E;}
+.sort-btn.active{background:#EEF2FB!important;background-image:none!important;color:#080C18;box-shadow:none;}
+.time-section{color:var(--wave);}
+#sectionTerremoti .eq-item.eq-card{background:#111A2E;border-color:#1F2A44;position:relative;}
+.eq-card .eqc-bar{position:absolute;left:6px;top:10px;bottom:10px;width:4px;border-radius:4px;}
+.eq-card .eqc-head,.eq-card .eqc-body{padding-left:20px;}
+.m0{background:#2E3B57;color:#CBD5E1;border-color:transparent;}
+.m1{background:#1F5B48;color:#8BF0C4;border-color:transparent;}
+.m2{background:#5E4C12;color:#FDE68A;border-color:transparent;}
+.m3{background:#6B3416;color:#FFC79A;border-color:transparent;}
+.m4{background:#7A1E2A;color:#FFC2C8;border-color:transparent;box-shadow:none;}
+.eq-hero{margin:10px 14px 0;padding:16px 18px;border-radius:20px;background:#111A2E;border:1px solid #1F2A44;display:flex;align-items:center;gap:14px;}
+.eq-hero-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.eq-hero-lab{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.eq-hero-num{font-family:var(--font-display);font-size:32px;font-weight:700;line-height:1;}
+.eq-hero-num small{font-size:15px;font-weight:500;color:var(--muted);}
+.eq-hero-sub{font-size:13px;color:#C9D2E3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.eq-hero-wave{width:104px;height:46px;flex-shrink:0;}
+.bottom-tabs{background:#131D33;border-color:#26324F;}
+.btab.active{background:#1E2A47;box-shadow:none;}
+.btn-red,.eqd-seis-btn{background:var(--lava);box-shadow:0 12px 26px -14px rgba(255,90,60,.8);}
+.panel{background:#111A2E;border-color:#1F2A44;}
+.side-menu,.filter-drawer,.profile-panel{background:#0C1324;}
+.side-menu-item{background:#111A2E;}
+.eqd-sheet{background:#080C18;}
+.eqd-box,.sc,.mc{background:#111A2E;border-color:#1F2A44;}
+.eqd-tab.active{background:#1E2A47;border-color:#2A3654;}
+.eqd-title{font-size:18px;}
+.brand h1{background:none;-webkit-text-fill-color:#EEF2FB;}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -1324,6 +1362,14 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
     <div class="search-bar">
       <input id="eqSearchInput" type="text" placeholder="🔍 Cerca per provincia, regione o località (es. Benevento, BN, Campania)" oninput="filterEqByProv()"/>
       <button id="eqSearchClear" class="search-clear" title="Cancella ricerca" onclick="clearEqSearch()">✕</button>
+    </div>
+    <div class="eq-hero" id="eqHero" style="display:none;">
+      <div class="eq-hero-txt">
+        <div class="eq-hero-lab" id="eqHeroLab">Ultime 24 ore</div>
+        <div class="eq-hero-num"><span id="eqHeroN">0</span> <small>eventi</small></div>
+        <div class="eq-hero-sub" id="eqHeroSub"></div>
+      </div>
+      <svg class="eq-hero-wave" viewBox="0 0 110 48" fill="none" aria-hidden="true"><path d="M2 30h14l4-10 6 20 6-30 6 26 4-8h16l4-6 5 12 5-18 5 14h31" stroke="#8FA8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
     <div class="sort-bar">
       <button class="sort-btn active" id="sortData" onclick="sortEq('data')">Data</button>
@@ -2748,6 +2794,7 @@ function renderList(events,containerId,onSeis){
     const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
     const sbc=onSeis?`<button class="eqc-seis" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic">${IC.seismo}</span></button>`:'';
     html+=`<div class="eq-item eq-card" onclick="openEqDetail('${containerId}',${i})">
+      <span class="eqc-bar" style="background:${magCol(ev.mag)}" aria-hidden="true"></span>
       <div class="eqc-head">
         <div class="pl">${ev.place}</div>
         <span class="eqc-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></span>
@@ -2781,11 +2828,22 @@ function getEqView(){
 function renderEqView(){
   const view=getEqView();
   renderList(view,'eqList','openSeisForEq');
+  updateEqHero(view);
   renderSummary(view,'eqSumRow','sTot','sMaxM','sMinM','sAvgD');
   renderRegionTable(view,'eqRegTbl');
   if(eqMap){ try{ renderMarkers(view,eqMap,eqMarkers,'openSeisForEq',false); }catch(e){} }
   const clearBtn=document.getElementById('eqSearchClear');
   if(clearBtn) clearBtn.classList.toggle('show',!!eqSearchQ);
+}
+function updateEqHero(view){
+  const box=document.getElementById('eqHero');if(!box)return;
+  if(!view||!view.length){box.style.display='none';return;}
+  const per=document.getElementById('eqPeriod');
+  document.getElementById('eqHeroLab').textContent=per?per.options[per.selectedIndex].text:'Eventi';
+  document.getElementById('eqHeroN').textContent=view.length;
+  const mx=view.reduce((a,e)=>e.mag>a.mag?e:a,view[0]);
+  document.getElementById('eqHeroSub').textContent='Max M '+mx.mag.toFixed(1)+' · '+mx.place;
+  box.style.display='';
 }
 function filterEqByProv(){
   eqSearchQ=document.getElementById('eqSearchInput').value;
