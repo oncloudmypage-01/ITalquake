@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#080C18"/>
+<meta name="theme-color" content="#06080F"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"/>
@@ -109,6 +109,7 @@ window.IC=(function(){
     analogy:W('<path d="M4 17V7l8 5 8-5v10"/><path d="M4 7l8 5 8-5"/>'),
     planets:W('<circle cx="12" cy="12" r="3.2"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(-22 12 12)"/><circle cx="20.2" cy="8.4" r="1.1" fill="currentColor" stroke="none"/>'),
     forecast:W('<path d="M4 19V5"/><path d="M4 19h16"/><path d="M6 15l4-4 3 3 6-7"/><path d="M17 7h3v3"/>'),
+    grid:W('<rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/>'),
     neural:W('<circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 6.8l3.3 4M7 17.2l3.3-4M13.7 10.8 17 6.8M13.7 13.2l3.3 4"/>'),
     archive:W('<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/>')
   };
@@ -1125,6 +1126,117 @@ body::before{background:radial-gradient(700px 420px at 100% -10%,rgba(255,90,60,
 .eqd-tab.active{background:#1E2A47;border-color:#2A3654;}
 .eqd-title{font-size:18px;}
 .brand h1{background:none;-webkit-text-fill-color:#EEF2FB;}
+
+/* =====================================================================
+   IDENTITÀ "EPICENTRO" — applicata dalla tela di design
+===================================================================== */
+:root{--bg:#06080F;--panel:#0E1424;--panel-2:#141C30;--surface:#0E1424;--surface-2:#141C30;
+  --border:#222C45;--border-strong:#2A3550;--text:#F1F4FA;--muted:#9AA6BF;--faint:#6B7792;
+  --lava:#FF4D2E;--magma:#FF4D2E;--wave:#5EE6FF;}
+html,body{background:#06080F;}
+body::before{background:radial-gradient(600px 380px at 110% -10%,rgba(255,77,46,.10),transparent 60%),radial-gradient(500px 400px at -20% 110%,rgba(94,230,255,.05),transparent 60%),#06080F;}
+.top-header{background:rgba(6,8,15,.9);}
+.top-header h1{font-size:22px;letter-spacing:-.5px;}
+.top-header h1 .ic{background:#0E1424;border:1px solid #2A3550;color:var(--magma);box-shadow:0 0 0 4px rgba(255,77,46,.07),0 10px 24px -10px rgba(255,77,46,.6);}
+.hdr-btn{background:#0E1424;border-color:#222C45;border-radius:14px;}
+.panel,.sc,.mc,.eqd-box,.an-block,.sw-card,.an-match-card,.pl-chip,.side-menu-item{background:#0E1424;border-color:#222C45;}
+.side-menu,.filter-drawer,.profile-panel{background:#0A0F1C;}
+.time-section{color:var(--wave);}
+#sectionTerremoti .eq-item.eq-card{background:#0E1424;border-color:#222C45;border-radius:18px;}
+#sectionTerremoti .eq-item.eq-card:hover{background:#141C30;}
+.m0{background:#26314B;color:#CBD5E1;}
+.m1{background:#134E4A;color:#99F6E4;}
+.m2{background:#5B4A0E;color:#FDE68A;}
+.m3{background:#6E2E10;color:#FFC79A;}
+.m4{background:#7F1D2B;color:#FFC2C8;}
+.sort-bar{background:#0E1424;border:1px solid #222C45;}
+.btn-red,.eqd-seis-btn{background:var(--magma);box-shadow:0 14px 30px -14px rgba(255,77,46,.8);}
+input:checked+.sl{background:var(--magma);}
+.src-toggle-row input:checked+.src-check{background:var(--magma);}
+/* riepilogo in alto */
+.eq-hero{position:relative;overflow:hidden;flex-wrap:wrap;align-items:flex-end;border-radius:24px;background:#0E1424;border-color:#222C45;padding:16px 16px 14px;gap:12px 16px;}
+.eq-hero::after{content:"";position:absolute;right:-110px;top:-110px;width:240px;height:240px;pointer-events:none;
+  background:radial-gradient(circle,transparent 38px,rgba(255,77,46,.38) 39px,rgba(255,77,46,.38) 40.5px,transparent 41.5px,
+    transparent 70px,rgba(255,77,46,.2) 71px,rgba(255,77,46,.2) 72.5px,transparent 73.5px,
+    transparent 102px,rgba(255,77,46,.09) 103px,rgba(255,77,46,.09) 104.5px,transparent 105.5px);}
+.sort-bar .sort-btn.active{background:#F1F4FA!important;color:#06080F!important;box-shadow:none!important;transition:none;}
+.top-header h1 .ic{box-shadow:0 0 0 3px rgba(255,77,46,.10);}
+/* i cassetti chiusi non devono proiettare ombra sullo schermo */
+.side-menu:not(.open),.filter-drawer:not(.open){box-shadow:none!important;visibility:hidden;transition:transform .25s ease,visibility 0s .25s;}
+.side-menu.open,.filter-drawer.open{visibility:visible;transition:transform .25s ease;}
+.eq-hero-txt{flex:0 0 auto;}
+.eq-hero-live{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);margin-bottom:2px;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--magma);animation:livePulse 1.6s ease-out infinite;}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(255,77,46,.6)}100%{box-shadow:0 0 0 9px rgba(255,77,46,0)}}
+.eq-hero-num{font-size:46px;letter-spacing:-2px;}
+.eq-hero-num small{display:none;}
+.eq-hero-sub{font-size:12.5px;color:#C5CEE0;}
+.eq-hero-bars{flex:1;min-width:120px;height:56px;display:flex;align-items:flex-end;gap:3px;position:relative;z-index:1;}
+.eq-hero-bars i{flex:1;border-radius:2px;background:#2E3A58;min-height:3px;}
+.eq-hero-bars i.now{background:var(--magma);}
+.eq-hero-tiles{flex:1 1 100%;display:flex;gap:8px;position:relative;z-index:1;}
+.eq-hero-tile{flex:1;padding:9px 12px;border-radius:14px;background:#141C30;display:flex;flex-direction:column;gap:1px;min-width:0;}
+.eq-hero-tile span{font-size:11px;color:var(--muted);}
+.eq-hero-tile b{font-family:var(--font-display);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* barra in basso: tab attivo pieno */
+.bottom-tabs{background:rgba(20,28,48,.94);border-color:#2A3550;border-radius:24px;height:66px;}
+.btab{border-radius:18px;}
+.btab.active,.btab.active.t-eq,.btab.active.t-map,.btab.active.t-seis,.btab.active.t-fm,.btab.active.t-stor{background:var(--magma);color:#fff;box-shadow:0 10px 22px -12px rgba(255,77,46,.9);}
+.btab.active .btab-icon,.btab.active.t-eq .btab-icon,.btab.active.t-map .btab-icon,.btab.active.t-seis .btab-icon,.btab.active.t-fm .btab-icon,.btab.active.t-stor .btab-icon{color:#fff!important;filter:none;}
+.btab.active::after{display:none;}
+.btab.t-stor .btab-icon{color:color-mix(in srgb,#c4b5fd 72%,#94a3b8);}
+/* sezione Strumenti */
+.tools-lab{margin:6px 2px 10px;font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.tools-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:20px;}
+@media(min-width:700px){.tools-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+.tool-tile{min-height:122px;padding:14px;border-radius:20px;background:#0E1424;border:1px solid #222C45;color:var(--text);
+  text-align:left;display:flex;flex-direction:column;gap:8px;cursor:pointer;font-family:inherit;transition:background .2s,border-color .2s,transform .15s;}
+.tool-tile:hover{background:#141C30;border-color:#2A3550;}
+.tool-tile:active{transform:scale(.98);}
+.tool-top{display:flex;align-items:center;justify-content:space-between;}
+.tool-ic{width:42px;height:42px;border-radius:13px;font-size:21px;color:var(--tc);background:color-mix(in srgb,var(--tc) 14%,transparent);}
+.tl-badge{font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;background:#141C30;color:#C5CEE0;}
+.tool-t{font-size:15px;font-weight:600;}
+.tool-d{font-size:12px;color:var(--muted);line-height:1.4;}
+.tools-list{border-radius:20px;background:#0E1424;border:1px solid #222C45;overflow:hidden;margin-bottom:24px;}
+.tools-list button{width:100%;display:flex;align-items:center;gap:12px;padding:14px;background:none;border:none;border-bottom:1px solid #222C45;
+  color:var(--text);font:500 14.5px var(--font);cursor:pointer;text-align:left;}
+.tools-list button:last-child{border-bottom:none;}
+.tools-list .ic{font-size:20px;}
+.tl-t{flex:1;}.tl-s{font-size:12.5px;color:var(--muted);}.tl-chev{color:var(--faint);font-size:20px;line-height:1;}
+/* scheda evento */
+.eqd-header{background:rgba(6,8,15,.88);}
+.eqd-title{font-size:19px;}
+.eqd-box .v{font-size:20px;}
+.eqd-tab.active{background:#F1F4FA;color:#06080F;border-color:#F1F4FA;}
+.eqd-seis-btn{border-radius:18px;height:54px;font-size:15.5px;}
+/* animazione d'apertura */
+#splash{position:fixed;inset:0;z-index:20000;background:#06080F;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#F1F4FA;font-family:var(--font);transition:opacity .5s ease,visibility .5s;}
+#splash.out{opacity:0;visibility:hidden;}
+.spl-stage{position:relative;width:300px;height:300px;}
+.spl-ring{position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;border:2px solid #FF4D2E;opacity:0;
+  animation:splRing 2.4s cubic-bezier(.2,.7,.3,1) infinite;}
+.spl-r2{animation-delay:.8s}.spl-r3{animation-delay:1.6s}
+.spl-icon{position:absolute;left:50%;top:50%;width:132px;height:132px;margin:-66px 0 0 -66px;border-radius:34px;background:#0E1424;border:1px solid #2A3550;
+  box-shadow:0 0 0 8px rgba(255,77,46,.08),0 30px 70px -20px rgba(255,77,46,.55);display:flex;align-items:center;justify-content:center;
+  animation:splPop .9s .2s cubic-bezier(.2,.8,.2,1) both;}
+.spl-icon svg{width:104px;height:104px;}
+.spl-trace{stroke-dasharray:420;animation:splDraw 1.3s .55s ease-out both;}
+.spl-dot{transform-origin:60px 60px;animation:splDot 1.2s 1.4s ease-in-out infinite;}
+.spl-title{margin-top:8px;font-family:var(--font-display);font-size:44px;font-weight:700;letter-spacing:-1.5px;animation:splUp .7s 1.1s ease-out both;}
+.spl-title span{color:#FF4D2E;}
+.spl-sub{margin-top:8px;font-size:15px;color:#9AA6BF;animation:splUp .7s 1.35s ease-out both;}
+.spl-bar{position:absolute;left:80px;right:80px;bottom:calc(96px + env(safe-area-inset-bottom,0));height:3px;border-radius:3px;background:#1A2238;overflow:hidden;}
+.spl-bar i{display:block;height:3px;background:#FF4D2E;transform-origin:left;animation:splBar 2.1s .2s ease-in-out both;}
+.spl-foot{position:absolute;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom,0));text-align:center;font-size:12px;color:#9AA6BF;}
+@keyframes splRing{0%{transform:scale(.2);opacity:0}15%{opacity:.9}100%{transform:scale(2.6);opacity:0}}
+@keyframes splDraw{from{stroke-dashoffset:420}to{stroke-dashoffset:0}}
+@keyframes splPop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes splUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+@keyframes splDot{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+@keyframes splBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.spl-ring,.spl-icon,.spl-trace,.spl-dot,.spl-title,.spl-sub,.spl-bar i,.live-dot{animation:none!important;}}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -1153,6 +1265,32 @@ body::before{background:radial-gradient(700px 420px at 100% -10%,rgba(255,90,60,
 </style>
 </head>
 <body>
+<!-- ANIMAZIONE D'APERTURA -->
+<div id="splash" aria-hidden="true">
+  <div class="spl-stage">
+    <span class="spl-ring"></span><span class="spl-ring spl-r2"></span><span class="spl-ring spl-r3"></span>
+    <div class="spl-icon">
+      <svg viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="44" stroke="#FF4D2E" stroke-opacity=".22" stroke-width="3"/>
+        <circle cx="60" cy="60" r="30" stroke="#FF4D2E" stroke-opacity=".45" stroke-width="3"/>
+        <path class="spl-trace" d="M6 62h28l7-20 9 42 10-62 9 52 6-16h39" stroke="#fff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle class="spl-dot" cx="60" cy="60" r="7" fill="#FF4D2E"/>
+      </svg>
+    </div>
+  </div>
+  <div class="spl-title">IT<span>alquake</span></div>
+  <div class="spl-sub">Il respiro della terra, in tempo reale</div>
+  <div class="spl-bar"><i></i></div>
+  <div class="spl-foot">Collegamento a INGV…</div>
+</div>
+<script>
+(function(){
+  var sp=document.getElementById('splash');if(!sp)return;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setTimeout(function(){sp.classList.add('out');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp);},550);},reduce?400:2300);
+  sp.addEventListener('click',function(){sp.classList.add('out');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp);},550);});
+})();
+</script>
 
 <!-- LANDING -->
 <div id="landing">
@@ -1365,11 +1503,16 @@ body::before{background:radial-gradient(700px 420px at 100% -10%,rgba(255,90,60,
     </div>
     <div class="eq-hero" id="eqHero" style="display:none;">
       <div class="eq-hero-txt">
+        <div class="eq-hero-live"><span class="live-dot"></span>In diretta da INGV</div>
         <div class="eq-hero-lab" id="eqHeroLab">Ultime 24 ore</div>
         <div class="eq-hero-num"><span id="eqHeroN">0</span> <small>eventi</small></div>
         <div class="eq-hero-sub" id="eqHeroSub"></div>
       </div>
-      <svg class="eq-hero-wave" viewBox="0 0 110 48" fill="none" aria-hidden="true"><path d="M2 30h14l4-10 6 20 6-30 6 26 4-8h16l4-6 5 12 5-18 5 14h31" stroke="#8FA8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="eq-hero-bars" id="eqHeroBars" aria-hidden="true"></div>
+      <div class="eq-hero-tiles">
+        <div class="eq-hero-tile"><span>Più forte</span><b id="eqHeroMax">—</b></div>
+        <div class="eq-hero-tile"><span>Più vicino</span><b id="eqHeroNear">—</b></div>
+      </div>
     </div>
     <div class="sort-bar">
       <button class="sort-btn active" id="sortData" onclick="sortEq('data')">Data</button>
@@ -1790,6 +1933,48 @@ body::before{background:radial-gradient(700px 420px at 100% -10%,rgba(255,90,60,
         degli ultimi 60 giorni. Lungo termine: modello di Poisson sui tassi del catalogo storico CPTI15. Entrambi sono
         approssimazioni statistiche a scopo illustrativo, non sostituiscono le stime ufficiali INGV.
         Fonti: <code>webservices.ingv.it/fdsnws/event/1/query</code> · CPTI15 v4.0.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STRUMENTI (griglia) ═══ -->
+  <div class="section" id="sectionStrumenti">
+    <div class="container">
+      <div class="tools-lab">Esplora</div>
+      <div class="tools-grid">
+        <button class="tool-tile" onclick="goSection('storico')" style="--tc:#c4b5fd">
+          <span class="tool-top"><span class="tool-ic ic" data-ic="storico"></span></span>
+          <span class="tool-t">Storico</span><span class="tool-d">Terremoti INGV in un periodo a scelta</span>
+        </button>
+        <button class="tool-tile" onclick="goSection('catalogo')" style="--tc:#fca5a5">
+          <span class="tool-top"><span class="tool-ic ic" data-ic="archive"></span></span>
+          <span class="tool-t">Catalogo storico</span><span class="tool-d">Dal 1005 a oggi, per secolo e zona</span>
+        </button>
+        <button class="tool-tile" onclick="goSection('sciami')" style="--tc:#fdba74">
+          <span class="tool-top"><span class="tool-ic ic" data-ic="swarm"></span></span>
+          <span class="tool-t">Sciami sismici</span><span class="tool-d">Sequenze per provincia e periodo</span>
+        </button>
+        <button class="tool-tile" onclick="goSection('rete')" style="--tc:#f0abfc">
+          <span class="tool-top"><span class="tool-ic ic" data-ic="neural"></span><span class="tl-badge">Nuovo</span></span>
+          <span class="tool-t">Rete neurale</span><span class="tool-d">Prosegue l'andamento degli eventi</span>
+        </button>
+        <button class="tool-tile" onclick="goSection('prospettiva')" style="--tc:#7dd3fc">
+          <span class="tool-top"><span class="tool-ic ic" data-ic="forecast"></span><span class="tl-badge">Beta</span></span>
+          <span class="tool-t">Prospettiva</span><span class="tool-d">Probabilità a breve e lungo termine</span>
+        </button>
+        <button class="tool-tile" onclick="goSection('analogia')" style="--tc:#a5b4fc">
+          <span class="tool-top"><span class="tool-ic ic" data-ic="analogy"></span><span class="tl-badge">Beta</span></span>
+          <span class="tool-t">Analogia sismica</span><span class="tool-d">Il passato più simile a oggi</span>
+        </button>
+        <button class="tool-tile" onclick="goSection('pianeti')" style="--tc:#c4b5fd">
+          <span class="tool-top"><span class="tool-ic ic" data-ic="planets"></span><span class="tl-badge">Gioco</span></span>
+          <span class="tool-t">Pianeti</span><span class="tool-d">Configurazioni e terremoti, per gioco</span>
+        </button>
+      </div>
+      <div class="tools-lab">Impostazioni</div>
+      <div class="tools-list">
+        <button onclick="goSection('notifiche')"><span class="ic" data-ic="bell" style="color:#f472b6"></span><span class="tl-t">Notifiche</span><span class="tl-chev">›</span></button>
+        <button onclick="goSection('localizzazione')"><span class="ic" data-ic="locate" style="color:#5EE6FF"></span><span class="tl-t">Localizzazione</span><span class="tl-s">Sperimentale</span><span class="tl-chev">›</span></button>
       </div>
     </div>
   </div>
@@ -2225,8 +2410,8 @@ body::before{background:radial-gradient(700px 420px at 100% -10%,rgba(255,90,60,
       <span class="btab-icon ic" data-ic="seismo"></span>Sismogrammi</button>
     <button class="btab t-fm" id="btFm" onclick="goSection('focali')">
       <span class="btab-icon ic" data-ic="focal"></span>Focali</button>
-    <button class="btab t-stor" id="btStor" onclick="goSection('storico')">
-      <span class="btab-icon ic" data-ic="storico"></span>Storico</button>
+    <button class="btab t-stor" id="btStor" onclick="goSection('strumenti')">
+      <span class="btab-icon ic" data-ic="grid"></span>Strumenti</button>
   </nav>
 
   <!-- SCHEDA TERREMOTO (dettaglio evento, stile app INGV) -->
@@ -2278,7 +2463,7 @@ function goSection(sec){
     focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],
     localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],analogia:['analogy','Analogia Sismica'],
     pianeti:['planets','Configurazioni Planetarie'],prospettiva:['forecast','Prospettiva Sismica'],
-    catalogo:['archive','Catalogo Storico'],rete:['neural','Rete Neurale']};
+    catalogo:['archive','Catalogo Storico'],rete:['neural','Rete Neurale'],strumenti:['grid','Strumenti']};
   const _tt=titles[sec];
   document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
   document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
@@ -2324,6 +2509,8 @@ function goSection(sec){
   } else if(sec==='prospettiva'){
     document.getElementById('sectionProspettiva').classList.add('active');
     renderProspettivaLong();
+  } else if(sec==='strumenti'){
+    document.getElementById('sectionStrumenti').classList.add('active');
   } else if(sec==='rete'){
     document.getElementById('sectionRete').classList.add('active');
     initRete();
@@ -2340,6 +2527,10 @@ function goSection(sec){
     else setTimeout(()=>map&&map.invalidateSize(),80);
   }
 }
+/* le sezioni raggiungibili da "Strumenti" tengono acceso quel tab */
+(function(){const _gs=goSection;goSection=function(sec){_gs(sec);
+  if(['strumenti','storico','catalogo','sciami','rete','prospettiva','analogia','pianeti','notifiche','localizzazione'].includes(sec)){
+    const b=document.getElementById('btStor');if(b)b.classList.add('active');}};})();
 /* Frecce avanti/indietro e tasto back mobile */
 window.addEventListener('popstate',e=>{
   _navFromHistory=true;
@@ -2842,7 +3033,17 @@ function updateEqHero(view){
   document.getElementById('eqHeroLab').textContent=per?per.options[per.selectedIndex].text:'Eventi';
   document.getElementById('eqHeroN').textContent=view.length;
   const mx=view.reduce((a,e)=>e.mag>a.mag?e:a,view[0]);
-  document.getElementById('eqHeroSub').textContent='Max M '+mx.mag.toFixed(1)+' · '+mx.place;
+  document.getElementById('eqHeroSub').textContent='eventi registrati';
+  const prov=(mx.place.match(/\(([A-Z]{2})\)/)||[])[1];
+  document.getElementById('eqHeroMax').textContent='M '+mx.mag.toFixed(1)+(prov?' · '+prov:'');
+  let near='Attiva GPS';
+  if(userLat!=null){let d=1e9;view.forEach(e=>{const k=haverDist(userLat,userLon,e.lat,e.lon);if(k<d)d=k;});near=d.toFixed(0)+' km';}
+  document.getElementById('eqHeroNear').textContent=near;
+  /* istogramma: 24 intervalli sul periodo selezionato, l'ultimo in evidenza */
+  const now=Date.now(),hrs=per?Number(per.value):24,span=hrs*3600000/24,bins=new Array(24).fill(0);
+  view.forEach(e=>{const k=Math.floor((now-new Date(e.time).getTime())/span);if(k>=0&&k<24)bins[23-k]++;});
+  const top=Math.max(1,...bins);
+  document.getElementById('eqHeroBars').innerHTML=bins.map((n,i)=>`<i style="height:${(10+90*n/top).toFixed(0)}%"${i===23?' class="now"':''}></i>`).join('');
   box.style.display='';
 }
 function filterEqByProv(){
