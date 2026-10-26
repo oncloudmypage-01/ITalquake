@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#DDE9F8"/>
+<meta name="theme-color" content="#3966B8"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap"/>
@@ -1407,7 +1407,13 @@ input:checked+.sl{background:#2F5FB3;}
 #sectionTerremoti .eq-list{gap:10px;}
 /* zona dei tasti di sistema (home/indietro) in azzurro: con viewport-fit=cover
    Android disegna la pagina anche sotto la barra di navigazione */
-.bottom-tabs{background:linear-gradient(to bottom,#FFFFFF calc(100% - env(safe-area-inset-bottom,0px)),#DDE9F8 0);}
+.bottom-tabs{background:linear-gradient(to bottom,#FFFFFF calc(100% - env(safe-area-inset-bottom,0px)),#3966B8 0);}
+/* barre di sistema blu come l'app INGV: se Android disegna la pagina sotto la
+   barra di stato, quella fascia resta blu sopra l'intestazione azzurra */
+.top-header{background:linear-gradient(to bottom,#3966B8 env(safe-area-inset-top,0px),#DDE9F8 0);}
+.eqd-header{padding-top:calc(14px + env(safe-area-inset-top,0px));background:linear-gradient(to bottom,#3966B8 env(safe-area-inset-top,0px),#DDE9F8 0);}
+.eqd-sheet{padding-top:0;}
+.eqd-footer{background:linear-gradient(to bottom,#FFFFFF calc(100% - env(safe-area-inset-bottom,0px)),#3966B8 0);}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
