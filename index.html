@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
 <meta name="theme-color" content="#DDE9F8"/>
@@ -1391,6 +1391,23 @@ input:checked+.sl{background:#2F5FB3;}
 .spl-sub,.spl-foot{color:#4B5563;}
 .spl-bar{background:#E5E7EB;}
 .spl-title{font-family:var(--font);letter-spacing:-1px;}
+
+/* card un filo più compatte */
+.eq-card .eqc-head{padding:10px 0 8px;}
+.eq-card .eqc-head .pl{font-size:16.5px;}
+.eq-card .eqc-chev{width:20px;height:20px;}
+.eq-card .eqc-body{padding:8px 10px 10px;gap:9px;}
+.eq-card .eqc-meta{gap:5px;}
+.eq-card .eqc-row{font-size:15px;}
+.eq-card .eqc-row+.eqc-row{font-size:13.5px;}
+.eq-card .eqc-row .ic{font-size:16px;}
+.eq-card .eqc-seis{width:40px;height:40px;}
+.eq-card .eqc-seis .ic{font-size:19px;}
+.eq-card .eq-mag{min-width:64px;height:48px;font-size:24px;}
+#sectionTerremoti .eq-list{gap:10px;}
+/* zona dei tasti di sistema (home/indietro) in azzurro: con viewport-fit=cover
+   Android disegna la pagina anche sotto la barra di navigazione */
+.bottom-tabs{background:linear-gradient(to bottom,#FFFFFF calc(100% - env(safe-area-inset-bottom,0px)),#DDE9F8 0);}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
