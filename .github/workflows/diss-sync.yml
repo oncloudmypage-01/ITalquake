@@ -19,21 +19,13 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Esplora una scheda sorgente
+      - name: Esplora una scheda sorgente (raw)
         run: |
           set +e
-          for id in ITCS013 ITIS027; do
-            echo "=== $id"
-            curl -sSL -m 60 "https://diss.ingv.it/diss331/sources.php?$id" -o p.html -w "HTTP %{http_code} %{size_download}\n"
-            grep -oiE '<(h[1-6]|table|div|td|th|img|a)[^>]*(id|class|src|href)="[^"]*"' p.html | sort | uniq -c | sort -rn | head -60
-            python3 - <<'PY'
-          import re,html
-          t=open('p.html',encoding='utf-8',errors='replace').read()
-          t=re.sub(r'(?is)<(script|style).*?</\1>','',t)
-          t=re.sub(r'(?i)<br\s*/?>','\n',t)
-          t=re.sub(r'(?i)</(p|div|tr|h[1-6]|li|table)>','\n',t)
-          t=html.unescape(re.sub(r'<[^>]+>',' ',t))
-          t=re.sub(r'[ \t]+',' ',t); t=re.sub(r'\n\s*\n+','\n',t)
-          print(t[:6000])
-          PY
+          curl -sS -m 60 -D - "https://diss.ingv.it/diss331/sources.php?ITCS013" -o p.html; echo; cat p.html; echo
+          for u in "https://diss.ingv.it/diss331/sources.php?ITCS013" "https://diss.ingv.it/diss331/" "https://diss.ingv.it/diss331/index.php"; do
+            echo "=== $u (browser UA, follow)"
+            curl -sSL -m 60 -A "Mozilla/5.0 (Linux; Android 14) Chrome/130 Mobile" -c cj.txt -b cj.txt "$u" -o q.html -w "HTTP %{http_code} %{size_download} %{url_effective}\n"
+            head -c 1500 q.html; echo
+            grep -oiE '(src|href)="[^"]+"' q.html | sort -u | head -40
           done
