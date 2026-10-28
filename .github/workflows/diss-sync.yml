@@ -19,15 +19,22 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Esplora i servizi DISS
+      - name: Esplora gli attributi
         run: |
           set +e
-          for base in https://services.seismofaults.eu/DISS331 https://services.seismofaults.eu/geoserver/DISS331; do
-            echo "=== $base WFS GetCapabilities"
-            curl -sSL -m 60 "$base/wfs?service=WFS&request=GetCapabilities&version=2.0.0" -o caps.xml -w "HTTP %{http_code} %{size_download}\n"
-            grep -o '<Name>[^<]*</Name>' caps.xml | head -60
-            grep -o '<ows:Value>[^<]*json[^<]*</ows:Value>' caps.xml | sort -u | head
+          W="https://services.seismofaults.eu/DISS331/wfs?service=WFS&version=2.0.0&request=GetFeature&outputFormat=application/json"
+          for L in csspln331 csstop331 iss331 dss331 subdzon331; do
+            echo "=== $L"
+            curl -sSL -m 120 "$W&typeNames=DISS331:$L" -o $L.json -w "HTTP %{http_code} %{size_download}\n"
+            python3 - "$L.json" <<'PY'
+          import json,sys
+          d=json.load(open(sys.argv[1]))
+          f=d.get('features',[])
+          print('features',len(f),'crs',d.get('crs'))
+          if f:
+            print('geom',f[0]['geometry']['type'])
+            print(json.dumps(f[0]['properties'],ensure_ascii=False)[:3000])
+          PY
           done
-          echo "=== download page"
-          curl -sSL -m 60 https://diss.ingv.it/download-diss-3-3-1 -o dl.html -w "HTTP %{http_code} %{size_download}\n"
-          grep -oiE 'href="[^"]+\.(zip|geojson|json|kmz)[^"]*"' dl.html | sort -u | head -60
+          echo "=== link nella pagina download"
+          curl -sSL -m 60 https://diss.ingv.it/download-diss-3-3-1 | grep -oiE 'href="[^"]+"' | sort -u | head -80
