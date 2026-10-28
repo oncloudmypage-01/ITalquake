@@ -241,25 +241,31 @@ exports.sendEarthquakeNotifications = functions.pubsub
   });
 
 /* ================================================================
-   STIMA PROVVISORIA — dicitura pubblicata DA INGV (sito/Twitter),
-   non calcolata da noi. La leggiamo dalla home di terremoti.ingv.it
-   lato server (niente CORS, a differenza del client) e la esponiamo
-   sia come notifica push sia come endpoint HTTP che la webapp legge.
+   STIMA PROVVISORIA — dicitura pubblicata DA INGV, non calcolata da noi.
+   È la stessa che terremoti.ingv.it mostra in cima alla lista nei primi
+   minuti dopo un terremoto: la pagina la legge ogni 30 s dal servizio
+   JSON qui sotto. Il servizio non ha CORS, quindi lo leggiamo lato server
+   e lo esponiamo alla webapp (endpoint HTTP) e come notifica push.
+   Risposta: {"data":[{ot, mag_min, mag_max, time_it, date_it, region, tid}]}
 ================================================================ */
-const INGV_HOME = 'https://terremoti.ingv.it/';
+const INGV_STIMA = 'https://terremoti.ingv.it/ws/string_for_auto_hypocenter/query';
 
-function parseStimaProvvisoria(html) {
-  if (!html) return { active: false };
-  const m = html.match(/STIMA\s+PROVVISORIA[^<]{0,300}?(?:prov\/zona|prov\.|zona)\s+([A-Za-zÀ-ɏ'\s]{3,30}?)(?:\s*[-<]|$)/i);
-  if (!m) return { active: false };
-  const mag = html.match(/magnitud[ei][^2-9]*([2-9][.,]\d)/i);
-  const ora = html.match(/ore\s+(\d{2}:\d{2})/i);
+function parseStimaProvvisoria(json) {
+  let d;
+  try { d = JSON.parse(json); } catch (e) { return { active: false, items: [] }; }
+  const items = (d && Array.isArray(d.data) ? d.data : []).map(it => ({
+    ot: it.ot || null, mag_min: it.mag_min ?? null, mag_max: it.mag_max ?? null,
+    time_it: it.time_it || null, date_it: it.date_it || null, region: it.region || null, tid: it.tid || null
+  }));
+  if (!items.length) return { active: false, items: [] };
+  const f = items[0];
   return {
     active: true,
-    prov:   m[1].trim().replace(/\s+/g, ' '),
-    mag:    mag ? mag[1] : null,
-    ora:    ora ? ora[1] : null,
-    raw:    m[0].slice(0, 160)
+    items,
+    prov: f.region,
+    mag: f.mag_min != null && f.mag_max != null ? `${f.mag_min}–${f.mag_max}` : null,
+    ora: f.time_it,
+    raw: [f.ot, f.mag_min, f.mag_max, f.region].join('|')
   };
 }
 
@@ -272,10 +278,10 @@ exports.checkStimaProvvisoria = functions.pubsub
 
     let result;
     try {
-      const html = await fetchText(INGV_HOME);
-      result = parseStimaProvvisoria(html);
+      const json = await fetchText(INGV_STIMA);
+      result = parseStimaProvvisoria(json);
     } catch (e) {
-      console.error('Errore fetch home INGV:', e.message);
+      console.error('Errore lettura stima provvisoria INGV:', e.message);
       return null;
     }
 
@@ -289,7 +295,7 @@ exports.checkStimaProvvisoria = functions.pubsub
     });
 
     if (!isNew) return null;
-    console.log('Nuova STIMA PROVVISORIA rilevata su terremoti.ingv.it:', result.raw);
+    console.log('Nuova STIMA PROVVISORIA pubblicata da INGV:', result.raw);
 
     const usersSnap = await db.collection('users')
       .where('notifEnabled', '==', true)
@@ -300,7 +306,7 @@ exports.checkStimaProvvisoria = functions.pubsub
     if (!tokens.length) return null;
 
     const title = '⚠️ Stima provvisoria INGV';
-    const body  = `${result.prov}${result.mag ? ' · M ~' + result.mag : ''}${result.ora ? ' · ore ' + result.ora : ''}\nDato appena pubblicato, non ancora confermato.`;
+    const body  = `Magnitudo tra ${result.items[0].mag_min} e ${result.items[0].mag_max} · ${result.prov}${result.ora ? ' · ore ' + result.ora : ''}\nDato automatico INGV, non ancora rivisto.`;
 
     for (let i = 0; i < tokens.length; i += 500) {
       const chunk = tokens.slice(i, i + 500);
@@ -334,6 +340,7 @@ exports.getStimaProvvisoria = functions.https.onRequest(async (req, res) => {
     const data = doc.data();
     res.json({
       active: !!data.active,
+      items:  data.items || [],
       prov:   data.prov || null,
       mag:    data.mag || null,
       ora:    data.ora || null,
