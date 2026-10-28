@@ -19,17 +19,15 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Esplora il Mapper
+      - name: Esplora i file dati del Mapper
         run: |
           set +e
           B=https://diss.ingv.it/mapper
-          curl -sSL -m 60 "$B/js/js.js" -o js.js -w "js.js HTTP %{http_code} %{size_download}\n"
-          curl -sSL -m 60 "$B/" -o idx.html
-          grep -oE 'src="js/[^"]+"' idx.html | sort -u
-          for f in $(grep -oE 'src="js/[^"]+"' idx.html | sed 's/src="//;s/"//' | sort -u); do curl -sSL -m 60 "$B/$f" >> alljs.js; done
-          cat js.js >> alljs.js
-          echo "=== URL/php nel codice"
-          grep -oE "['\"][^'\" ]*\.(php|json|txt|html)[^'\" ]*['\"]" alljs.js | sort | uniq -c | sort -rn | head -60
-          echo "=== contesti 'source'"
-          grep -n -iE "ajax|fetch\(|\.get\(|getJSON|XMLHttp" alljs.js | head -40
-          grep -n -iE "source=|sourceID|idsource|Commentary|Summary|References" alljs.js | head -40
+          for f in js.js mapDISS.js mapDISS_sources.js mapDISS_listenerOfSource.js mapDISS_caricaMapper.js hist.js strum.js; do curl -sSL -m 60 "$B/js/$f" >> alljs.js; echo >> alljs.js; done
+          echo "=== codice generalInfo/commentary/picture/references"
+          awk '/function generalInfo/,0' alljs.js | head -330
+          echo "=== showPicture"
+          awk '/function showPicture/,/^}/' alljs.js | head -60
+          for f in data/com/ITCS013COM.txt data/MainTable.txt data/LinkTable.txt data/ContComp4web.txt data/AssignReferences4web.txt data/Assign_ISS.txt data/CSSTOP4web.MID data/CSSPLN4web.MID data/ISS4web.MID CPTI-CFTI.txt data/CPTI-CFTI.txt; do
+            echo "=== $f"; curl -sSL -m 60 "$B/$f" -o t.txt -w "HTTP %{http_code} %{size_download}\n"; head -c 1800 t.txt; echo
+          done
