@@ -4,8 +4,8 @@
   "description": "Terremoti, sismogrammi e meccanismi focali INGV in tempo reale",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#091315",
-  "theme_color": "#091315",
+  "background_color": "#F5F1EA",
+  "theme_color": "#F5F1EA",
   "orientation": "portrait",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },

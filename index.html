@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#091315"/>
+<meta name="theme-color" content="#F5F1EA"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap"/>
@@ -1239,159 +1239,159 @@ input:checked+.sl{background:var(--magma);}
 @media (prefers-reduced-motion:reduce){.spl-ring,.spl-icon,.spl-trace,.spl-dot,.spl-title,.spl-sub,.spl-bar i,.live-dot{animation:none!important;}}
 
 /* =====================================================================
-   TEMA "OCEANO" scuro — struttura della lista INGV, accento verde acqua
+   TEMA "CARTA SISMICA" chiaro — carta da sismografo, inchiostro nero, accento vermiglio
 ===================================================================== */
-:root{--bg:#091315;--panel:#11232A;--panel-2:#0E1B1E;--surface:#11232A;--surface-2:#132A2E;
-  --border:#1D353C;--border-strong:#26444C;--text:#E7F3F2;--muted:#9DB4B7;--faint:#5F7A80;
-  --accent:#2DD4BF;--accent-2:#2DD4BF;--ring:0 0 0 3px rgba(45,212,191,.35);
+:root{--bg:#F5F1EA;--panel:#FFFFFF;--panel-2:#FFFFFF;--surface:#FFFFFF;--surface-2:#EFE8DC;
+  --border:#E3DBCC;--border-strong:#D3C9B8;--text:#1C1917;--muted:#5F574F;--faint:#8A8075;
+  --accent:#C2410C;--accent-2:#C2410C;--ring:0 0 0 3px rgba(194,65,12,.35);
   --font:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;--font-display:'Roboto',system-ui,sans-serif;--shadow:none;}
-html,body{background:#091315;color:#E7F3F2;color-scheme:dark;}
+html,body{background:#F5F1EA;color:#1C1917;color-scheme:light;}
 body{font-family:var(--font);letter-spacing:0;}
-body::before{background:#091315;}
+body::before{background:#F5F1EA;}
 h1,h2,h3{font-family:var(--font);letter-spacing:0;}
 /* intestazione */
-.top-header{background:#091315;border:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:16px 8px 10px 10px;padding-top:calc(16px + env(safe-area-inset-top,0));}
-.top-header h1{font-size:24px;font-weight:500;color:#E7F3F2;letter-spacing:0;}
+.top-header{background:#F5F1EA;border:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:16px 8px 10px 10px;padding-top:calc(16px + env(safe-area-inset-top,0));}
+.top-header h1{font-size:24px;font-weight:500;color:#1C1917;letter-spacing:0;}
 .top-header h1 .ic{display:none;}
 .hdr-btn{background:transparent;border:none;width:44px;height:44px;border-radius:50%;}
-.hdr-btn:hover{background:rgba(45,212,191,.1);}
-.hdr-btn .ic,#gpsHdrBtn .ic{color:#2DD4BF!important;font-size:22px;}
+.hdr-btn:hover{background:rgba(194,65,12,.1);}
+.hdr-btn .ic,#gpsHdrBtn .ic{color:#C2410C!important;font-size:22px;}
 /* ricerca + ordinamento */
 .search-bar{padding:4px 12px 6px;}
-.search-bar input{background:#11232A;border:1px solid #26444C;border-radius:24px;color:#E7F3F2;}
-.search-bar input::placeholder{color:#7C9599;}
-.search-bar input:focus{border-color:#2DD4BF;box-shadow:var(--ring);}
-.sort-bar{margin:6px 12px 4px;padding:5px;border:none;border-radius:28px;background:#132A2E;box-shadow:none;gap:0;}
-.sort-btn{height:40px;border-radius:22px;color:#9DB4B7;font-size:15px;font-weight:500;}
-.sort-btn:hover{color:#E7F3F2;}
-.sort-bar .sort-btn.active{background:#E7F3F2!important;background-image:none!important;color:#091315!important;box-shadow:none!important;transition:none;}
-#sortStats .ic{color:#2DD4BF;}
+.search-bar input{background:#FFFFFF;border:1px solid #D3C9B8;border-radius:24px;color:#1C1917;}
+.search-bar input::placeholder{color:#8A8075;}
+.search-bar input:focus{border-color:#C2410C;box-shadow:var(--ring);}
+.sort-bar{margin:6px 12px 4px;padding:5px;border:none;border-radius:28px;background:#EFE8DC;box-shadow:none;gap:0;}
+.sort-btn{height:40px;border-radius:22px;color:#5F574F;font-size:15px;font-weight:500;}
+.sort-btn:hover{color:#1C1917;}
+.sort-bar .sort-btn.active{background:#1C1917!important;background-image:none!important;color:#F5F1EA!important;box-shadow:none!important;transition:none;}
+#sortStats .ic{color:#C2410C;}
 .eq-hero{display:none!important;}
 /* fasce di sezione */
 #sectionTerremoti .eq-list{padding:0 12px 12px;gap:10px;}
-.time-section{background:#0E1B1E;color:#2DD4BF;font-size:15px;font-weight:700;letter-spacing:.04em;padding:11px 20px;margin:14px -12px 2px;}
+.time-section{background:#FFFFFF;color:#C2410C;font-size:15px;font-weight:700;letter-spacing:.04em;padding:11px 20px;margin:14px -12px 2px;}
 .time-section::after{display:none;}
 /* card come INGV, in scuro */
-#sectionTerremoti .eq-item.eq-card,.eq-item.eq-card{background:#11232A;border:1px solid #1D353C;border-radius:10px;box-shadow:none;}
-#sectionTerremoti .eq-item.eq-card:hover{background:#132A2E;border-color:#26444C;}
+#sectionTerremoti .eq-item.eq-card,.eq-item.eq-card{background:#FFFFFF;border:1px solid #E3DBCC;border-radius:10px;box-shadow:none;}
+#sectionTerremoti .eq-item.eq-card:hover{background:#EFE8DC;border-color:#D3C9B8;}
 .eq-card .eqc-bar{display:none;}
-.eq-card .eqc-head{margin:0 10px;padding:10px 0 8px;border-bottom:1px solid #1D353C;}
-.eq-card .eqc-head .pl{font-family:var(--font);font-size:16.5px;font-weight:700;color:#E7F3F2;letter-spacing:0;}
-.eq-card .eqc-chev{width:20px;height:20px;color:#5F7A80;}
+.eq-card .eqc-head{margin:0 10px;padding:10px 0 8px;border-bottom:1px solid #E3DBCC;}
+.eq-card .eqc-head .pl{font-family:var(--font);font-size:16.5px;font-weight:700;color:#1C1917;letter-spacing:0;}
+.eq-card .eqc-chev{width:20px;height:20px;color:#8A8075;}
 .eq-card .eqc-body{padding:8px 10px 10px;gap:9px;}
 .eq-card .eqc-meta{gap:5px;}
-.eq-card .eqc-row{font-size:15px;color:#E7F3F2;opacity:1;}
-.eq-card .eqc-row+.eqc-row{font-size:13.5px;color:#C2D6D8;}
-.eq-card .eqc-row .ic{font-size:16px;color:#5F7A80;}
-.eq-card .eqc-near{color:#FF9A7A;}
-.eq-card .eqc-seis{width:40px;height:40px;border-radius:8px;background:#16393A;border:none;}
-.eq-card .eqc-seis:hover{background:#1C4646;}
-.eq-card .eqc-seis .ic{color:#2DD4BF;font-size:19px;}
+.eq-card .eqc-row{font-size:15px;color:#1C1917;opacity:1;}
+.eq-card .eqc-row+.eqc-row{font-size:13.5px;color:#3F3833;}
+.eq-card .eqc-row .ic{font-size:16px;color:#8A8075;}
+.eq-card .eqc-near{color:#B42318;}
+.eq-card .eqc-seis{width:40px;height:40px;border-radius:8px;background:#F6E6DC;border:none;}
+.eq-card .eqc-seis:hover{background:#F1D9CB;}
+.eq-card .eqc-seis .ic{color:#C2410C;font-size:19px;}
 .eq-card .eq-mag{min-width:64px;height:48px;border-radius:7px;font-family:var(--font);font-size:24px;font-weight:700;letter-spacing:0;color:#FFFFFF!important;border:none!important;box-shadow:none!important;}
-.eq-card .eq-mag.m0,.eq-card .eq-mag.m1{background:#178C82;}
-.eq-card .eq-mag.m2{background:#3D6B77;}
-.eq-card .eq-mag.m3{background:#D98A26;}
-.eq-card .eq-mag.m4{background:#D9483B;}
-.m0{background:#26314B;color:#CBD5E1;}
-.m1{background:#134E4A;color:#99F6E4;}
-.m2{background:#5B4A0E;color:#FDE68A;}
-.m3{background:#6E2E10;color:#FFC79A;}
-.m4{background:#7F1D2B;color:#FFC2C8;box-shadow:none;}
+.eq-card .eq-mag.m0,.eq-card .eq-mag.m1{background:#74828A;}
+.eq-card .eq-mag.m2{background:#4F6673;}
+.eq-card .eq-mag.m3{background:#B7791F;}
+.eq-card .eq-mag.m4{background:#C81E1E;}
+.m0{background:#74828A;color:#F1F5F9;}
+.m1{background:#4F6673;color:#FFFFFF;}
+.m2{background:#B7791F;color:#FFFFFF;}
+.m3{background:#C2410C;color:#FFFFFF;}
+.m4{background:#C81E1E;color:#FFFFFF;box-shadow:none;}
 /* barra in basso */
 .bottom-tabs{left:0;right:0;width:auto;transform:none;bottom:0;height:calc(70px + env(safe-area-inset-bottom,0));
-  padding:0 0 env(safe-area-inset-bottom,0);gap:0;border:none;border-top:1px solid #1D353C;border-radius:0;background:#0E1B1E;
+  padding:0 0 env(safe-area-inset-bottom,0);gap:0;border:none;border-top:1px solid #E3DBCC;border-radius:0;background:#FFFFFF;
   -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;}
 .btab,.btab.active,.btab.active.t-eq,.btab.active.t-map,.btab.active.t-seis,.btab.active.t-fm,.btab.active.t-stor{border-radius:0;background:transparent;box-shadow:none;}
-.btab{color:#9DB4B7;font-size:12px;font-weight:400;gap:4px;}
-.btab .btab-icon,.btab.t-eq .btab-icon,.btab.t-map .btab-icon,.btab.t-seis .btab-icon,.btab.t-fm .btab-icon,.btab.t-stor .btab-icon{color:#9DB4B7!important;font-size:23px;filter:none;}
-.btab.active,.btab.active.t-eq,.btab.active.t-map,.btab.active.t-seis,.btab.active.t-fm,.btab.active.t-stor{color:#2DD4BF;font-weight:700;}
-.btab.active .btab-icon,.btab.active.t-eq .btab-icon,.btab.active.t-map .btab-icon,.btab.active.t-seis .btab-icon,.btab.active.t-fm .btab-icon,.btab.active.t-stor .btab-icon{color:#2DD4BF!important;}
+.btab{color:#5F574F;font-size:12px;font-weight:400;gap:4px;}
+.btab .btab-icon,.btab.t-eq .btab-icon,.btab.t-map .btab-icon,.btab.t-seis .btab-icon,.btab.t-fm .btab-icon,.btab.t-stor .btab-icon{color:#5F574F!important;font-size:23px;filter:none;}
+.btab.active,.btab.active.t-eq,.btab.active.t-map,.btab.active.t-seis,.btab.active.t-fm,.btab.active.t-stor{color:#C2410C;font-weight:700;}
+.btab.active .btab-icon,.btab.active.t-eq .btab-icon,.btab.active.t-map .btab-icon,.btab.active.t-seis .btab-icon,.btab.active.t-fm .btab-icon,.btab.active.t-stor .btab-icon{color:#C2410C!important;}
 .btab.active::after{display:none;}
 body{padding-bottom:calc(80px + env(safe-area-inset-bottom,0));}
 #seisToast{bottom:88px!important;}
 .update-banner{bottom:88px;}
 #sectionMappa .mapbox{height:calc(100vh - 232px)!important;height:calc(100dvh - 232px)!important;}
 /* pannelli e controlli */
-.panel{background:#11232A;border:1px solid #1D353C;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:18px;}
-.sc,.mc,.eqd-box,.an-block,.sw-card,.an-match-card,.pl-chip,.tool-tile,.tools-list,.side-menu-item{background:#11232A;border-color:#1D353C;}
-.tool-tile:hover,.side-menu-item:hover,.sw-card:hover{background:#132A2E;border-color:#26444C;}
-.tools-lab{color:#2DD4BF;}
-.tl-badge,.side-badge{background:#132A2E;color:#C2D6D8;border-color:#26444C;}
-label{color:#9DB4B7;}
-select,input{background-color:#0B1A1D;border:1px solid #26444C;color:#E7F3F2;}
-select option{background:#11232A;color:#E7F3F2;}
+.panel{background:#FFFFFF;border:1px solid #E3DBCC;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:18px;}
+.sc,.mc,.eqd-box,.an-block,.sw-card,.an-match-card,.pl-chip,.tool-tile,.tools-list,.side-menu-item{background:#FFFFFF;border-color:#E3DBCC;}
+.tool-tile:hover,.side-menu-item:hover,.sw-card:hover{background:#EFE8DC;border-color:#D3C9B8;}
+.tools-lab{color:#C2410C;}
+.tl-badge,.side-badge{background:#EFE8DC;color:#3F3833;border-color:#D3C9B8;}
+label{color:#5F574F;}
+select,input{background-color:#FFFFFF;border:1px solid #D3C9B8;color:#1C1917;}
+select option{background:#FFFFFF;color:#1C1917;}
 .btn,.btn-outline{box-shadow:none;}
-.btn-red,.btn-green,.btn-purple,.eqd-seis-btn{background:#14B8A6;color:#04201C;box-shadow:none;}
-.gen-btn{width:100%;border:none;border-radius:14px;padding:13px 14px;font:700 15px var(--font);cursor:pointer;background:#14B8A6;color:#04201C;}
+.btn-red,.btn-green,.btn-purple,.eqd-seis-btn{background:#C2410C;color:#FFFFFF;box-shadow:none;}
+.gen-btn{width:100%;border:none;border-radius:14px;padding:13px 14px;font:700 15px var(--font);cursor:pointer;background:#C2410C;color:#FFFFFF;}
 .gen-btn:disabled{opacity:.6;cursor:wait;}
-.hint{background:rgba(45,212,191,.07);border-color:#26444C;color:#C2D6D8;}
+.hint{background:rgba(194,65,12,.07);border-color:#D3C9B8;color:#3F3833;}
 .an-warn{background:rgba(251,191,36,.07)!important;}
-.sl{background:#26444C;}
-input:checked+.sl{background:#14B8A6;}
+.sl{background:#D3C9B8;}
+input:checked+.sl{background:#C2410C;}
 .an-block .sig-row{gap:14px;align-items:baseline;}
 .an-block .sig-row .k{flex:1 1 auto;}
 .an-block .sig-row .v{text-align:right;flex:0 1 auto;}
 /* cassetti */
-.side-menu,.filter-drawer,.profile-panel{background:#0B1A1D;border-color:#1D353C;}
-.side-menu-header h3{background:none;-webkit-text-fill-color:#E7F3F2;color:#E7F3F2;}
+.side-menu,.filter-drawer,.profile-panel{background:#FFFFFF;border-color:#E3DBCC;}
+.side-menu-header h3{background:none;-webkit-text-fill-color:#1C1917;color:#1C1917;}
 .side-menu-overlay,.filter-overlay,.profile-overlay{background:rgba(0,0,0,.55);}
 /* scheda evento */
-.eqd-sheet{background:#091315;padding-top:0;}
-.eqd-header{background:#091315;border-bottom:1px solid #1D353C;padding-top:calc(14px + env(safe-area-inset-top,0px));-webkit-backdrop-filter:none;backdrop-filter:none;}
-.eqd-title{font-family:var(--font);font-size:19px;color:#E7F3F2;}
-.eqd-tab{background:#11232A;color:#9DB4B7;border-color:#1D353C;}
-.eqd-tab.active{background:#14B8A6;color:#04201C;border-color:#14B8A6;}
-.eqd-footer{background:#0E1B1E;border-top-color:#1D353C;}
+.eqd-sheet{background:#F5F1EA;padding-top:0;}
+.eqd-header{background:#F5F1EA;border-bottom:1px solid #E3DBCC;padding-top:calc(14px + env(safe-area-inset-top,0px));-webkit-backdrop-filter:none;backdrop-filter:none;}
+.eqd-title{font-family:var(--font);font-size:19px;color:#1C1917;}
+.eqd-tab{background:#FFFFFF;color:#5F574F;border-color:#E3DBCC;}
+.eqd-tab.active{background:#C2410C;color:#FFFFFF;border-color:#C2410C;}
+.eqd-footer{background:#FFFFFF;border-top-color:#E3DBCC;}
 .eqd-seis-btn{border-radius:10px;height:50px;}
 /* mappe: le immagini del DISS non vanno invertite dal filtro scuro */
 .leaflet-srcPane-pane .leaflet-tile{filter:none!important;}
-.src-toggle{background:rgba(12,24,27,.96);border:1px solid #26444C;border-radius:12px;color:#E7F3F2;max-width:230px;}
-.src-toggle-row{color:#E7F3F2;font-weight:500;}
-.src-check{border:2px solid #5F7A80;border-radius:4px;}
-.src-toggle-row input:checked+.src-check{background:#14B8A6;border-color:#14B8A6;}
-.src-legend{display:flex;flex-direction:column;gap:6px;border-top-color:#1D353C;color:#C2D6D8;font-size:12px;}
+.src-toggle{background:rgba(255,255,255,.97);border:1px solid #D3C9B8;border-radius:12px;color:#1C1917;max-width:230px;}
+.src-toggle-row{color:#1C1917;font-weight:500;}
+.src-check{border:2px solid #8A8075;border-radius:4px;}
+.src-toggle-row input:checked+.src-check{background:#C2410C;border-color:#C2410C;}
+.src-legend{display:flex;flex-direction:column;gap:6px;border-top-color:#E3DBCC;color:#3F3833;font-size:12px;}
 .src-wms-leg{display:flex;flex-direction:column;gap:4px;}
 .src-wms-leg img{max-width:200px;height:auto;display:block;background:#FFFFFF;border-radius:6px;padding:4px;}
 .src-local-leg{display:flex;flex-direction:column;gap:6px;}
 .src-legend .src-l-poly i{width:22px;height:12px;border-radius:2px;background:rgba(247,183,51,.45);border:1.2px solid #D9731A;}
 .src-legend .src-l-top i{width:22px;height:3px;border-radius:2px;background:#B4530F;}
-.src-note{color:#7C9599;}
+.src-note{color:#8A8075;}
 /* grafici: fondo scuro uniforme, etichette chiare */
-.canvas-box,.sta-canvas{background:#0B1A1D!important;border:1px solid #1D353C;}
-.nn-chart{background:#0B1A1D!important;border:1px solid #1D353C;}
-.nn-chart-title span{color:#9DB4B7;}
+.canvas-box,.sta-canvas{background:#FFFFFF!important;border:1px solid #E3DBCC;}
+.nn-chart{background:#FFFFFF!important;border:1px solid #E3DBCC;}
+.nn-chart-title span{color:#5F574F;}
 /* ── Sismogrammi e Focali: intro e passi in linguaggio semplice ── */
-.sx-intro{display:flex;gap:14px;align-items:center;padding:16px;margin:4px 0 14px;border-radius:18px;background:#11232A;border:1px solid #1D353C;position:relative;overflow:hidden;}
+.sx-intro{display:flex;gap:14px;align-items:center;padding:16px;margin:4px 0 14px;border-radius:18px;background:#FFFFFF;border:1px solid #E3DBCC;position:relative;overflow:hidden;}
 .sx-intro.col{flex-direction:column;align-items:stretch;gap:12px;}
-.sx-ic{width:48px;height:48px;border-radius:14px;background:rgba(45,212,191,.14);color:#2DD4BF;font-size:26px;flex-shrink:0;}
-.sx-t{font-size:17px;font-weight:700;color:#E7F3F2;}
-.sx-d{font-size:14px;color:#C2D6D8;line-height:1.45;margin-top:3px;}
+.sx-ic{width:48px;height:48px;border-radius:14px;background:rgba(194,65,12,.14);color:#C2410C;font-size:26px;flex-shrink:0;}
+.sx-t{font-size:17px;font-weight:700;color:#1C1917;}
+.sx-d{font-size:14px;color:#3F3833;line-height:1.45;margin-top:3px;}
 .sx-wave{position:absolute;right:-10px;top:6px;width:120px;height:48px;opacity:.16;pointer-events:none;}
 .sx-intro>div{position:relative;z-index:1;}
 .sx-step{display:flex;flex-direction:column;gap:8px;}
-.sx-h{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#E7F3F2;}
-.sx-num{width:22px;height:22px;border-radius:50%;background:#2DD4BF;color:#091315;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;}
-.sx-note{font-size:12.5px;color:#9DB4B7;min-height:1em;}
+.sx-h{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#1C1917;}
+.sx-num{width:22px;height:22px;border-radius:50%;background:#C2410C;color:#F5F1EA;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;}
+.sx-note{font-size:12.5px;color:#5F574F;min-height:1em;}
 .chips{display:flex;gap:6px;flex-wrap:wrap;}
-.chip{flex:1;min-width:72px;height:42px;border-radius:12px;border:1px solid #26444C;background:#11232A;color:#C2D6D8;font:500 14px var(--font);cursor:pointer;transition:background .15s,color .15s;}
-.chip:hover{border-color:#2DD4BF;}
-.chip.on{background:#2DD4BF;border-color:#2DD4BF;color:#091315;}
+.chip{flex:1;min-width:72px;height:42px;border-radius:12px;border:1px solid #D3C9B8;background:#FFFFFF;color:#3F3833;font:500 14px var(--font);cursor:pointer;transition:background .15s,color .15s;}
+.chip:hover{border-color:#C2410C;}
+.chip.on{background:#C2410C;border-color:#C2410C;color:#F5F1EA;}
 .chip:disabled{opacity:.4;cursor:not-allowed;}
-.chip-link{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 13px;border-radius:18px;border:1px solid #26444C;background:transparent;color:#2DD4BF;font:500 13.5px var(--font);cursor:pointer;}
+.chip-link{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 13px;border-radius:18px;border:1px solid #D3C9B8;background:transparent;color:#C2410C;font:500 13.5px var(--font);cursor:pointer;}
 .chip-link .ic{font-size:16px;}
-details.adv{border:1px dashed #26444C;border-radius:12px;padding:0 12px;}
-details.adv summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:500;color:#9DB4B7;}
+details.adv{border:1px dashed #D3C9B8;border-radius:12px;padding:0 12px;}
+details.adv summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:500;color:#5F574F;}
 details.adv summary::-webkit-details-marker{display:none;}
 details.adv summary::after{content:"▾";font-size:14px;transition:transform .2s;}
 details.adv[open] summary::after{transform:rotate(180deg);}
 details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
 .bb-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
-.bb-legend div{padding:10px 6px;border-radius:12px;background:#0B1A1D;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;}
-.bb-legend b{font-size:13px;color:#E7F3F2;}
-.bb-legend span{font-size:11.5px;color:#9DB4B7;line-height:1.3;}
-.sx-src{font-size:12px;color:#7C9599;text-align:center;}
-#splash{background:#091315;}
-.spl-icon{background:#11232A;border-color:#26444C;}
+.bb-legend div{padding:10px 6px;border-radius:12px;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;}
+.bb-legend b{font-size:13px;color:#1C1917;}
+.bb-legend span{font-size:11.5px;color:#5F574F;line-height:1.3;}
+.sx-src{font-size:12px;color:#8A8075;text-align:center;}
+#splash{background:#F5F1EA;}
+.spl-icon{background:#FFFFFF;border-color:#D3C9B8;}
 
 /* scheda DISS */
 #dissSheet{z-index:420;}
@@ -1400,22 +1400,22 @@ details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
 .diss-tabs .eqd-tab{flex:1;min-width:80px;}
 .diss-tabs small{opacity:.75;font-weight:500;}
 .diss-params{margin-bottom:6px;}
-.diss-h{margin:16px 0 8px;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2DD4BF;}
-.diss-ev{display:flex;flex-direction:column;gap:2px;padding:9px 12px;margin-bottom:6px;border-radius:10px;background:#11232A;border:1px solid #1D353C;font-size:13px;}
-.diss-ev b{font-size:12px;color:#C2D6D8;}
-.diss-ev span{color:#E7F3F2;line-height:1.45;}
+.diss-h{margin:16px 0 8px;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#C2410C;}
+.diss-ev{display:flex;flex-direction:column;gap:2px;padding:9px 12px;margin-bottom:6px;border-radius:10px;background:#FFFFFF;border:1px solid #E3DBCC;font-size:13px;}
+.diss-ev b{font-size:12px;color:#3F3833;}
+.diss-ev span{color:#1C1917;line-height:1.45;}
 .diss-rel{display:flex;flex-wrap:wrap;gap:6px;}
 .diss-rel .chip{flex:0 0 auto;height:36px;font-size:13px;padding:0 12px;}
-.diss-txt{font-size:13.5px;line-height:1.55;color:#C2D6D8;}
+.diss-txt{font-size:13.5px;line-height:1.55;color:#3F3833;}
 .diss-note{font-size:12.5px;color:var(--muted);margin:4px 0 8px;font-style:italic;}
-.diss-p{font-size:14.5px;line-height:1.6;color:#E7F3F2;margin:0 0 10px;}
+.diss-p{font-size:14.5px;line-height:1.6;color:#1C1917;margin:0 0 10px;}
 .diss-gal{display:grid;gap:14px;}
-.diss-gal figure{margin:0;border-radius:12px;overflow:hidden;background:#11232A;border:1px solid #1D353C;}
+.diss-gal figure{margin:0;border-radius:12px;overflow:hidden;background:#FFFFFF;border:1px solid #E3DBCC;}
 .diss-gal img{display:block;width:100%;height:auto;background:#fff;}
-.diss-gal figcaption{padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:1.45;color:#C2D6D8;}
-.diss-gal figcaption b{color:#E7F3F2;font-size:13.5px;}
-.diss-refs{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px;font-size:13px;line-height:1.5;color:#C2D6D8;}
-.diss-refs b{color:#E7F3F2;font-weight:600;}
+.diss-gal figcaption{padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:1.45;color:#3F3833;}
+.diss-gal figcaption b{color:#1C1917;font-size:13.5px;}
+.diss-refs{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px;font-size:13px;line-height:1.5;color:#3F3833;}
+.diss-refs b{color:#1C1917;font-weight:600;}
 .src-legend .dl i{width:22px;height:12px;border-radius:2px;border:1.4px solid;display:inline-block;}
 .src-legend .dl{display:flex;align-items:center;gap:8px;}
 /* legenda DISS compatta */
@@ -1424,11 +1424,11 @@ details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
 .src-legend{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;margin-top:6px;padding-top:6px;font-size:10.5px;}
 .src-legend .dl{gap:5px;}
 .src-legend .dl i{width:14px;height:9px;border-width:1.2px;}
-.src-legend .src-note{grid-column:1/-1;font-size:9.5px;line-height:1.3;color:#7F989C;}
+.src-legend .src-note{grid-column:1/-1;font-size:9.5px;line-height:1.3;color:#7A7065;}
 /* mappa a tutto schermo */
 .map-fs-btn a{display:flex!important;align-items:center;justify-content:center;width:34px!important;height:34px!important;
-  background:#11232A!important;color:#E7F3F2!important;border-color:#26444C!important;}
-.map-fs-btn a:hover{background:#132A2E!important;}
+  background:#FFFFFF!important;color:#1C1917!important;border-color:#D3C9B8!important;}
+.map-fs-btn a:hover{background:#EFE8DC!important;}
 .map-fs-btn svg{width:18px;height:18px;display:block;}
 .leaflet-container.map-fs{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;
   z-index:410!important;margin:0!important;border-radius:0!important;border:none!important;max-width:none!important;max-height:none!important;}
@@ -1436,8 +1436,8 @@ details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
 .leaflet-container.map-fs .leaflet-bottom{bottom:env(safe-area-inset-bottom,0px);}
 body.map-fs-on{overflow:hidden;}
 /* ── sismogramma su fondo bianco + visore navigabile ── */
-.canvas-box.seis-box{background:#FFFFFF!important;border:1px solid #1D353C;padding:6px;position:relative;cursor:zoom-in;overflow:hidden;}
-.canvas-box.seis-box:focus-visible{outline:2px solid #2DD4BF;outline-offset:2px;}
+.canvas-box.seis-box{background:#FFFFFF!important;border:1px solid #E3DBCC;padding:6px;position:relative;cursor:zoom-in;overflow:hidden;}
+.canvas-box.seis-box:focus-visible{outline:2px solid #C2410C;outline-offset:2px;}
 .seis-exp{position:absolute;right:12px;top:12px;width:32px;height:32px;border-radius:9px;background:rgba(9,19,21,.08);color:#0E2A30;
   display:flex;align-items:center;justify-content:center;pointer-events:none;}
 .seis-exp svg{width:17px;height:17px;}
@@ -1447,19 +1447,19 @@ body.map-fs-on{overflow:hidden;}
 .sv{position:fixed;inset:0;z-index:430;background:#FFFFFF;color:#0E2A30;display:flex;flex-direction:column;font-family:Inter,system-ui,sans-serif;}
 .sv[hidden]{display:none;}
 .sv-h{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px 6px;
-  background:#0E1B1E;color:#E7F3F2;border-bottom:1px solid #1D353C;}
-.sv-back{width:44px;height:44px;flex-shrink:0;border:none;background:transparent;color:#2DD4BF;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;}
+  background:#FFFFFF;color:#1C1917;border-bottom:1px solid #E3DBCC;}
+.sv-back{width:44px;height:44px;flex-shrink:0;border:none;background:transparent;color:#C2410C;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;}
 .sv-back svg{width:22px;height:22px;}
 .sv-ht{min-width:0;display:flex;flex-direction:column;gap:2px;}
 .sv-t{font-size:15.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sv-s{font-size:12px;color:#9DB4B7;}
+.sv-s{font-size:12px;color:#5F574F;}
 .sv-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:12px 12px 10px;}
 .sv-read{display:flex;justify-content:space-between;gap:8px;}
 .sv-read div{display:flex;flex-direction:column;gap:1px;}
 .sv-read .r{align-items:flex-end;}
 .sv-read span{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#5B6E72;}
 .sv-read b{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;}
-.sv-read .r b{color:#0F766E;}
+.sv-read .r b{color:#C2410C;}
 .sv-plot{flex:1;min-height:180px;border:1px solid #DCE5E5;border-radius:12px;overflow:hidden;}
 #svCanvas{display:block;width:100%;height:100%;}
 .sv-stage{position:relative;height:100%;}
@@ -1470,55 +1470,55 @@ body.map-fs-on{overflow:hidden;}
 .sv-seg{display:flex;background:#EEF3F3;border-radius:11px;padding:3px;gap:3px;}
 .sv-seg button{flex:1;height:36px;border:none;border-radius:9px;background:transparent;color:#41575B;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;}
 .sv-seg button[aria-pressed="true"]{background:#FFFFFF;color:#0E2A30;box-shadow:0 1px 3px rgba(14,42,48,.15);}
-.seis-tip{position:absolute;z-index:3;pointer-events:none;background:#0E1B1E;color:#E7F3F2;border-radius:8px;padding:5px 8px;font:12px Inter,system-ui,sans-serif;
+.seis-tip{position:absolute;z-index:3;pointer-events:none;background:#FFFFFF;color:#1C1917;border-radius:8px;padding:5px 8px;font:12px Inter,system-ui,sans-serif;
   display:flex;gap:8px;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.25);}
 .seis-tip[hidden],.seis-line[hidden]{display:none;}
 .seis-tip b{font-weight:600;font-variant-numeric:tabular-nums;}
-.seis-tip span{color:#5EEAD4;font-variant-numeric:tabular-nums;}
-.seis-line{position:absolute;z-index:2;pointer-events:none;border-left:1.4px dashed #0F766E;}
+.seis-tip span{color:#FDBA74;font-variant-numeric:tabular-nums;}
+.seis-line{position:absolute;z-index:2;pointer-events:none;border-left:1.4px dashed #C2410C;}
 .sv-ovh{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:#5B6E72;}
 .sv-ovh b{color:#0E2A30;font-weight:600;white-space:nowrap;}
 #svOverview{display:block;width:100%;height:54px;border-radius:9px;background:#F3F7F7;touch-action:none;cursor:pointer;}
 .sv-hint{margin:0;font-size:12px;line-height:1.45;color:#5B6E72;}
-.sv-bar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:#0E1B1E;border-top:1px solid #1D353C;}
-.sv-bar button{width:48px;height:48px;flex-shrink:0;border-radius:12px;border:1px solid #26444C;background:#11232A;color:#E7F3F2;
+.sv-bar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:#FFFFFF;border-top:1px solid #E3DBCC;}
+.sv-bar button{width:48px;height:48px;flex-shrink:0;border-radius:12px;border:1px solid #D3C9B8;background:#FFFFFF;color:#1C1917;
   display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
 .sv-bar button svg{width:20px;height:20px;}
-.sv-bar .sv-all{flex:1;width:auto;border:none;background:#14B8A6;color:#04201C;font:600 14px Inter,system-ui,sans-serif;}
+.sv-bar .sv-all{flex:1;width:auto;border:none;background:#C2410C;color:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;}
 body.sv-on{overflow:hidden;}
 /* stazioni della sezione Sismogrammi */
 .sta-ic svg{display:block;overflow:visible;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35));}
-.leaflet-tooltip.sta-tip{background:#0E1B1E;color:#E7F3F2;border:1px solid #2DD4BF;border-radius:11px;padding:7px 11px 8px;
+.leaflet-tooltip.sta-tip{background:#FFFFFF;color:#1C1917;border:1px solid #C2410C;border-radius:11px;padding:7px 11px 8px;
   box-shadow:0 6px 18px rgba(0,0,0,.35);font-family:Inter,system-ui,sans-serif;white-space:nowrap;}
-.leaflet-tooltip-top.sta-tip::before{border-top-color:#2DD4BF;}
+.leaflet-tooltip-top.sta-tip::before{border-top-color:#C2410C;}
 .sta-tip b{display:block;font-size:13.5px;font-weight:700;letter-spacing:.2px;}
-.sta-tip span{display:block;font-size:12px;color:#C2D6D8;margin-top:1px;}
+.sta-tip span{display:block;font-size:12px;color:#3F3833;margin-top:1px;}
 /* riquadro breve della sorgente DISS */
-.diss-pop .leaflet-popup-content-wrapper{background:#0E1B1E;color:#E7F3F2;border:1px solid #26444C;border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.45);}
+.diss-pop .leaflet-popup-content-wrapper{background:#FFFFFF;color:#1C1917;border:1px solid #D3C9B8;border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.45);}
 .diss-pop .leaflet-popup-content{margin:12px 14px 14px;font-family:Inter,system-ui,sans-serif;}
-.diss-pop .leaflet-popup-tip{background:#0E1B1E;border:1px solid #26444C;}
-.diss-pop a.leaflet-popup-close-button{color:#9DB4B7;top:6px;right:6px;font-size:20px;}
-.dp-type{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#9DB4B7;padding-right:16px;}
+.diss-pop .leaflet-popup-tip{background:#FFFFFF;border:1px solid #D3C9B8;}
+.diss-pop a.leaflet-popup-close-button{color:#5F574F;top:6px;right:6px;font-size:20px;}
+.dp-type{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#5F574F;padding-right:16px;}
 .dp-name{font-size:16px;font-weight:700;line-height:1.25;margin:3px 0 10px;padding-right:12px;}
-.dp-kind{display:flex;gap:9px;align-items:flex-start;background:#11232A;border:1px solid #1D353C;border-radius:10px;padding:8px 10px;}
-.dp-kind i{flex-shrink:0;width:10px;height:10px;border-radius:50%;margin-top:4px;background:#9DB4B7;}
-.dp-kind.k-nm i{background:#38BDF8;}.dp-kind.k-rv i{background:#F87171;}.dp-kind.k-ss i{background:#FBBF24;}
+.dp-kind{display:flex;gap:9px;align-items:flex-start;background:#FFFFFF;border:1px solid #E3DBCC;border-radius:10px;padding:8px 10px;}
+.dp-kind i{flex-shrink:0;width:10px;height:10px;border-radius:50%;margin-top:4px;background:#5F574F;}
+.dp-kind.k-nm i{background:#38BDF8;}.dp-kind.k-rv i{background:#F87171;}.dp-kind.k-ss i{background:#B45309;}
 .dp-kind.k-ds i{background:#C084FC;}.dp-kind.k-sd i{background:#38BDF8;}
 .dp-kind b{display:block;font-size:13.5px;font-weight:600;}
-.dp-kind span{display:block;font-size:12px;color:#9DB4B7;margin-top:2px;line-height:1.35;}
+.dp-kind span{display:block;font-size:12px;color:#5F574F;margin-top:2px;line-height:1.35;}
 .dp-facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
-.dp-facts span{font-size:12px;color:#C2D6D8;background:#132A2E;border-radius:999px;padding:3px 9px;}
-.dp-btn{margin-top:12px;width:100%;height:40px;border:none;border-radius:10px;background:#14B8A6;color:#04201C;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;}
+.dp-facts span{font-size:12px;color:#3F3833;background:#EFE8DC;border-radius:999px;padding:3px 9px;}
+.dp-btn{margin-top:12px;width:100%;height:40px;border:none;border-radius:10px;background:#C2410C;color:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;}
 /* rete neurale: pseudo-epicentri */
 #nnEpiPanel{display:none;}
-.nn-map{height:300px;border-radius:12px;overflow:hidden;border:1px solid #1D353C;}
+.nn-map{height:300px;border-radius:12px;overflow:hidden;border:1px solid #E3DBCC;}
 .nn-epi{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
-.nn-epi li{display:flex;align-items:center;gap:10px;background:#11232A;border:1px solid #1D353C;border-radius:12px;padding:10px 10px 10px 12px;}
-.nn-rk{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#132A2E;color:#2DD4BF;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;}
+.nn-epi li{display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #E3DBCC;border-radius:12px;padding:10px 10px 10px 12px;}
+.nn-rk{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#EFE8DC;color:#C2410C;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;}
 .nn-ei{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
 .nn-ei b{font-size:14px;}
-.nn-ei span{font-size:12px;color:#9DB4B7;line-height:1.4;}
-.nn-ei span b{font-size:12px;color:#E7F3F2;}
+.nn-ei span{font-size:12px;color:#5F574F;line-height:1.4;}
+.nn-ei span b{font-size:12px;color:#1C1917;}
 .nn-em{flex-shrink:0;width:78px;box-sizing:border-box;padding:6px 8px;border-radius:10px;color:#fff;font-weight:700;font-size:16px;text-align:center;display:flex;flex-direction:column;}
 .nn-em small{font-size:9px;font-weight:600;opacity:.85;text-transform:uppercase;letter-spacing:.3px;}
 .nn-num{color:#fff;font:700 11px Inter,system-ui,sans-serif;text-align:center;line-height:18px;text-shadow:0 1px 2px rgba(0,0,0,.6);}
@@ -1538,7 +1538,50 @@ body.sv-on{overflow:hidden;}
 .prov-s{font-size:13px;color:#FECDCA;}
 .prov-s b{color:#FFFFFF;}
 .prov-n{font-size:11.5px;color:#FDA29B;margin-top:2px;}
-.prov-x{flex-shrink:0;width:32px;height:32px;border:none;border-radius:8px;background:rgba(255,255,255,.08);color:#FECDCA;font-size:14px;cursor:pointer;}
+.prov-x{flex-shrink:0;width:32px;height:32px;border:none;border-radius:8px;background:rgba(28,25,23,.08);color:#FECDCA;font-size:14px;cursor:pointer;}
+/* ── Carta sismica: ritocchi per il tema chiaro ── */
+.time-section{background:#ECE5D8;color:#C2410C;}
+.leaflet-container{background:#E9E4DA!important;}
+.leaflet-tile{filter:saturate(.75) sepia(.08) brightness(1.01)!important;}
+.leaflet-srcPane-pane .leaflet-tile{filter:none!important;}
+.leaflet-bar{border:1px solid #D3C9B8!important;box-shadow:0 4px 12px rgba(28,25,23,.12)!important;}
+.leaflet-bar a{background:#FFFFFF!important;color:#1C1917!important;border-bottom-color:#E3DBCC!important;}
+.leaflet-bar a:hover{background:#F5F1EA!important;}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#FFFFFF!important;color:#1C1917!important;border:1px solid #D3C9B8;box-shadow:0 10px 28px rgba(28,25,23,.18)!important;}
+.leaflet-container a.leaflet-popup-close-button{color:#8A8075!important;}
+.leaflet-control-attribution{background:rgba(255,255,255,.8)!important;color:#5F574F!important;}
+.leaflet-control-attribution a{color:#5F574F!important;}
+.leaflet-tooltip{background:#FFFFFF;color:#1C1917;border:1px solid #D3C9B8;box-shadow:0 4px 12px rgba(28,25,23,.15);}
+#sectionMappa .panel-header{background:#F5F1EA;}
+.diss-pop .leaflet-popup-content-wrapper{box-shadow:0 10px 28px rgba(28,25,23,.2)!important;}
+.src-toggle{box-shadow:0 4px 14px rgba(28,25,23,.12);-webkit-backdrop-filter:none;backdrop-filter:none;}
+/* stima provvisoria su carta: rosso chiaro come nel bozzetto */
+.prov-item{background:#FEECEA;border-color:#F3B5AE;color:#5C1410;box-shadow:0 4px 14px rgba(180,35,24,.12);}
+.prov-h b{color:#9A2A1F;}.prov-h span{color:#9A2A1F;}
+.prov-m{color:#5C1410;}.prov-s{color:#7A2A20;}.prov-s b{color:#5C1410;}.prov-n{color:#9A2A1F;}
+.prov-x{background:rgba(154,42,31,.08);color:#9A2A1F;}
+.prov-pulse{background:#D92D20;}
+/* fumetto del sismogramma: inchiostro scuro sul tracciato bianco */
+.seis-tip{background:#1C1917;color:#F5F1EA;}
+.seis-tip span{color:#FDBA74;}
+.seis-line{border-left-color:#C2410C;}
+.sta-tip b{color:#1C1917;}.sta-tip span{color:#5F574F;}
+.leaflet-tooltip.sta-tip{background:#FFFFFF;color:#1C1917;border-color:#C2410C;box-shadow:0 6px 18px rgba(28,25,23,.18);}
+.leaflet-tooltip-top.sta-tip::before{border-top-color:#C2410C;}
+.dp-kind{background:#F5F1EA;}
+.dp-facts span{background:#EFE8DC;color:#3F3833;}
+.sv-h{border-bottom-color:#E3DBCC;}
+.sv-back{color:#C2410C;}
+.top-header{background:#F5F1EA;}
+.eq-card .eqc-seis .ic{color:#C2410C;}
+.nn-rk{background:#F6E6DC;color:#C2410C;}
+/* icona lente al posto dell'emoji nei campi di ricerca */
+.search-bar input{padding-left:44px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%238A8075' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:16px center;}
+.tools-list button{border-bottom-color:#E3DBCC;}
+.sv-seg{background:#EFE8DC;}.sv-seg button{color:#5F574F;}.sv-seg button[aria-pressed="true"]{color:#1C1917;box-shadow:0 1px 3px rgba(28,25,23,.15);}
+.sv-read span,.sv-ovh,.sv-hint{color:#6B6259;}
+.sv-plot{border-color:#E3DBCC;}
+#svOverview{background:#F5F1EA;}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -1607,7 +1650,7 @@ body.sv-on{overflow:hidden;}
       <p>Ricerca libera per intervallo di date su tutto il catalogo INGV</p>
     </div>
     <div class="choice-card seis" onclick="goSection('sismogrammi')">
-      <div class="icon ic" data-ic="seismo" style="color:#86efac;"></div><h2>Sismogrammi</h2>
+      <div class="icon ic" data-ic="seismo" style="color:#15803D;"></div><h2>Sismogrammi</h2>
       <p>Terremoti, sismogrammi e meccanismi focali INGV in tempo reale</p>
     </div>
     <div class="choice-card" style="border-color:rgba(251,146,60,0.4);"
@@ -1617,12 +1660,12 @@ body.sv-on{overflow:hidden;}
     </div>
     <div class="choice-card" style="border-color:rgba(236,72,153,0.4);"
          onclick="goSection('notifiche')">
-      <div class="icon ic" data-ic="bell" style="color:#f9a8d4;"></div><h2>Notifiche</h2>
+      <div class="icon ic" data-ic="bell" style="color:#BE185D;"></div><h2>Notifiche</h2>
       <p>Avvisi push per terremoti nella tua provincia e auto-aggiornamento</p>
     </div>
     <div class="choice-card" style="border-color:rgba(16,185,129,0.4);"
          onclick="goSection('localizzazione')">
-      <div class="icon ic" data-ic="locate" style="color:#5eead4;"></div><h2>Localizzazione</h2>
+      <div class="icon ic" data-ic="locate" style="color:#FDBA74;"></div><h2>Localizzazione</h2>
       <p>Stima sperimentale epicentro da tempi S-P su stazioni vicine</p>
     </div>
   </div>
@@ -1661,14 +1704,14 @@ body.sv-on{overflow:hidden;}
     </div>
     <div class="side-menu-body">
       <button class="side-menu-item" onclick="closeSideMenu();goSection('terremoti')">
-        <span class="ic side-menu-icon" data-ic="home" style="color:#93c5fd;"></span>
+        <span class="ic side-menu-icon" data-ic="home" style="color:#1D4ED8;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Home</div>
           <div class="side-menu-desc">Torna alla lista dei terremoti recenti</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('catalogo')">
-        <span class="ic side-menu-icon" data-ic="archive" style="color:#fca5a5;"></span>
+        <span class="ic side-menu-icon" data-ic="archive" style="color:#B42318;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Catalogo Storico</div>
           <div class="side-menu-desc">Terremoti storici CPTI15 (dal 1005) + forti recenti da INGV, su mappa con filtri per secolo e zona</div>
@@ -1682,28 +1725,28 @@ body.sv-on{overflow:hidden;}
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('analogia')">
-        <span class="ic side-menu-icon" data-ic="analogy" style="color:#a5b4fc;"></span>
+        <span class="ic side-menu-icon" data-ic="analogy" style="color:#4338CA;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Analogia Sismica <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Cerca il periodo storico che ha colpito le stesse zone del periodo attuale e mostra cosa è successo dopo</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('prospettiva')">
-        <span class="ic side-menu-icon" data-ic="forecast" style="color:#7dd3fc;"></span>
+        <span class="ic side-menu-icon" data-ic="forecast" style="color:#0369A1;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Prospettiva Sismica <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Probabilità a breve termine (clustering/Omori) e ricorrenza storica per zona</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('rete')">
-        <span class="ic side-menu-icon" data-ic="neural" style="color:#f0abfc;"></span>
+        <span class="ic side-menu-icon" data-ic="neural" style="color:#A21CAF;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Rete Neurale <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Una piccola rete neurale impara dall'ultimo anno di dati INGV e "prosegue" l'andamento degli eventi nei giorni successivi</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('pianeti')">
-        <span class="ic side-menu-icon" data-ic="planets" style="color:#c4b5fd;"></span>
+        <span class="ic side-menu-icon" data-ic="planets" style="color:#6D28D9;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Configurazioni Planetarie <span class="side-badge">Gioco</span></div>
           <div class="side-menu-desc">Trova le date con la configurazione planetaria più simile e confronta gli eventi sismici</div>
@@ -1768,7 +1811,7 @@ body.sv-on{overflow:hidden;}
       <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes();toggleFilters();" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="refresh" style="font-size:17px;"></span>Aggiorna</button>
       <div id="eqStatus" class="status">Pronto.</div>
       <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
-      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="bell" style="font-size:16px;"></span>Notifiche &amp; Auto-aggiornamento →</button>
+      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#BE185D;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="bell" style="font-size:16px;"></span>Notifiche &amp; Auto-aggiornamento →</button>
     </div>
   </div>
 
@@ -1788,7 +1831,7 @@ body.sv-on{overflow:hidden;}
   <div class="section" id="sectionTerremoti">
     <div id="provBox" class="prov-box" hidden role="alert" aria-live="assertive"></div>
     <div class="search-bar">
-      <input id="eqSearchInput" type="text" placeholder="🔍 Cerca per provincia, regione o località (es. Benevento, BN, Campania)" oninput="filterEqByProv()"/>
+      <input id="eqSearchInput" type="text" placeholder="Cerca per provincia, regione o località (es. Benevento, BN, Campania)" oninput="filterEqByProv()"/>
       <button id="eqSearchClear" class="search-clear" title="Cancella ricerca" onclick="clearEqSearch()">✕</button>
     </div>
     <div class="eq-hero" id="eqHero" style="display:none;">
@@ -1819,8 +1862,8 @@ body.sv-on{overflow:hidden;}
       </div>
       <div id="eqSumRow" class="summary-row" style="display:none;padding:8px 16px;">
         <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="sTot">—</div></div>
-        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#fca5a5">—</div></div>
-        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#86efac">—</div></div>
+        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#B42318">—</div></div>
+        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#15803D">—</div></div>
         <div class="sc"><div class="k">Prof. media</div><div class="v" id="sAvgD">—</div></div>
       </div>
       <div style="padding:0 16px 4px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Per Regione</div>
@@ -1963,8 +2006,8 @@ body.sv-on{overflow:hidden;}
           </section>
           <div id="stSumRow" class="summary-row" style="display:none">
             <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="stTot">—</div></div>
-            <div class="sc"><div class="k">Mag. max</div><div class="v" id="stMaxV" style="color:#fca5a5">—</div></div>
-            <div class="sc"><div class="k">Mag. min</div><div class="v" id="stMinV" style="color:#86efac">—</div></div>
+            <div class="sc"><div class="k">Mag. max</div><div class="v" id="stMaxV" style="color:#B42318">—</div></div>
+            <div class="sc"><div class="k">Mag. min</div><div class="v" id="stMinV" style="color:#15803D">—</div></div>
             <div class="sc"><div class="k">Prof. media</div><div class="v" id="stAvgD">—</div></div>
           </div>
           <section class="panel">
@@ -1972,11 +2015,11 @@ body.sv-on{overflow:hidden;}
             <div class="tl-header">
               <label>Filtra provincia:</label>
               <select id="stTlProv" onchange="applyTlFilter('st')"
-                style="background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
+                style="background:#FFFFFF;color:var(--text);border:1px solid rgba(28,25,23,0.12);">
                 <option value="">Tutta Italia</option></select>
             </div>
             <div style="padding:10px 16px 16px">
-              <canvas id="stTlCanvas" width="1200" height="175" style="width:100%;display:block;background:#0B1A1D;cursor:crosshair;border-radius:10px;"></canvas>
+              <canvas id="stTlCanvas" width="1200" height="175" style="width:100%;display:block;background:#FFFFFF;cursor:crosshair;border-radius:10px;"></canvas>
             </div>
           </section>
           <section class="panel">
@@ -2091,7 +2134,7 @@ body.sv-on{overflow:hidden;}
           <div id="swSumRow" class="summary-row" style="display:none">
             <div class="sc"><div class="k">Eventi analizzati</div><div class="v" id="swTotEv">—</div></div>
             <div class="sc"><div class="k">Sciami sismici</div><div class="v" id="swTotSwarm" style="color:#fdba74">—</div></div>
-            <div class="sc"><div class="k">Sequenze sismiche</div><div class="v" id="swTotSeq" style="color:#fca5a5">—</div></div>
+            <div class="sc"><div class="k">Sequenze sismiche</div><div class="v" id="swTotSeq" style="color:#B42318">—</div></div>
           </div>
           <section class="panel">
             <div class="panel-header"><h2>Cluster individuati</h2></div>
@@ -2109,7 +2152,7 @@ body.sv-on{overflow:hidden;}
       <div class="header">
         <div class="title-wrap"><h1>Analogia Sismica</h1>
           <p>Cerca nel catalogo INGV <b>dal 2000 in poi</b> i periodi storici che hanno colpito <b>le stesse zone geografiche</b> del periodo attuale (o zone limitrofe, entro celle di ~30 km) e mostra i primi 4 più simili in ordine, con l'evento più forte accaduto nel periodo successivo a ciascuno.</p></div>
-        <span class="badge" style="background:rgba(165,180,252,.14);color:#a5b4fc;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
+        <span class="badge" style="background:rgba(165,180,252,.14);color:#4338CA;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
       </div>
       <section class="panel">
         <div class="panel-header"><h2>Finestra temporale</h2><p>Su quale intervallo del periodo attuale eseguire il confronto</p></div>
@@ -2173,7 +2216,7 @@ body.sv-on{overflow:hidden;}
         </section>
         <div id="hcSumRow" class="summary-row" style="display:none;margin-top:12px;">
           <div class="sc"><div class="k">Eventi mostrati</div><div class="v" id="hcTot">—</div></div>
-          <div class="sc"><div class="k">Mag. max</div><div class="v" id="hcMax" style="color:#fca5a5">—</div></div>
+          <div class="sc"><div class="k">Mag. max</div><div class="v" id="hcMax" style="color:#B42318">—</div></div>
           <div class="sc"><div class="k">Più recente</div><div class="v" id="hcLast">—</div></div>
         </div>
         <section class="panel">
@@ -2195,9 +2238,9 @@ body.sv-on{overflow:hidden;}
       <div class="header">
         <div class="title-wrap"><h1>Prospettiva Sismica</h1>
           <p>Stima statistica della probabilità sismica: a breve termine dai terremoti recenti (clustering e legge di Omori), a lungo termine dalla ricorrenza storica per zona.</p></div>
-        <span class="badge" style="background:rgba(125,211,252,.14);color:#7dd3fc;border:1px solid rgba(125,211,252,.4);">Sperimentale</span>
+        <span class="badge" style="background:rgba(125,211,252,.14);color:#0369A1;border:1px solid rgba(125,211,252,.4);">Sperimentale</span>
       </div>
-      <div class="an-warn" style="color:#fbbf24;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
+      <div class="an-warn" style="color:#B45309;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
         ⚠️ <b>Non è una previsione ufficiale né un allarme.</b> I terremoti <b>non si possono predire</b> (data, ora, luogo esatti).
         Qui si stima solo come varia la <b>probabilità</b>, con gli stessi principi statistici dell'Operational Earthquake
         Forecasting dell'INGV: numeri piccoli, che salgono dopo un evento forte e poi ricalano. Per la pericolosità ufficiale
@@ -2207,7 +2250,7 @@ body.sv-on{overflow:hidden;}
       <section class="panel" style="margin-top:16px;">
         <div class="panel-header"><h2>Breve termine — prossimi 7 giorni</h2><p>In Italia, probabilità di un evento M≥5 alla luce dell'attività recente</p></div>
         <div style="padding:14px 16px;">
-          <button class="btn btn-purple" id="prRunBtn" onclick="fetchProspettiva()">📈 Calcola la prospettiva</button>
+          <button class="btn btn-purple" id="prRunBtn" onclick="fetchProspettiva()">Calcola la prospettiva</button>
           <div id="prStatus" class="status">Premi per calcolare con i dati INGV più recenti.</div>
           <div id="prShort" style="display:none;margin-top:14px;"></div>
         </div>
@@ -2232,11 +2275,11 @@ body.sv-on{overflow:hidden;}
     <div class="container">
       <div class="tools-lab">Esplora</div>
       <div class="tools-grid">
-        <button class="tool-tile" onclick="goSection('storico')" style="--tc:#c4b5fd">
+        <button class="tool-tile" onclick="goSection('storico')" style="--tc:#6D28D9">
           <span class="tool-top"><span class="tool-ic ic" data-ic="storico"></span></span>
           <span class="tool-t">Storico</span><span class="tool-d">Terremoti INGV in un periodo a scelta</span>
         </button>
-        <button class="tool-tile" onclick="goSection('catalogo')" style="--tc:#fca5a5">
+        <button class="tool-tile" onclick="goSection('catalogo')" style="--tc:#B42318">
           <span class="tool-top"><span class="tool-ic ic" data-ic="archive"></span></span>
           <span class="tool-t">Catalogo storico</span><span class="tool-d">Dal 1005 a oggi, per secolo e zona</span>
         </button>
@@ -2244,19 +2287,19 @@ body.sv-on{overflow:hidden;}
           <span class="tool-top"><span class="tool-ic ic" data-ic="swarm"></span></span>
           <span class="tool-t">Sciami sismici</span><span class="tool-d">Sequenze per provincia e periodo</span>
         </button>
-        <button class="tool-tile" onclick="goSection('rete')" style="--tc:#f0abfc">
+        <button class="tool-tile" onclick="goSection('rete')" style="--tc:#A21CAF">
           <span class="tool-top"><span class="tool-ic ic" data-ic="neural"></span><span class="tl-badge">Nuovo</span></span>
           <span class="tool-t">Rete neurale</span><span class="tool-d">Prosegue l'andamento degli eventi</span>
         </button>
-        <button class="tool-tile" onclick="goSection('prospettiva')" style="--tc:#7dd3fc">
+        <button class="tool-tile" onclick="goSection('prospettiva')" style="--tc:#0369A1">
           <span class="tool-top"><span class="tool-ic ic" data-ic="forecast"></span><span class="tl-badge">Beta</span></span>
           <span class="tool-t">Prospettiva</span><span class="tool-d">Probabilità a breve e lungo termine</span>
         </button>
-        <button class="tool-tile" onclick="goSection('analogia')" style="--tc:#a5b4fc">
+        <button class="tool-tile" onclick="goSection('analogia')" style="--tc:#4338CA">
           <span class="tool-top"><span class="tool-ic ic" data-ic="analogy"></span><span class="tl-badge">Beta</span></span>
           <span class="tool-t">Analogia sismica</span><span class="tool-d">Il passato più simile a oggi</span>
         </button>
-        <button class="tool-tile" onclick="goSection('pianeti')" style="--tc:#c4b5fd">
+        <button class="tool-tile" onclick="goSection('pianeti')" style="--tc:#6D28D9">
           <span class="tool-top"><span class="tool-ic ic" data-ic="planets"></span><span class="tl-badge">Gioco</span></span>
           <span class="tool-t">Pianeti</span><span class="tool-d">Configurazioni e terremoti, per gioco</span>
         </button>
@@ -2275,9 +2318,9 @@ body.sv-on{overflow:hidden;}
       <div class="header">
         <div class="title-wrap"><h1>Rete Neurale</h1>
           <p>Cinque reti neurali vengono addestrate direttamente sul tuo dispositivo con fino a 5 anni di terremoti INGV della zona scelta, poi "proseguono" la serie: quanti eventi al giorno, quanto forti e in quali punti della zona è più probabile che avvengano.</p></div>
-        <span class="badge" style="background:rgba(240,171,252,.14);color:#f0abfc;border:1px solid rgba(240,171,252,.4);">Sperimentale</span>
+        <span class="badge" style="background:rgba(162,28,175,.14);color:#A21CAF;border:1px solid rgba(162,28,175,.4);">Sperimentale</span>
       </div>
-      <div class="an-warn" style="color:#fbbf24;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
+      <div class="an-warn" style="color:#B45309;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
         ⚠️ <b>Non è una previsione dei terremoti.</b> La rete estrapola solo la tendenza statistica dell'attività
         (quanti eventi, di che taglia tipica): <b>non può anticipare</b> un forte terremoto improvviso, e tende a riportarsi
         verso la media man mano che si allontana da oggi. Usala come curiosità per vedere se uno sciame tende a calare o a crescere.
@@ -2339,7 +2382,7 @@ body.sv-on{overflow:hidden;}
       <div class="header">
         <div class="title-wrap"><h1>Configurazioni Planetarie</h1>
           <p>Inserisci una data: l'app calcola la posizione di Sole, Luna e pianeti in quel giorno, cerca nel passato e nel futuro (dal 1750 al 2250) le date con la configurazione più simile, e mostra i terremoti di quelle date — dal catalogo strumentale INGV per le date dal 1985, dal catalogo storico CPTI15 (per anno) per quelle precedenti.</p></div>
-        <span class="badge" style="background:rgba(196,181,253,.14);color:#c4b5fd;border:1px solid rgba(196,181,253,.4);">Gioco</span>
+        <span class="badge" style="background:rgba(196,181,253,.14);color:#6D28D9;border:1px solid rgba(196,181,253,.4);">Gioco</span>
       </div>
       <section class="panel">
         <div class="panel-header"><h2>Data di riferimento</h2><p>Configurazione planetaria calcolata a mezzogiorno UTC</p></div>
@@ -2348,7 +2391,7 @@ body.sv-on{overflow:hidden;}
             <input id="plDate" type="date"/></div>
           <button class="btn btn-purple" id="plRunBtn" onclick="fetchPianeti()" style="margin-top:14px;">🔭 Cerca configurazioni simili</button>
           <div id="plStatus" class="status">Scegli una data e avvia la ricerca.</div>
-          <div class="an-warn" style="color:#f9a8d4;background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.3);">
+          <div class="an-warn" style="color:#BE185D;background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.3);">
             🎲 <b>Questo è un gioco, non uno strumento di previsione.</b> Non esiste alcuna correlazione scientifica dimostrata
             tra le configurazioni planetarie e i terremoti: le maree gravitazionali indotte dai pianeti sulla crosta terrestre
             sono di ordini di grandezza inferiori a quelle lunisolari, a loro volta troppo deboli per innescare un sisma.
@@ -2391,7 +2434,7 @@ body.sv-on{overflow:hidden;}
         <span class="sx-ic ic" data-ic="seismo"></span>
         <div><div class="sx-t">Come ha tremato la terra</div>
           <div class="sx-d">Scegli una stazione sismica e guarda il tracciato che ha registrato.</div></div>
-        <svg class="sx-wave" viewBox="0 0 150 60" fill="none" aria-hidden="true"><path d="M0 30h30l5-12 6 24 7-34 7 30 5-10h18l4-6 5 14 5-20 5 16h53" stroke="#2DD4BF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="sx-wave" viewBox="0 0 150 60" fill="none" aria-hidden="true"><path d="M0 30h30l5-12 6 24 7-34 7 30 5-10h18l4-6 5 14 5-20 5 16h53" stroke="#C2410C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="grid">
         <section class="panel">
@@ -2485,16 +2528,16 @@ body.sv-on{overflow:hidden;}
             <div class="panel-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;">
               <div><h2 id="plotTitle">Tracciato</h2><p id="plotSub" style="margin:4px 0 0;color:var(--muted);font-size:13px;">Il movimento del terreno registrato dalla stazione. Tocca il grafico per esplorarlo.</p></div>
               <div class="seis-view-ctrl" style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
-                <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
+                <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#FFFFFF;color:var(--text);border:1px solid rgba(28,25,23,0.12);">
                   <option value="waveform">Tracciato</option>
                   <option value="dayplot">Giornata a righe</option></select>
                 <div id="dayplotControls" style="display:none;align-items:center;gap:7px;">
                   <label style="font-size:11px;color:var(--muted);white-space:nowrap;">Min/riga</label>
                   <input id="dayplotInterval" type="number" min="1" max="120" value="30"
-                    style="width:60px;padding:7px 9px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);"/>
+                    style="width:60px;padding:7px 9px;font-size:13px;border-radius:9px;background:#FFFFFF;color:var(--text);border:1px solid rgba(28,25,23,0.12);"/>
                 </div>
                 <button id="downloadSeisBtn" onclick="downloadSeisImage()" title="Scarica come immagine"
-                  style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:13px;font-weight:600;border-radius:9px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#86efac;cursor:pointer;">
+                  style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:13px;font-weight:600;border-radius:9px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#15803D;cursor:pointer;">
                   <span class="ic" data-ic="download" style="font-size:15px;"></span>PNG
                 </button>
               </div>
@@ -2525,9 +2568,9 @@ body.sv-on{overflow:hidden;}
         <div><div class="sx-t">Come si è mossa la faglia</div>
           <div class="sx-d">Ogni “pallina” riassume il movimento della roccia durante un terremoto forte.</div></div>
         <div class="bb-legend">
-          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia normale"><circle cx="20" cy="20" r="18" fill="#FF5A3C"/><path d="M20 2 C10 12 10 28 20 38 C30 28 30 12 20 2 Z" fill="#F5F7FB"/><circle cx="20" cy="20" r="18" fill="none" stroke="#091315" stroke-width="1.5"/></svg><b>Normale</b><span>la crosta si allunga</span></div>
-          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia inversa"><circle cx="20" cy="20" r="18" fill="#F5F7FB"/><path d="M20 2 C10 12 10 28 20 38 C30 28 30 12 20 2 Z" fill="#FF5A3C"/><circle cx="20" cy="20" r="18" fill="none" stroke="#091315" stroke-width="1.5"/></svg><b>Inversa</b><span>la crosta si comprime</span></div>
-          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia trascorrente"><circle cx="20" cy="20" r="18" fill="#F5F7FB"/><path d="M20 20 L7.3 7.3 A18 18 0 0 1 32.7 7.3 Z M20 20 L32.7 32.7 A18 18 0 0 1 7.3 32.7 Z" fill="#FF5A3C"/><circle cx="20" cy="20" r="18" fill="none" stroke="#091315" stroke-width="1.5"/></svg><b>Trascorrente</b><span>i blocchi scorrono di lato</span></div>
+          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia normale"><circle cx="20" cy="20" r="18" fill="#FF5A3C"/><path d="M20 2 C10 12 10 28 20 38 C30 28 30 12 20 2 Z" fill="#F5F7FB"/><circle cx="20" cy="20" r="18" fill="none" stroke="#F5F1EA" stroke-width="1.5"/></svg><b>Normale</b><span>la crosta si allunga</span></div>
+          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia inversa"><circle cx="20" cy="20" r="18" fill="#F5F7FB"/><path d="M20 2 C10 12 10 28 20 38 C30 28 30 12 20 2 Z" fill="#FF5A3C"/><circle cx="20" cy="20" r="18" fill="none" stroke="#F5F1EA" stroke-width="1.5"/></svg><b>Inversa</b><span>la crosta si comprime</span></div>
+          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia trascorrente"><circle cx="20" cy="20" r="18" fill="#F5F7FB"/><path d="M20 20 L7.3 7.3 A18 18 0 0 1 32.7 7.3 Z M20 20 L32.7 32.7 A18 18 0 0 1 7.3 32.7 Z" fill="#FF5A3C"/><circle cx="20" cy="20" r="18" fill="none" stroke="#F5F1EA" stroke-width="1.5"/></svg><b>Trascorrente</b><span>i blocchi scorrono di lato</span></div>
         </div>
       </div>
       <div class="eq-grid">
@@ -2583,8 +2626,8 @@ body.sv-on{overflow:hidden;}
             <div id="fmSumRow" style="display:none;margin-top:12px;">
               <div class="summary-row">
                 <div class="sc"><div class="k">Soluzioni</div><div class="v" id="fmTot">—</div></div>
-                <div class="sc"><div class="k">Mag. max</div><div class="v" id="fmMaxM" style="color:#fca5a5">—</div></div>
-                <div class="sc"><div class="k">Mag. min</div><div class="v" id="fmMinM" style="color:#86efac">—</div></div>
+                <div class="sc"><div class="k">Mag. max</div><div class="v" id="fmMaxM" style="color:#B42318">—</div></div>
+                <div class="sc"><div class="k">Mag. min</div><div class="v" id="fmMinM" style="color:#15803D">—</div></div>
               </div>
             </div>
           </div>
@@ -2611,18 +2654,18 @@ body.sv-on{overflow:hidden;}
   <div class="section" id="sectionNotifiche">
     <div class="container">
       <div class="header">
-        <div class="title-wrap"><h1><span class="ic" data-ic="bell" style="color:#f9a8d4;"></span>Notifiche</h1>
+        <div class="title-wrap"><h1><span class="ic" data-ic="bell" style="color:#BE185D;"></span>Notifiche</h1>
           <p>Configura avvisi push personalizzati per la tua area.</p></div>
-        <span class="badge" style="background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.35);">Firebase</span>
+        <span class="badge" style="background:rgba(236,72,153,0.12);color:#BE185D;border:1px solid rgba(236,72,153,0.35);">Firebase</span>
       </div>
 
       <!-- ACCOUNT -->
       <section class="panel" style="margin-bottom:18px;">
-        <div class="panel-header"><h2 style="display:inline-flex;align-items:center;gap:9px;"><span class="ic" data-ic="user" style="font-size:0.9em;color:#93c5fd;"></span>Account</h2>
+        <div class="panel-header"><h2 style="display:inline-flex;align-items:center;gap:9px;"><span class="ic" data-ic="user" style="font-size:0.9em;color:#1D4ED8;"></span>Account</h2>
           <p>Accedi per salvare le tue preferenze nel cloud e ricevere notifiche push.</p></div>
         <div class="controls">
           <div id="authStatus" style="padding:8px 0;font-size:14px;color:var(--muted);">Non collegato.</div>
-          <button class="btn" id="loginBtn" onclick="handleAuth()" style="background:rgba(66,133,244,0.15);border-color:rgba(66,133,244,0.4);color:#93c5fd;">
+          <button class="btn" id="loginBtn" onclick="handleAuth()" style="background:rgba(66,133,244,0.15);border-color:rgba(66,133,244,0.4);color:#1D4ED8;">
             <span id="loginBtnText">🔑 Accedi con Google</span>
           </button>
         </div>
@@ -2694,10 +2737,10 @@ body.sv-on{overflow:hidden;}
     <div class="container">
       <div class="header">
         <div class="title-wrap">
-          <h1><span class="ic" data-ic="locate" style="color:#5eead4;"></span>Localizzazione Sperimentale</h1>
+          <h1><span class="ic" data-ic="locate" style="color:#FDBA74;"></span>Localizzazione Sperimentale</h1>
           <p>Stima dell'area epicentrale da tempi S-P su stazioni vicine. Solo indicativa — errori dell'ordine delle decine di km.</p>
         </div>
-        <span class="badge" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border:1px solid rgba(16,185,129,0.35);">⚗️ SPERIMENTALE</span>
+        <span class="badge" style="background:rgba(16,185,129,0.12);color:#047857;border:1px solid rgba(16,185,129,0.35);">⚗️ SPERIMENTALE</span>
       </div>
 
       <!-- Monitor + controlli -->
@@ -2708,8 +2751,8 @@ body.sv-on{overflow:hidden;}
             <p>Controlla automaticamente terremoti.ingv.it ogni 30 secondi.</p>
           </div>
           <div class="loc-monitor-btns" style="display:flex;gap:8px;">
-            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="startLocMonitor()">▶ Avvia monitor</button>
-            <button class="btn" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#fca5a5;" onclick="stopLocMonitor()">⏹ Ferma</button>
+            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#047857;" onclick="startLocMonitor()">▶ Avvia monitor</button>
+            <button class="btn" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#B42318;" onclick="stopLocMonitor()">⏹ Ferma</button>
           </div>
         </div>
         <div style="padding:0 18px 16px;">
@@ -2717,9 +2760,9 @@ body.sv-on{overflow:hidden;}
           <!-- Analisi manuale -->
           <div class="loc-manual">
             <span style="font-size:12px;color:var(--muted);">Oppure analisi manuale:</span>
-            <input id="locProvInput" type="text" placeholder="Provincia (es. Palermo)" style="width:180px;padding:7px 11px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:var(--text);font-size:13px;"/>
-            <input id="locTimeInput" type="datetime-local" style="padding:7px 11px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:var(--text);font-size:13px;"/>
-            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="runLocAnalysis(document.getElementById('locProvInput').value, document.getElementById('locTimeInput').value||null)">🔍 Analizza</button>
+            <input id="locProvInput" type="text" placeholder="Provincia (es. Palermo)" style="width:180px;padding:7px 11px;border-radius:9px;border:1px solid rgba(28,25,23,0.12);background:#FFFFFF;color:var(--text);font-size:13px;"/>
+            <input id="locTimeInput" type="datetime-local" style="padding:7px 11px;border-radius:9px;border:1px solid rgba(28,25,23,0.12);background:#FFFFFF;color:var(--text);font-size:13px;"/>
+            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#047857;" onclick="runLocAnalysis(document.getElementById('locProvInput').value, document.getElementById('locTimeInput').value||null)">🔍 Analizza</button>
           </div>
         </div>
       </section>
@@ -2823,7 +2866,7 @@ body.sv-on{overflow:hidden;}
       <div class="eqd-pane" id="eqdPaneLoc"></div>
     </div>
     <div class="eqd-footer">
-      <button class="eqd-seis-btn" id="eqdSeisBtn" onclick="eqdGoSeismo()">📈 Vai al sismogramma</button>
+      <button class="eqd-seis-btn" id="eqdSeisBtn" onclick="eqdGoSeismo()">Vai al sismogramma</button>
     </div>
   </div>
 
@@ -3288,7 +3331,7 @@ function haversine(a,b,c,d){
 }
 function magCls(m){return m<1?'m0':m<2?'m1':m<3?'m2':m<4?'m3':'m4';}
 function magCol(m){
-  return m<1?'#94a3b8':m<2?'#22c55e':m<3?'#eab308':m<4?'#f97316':m<5?'#ef4444':'#a855f7';
+  return m<1?'#6B6259':m<2?'#22c55e':m<3?'#eab308':m<4?'#f97316':m<5?'#ef4444':'#a855f7';
 }
 function depthCol(d){return d<=10?'#ef4444':d<=30?'#f97316':d<=70?'#eab308':'#3b82f6';}
 
@@ -3556,20 +3599,20 @@ function renderMarkers(events,leafletMap,markersArr,onSeis,autoZoom=true){
         :'';
       this.getPopup().setContent(`<div style="font-family:sans-serif;min-width:180px;">
       <b style="font-size:14px;">${_popupEv.place}</b><br>
-      <span style="color:#8d9ab5;font-size:12px;">${_popupEv.time.replace('T',' ').slice(0,19)} UTC</span>
+      <span style="color:#6B6259;font-size:12px;">${_popupEv.time.replace('T',' ').slice(0,19)} UTC</span>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;">
-        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
-          <div style="font-size:9px;color:#8d9ab5;text-transform:uppercase;">Magnitudo</div>
-          <div style="font-size:18px;font-weight:800;color:#fca5a5;">${_popupEv.mag.toFixed(1)}</div>
+        <div style="background:rgba(28,25,23,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
+          <div style="font-size:9px;color:#6B6259;text-transform:uppercase;">Magnitudo</div>
+          <div style="font-size:18px;font-weight:800;color:#B42318;">${_popupEv.mag.toFixed(1)}</div>
         </div>
-        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
-          <div style="font-size:9px;color:#8d9ab5;text-transform:uppercase;">Profondità</div>
-          <div style="font-size:18px;font-weight:800;color:#93c5fd;">${_popupEv.depth.toFixed(0)} km</div>
+        <div style="background:rgba(28,25,23,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
+          <div style="font-size:9px;color:#6B6259;text-transform:uppercase;">Profondità</div>
+          <div style="font-size:18px;font-weight:800;color:#1D4ED8;">${_popupEv.depth.toFixed(0)} km</div>
         </div>
       </div>
-      <div style="font-size:10px;color:#8d9ab5;margin-top:6px;">Lat ${_popupEv.lat.toFixed(3)} · Lon ${_popupEv.lon.toFixed(3)}</div>
+      <div style="font-size:10px;color:#6B6259;margin-top:6px;">Lat ${_popupEv.lat.toFixed(3)} · Lon ${_popupEv.lon.toFixed(3)}</div>
       ${distRow}
-      ${_popupOnSeis?`<button onclick="${_popupOnSeis}(${_popupI})" style="margin-top:9px;width:100%;padding:7px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">📈 Sismogramma</button>`:''}
+      ${_popupOnSeis?`<button onclick="${_popupOnSeis}(${_popupI})" style="margin-top:9px;width:100%;padding:7px;border:none;border-radius:8px;background:#C2410C;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">Sismogramma</button>`:''}
     </div>`);
     });
     m.bindPopup('');
@@ -3616,7 +3659,7 @@ function renderList(events,containerId,onSeis){
     }
     const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic" style="font-size:19px;">${IC.seismo}</span><span style="font-size:9px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
     const _distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
-    const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
+    const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#6B6259;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
     const sbc=onSeis?`<button class="eqc-seis" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic">${IC.seismo}</span></button>`:'';
     html+=`<div class="eq-item eq-card" onclick="openEqDetail('${containerId}',${i})">
       <span class="eqc-bar" style="background:${magCol(ev.mag)}" aria-hidden="true"></span>
@@ -3815,10 +3858,10 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
   const ctx=canvas.getContext('2d');
   const W=canvas.width,H=canvas.height;
   const evs=provFilter?events.filter(ev=>extractProv(ev.place)===provFilter):events;
-  ctx.fillStyle='#0B1A1D';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,W,H);
   TL_HITS[hitsKey]=[];
   if(!evs.length){
-    ctx.fillStyle='#AAB4C8';ctx.font='14px sans-serif';ctx.textAlign='center';
+    ctx.fillStyle='#5F574F';ctx.font='14px sans-serif';ctx.textAlign='center';
     ctx.fillText('Nessun evento',W/2,H/2);return;
   }
   const pL=55,pR=18,pT=18,pB=30,plotW=W-pL-pR,plotH=H-pT-pB;
@@ -3828,9 +3871,9 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
   /* grid */
   for(let gm=1;gm<=Math.ceil(mMax);gm++){
     const y=pT+plotH-((gm/mMax)*plotH);
-    ctx.strokeStyle='rgba(255,255,255,0.07)';ctx.lineWidth=1;
+    ctx.strokeStyle='rgba(28,25,23,0.08)';ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+plotW,y);ctx.stroke();
-    ctx.fillStyle='#AAB4C8';ctx.font='10px sans-serif';ctx.textAlign='right';
+    ctx.fillStyle='#5F574F';ctx.font='10px sans-serif';ctx.textAlign='right';
     ctx.fillText('M'+gm,pL-3,y+4);
   }
   /* dots */
@@ -3846,14 +3889,14 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
     TL_HITS[hitsKey].push({ev,x,y,r});
   });
   /* X axis */
-  ctx.fillStyle='#AAB4C8';ctx.font='10px sans-serif';ctx.textAlign='center';
+  ctx.fillStyle='#5F574F';ctx.font='10px sans-serif';ctx.textAlign='center';
   for(let i=0;i<=5;i++){
     const t=tMin+(tR/5)*i,x=pL+(i/5)*plotW;
     const d=new Date(t);
     const lb=`${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')} `
             +`${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}`;
     ctx.fillText(lb,x,H-5);
-    ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=0.5;
+    ctx.strokeStyle='rgba(28,25,23,0.06)';ctx.lineWidth=0.5;
     ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+plotH);ctx.stroke();
   }
 }
@@ -3892,7 +3935,7 @@ function updateProvSelect(events,selectId){
         c.style.cursor='pointer';tt.style.display='block';
         tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-38)+'px';
         const dt=h.ev.time.replace('T',' ').slice(0,19);
-        tt.innerHTML=`<strong>M${h.ev.mag.toFixed(1)}</strong> — ${h.ev.place}<br><small style="color:#94a3b8;">${dt} UTC · ${h.ev.depth.toFixed(0)} km</small>`;
+        tt.innerHTML=`<strong>M${h.ev.mag.toFixed(1)}</strong> — ${h.ev.place}<br><small style="color:#6B6259;">${dt} UTC · ${h.ev.depth.toFixed(0)} km</small>`;
       }else{c.style.cursor='crosshair';tt.style.display='none';}
     }
   });
@@ -3979,7 +4022,7 @@ function renderEqdDati(ev){
   const distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
   document.getElementById('eqdPaneDati').innerHTML=`
     <div class="eqd-grid">
-      <div class="eqd-box"><div class="k">Magnitudo</div><div class="v" style="color:#fca5a5;">${ev.mag.toFixed(1)}</div></div>
+      <div class="eqd-box"><div class="k">Magnitudo</div><div class="v" style="color:#B42318;">${ev.mag.toFixed(1)}</div></div>
       <div class="eqd-box"><div class="k">Profondità</div><div class="v">${ev.depth.toFixed(1)} km</div></div>
     </div>
     <div class="eqd-row"><span class="k">Data e ora (locale)</span><span class="v">${localStr}</span></div>
@@ -4055,8 +4098,8 @@ function initEqMap(){
 function addLegend(m){
   const lg=L.control({position:'bottomright'});
   lg.onAdd=()=>{const d=L.DomUtil.create('div');
-    d.style.cssText='background:rgba(11,17,32,.97);border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:9px 13px;color:#e5e7eb;font-size:12px;line-height:1.9;';
-    d.innerHTML='<b style="font-size:10px;color:#94a3b8;text-transform:uppercase">Profondità</b><br>'
+    d.style.cssText='background:rgba(255,255,255,.96);border:1px solid #D3C9B8;border-radius:11px;padding:9px 13px;color:#1C1917;font-size:12px;line-height:1.9;';
+    d.innerHTML='<b style="font-size:10px;color:#6B6259;text-transform:uppercase">Profondità</b><br>'
       +'<span style="color:#ef4444">●</span> 0–10 km<br>'
       +'<span style="color:#f97316">●</span> 10–30 km<br>'
       +'<span style="color:#eab308">●</span> 30–70 km<br>'
@@ -5349,7 +5392,7 @@ async function renderProspettivaLong(){
     return `<div class="an-match-card" style="margin-bottom:10px;">
       <div class="an-match-header">
         <span class="an-rank ${cls}">${r.p30.toFixed(0)}%</span>
-        <h3 style="color:#7dd3fc;">${r.z.n}</h3>
+        <h3 style="color:#0369A1;">${r.z.n}</h3>
       </div>
       <div class="an-match-body">
         <div class="sig-row"><span class="k">Eventi M≥${PR_ZONE_MINMAG} dal ${PR_ZONE_SINCE}</span><span class="v">${r.n} · ~1 ogni ${r.recur||'—'} anni</span></div>
@@ -5502,8 +5545,8 @@ function hcRender(arr){
   listEl.innerHTML=shown.map((e,i)=>`
     <div class="eq-item" onclick="hcFocus(${i})">
       <div class="eq-info">
-        <div class="pl">${e.area||'—'}${e.src==='INGV'?' <span class="badge" style="font-size:9px;padding:1px 5px;background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.4);vertical-align:1px;">INGV</span>':''}</div>
-        <div class="dt"><span><span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.clock}</span> ${_hcDateStr(e)}</span></div>
+        <div class="pl">${e.area||'—'}${e.src==='INGV'?' <span class="badge" style="font-size:9px;padding:1px 5px;background:rgba(59,130,246,.15);color:#1D4ED8;border:1px solid rgba(59,130,246,.4);vertical-align:1px;">INGV</span>':''}</div>
+        <div class="dt"><span><span class="ic" style="font-size:12px;vertical-align:-2px;color:#6B6259;">${IC.clock}</span> ${_hcDateStr(e)}</span></div>
       </div>
       <div class="eq-mag ${magCls(e.mw)}">${e.mw.toFixed(1)}</div>
     </div>`).join('');
@@ -5569,7 +5612,7 @@ function markNotifDirty(){
   const status=document.getElementById('saveNotifStatus');
   if(status){
     status.textContent='● Modifiche non salvate — premi "Salva modifiche" per renderle effettive anche dopo un ricaricamento o con l\'app chiusa.';
-    status.style.color='#fbbf24';
+    status.style.color='#B45309';
   }
 }
 async function saveNotifPrefsBtn(){
@@ -5598,17 +5641,17 @@ async function saveNotifPrefsBtn(){
         status.textContent= ok
           ? '✅ Preferenze salvate (dispositivo + cloud).'
           : '⚠️ Salvate sul dispositivo, ma la sincronizzazione cloud è fallita. Riprova.';
-        status.style.color= ok ? '#6ee7b7' : '#fca5a5';
+        status.style.color= ok ? '#047857' : '#B42318';
       }
     } else {
       if(status){
         status.textContent='✅ Preferenze salvate sul dispositivo. Accedi con Google per sincronizzarle anche nel cloud (necessario per le notifiche push con app chiusa).';
-        status.style.color='#6ee7b7';
+        status.style.color='#047857';
       }
     }
     _notifDirty=false;
   }catch(e){
-    if(status){status.textContent='❌ Errore nel salvataggio: '+e.message;status.style.color='#fca5a5';}
+    if(status){status.textContent='❌ Errore nel salvataggio: '+e.message;status.style.color='#B42318';}
   }finally{
     if(btn){btn.disabled=false;btn.textContent='💾 Salva modifiche';}
   }
@@ -5619,8 +5662,8 @@ function updatePermBtn(){
   const b=document.getElementById('notifPermBtn');
   if(!b||typeof Notification==='undefined')return;
   const p=Notification.permission;
-  if(p==='granted'){b.textContent='✓ Notifiche abilitate';b.style.background='rgba(34,197,94,0.2)';b.style.color='#86efac';b.disabled=true;}
-  else if(p==='denied'){b.textContent='✗ Permesso negato (impostazioni browser)';b.style.background='rgba(239,68,68,0.12)';b.style.color='#fca5a5';b.disabled=false;}
+  if(p==='granted'){b.textContent='✓ Notifiche abilitate';b.style.background='rgba(34,197,94,0.2)';b.style.color='#15803D';b.disabled=true;}
+  else if(p==='denied'){b.textContent='✗ Permesso negato (impostazioni browser)';b.style.background='rgba(239,68,68,0.12)';b.style.color='#B42318';b.disabled=false;}
   else{b.textContent='Richiedi permesso notifiche';b.style.background='';b.style.color='';b.disabled=false;}
 }
 async function askNotifPerm(){
@@ -6176,17 +6219,17 @@ function svPaintCursor(){
   }else{
     const row=Math.floor(SV.cur/g.spr),yC=g.pT+row*g.rH+g.rH/2;
     x=g.pL+((SV.cur-row*g.spr)/(g.spr-1||1))*g.pW;y=Math.max(yC-g.rH*.9,Math.min(yC+g.rH*.9,yC-(d[SV.cur]/g.amp)*g.hH));top=yC-g.rH/2;hh=g.rH;
-    ctx.fillStyle='rgba(20,184,166,.10)';ctx.fillRect(g.pL,top,g.pW,hh);
+    ctx.fillStyle='rgba(194,65,12,.10)';ctx.fillRect(g.pL,top,g.pW,hh);
   }
-  ctx.strokeStyle='#0F766E';ctx.lineWidth=1.4;ctx.setLineDash([4,3]);
+  ctx.strokeStyle='#C2410C';ctx.lineWidth=1.4;ctx.setLineDash([4,3]);
   ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,top+hh);ctx.stroke();ctx.setLineDash([]);
-  ctx.beginPath();ctx.arc(x,y,4.5,0,Math.PI*2);ctx.fillStyle='#14B8A6';ctx.fill();ctx.strokeStyle='#FFFFFF';ctx.lineWidth=2;ctx.stroke();
+  ctx.beginPath();ctx.arc(x,y,4.5,0,Math.PI*2);ctx.fillStyle='#C2410C';ctx.fill();ctx.strokeStyle='#FFFFFF';ctx.lineWidth=2;ctx.stroke();
   const ro=seisReadout(SV.cur);tEl.textContent=ro.time;vEl.textContent=ro.amp;
 }
 function svDrawOverview(){
   const d=_svData(),ov=document.getElementById('svOverview');
   const o=_seisCanvas(ov,54);
-  o.ctx.fillStyle='#F3F7F7';o.ctx.fillRect(0,0,o.w,o.h);
+  o.ctx.fillStyle='#F5F1EA';o.ctx.fillRect(0,0,o.w,o.h);
   if(!SV.ovMax){let m=0;for(const v of d){const a=Math.abs(v);if(a>m)m=a;}SV.ovMax=m||1;}
   o.ctx.strokeStyle='#8A9A9D';o.ctx.lineWidth=.8;o.ctx.beginPath();
   _envelope(o.ctx,d,0,d.length,0,o.w,v=>o.h/2-(v/SV.ovMax)*(o.h/2-4));o.ctx.stroke();
@@ -6197,8 +6240,8 @@ function svDrawOverview(){
     a=r0*g.spr;b=Math.min(d.length,r1*g.spr);
   }
   const x0=a/d.length*o.w,x1=Math.max(x0+4,b/d.length*o.w);
-  o.ctx.fillStyle='rgba(20,184,166,.16)';o.ctx.fillRect(x0,2,x1-x0,o.h-4);
-  o.ctx.strokeStyle='#0F766E';o.ctx.lineWidth=1.6;o.ctx.strokeRect(x0+.8,2.8,x1-x0-1.6,o.h-5.6);
+  o.ctx.fillStyle='rgba(194,65,12,.16)';o.ctx.fillRect(x0,2,x1-x0,o.h-4);
+  o.ctx.strokeStyle='#C2410C';o.ctx.lineWidth=1.6;o.ctx.strokeRect(x0+.8,2.8,x1-x0-1.6,o.h-5.6);
 }
 function _svLocal(e){const r=document.getElementById('svCanvas').getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
 (function(){
@@ -6298,7 +6341,7 @@ function initMap(){
 function _staIcon(sel){
   const s=sel?24:15;
   return L.divIcon({className:'sta-ic',iconSize:[s,s],iconAnchor:[s/2,s*0.62],tooltipAnchor:[0,-s*0.55],
-    html:`<svg width="${s}" height="${s}" viewBox="0 0 24 24"><path d="M12 3l10 17H2z" fill="${sel?'#2DD4BF':'#14B8A6'}" stroke="${sel?'#FFFFFF':'#04201C'}" stroke-width="${sel?2.6:2}" stroke-linejoin="round"/></svg>`});
+    html:`<svg width="${s}" height="${s}" viewBox="0 0 24 24"><path d="M12 3l10 17H2z" fill="${sel?'#1D4ED8':'#1C1917'}" stroke="#FFFFFF" stroke-width="${sel?2.6:2}" stroke-linejoin="round"/></svg>`});
 }
 function _titleCase(t){return String(t||'').toLowerCase().replace(/(^|[\s'(\-\/])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());}
 /* Località della stazione (comune e provincia), da OpenStreetMap; salvata per non richiederla di nuovo */
@@ -6564,7 +6607,7 @@ function drawBeachball(canvas,strike,dip,rake){
   }
   ctx.putImageData(img,0,0);
   ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);
-  ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=1;ctx.stroke();
+  ctx.strokeStyle='rgba(28,25,23,0.10)';ctx.lineWidth=1;ctx.stroke();
 }
 
 function makeBeachBallIcon(strike,dip,rake,size){
@@ -6809,16 +6852,16 @@ function fmPopupHtml(ev){
   const np2=!isNaN(ev.strike2)?ev.strike2.toFixed(0)+'/'+ev.dip2.toFixed(0)+'/'+ev.rake2.toFixed(0):'N/D';
   return '<div style="font-family:sans-serif;min-width:200px;">'
     +'<b style="font-size:14px">'+ev.place+'</b><br>'
-    +'<span style="font-size:12px;color:#8d9ab5">'+ev.time.replace('T',' ').slice(0,19)+' UTC</span>'
+    +'<span style="font-size:12px;color:#6B6259">'+ev.time.replace('T',' ').slice(0,19)+' UTC</span>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;">'
-    +'<div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
-    +'<div style="font-size:9px;color:#8d9ab5;text-transform:uppercase">Magnitudo</div>'
-    +'<div style="font-size:18px;font-weight:800;color:#fca5a5">'+ev.mag.toFixed(1)+' '+ev.magType+'</div></div>'
-    +'<div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
-    +'<div style="font-size:9px;color:#8d9ab5;text-transform:uppercase">Profondita</div>'
-    +'<div style="font-size:18px;font-weight:800;color:#93c5fd">'+ev.depth.toFixed(0)+' km</div></div></div>'
-    +'<div style="margin-top:8px;font-size:12px;background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:7px 10px;">'
-    +'<div style="color:#8d9ab5;font-size:10px;text-transform:uppercase;margin-bottom:3px">Piani nodali (str/dip/rake)</div>'
+    +'<div style="background:rgba(28,25,23,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
+    +'<div style="font-size:9px;color:#6B6259;text-transform:uppercase">Magnitudo</div>'
+    +'<div style="font-size:18px;font-weight:800;color:#B42318">'+ev.mag.toFixed(1)+' '+ev.magType+'</div></div>'
+    +'<div style="background:rgba(28,25,23,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
+    +'<div style="font-size:9px;color:#6B6259;text-transform:uppercase">Profondita</div>'
+    +'<div style="font-size:18px;font-weight:800;color:#1D4ED8">'+ev.depth.toFixed(0)+' km</div></div></div>'
+    +'<div style="margin-top:8px;font-size:12px;background:rgba(28,25,23,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:7px 10px;">'
+    +'<div style="color:#6B6259;font-size:10px;text-transform:uppercase;margin-bottom:3px">Piani nodali (str/dip/rake)</div>'
     +'<div>NP1: <b>'+np1+'</b></div><div>NP2: <b>'+np2+'</b></div></div></div>';
 }
 
@@ -7212,11 +7255,11 @@ function gridSearchEpicenter(results){
 function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
   const W=canvas.width,H=canvas.height;
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#0B1A1D';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,W,H);
   const n=samples.length;
   if(!n) return;
   const mi=Math.min(...samples),ma=Math.max(...samples),range=ma-mi||1;
-  ctx.strokeStyle='#E6EBF4';ctx.lineWidth=1;ctx.beginPath();
+  ctx.strokeStyle='#1C1917';ctx.lineWidth=1;ctx.beginPath();
   for(let i=0;i<n;i++){
     const x=i/n*W,y=H-(samples[i]-mi)/range*(H-4)-2;
     i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
@@ -7224,9 +7267,9 @@ function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
   ctx.stroke();
   /* Pick P — verde */
   if(pickP>=0){
-    ctx.strokeStyle='#2DD4BF';ctx.lineWidth=1.5;ctx.beginPath();
+    ctx.strokeStyle='#C2410C';ctx.lineWidth=1.5;ctx.beginPath();
     const xP=pickP/n*W;ctx.moveTo(xP,0);ctx.lineTo(xP,H);ctx.stroke();
-    ctx.fillStyle='#2DD4BF';ctx.font='9px sans-serif';ctx.fillText('P',xP+2,9);
+    ctx.fillStyle='#C2410C';ctx.font='9px sans-serif';ctx.fillText('P',xP+2,9);
   }
   /* Pick S — rosso */
   if(pickS>=0){
@@ -7237,8 +7280,8 @@ function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
 }
 function drawLocEmpty(canvas,msg){
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#0B1A1D';ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle='#AAB4C8';ctx.font='11px sans-serif';ctx.textAlign='center';
+  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#5F574F';ctx.font='11px sans-serif';ctx.textAlign='center';
   ctx.fillText(msg,canvas.width/2,canvas.height/2+4);
 }
 
@@ -7761,7 +7804,7 @@ async function _nnRenderEpi(R){
     return `<li><span class="nn-rk">${i+1}</span><div class="nn-ei"><b>${_esc(near(r.lat,r.lon))}</b>
       <span>${r.lat.toFixed(2)}°N ${r.lon.toFixed(2)}°E · ${r.hist} eventi nel periodo, ultimo ${r.lastDays<1?'oggi':r.lastDays===1?'ieri':r.lastDays+' giorni fa'}</span>
       <span>≈ ${r.N<1?r.N.toFixed(1).replace('.',','):Math.round(r.N)} eventi attesi · probabilità di almeno un M3+: <b>${p}</b></span></div>
-      <div class="nn-em" style="background:${r.mMed==null?'#3D6B77':magCol(r.mMed)}"><small>mag. max probabile</small>${m}</div></li>`;}).join('')+`</ol>
+      <div class="nn-em" style="background:${r.mMed==null?'#4F6673':magCol(r.mMed)}"><small>mag. max probabile</small>${m}</div></li>`;}).join('')+`</ol>
     <div class="hint" style="margin-top:8px;">b-value stimato dai dati: <b>${R.epi.b.toFixed(2)}</b>. Le zone vengono dalla sismicità recente (più peso agli ultimi 45 giorni),
     il numero di eventi dalla rete neurale, la magnitudo dalla legge di Gutenberg-Richter. Sono zone statisticamente attive, <b>non</b> previsioni di terremoti.</div>`;
   /* mappa dei pseudo-epicentri */
@@ -7775,7 +7818,7 @@ async function _nnRenderEpi(R){
   _nnLayer=L.layerGroup().addTo(_nnMap);
   const b=[];
   list.forEach((r,i)=>{
-    const col=r.mMed==null?'#5F7A80':magCol(r.mMed);
+    const col=r.mMed==null?'#8A8075':magCol(r.mMed);
     L.circleMarker([r.lat,r.lon],{radius:Math.max(7,Math.min(22,6+Math.sqrt(r.N)*3)),color:'#FFFFFF',weight:1.5,fillColor:col,fillOpacity:.75})
       .bindTooltip(`<b>${i+1}. ${_esc(near(r.lat,r.lon))}</b><br>≈ ${r.N.toFixed(1).replace('.',',')} eventi · ${r.mMed==null?'sotto soglia':'M '+r.mMed.toFixed(1)}`)
       .addTo(_nnLayer);
@@ -7826,16 +7869,16 @@ function _nnDraw(R){
   const obsN=S.nAdj.slice(-SHOW),obsM=S.mx.slice(-SHOW),tot=SHOW+H;
   const pad={l:34,r:8,t:10,b:22};
   const axisDates=(ctx,w,h)=>{
-    ctx.fillStyle='#AAB4C8';ctx.font='11px Roboto,system-ui,sans-serif';ctx.textAlign='center';
+    ctx.fillStyle='#5F574F';ctx.font='11px Roboto,system-ui,sans-serif';ctx.textAlign='center';
     const day0=Date.now()-(SHOW-1)*86400000,step=Math.ceil(tot/6);
     for(let i=0;i<tot;i+=step){const x=pad.l+(i+.5)*(w-pad.l-pad.r)/tot;
       ctx.fillText(new Date(day0+i*86400000).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'}),x,h-6);}
   };
   const today=(ctx,w,h)=>{const x=pad.l+SHOW*(w-pad.l-pad.r)/tot;
-    ctx.strokeStyle='rgba(240,171,252,.6)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillStyle='#F0ABFC';ctx.font='600 11px Roboto,system-ui,sans-serif';ctx.textAlign='left';ctx.fillText('oggi',x+4,pad.t+9);};
+    ctx.strokeStyle='rgba(162,28,175,.6)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#A21CAF';ctx.font='600 11px Roboto,system-ui,sans-serif';ctx.textAlign='left';ctx.fillText('oggi',x+4,pad.t+9);};
   const grid=(ctx,w,h,ymax,yfmt,ymin=0)=>{
-    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.fillStyle='#AAB4C8';ctx.font='11px Roboto,system-ui,sans-serif';ctx.textAlign='right';
+    ctx.strokeStyle='rgba(28,25,23,0.08)';ctx.fillStyle='#5F574F';ctx.font='11px Roboto,system-ui,sans-serif';ctx.textAlign='right';
     for(let g=0;g<=3;g++){const v=ymin+(ymax-ymin)*g/3,y=h-pad.b-(h-pad.t-pad.b)*g/3;
       ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillText(yfmt(v),pad.l-5,y+3);}
   };
@@ -7844,12 +7887,12 @@ function _nnDraw(R){
    const ymax=Math.max(1,...obsN,...fN.map(v=>v.hi))*1.1,bw=(w-pad.l-pad.r)/tot;
    const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/ymax,Xc=i=>pad.l+(i+.5)*bw;
    grid(ctx,w,h,ymax,v=>v.toFixed(0));
-   ctx.fillStyle='rgba(45,212,191,.6)';
+   ctx.fillStyle='rgba(194,65,12,.6)';
    obsN.forEach((v,i)=>{const y=Y(v);ctx.fillRect(pad.l+i*bw+bw*.12,y,Math.max(1,bw*.76),h-pad.b-y);});
-   ctx.fillStyle='rgba(240,171,252,.18)';ctx.beginPath();
+   ctx.fillStyle='rgba(162,28,175,.18)';ctx.beginPath();
    fN.forEach((v,i)=>{const x=Xc(SHOW+i);i?ctx.lineTo(x,Y(v.hi)):ctx.moveTo(x,Y(v.hi));});
    for(let i=fN.length-1;i>=0;i--)ctx.lineTo(Xc(SHOW+i),Y(fN[i].lo));ctx.closePath();ctx.fill();
-   ctx.strokeStyle='#F0ABFC';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(Xc(SHOW-1),Y(obsN[SHOW-1]));
+   ctx.strokeStyle='#A21CAF';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(Xc(SHOW-1),Y(obsN[SHOW-1]));
    fN.forEach((v,i)=>ctx.lineTo(Xc(SHOW+i),Y(v.mean)));ctx.stroke();ctx.lineWidth=1;
    today(ctx,w,h);axisDates(ctx,w,h);}
   /* --- magnitudo massima --- */
