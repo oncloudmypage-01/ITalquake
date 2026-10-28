@@ -7,14 +7,14 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Contesto "stima provvisoria" nella home
+      - name: Endpoint stima provvisoria
         run: |
           curl -sL -A 'Mozilla/5.0' https://terremoti.ingv.it/ -o home.html
           python3 - <<'PY'
-          import re
           h=open('home.html',encoding='utf-8',errors='replace').read()
-          for m in re.finditer(r'(?i)provvis',h):
-              print('=====',m.start()); print(h[max(0,m.start()-700):m.start()+900]); print()
-          for u in sorted(set(re.findall(r'''["'](https?://[^"' ]*(?:json|api|alert|provv|ajax)[^"' ]*)["']''',h))): print('URL',u)
-          for u in sorted(set(re.findall(r'''(?:url|href|src)\s*[:=]\s*["']([^"']+)["']''',h)))[:80]: print('REF',u)
+          i=h.find('string_for_auto_hypocenter'); print(h[max(0,i-2500):i+1800])
+          j=h.find('stima_provvisoria_container'); print('==== container html'); print(h[max(0,j-600):j+900])
           PY
+          for u in 'https://terremoti.ingv.it/ws/string_for_auto_hypocenter/query' 'https://terremoti.ingv.it/ws/string_for_auto_hypocenter/query?format=json'; do
+            echo "=== $u"; curl -s -i -m 20 -H 'Origin: https://italquake.firebaseapp.com' -A 'Mozilla/5.0' "$u" | head -c 3000; echo
+          done
