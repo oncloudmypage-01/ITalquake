@@ -15,22 +15,27 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: diss-sync-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  probe:
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Etichette delle colonne e immagini
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dipendenze
+        run: pip install pillow
+      - name: Scarica i dati del DISS
+        run: python tools/build_diss.py
+      - name: Salva nel repository
         run: |
-          set +e
-          B=https://diss.ingv.it/mapper
-          for f in js.js mapDISS.js mapDISS_sources.js mapDISS_listenerOfSource.js mapDISS_caricaMapper.js; do curl -sSL -m 60 "$B/js/$f" >> alljs.js; echo >> alljs.js; done
-          echo "=== assegnazioni colonne"
-          grep -n -E "VALUEELEMENT_[A-Za-z]+\"\)\.innerHTML *= *line" alljs.js | sed -E 's/^[0-9]+: *//' | sort -u | head -120
-          echo "=== sezioni dei commenti"
-          for id in ITCS013 ITIS003 ITDS001 ITSD001; do curl -sSL -m 60 "$B/data/com/${id}COM.txt" -o c.txt -w "$id HTTP %{http_code} %{size_download}\n"; grep -E '^\*\*' c.txt; done
-          echo "=== imgContent"
-          curl -sSL -m 60 "$B/imgContent.php?idSource=ITCS013&img=P00700&sType=CS" | head -c 2500; echo
-          grep -n "ITCS013" <(curl -sSL -m 60 "$B/data/LinkTable.txt") | head
-          for t in CSS ISS DSS SDS DSSA; do curl -sSL -m 60 -o /dev/null -w "$t 4web.MID HTTP %{http_code} %{size_download}\n" "$B/data/${t}4web.MID"; done
-          curl -sSL -m 60 "$B/data/SDS4web.MID" | head -c 1500; echo
-          curl -sSL -m 60 "$B/data/DSS4web.MID" | head -c 1500; echo
+          git config user.name "diss-sync[bot]"
+          git config user.email "diss-sync@users.noreply.github.com"
+          git add diss
+          if git diff --cached --quiet; then echo "Nessuna novità dal DISS"; exit 0; fi
+          git commit -m "Dati DISS aggiornati ($(date -u +%Y-%m-%d))"
+          git push
