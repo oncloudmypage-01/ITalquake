@@ -7,28 +7,30 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Home terremoti.ingv.it
+      - name: Versioni degli eventi FDSN
         run: |
-          UA='Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36'
-          curl -sL -A "$UA" https://terremoti.ingv.it/ -o home.html; wc -c home.html
-          echo '--- provvisori'; grep -o -i '.\{200\}provvisori.\{300\}' home.html | head -20
-          echo '--- scripts'; grep -o '<script[^>]*src="[^"]*"' home.html | head -30
-          echo '--- api urls'; grep -o -i '["'"'"'][^"'"'"' ]*\(api\|json\|feed\|events\)[^"'"'"' ]*["'"'"']' home.html | sort -u | head -60
-          curl -sL -A "$UA" 'https://terremoti.ingv.it/events' -o ev.html; wc -c ev.html
-          echo '--- ev provvisori'; grep -o -i '.\{200\}provvisori.\{300\}' ev.html | head -20
-          echo '--- ev api'; grep -o -i '["'"'"'][^"'"'"' ]*\(api\|json\|feed\)[^"'"'"' ]*["'"'"']' ev.html | sort -u | head -60
-          for f in $(grep -o '<script[^>]*src="[^"]*"' home.html ev.html | sed 's/.*src="//;s/"$//' | sort -u | head -15); do
-            case "$f" in http*) u="$f";; //*) u="https:$f";; *) u="https://terremoti.ingv.it/${f#/}";; esac
-            echo "=== JS $u"; curl -sL -A "$UA" "$u" -o s.js; wc -c s.js
-            grep -o -i '.\{120\}provvisori.\{200\}' s.js | head -8
-            grep -o -i '["'"'"'`][^"'"'"'` ]*\(/api/\|\.json\|webservices\|fdsnws\)[^"'"'"'` ]*["'"'"'`]' s.js | sort -u | head -25
+          S=$(date -u -d '-3 days' +%Y-%m-%dT%H:%M:%S)
+          B='https://webservices.ingv.it/fdsnws/event/1/query'
+          echo '=== geojson ultimi eventi (proprietà)'; curl -s "$B?format=geojson&limit=3&orderby=time" | head -c 2500; echo
+          for q in "maxversion=99" "maxversion=50" "minversion=0&maxversion=10" "minversion=100&maxversion=100" "minversion=101"; do
+            echo "=== $q"; curl -s -w '\nHTTP %{http_code}\n' "$B?format=text&starttime=$S&orderby=time&limit=8&$q" | head -12
           done
-      - name: Endpoint candidati
+          echo '=== distribuzione version ultimi 3 giorni M>=2'
+          curl -s "$B?format=geojson&starttime=$S&minmag=2&limit=500" | python3 -c "
+          import json,sys,collections
+          d=json.load(sys.stdin); c=collections.Counter(f['properties'].get('version') for f in d['features']); print(c)
+          for f in d['features'][:6]: print({k:f['properties'].get(k) for k in ('eventId','time','mag','magType','place','version','author','type')})"
+      - name: Pagina eventi (struttura righe) e feed
         run: |
           UA='Mozilla/5.0'
-          for u in 'https://terremoti.ingv.it/api/events' 'https://terremoti.ingv.it/events?format=json' \
-                   'https://webservices.ingv.it/fdsnws/event/1/query?format=text&limit=5&orderby=time' \
-                   'https://webservices.ingv.it/ingvws/eqk/1/query?format=json' \
-                   'https://terremoti.ingv.it/stima-provvisoria' ; do
-            echo "=== $u"; curl -sL -m 20 -A "$UA" -w '\nHTTP %{http_code} %{content_type}\n' "$u" | head -c 1500; echo
-          done
+          curl -sL -A "$UA" https://terremoti.ingv.it/ -o home.html
+          python3 - <<'PY'
+          import re
+          h=open('home.html',encoding='utf-8',errors='replace').read()
+          i=h.find('<tbody'); print(h[i:i+3500])
+          for w in ['provvis','Provvis','PROVVIS','preliminar','stima','Stima','alert','in corso','elaborazione']:
+              print(w, [m.start() for m in re.finditer(w,h)][:5])
+          PY
+          echo '=== feed atom'; curl -sL -A "$UA" https://terremoti.ingv.it/feed/atom/all_week | head -c 2500; echo
+          echo '=== wayback snapshot con stima provvisoria?'
+          curl -s 'https://web.archive.org/cdx/search/cdx?url=terremoti.ingv.it/&output=json&limit=5&from=2025&filter=statuscode:200&collapse=digest' | head -c 1200; echo
