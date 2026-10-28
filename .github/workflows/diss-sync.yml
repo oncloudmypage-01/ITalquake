@@ -19,13 +19,17 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Esplora una scheda sorgente (raw)
+      - name: Esplora il Mapper
         run: |
           set +e
-          curl -sS -m 60 -D - "https://diss.ingv.it/diss331/sources.php?ITCS013" -o p.html; echo; cat p.html; echo
-          for u in "https://diss.ingv.it/diss331/sources.php?ITCS013" "https://diss.ingv.it/diss331/" "https://diss.ingv.it/diss331/index.php"; do
-            echo "=== $u (browser UA, follow)"
-            curl -sSL -m 60 -A "Mozilla/5.0 (Linux; Android 14) Chrome/130 Mobile" -c cj.txt -b cj.txt "$u" -o q.html -w "HTTP %{http_code} %{size_download} %{url_effective}\n"
-            head -c 1500 q.html; echo
-            grep -oiE '(src|href)="[^"]+"' q.html | sort -u | head -40
-          done
+          B=https://diss.ingv.it/mapper
+          curl -sSL -m 60 "$B/js/js.js" -o js.js -w "js.js HTTP %{http_code} %{size_download}\n"
+          curl -sSL -m 60 "$B/" -o idx.html
+          grep -oE 'src="js/[^"]+"' idx.html | sort -u
+          for f in $(grep -oE 'src="js/[^"]+"' idx.html | sed 's/src="//;s/"//' | sort -u); do curl -sSL -m 60 "$B/$f" >> alljs.js; done
+          cat js.js >> alljs.js
+          echo "=== URL/php nel codice"
+          grep -oE "['\"][^'\" ]*\.(php|json|txt|html)[^'\" ]*['\"]" alljs.js | sort | uniq -c | sort -rn | head -60
+          echo "=== contesti 'source'"
+          grep -n -iE "ajax|fetch\(|\.get\(|getJSON|XMLHttp" alljs.js | head -40
+          grep -n -iE "source=|sourceID|idsource|Commentary|Summary|References" alljs.js | head -40
