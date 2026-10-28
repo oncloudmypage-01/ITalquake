@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#3966B8"/>
+<meta name="theme-color" content="#0A0F1C"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap"/>
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded',function(){
 :root{
   --bg:#0f172a;--panel:#111827;--text:#e5e7eb;--muted:#94a3b8;
   --accent:#22c55e;--accent-2:#3b82f6;--danger:#ef4444;
-  --border:rgba(15,23,42,0.08);--shadow:0 10px 30px rgba(0,0,0,0.28);
+  --border:rgba(255,255,255,0.08);--shadow:0 10px 30px rgba(0,0,0,0.28);
 }
 *{box-sizing:border-box;}
 body{margin:0;font-family:Inter,system-ui,sans-serif;
@@ -147,11 +147,11 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .brand p{margin:10px 0 0;color:var(--muted);font-size:16px;text-align:center;}
 .choices{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
-.choice-card{width:240px;border-radius:22px;border:1px solid rgba(15,23,42,0.1);
-  background:rgba(15,23,42,0.04);padding:30px 22px;cursor:pointer;
+.choice-card{width:240px;border-radius:22px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);padding:30px 22px;cursor:pointer;
   transition:transform .2s,border-color .2s,background .2s;
   text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;}
-.choice-card:hover{transform:translateY(-4px);background:rgba(15,23,42,0.08);}
+.choice-card:hover{transform:translateY(-4px);background:rgba(255,255,255,0.08);}
 .choice-card.eq{border-color:rgba(239,68,68,0.4);}
 .choice-card.eq:hover{border-color:rgba(239,68,68,0.8);}
 .choice-card.stor{border-color:rgba(168,85,247,0.4);}
@@ -166,7 +166,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .ic{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:0 0 auto;}
 .ic svg{width:1em;height:1em;display:block;}
 .nav-brand{display:inline-flex;align-items:center;gap:8px;}
-.nav-brand .ic{font-size:18px;color:#15803D;}
+.nav-brand .ic{font-size:18px;color:#86efac;}
 .nav-tab{display:inline-flex;align-items:center;gap:7px;}
 .nav-tab .ic{font-size:17px;}
 .nav-home{display:inline-flex;align-items:center;gap:7px;}
@@ -179,7 +179,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .profile-row .ic{font-size:16px;color:var(--muted);}
 .profile-avatar-placeholder .ic{font-size:26px;}
 .hdr-btn .ic{font-size:18px;}
-.seis-btn .ic{font-size:17px;color:#15803D;}
+.seis-btn .ic{font-size:17px;color:#86efac;}
 /* ── tocco di colore leggero sulle icone (smorzato verso lo slate) ── */
 #tabEq .ic{color:color-mix(in srgb,#f87171 70%,#94a3b8);}
 #tabStor .ic{color:color-mix(in srgb,#c084fc 70%,#94a3b8);}
@@ -203,7 +203,7 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 /* ── APP / NAV ── */
 #appContainer{display:block;}
 #appContainer.visible{display:block;}
-.nav-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);
+.nav-bar{position:sticky;top:0;z-index:100;background:rgba(11,17,32,.97);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
   display:flex;align-items:center;padding:0 20px;gap:0;}
 .nav-brand{font-weight:700;font-size:15px;padding:15px 18px 15px 0;
@@ -217,13 +217,13 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .nav-tab:hover{color:var(--text);}
 .nav-tab.a-eq{color:#f87171;border-bottom-color:#ef4444;}
 .nav-tab.a-stor{color:#c084fc;border-bottom-color:#a855f7;}
-.nav-tab.a-seis{color:#15803D;border-bottom-color:#22c55e;}
-.nav-tab.a-fm{color:#C2410C;border-bottom-color:#fb923c;}
+.nav-tab.a-seis{color:#86efac;border-bottom-color:#22c55e;}
+.nav-tab.a-fm{color:#fdba74;border-bottom-color:#fb923c;}
 .nav-spacer{flex:1;}
 .nav-home{padding:7px 13px;border-radius:9px;font-size:14px;font-weight:600;
   background:rgba(34,197,94,0.10);border:1px solid rgba(34,197,94,0.30);
-  color:#15803D;cursor:pointer;transition:all .18s;}
-.nav-home:hover{background:rgba(34,197,94,0.22);color:#166534;border-color:rgba(34,197,94,0.55);}
+  color:#86efac;cursor:pointer;transition:all .18s;}
+.nav-home:hover{background:rgba(34,197,94,0.22);color:#bbf7d0;border-color:rgba(34,197,94,0.55);}
 .section{display:none;}
 .section.active{display:block;}
 
@@ -234,12 +234,12 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .title-wrap h1{margin:0;font-size:clamp(20px,4vw,34px);line-height:1.1;}
 .title-wrap p{margin:8px 0 0;color:var(--muted);}
 .badge{padding:9px 14px;border-radius:999px;font-weight:600;font-size:13px;}
-.badge-green{background:rgba(34,197,94,0.12);color:#15803D;border:1px solid rgba(34,197,94,0.35);}
-.badge-red{background:rgba(239,68,68,0.12);color:#B91C1C;border:1px solid rgba(239,68,68,0.35);}
-.badge-purple{background:rgba(168,85,247,0.12);color:#7E22CE;border:1px solid rgba(168,85,247,0.35);}
+.badge-green{background:rgba(34,197,94,0.12);color:#86efac;border:1px solid rgba(34,197,94,0.35);}
+.badge-red{background:rgba(239,68,68,0.12);color:#fca5a5;border:1px solid rgba(239,68,68,0.35);}
+.badge-purple{background:rgba(168,85,247,0.12);color:#d8b4fe;border:1px solid rgba(168,85,247,0.35);}
 
 /* panel — NO overflow:hidden globale; solo i panel-map lo hanno */
-.panel{background:rgba(255,255,255,.97);border:1px solid var(--border);
+.panel{background:rgba(11,17,32,.97);border:1px solid var(--border);
   border-radius:22px;box-shadow:var(--shadow);}
 .panel-map{overflow:hidden;} /* solo le mappe ne hanno bisogno */
 .panel-header{padding:18px 18px 10px;}
@@ -255,8 +255,8 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;
 .controls{padding:16px;display:grid;gap:12px;}
 .field{display:grid;gap:5px;}
 label{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
-select,input{width:100%;border-radius:12px;border:1px solid rgba(15,23,42,0.1);
-  background:#FFFFFF;color:var(--text);padding:11px 13px;font-size:14px;outline:none;}
+select,input{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,0.1);
+  background:#0b1220;color:var(--text);padding:11px 13px;font-size:14px;outline:none;}
 input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .btn{width:100%;border-radius:13px;border:none;padding:12px 14px;
@@ -266,9 +266,9 @@ input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
 .btn-green{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;}
 .btn-red{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;}
 .btn-purple{background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;}
-.btn-outline{background:rgba(15,23,42,0.05);color:var(--text);
+.btn-outline{background:rgba(255,255,255,0.05);color:var(--text);
   border:1px solid var(--border)!important;}
-.btn-outline:hover{background:rgba(15,23,42,0.1);}
+.btn-outline:hover{background:rgba(255,255,255,0.1);}
 .status{font-size:13px;color:var(--muted);margin-top:4px;}
 .hint{font-size:12px;color:var(--muted);line-height:1.5;
   background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.22);
@@ -299,7 +299,7 @@ details.nd[open] summary::before{transform:rotate(90deg);}
 details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .npb{padding:9px 13px;border-radius:11px;font-size:13px;font-weight:700;width:auto;
   background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);
-  color:#1D4ED8;cursor:pointer;transition:all .18s;}
+  color:#93c5fd;cursor:pointer;transition:all .18s;}
 .npb:hover{background:rgba(59,130,246,0.25);}
 .ri{font-size:11px;color:var(--muted);text-align:right;}
 
@@ -321,42 +321,42 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .eq-list{max-height:630px;overflow-y:auto;}
 .eq-item{display:flex;align-items:center;gap:11px;padding:9px 16px;
   border-bottom:1px solid var(--border);transition:background .15s;}
-.eq-item:hover{background:rgba(15,23,42,0.03);}
+.eq-item:hover{background:rgba(255,255,255,0.03);}
 .eq-item:last-child{border-bottom:none;}
 .eq-mag{min-width:44px;height:44px;border-radius:10px;display:flex;align-items:center;
   justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;}
-.m0{background:rgba(148,163,184,.15);color:#64748B;}
-.m1{background:rgba(34,197,94,.15);color:#15803D;}
-.m2{background:rgba(234,179,8,.15);color:#A16207;}
-.m3{background:rgba(249,115,22,.15);color:#C2410C;}
-.m4{background:rgba(239,68,68,.15);color:#B91C1C;}
+.m0{background:rgba(148,163,184,.15);color:#94a3b8;}
+.m1{background:rgba(34,197,94,.15);color:#86efac;}
+.m2{background:rgba(234,179,8,.15);color:#fde047;}
+.m3{background:rgba(249,115,22,.15);color:#fdba74;}
+.m4{background:rgba(239,68,68,.15);color:#fca5a5;}
 .eq-info{flex:1;min-width:0;cursor:pointer;}
 .eq-info .pl{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .eq-info .dt{font-size:11px;color:var(--muted);margin-top:2px;}
 .eq-depth{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
 .seis-btn{flex-shrink:0;padding:5px 9px;border-radius:8px;font-size:13px;
   background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
-  color:#1D4ED8;cursor:pointer;transition:all .18s;width:auto;}
+  color:#93c5fd;cursor:pointer;transition:all .18s;width:auto;}
 .seis-btn:hover{background:rgba(59,130,246,.25);}
 
 /* summary cards */
 .summary-row{display:flex;gap:11px;flex-wrap:wrap;}
-.sc{flex:1;min-width:100px;background:rgba(15,23,42,.03);
+.sc{flex:1;min-width:100px;background:rgba(255,255,255,.03);
   border:1px solid var(--border);border-radius:14px;padding:11px 14px;}
 .sc .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
 .sc .v{font-size:20px;font-weight:800;}
 
 /* ── SCIAMI SISMICI: card cluster ── */
 .sw-list{padding:8px 16px 16px;display:flex;flex-direction:column;gap:10px;}
-.sw-card{background:rgba(15,23,42,.03);border:1px solid var(--border);border-radius:14px;
+.sw-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;
   padding:13px 15px;cursor:pointer;transition:background .15s;}
-.sw-card:hover{background:rgba(15,23,42,.06);}
+.sw-card:hover{background:rgba(255,255,255,.06);}
 .sw-card .sw-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .sw-card .sw-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
   padding:2px 8px;border-radius:6px;}
-.sw-card .sw-label.swarm{background:rgba(249,115,22,.14);color:#C2410C;border:1px solid rgba(249,115,22,.4);}
-.sw-card .sw-label.seq{background:rgba(239,68,68,.14);color:#B91C1C;border:1px solid rgba(239,68,68,.4);}
-.sw-card .sw-mag{font-size:16px;font-weight:800;color:#B91C1C;}
+.sw-card .sw-label.swarm{background:rgba(249,115,22,.14);color:#fdba74;border:1px solid rgba(249,115,22,.4);}
+.sw-card .sw-label.seq{background:rgba(239,68,68,.14);color:#fca5a5;border:1px solid rgba(239,68,68,.4);}
+.sw-card .sw-mag{font-size:16px;font-weight:800;color:#fca5a5;}
 .sw-card .sw-place{font-size:14.5px;font-weight:700;margin-top:6px;}
 .sw-card .sw-meta{font-size:12px;color:var(--muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:10px;}
 
@@ -366,10 +366,10 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .rtbl th{padding:8px 12px;text-align:left;font-size:11px;font-weight:700;
   color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);}
 .rtbl th.r{text-align:right;}
-.rtbl td{padding:8px 12px;border-bottom:1px solid rgba(15,23,42,.04);}
+.rtbl td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04);}
 .rtbl td.r{text-align:right;font-variant-numeric:tabular-nums;}
 .rtbl tr:last-child td{border-bottom:none;}
-.rtbl tr:hover td{background:rgba(15,23,42,.02);}
+.rtbl tr:hover td{background:rgba(255,255,255,.02);}
 .rbar{display:inline-block;height:6px;border-radius:3px;
   background:linear-gradient(90deg,#3b82f6,#22c55e);vertical-align:middle;margin-left:7px;}
 .mpill{display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:700;}
@@ -379,20 +379,20 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .tl-header label{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;}
 .tl-header select{width:auto;padding:6px 10px;font-size:13px;border-radius:9px;}
 #timelineTooltip,#storicoTimelineTooltip{
-  position:fixed;background:rgba(255,255,255,.97);border:1px solid rgba(15,23,42,.15);
+  position:fixed;background:rgba(11,17,32,.97);border:1px solid rgba(255,255,255,.15);
   border-radius:9px;padding:7px 11px;font-size:13px;pointer-events:none;
   display:none;z-index:9999;max-width:270px;line-height:1.5;}
 
 /* sismogrammi canvas */
-.canvas-box{background:#08101c;border:1px solid rgba(15,23,42,.08);
+.canvas-box{background:#08101c;border:1px solid rgba(255,255,255,.08);
   border-radius:16px;padding:12px;overflow-x:auto;}
-.log-box{padding:16px;max-height:180px;overflow:auto;color:#374151;
+.log-box{padding:16px;max-height:180px;overflow:auto;color:#d1d5db;
   font-family:ui-monospace,monospace;font-size:12px;line-height:1.5;background:#08101c;
   border-radius:0 0 22px 22px;}
 
 /* meta grid */
 .meta-grid{padding:16px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.mc{background:rgba(15,23,42,.03);border:1px solid rgba(15,23,42,.06);
+.mc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
   border-radius:13px;padding:12px;}
 .mc .k{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
 .mc .v{font-size:15px;font-weight:700;word-break:break-word;}
@@ -401,7 +401,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 /* loading */
 .lo{padding:36px;text-align:center;color:var(--muted);font-size:14px;}
 .spin{display:inline-block;width:20px;height:20px;margin-right:7px;
-  border:3px solid rgba(15,23,42,.1);border-top-color:var(--accent-2);
+  border:3px solid rgba(255,255,255,.1);border-top-color:var(--accent-2);
   border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;}
 @keyframes sp{to{transform:rotate(360deg);}}
 
@@ -409,13 +409,13 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .bb-icon{border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.6);cursor:pointer;display:block;}
 .fm-list-item{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:12px;
   padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
-.fm-list-item:hover{background:rgba(15,23,42,.04);}
-.fm-mag{font-size:22px;font-weight:800;color:#B91C1C;}
+.fm-list-item:hover{background:rgba(255,255,255,.04);}
+.fm-mag{font-size:22px;font-weight:800;color:#fca5a5;}
 .fm-meta{font-size:12px;color:var(--muted);margin-top:2px;}
 
 /* toast */
 #seisToast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  background:rgba(255,255,255,.97);border:1px solid rgba(59,130,246,.4);
+  background:rgba(11,17,32,.97);border:1px solid rgba(59,130,246,.4);
   border-radius:13px;padding:11px 18px;font-size:14px;z-index:9998;
   display:none;max-width:460px;text-align:center;line-height:1.5;
   box-shadow:0 8px 28px rgba(0,0,0,.5);}
@@ -423,7 +423,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 /* update banner */
 .update-banner{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);
   display:none;align-items:center;gap:10px;
-  background:rgba(255,255,255,.97);border:1px solid rgba(34,197,94,.45);
+  background:rgba(11,17,32,.97);border:1px solid rgba(34,197,94,.45);
   border-radius:13px;padding:10px 10px 10px 16px;font-size:13px;font-weight:600;
   color:var(--text);z-index:10000;max-width:min(92vw,420px);
   box-shadow:0 8px 28px rgba(0,0,0,.5);}
@@ -485,18 +485,18 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .gps-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;
   border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;
   background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);
-  color:#1D4ED8;transition:all .18s;}
+  color:#93c5fd;transition:all .18s;}
 .gps-btn:hover{background:rgba(59,130,246,0.28);}
 .gps-btn.active{background:rgba(59,130,246,0.3);color:#60a5fa;}
 /* ── NOTIFICHE SECTION ── */
-.nav-tab.a-notif{color:#BE185D;border-bottom-color:#ec4899;}
+.nav-tab.a-notif{color:#f9a8d4;border-bottom-color:#ec4899;}
 .notif-grid{display:grid;gap:18px;max-width:560px;margin:0 auto;}
 .toggle-row{display:flex;align-items:center;gap:12px;padding:4px 0;}
 
 /* ── SEZIONE LOCALIZZAZIONE ── */
-.nav-tab.a-loc{color:#047857;border-bottom-color:#10b981;}
+.nav-tab.a-loc{color:#6ee7b7;border-bottom-color:#10b981;}
 .loc-alert{border-radius:14px;padding:14px 18px;background:rgba(251,146,60,0.12);
-  border:1px solid rgba(251,146,60,0.4);color:#9A3412;font-size:14px;line-height:1.6;}
+  border:1px solid rgba(251,146,60,0.4);color:#fed7aa;font-size:14px;line-height:1.6;}
 .loc-alert b{color:#fb923c;}
 .loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 @media(max-width:900px){.loc-grid{grid-template-columns:1fr;}}
@@ -505,11 +505,11 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .sta-card:last-child{border-bottom:none;}
 .sta-canvas{border-radius:6px;background:#08101c;display:block;}
 .sta-info{font-size:12px;}
-.sta-code{font-weight:700;font-size:14px;color:#047857;}
+.sta-code{font-weight:700;font-size:14px;color:#6ee7b7;}
 .sta-pick{color:var(--muted);margin-top:2px;}
 .loc-result{border-radius:14px;padding:16px 20px;
   background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.35);margin-top:18px;}
-.loc-result h3{margin:0 0 8px;color:#047857;font-size:15px;}
+.loc-result h3{margin:0 0 8px;color:#6ee7b7;font-size:15px;}
 .loc-result .coords{font-size:22px;font-weight:700;color:#d1fae5;letter-spacing:.02em;}
 .loc-result .uncer{font-size:12px;color:var(--muted);margin-top:4px;}
 .poll-dot{display:inline-block;width:8px;height:8px;border-radius:50%;
@@ -521,7 +521,7 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 /* ── BOTTOM TAB BAR ── */
 .nav-bar{display:none!important;}
 .bottom-tabs{position:fixed;bottom:0;left:0;right:0;z-index:200;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+  background:rgba(11,17,32,.97);backdrop-filter:blur(14px);
   border-top:1px solid var(--border);display:flex;
   padding:0 0 env(safe-area-inset-bottom,0);height:60px;}
 .btab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -531,21 +531,21 @@ details.nd .nb{display:grid;gap:9px;padding-top:8px;}
 .btab.active{color:#3b82f6;}
 .btab.active.t-eq{color:#f87171;}
 .btab.active.t-map{color:#60a5fa;}
-.btab.active.t-seis{color:#15803D;}
-.btab.active.t-fm{color:#C2410C;}
+.btab.active.t-seis{color:#86efac;}
+.btab.active.t-fm{color:#fdba74;}
 .btab.active.t-live{color:#f87171;}
 body{padding-bottom:64px;}
 
 /* ── TOP HEADER BAR ── */
-.top-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);
+.top-header{position:sticky;top:0;z-index:100;background:rgba(11,17,32,.97);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
 .top-header h1{margin:0;font-size:20px;font-weight:700;color:var(--text);}
 .top-header .hdr-actions{display:flex;gap:8px;align-items:center;}
 .hdr-btn{padding:6px 10px;border-radius:8px;font-size:18px;
-  background:rgba(15,23,42,0.06);border:1px solid var(--border);
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
   cursor:pointer;color:var(--text);transition:background .15s;}
-.hdr-btn:hover{background:rgba(15,23,42,0.12);}
+.hdr-btn:hover{background:rgba(255,255,255,0.12);}
 
 /* ── BANNER "STIMA PROVVISORIA" (testo reale pubblicato da INGV) ── */
 .prov-banner{position:sticky;top:0;z-index:99;display:flex;align-items:center;gap:10px;
@@ -553,11 +553,11 @@ body{padding-bottom:64px;}
   backdrop-filter:blur(12px);}
 .prov-banner .dot{width:8px;height:8px;border-radius:50%;background:#f97316;
   animation:pulse 1.2s infinite;flex-shrink:0;}
-.prov-banner-text{flex:1;min-width:0;font-size:12.5px;color:#C2410C;}
-.prov-banner-text b{color:#9A3412;letter-spacing:.03em;margin-right:6px;}
-.prov-banner-close{flex-shrink:0;background:transparent;border:none;color:#C2410C;
+.prov-banner-text{flex:1;min-width:0;font-size:12.5px;color:#fdba74;}
+.prov-banner-text b{color:#fed7aa;letter-spacing:.03em;margin-right:6px;}
+.prov-banner-close{flex-shrink:0;background:transparent;border:none;color:#fdba74;
   font-size:14px;cursor:pointer;padding:2px 6px;}
-.prov-banner-close:hover{color:#9A3412;}
+.prov-banner-close:hover{color:#fed7aa;}
 
 /* ── SEARCH BAR (Provincia/Regione/Località) ── */
 .search-bar{padding:10px 16px 4px;position:relative;}
@@ -565,15 +565,15 @@ body{padding-bottom:64px;}
 .search-clear{display:none;position:absolute;right:24px;top:50%;transform:translateY(-50%);
   background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;
   width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;}
-.search-clear:active{background:rgba(15,23,42,0.08);}
+.search-clear:active{background:rgba(255,255,255,0.08);}
 .search-clear.show{display:flex;}
 .search-info{padding:6px 16px 0;font-size:12px;color:var(--muted);}
 
 /* ── SORT TABS (Data/Magnitudo/Distanza) ── */
-.sort-bar{display:flex;gap:0;padding:8px 16px 4px;background:rgba(255,255,255,.97);}
+.sort-bar{display:flex;gap:0;padding:8px 16px 4px;background:rgba(11,17,32,.97);}
 .sort-btn{flex:1;padding:8px;border:none;border-radius:20px;font-size:13px;font-weight:600;
   background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;text-align:center;}
-.sort-btn.active{background:rgba(59,130,246,0.15);color:#1D4ED8;}
+.sort-btn.active{background:rgba(59,130,246,0.15);color:#93c5fd;}
 
 /* ── TIME-SECTION LABELS ── */
 .time-section{padding:10px 16px 4px;font-size:12px;font-weight:700;
@@ -583,7 +583,7 @@ body{padding-bottom:64px;}
 .eq-list{max-height:none;overflow-y:visible;}
 .eq-item{display:flex;align-items:center;gap:12px;padding:16px;
   border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
-.eq-item:active{background:rgba(15,23,42,0.05);}
+.eq-item:active{background:rgba(255,255,255,0.05);}
 .eq-info{flex:1;min-width:0;}
 .eq-info .pl{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .eq-info .dt{font-size:12.5px;color:var(--muted);margin-top:5px;display:flex;flex-direction:column;gap:3px;}
@@ -591,7 +591,7 @@ body{padding-bottom:64px;}
   justify-content:center;font-size:20px;font-weight:800;flex-shrink:0;order:2;margin-left:auto;}
 .seis-btn{flex-shrink:0;padding:7px 8px;border-radius:9px;font-size:17px;
   background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
-  color:#1D4ED8;cursor:pointer;transition:all .18s;
+  color:#93c5fd;cursor:pointer;transition:all .18s;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;line-height:1;min-width:54px;}
 
@@ -622,13 +622,13 @@ body{padding-bottom:64px;}
 .side-menu-header{display:flex;align-items:center;justify-content:space-between;
   padding:16px 18px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .side-menu-header h3{margin:0;font-size:16px;color:var(--text);letter-spacing:.02em;}
-.side-menu-close{background:rgba(15,23,42,.06);border:1px solid var(--border);
+.side-menu-close{background:rgba(255,255,255,.06);border:1px solid var(--border);
   border-radius:8px;width:30px;height:30px;color:var(--text);cursor:pointer;font-size:14px;}
 .side-menu-body{flex:1;overflow-y:auto;padding:12px;}
 .side-menu-item{width:100%;display:flex;align-items:flex-start;gap:12px;padding:14px 12px;
-  background:rgba(15,23,42,.03);border:1px solid var(--border);border-radius:12px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;
   color:var(--text);cursor:pointer;text-align:left;transition:background .15s;margin-bottom:8px;}
-.side-menu-item:hover{background:rgba(15,23,42,.07);}
+.side-menu-item:hover{background:rgba(255,255,255,.07);}
 .side-menu-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
 .side-menu-text{min-width:0;flex:1;}
 .side-menu-title{font-size:14.5px;font-weight:700;}
@@ -636,22 +636,22 @@ body{padding-bottom:64px;}
 .side-menu-hint{padding:14px 12px;font-size:12px;color:var(--muted);font-style:italic;
   text-align:center;border:1px dashed var(--border);border-radius:10px;margin-top:4px;}
 .side-badge{display:inline-block;font-size:9px;font-weight:800;padding:1px 6px;border-radius:5px;
-  background:rgba(165,180,252,.16);color:#4338CA;border:1px solid rgba(165,180,252,.35);
+  background:rgba(165,180,252,.16);color:#a5b4fc;border:1px solid rgba(165,180,252,.35);
   text-transform:uppercase;letter-spacing:.04em;margin-left:6px;vertical-align:1px;}
 
 /* ── ANALOGIA SISMICA (sezione sperimentale) ── */
 .an-window-picker{display:flex;gap:8px;flex-wrap:wrap;}
 .an-window-btn{flex:1;min-width:100px;padding:12px 10px;border-radius:10px;font-weight:700;
-  font-size:13px;background:rgba(15,23,42,.04);border:1px solid var(--border);
+  font-size:13px;background:rgba(255,255,255,.04);border:1px solid var(--border);
   color:var(--text);cursor:pointer;transition:all .15s;}
-.an-window-btn:hover{background:rgba(15,23,42,.08);}
-.an-window-btn.active{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.5);color:#4338CA;}
+.an-window-btn:hover{background:rgba(255,255,255,.08);}
+.an-window-btn.active{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.5);color:#a5b4fc;}
 .an-result{display:flex;flex-direction:column;gap:14px;margin-top:16px;}
-.an-block{background:rgba(15,23,42,.03);border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
+.an-block{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
 .an-block h3{margin:0 0 10px;font-size:13.5px;font-weight:800;text-transform:uppercase;
-  letter-spacing:.05em;color:#4338CA;}
-.an-block.match h3{color:#C2410C;}
-.an-block.next h3{color:#B91C1C;}
+  letter-spacing:.05em;color:#a5b4fc;}
+.an-block.match h3{color:#fdba74;}
+.an-block.next h3{color:#fca5a5;}
 .an-block .sig-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;
   border-bottom:1px solid var(--border);}
 .an-block .sig-row:last-child{border-bottom:none;}
@@ -659,47 +659,47 @@ body{padding-bottom:64px;}
 .an-block .sig-row .v{font-weight:700;}
 .an-big-event{margin-top:6px;padding:14px;border-radius:12px;
   background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.35);}
-.an-big-event .m{font-size:32px;font-weight:800;color:#B91C1C;line-height:1;}
+.an-big-event .m{font-size:32px;font-weight:800;color:#fca5a5;line-height:1;}
 .an-big-event .p{font-size:14px;font-weight:600;margin-top:6px;}
 .an-big-event .t{font-size:12px;color:var(--muted);margin-top:4px;}
 .an-none{padding:14px;text-align:center;color:var(--muted);font-size:13px;
-  background:rgba(15,23,42,.02);border:1px dashed var(--border);border-radius:10px;}
+  background:rgba(255,255,255,.02);border:1px dashed var(--border);border-radius:10px;}
 .an-progress{font-size:12.5px;color:var(--muted);}
-.an-warn{padding:11px 14px;font-size:12px;color:#B45309;background:rgba(251,191,36,.08);
+.an-warn{padding:11px 14px;font-size:12px;color:#fbbf24;background:rgba(251,191,36,.08);
   border:1px solid rgba(251,191,36,.3);border-radius:10px;margin-top:12px;}
 #anMatches{display:flex;flex-direction:column;gap:14px;}
-.an-match-card{background:rgba(15,23,42,.03);border:1px solid var(--border);
+.an-match-card{background:rgba(255,255,255,.03);border:1px solid var(--border);
   border-radius:14px;overflow:hidden;}
 .an-match-header{display:flex;align-items:center;gap:10px;padding:11px 14px;
   border-bottom:1px solid var(--border);background:rgba(253,186,116,.06);}
 .an-match-header h3{margin:0;font-size:13px;font-weight:800;text-transform:uppercase;
-  letter-spacing:.05em;color:#C2410C;flex:1;min-width:0;}
+  letter-spacing:.05em;color:#fdba74;flex:1;min-width:0;}
 .an-rank{font-size:12px;font-weight:800;padding:3px 9px;border-radius:8px;
-  background:rgba(253,186,116,.15);color:#C2410C;border:1px solid rgba(253,186,116,.4);flex-shrink:0;}
-.an-rank-1{color:#B45309;background:rgba(251,191,36,.18);border-color:rgba(251,191,36,.55);}
-.an-rank-2{color:#111827;background:rgba(229,231,235,.12);border-color:rgba(229,231,235,.35);}
-.an-rank-3{color:#B91C1C;background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.30);}
+  background:rgba(253,186,116,.15);color:#fdba74;border:1px solid rgba(253,186,116,.4);flex-shrink:0;}
+.an-rank-1{color:#fbbf24;background:rgba(251,191,36,.18);border-color:rgba(251,191,36,.55);}
+.an-rank-2{color:#e5e7eb;background:rgba(229,231,235,.12);border-color:rgba(229,231,235,.35);}
+.an-rank-3{color:#fca5a5;background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.30);}
 .an-rank-4{color:var(--muted);}
-.an-sim{font-size:14px;font-weight:800;color:#4338CA;flex-shrink:0;}
+.an-sim{font-size:14px;font-weight:800;color:#a5b4fc;flex-shrink:0;}
 .an-match-body{padding:12px 15px;}
 .an-next-divider{margin-top:14px;padding-top:10px;border-top:1px dashed var(--border);
   font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
-  color:#B91C1C;margin-bottom:8px;}
+  color:#fca5a5;margin-bottom:8px;}
 
 /* ── CONFIGURAZIONI PLANETARIE ── */
 #plPast,#plFuture{display:flex;flex-direction:column;gap:14px;margin-top:14px;}
 .pl-group-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
-  color:#6D28D9;margin:4px 2px -2px;}
+  color:#c4b5fd;margin:4px 2px -2px;}
 .pl-planets{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px;margin-top:10px;}
-.pl-chip{background:rgba(15,23,42,.03);border:1px solid var(--border);border-radius:9px;
+.pl-chip{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px;
   padding:7px 9px;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:6px;}
 .pl-chip .n{color:var(--muted);}
 .pl-chip .v{font-weight:700;font-variant-numeric:tabular-nums;}
-.pl-chip.off .v{color:#B91C1C;}
-.pl-chip.near .v{color:#15803D;}
+.pl-chip.off .v{color:#fca5a5;}
+.pl-chip.near .v{color:#86efac;}
 .pl-eq{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);}
 .pl-eq-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
-  color:#C2410C;margin-bottom:6px;}
+  color:#fdba74;margin-bottom:6px;}
 .pl-eq-list{max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;
   -webkit-overflow-scrolling:touch;}
 .pl-eq-row{display:flex;align-items:center;gap:9px;padding:5px 7px;border-radius:8px;
@@ -716,11 +716,11 @@ body{padding-bottom:64px;}
 .pr-state-val{font-size:30px;font-weight:800;letter-spacing:.01em;margin-top:4px;line-height:1;}
 .pr-state-sub{font-size:12.5px;margin-top:6px;color:var(--muted);}
 .pr-state.pr-lo{background:rgba(34,197,94,.10);border-color:rgba(34,197,94,.35);}
-.pr-state.pr-lo .pr-state-val{color:#15803D;}
+.pr-state.pr-lo .pr-state-val{color:#86efac;}
 .pr-state.pr-mid{background:rgba(251,191,36,.10);border-color:rgba(251,191,36,.4);}
-.pr-state.pr-mid .pr-state-val{color:#B45309;}
+.pr-state.pr-mid .pr-state-val{color:#fbbf24;}
 .pr-state.pr-hi{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.45);}
-.pr-state.pr-hi .pr-state-val{color:#B91C1C;}
+.pr-state.pr-hi .pr-state-val{color:#fca5a5;}
 
 /* ── SCHEDA TERREMOTO (dettaglio evento) ── */
 /* Scheda evento a pagina intera (occupa tutto il viewport, sopra ogni cosa) */
@@ -737,15 +737,15 @@ body{padding-bottom:64px;}
 .eqd-sheet.open{transform:translateY(0);visibility:visible;}
 .eqd-header{display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(12px);}
+  background:rgba(11,17,32,.97);backdrop-filter:blur(12px);}
 .eqd-title{font-size:16px;font-weight:700;line-height:1.3;flex:1;min-width:0;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.eqd-close{flex-shrink:0;background:rgba(15,23,42,.06);border:1px solid var(--border);
+.eqd-close{flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid var(--border);
   border-radius:8px;width:34px;height:34px;color:var(--text);cursor:pointer;font-size:15px;}
 .eqd-map{height:280px;width:100%;flex-shrink:0;}
 @media(max-width:640px){.eqd-map{height:220px;}}
 .eqd-tabs{display:flex;gap:0;padding:10px 16px 0;flex-shrink:0;}
-.eqd-tab{flex:1;padding:9px;border:none;background:rgba(15,23,42,.05);color:var(--muted);
+.eqd-tab{flex:1;padding:9px;border:none;background:rgba(255,255,255,.05);color:var(--muted);
   font-size:13px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;}
 .eqd-tab.active{color:#fff;border-bottom-color:#3b82f6;background:rgba(59,130,246,.1);}
 .eqd-tab:first-child{border-radius:10px 0 0 0;}
@@ -758,7 +758,7 @@ body{padding-bottom:64px;}
 .eqd-seis-btn{width:100%;padding:11px;border:none;border-radius:10px;background:#2563eb;
   color:#fff;font-weight:700;font-size:14px;cursor:pointer;}
 .eqd-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
-.eqd-box{background:rgba(15,23,42,.03);border:1px solid var(--border);border-radius:10px;padding:9px 12px;}
+.eqd-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:9px 12px;}
 .eqd-box .k{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
 .eqd-box .v{font-size:17px;font-weight:800;}
 .eqd-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;
@@ -813,11 +813,11 @@ body{padding-bottom:64px;}
 .profile-actions{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px;}
 .profile-btn-notif{width:100%;padding:10px;border-radius:10px;font-size:14px;font-weight:600;
   background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.3);
-  color:#BE185D;cursor:pointer;transition:background .15s;}
+  color:#f9a8d4;cursor:pointer;transition:background .15s;}
 .profile-btn-notif:hover{background:rgba(236,72,153,0.2);}
 .profile-btn-logout{width:100%;padding:10px;border-radius:10px;font-size:14px;font-weight:600;
   background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);
-  color:#B91C1C;cursor:pointer;transition:background .15s;}
+  color:#fca5a5;cursor:pointer;transition:background .15s;}
 .profile-btn-logout:hover{background:rgba(239,68,68,0.18);}
 
 @media(max-width:640px){
@@ -890,12 +890,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{ou
   transition:color .2s,background .2s,transform .15s;position:relative;}
 .btab:active{transform:scale(.95);}
 .btab .btab-icon{font-size:21px;transition:transform .2s;}
-.btab.active{background:linear-gradient(180deg,rgba(15,23,42,.09),rgba(255,255,255,.03));
+.btab.active{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
   box-shadow:0 1px 0 rgba(255,255,255,.07) inset;}
 .btab.active .btab-icon{transform:translateY(-1px);}
 .btab.active::after{content:"";position:absolute;bottom:5px;width:16px;height:3px;border-radius:3px;
   background:currentColor;opacity:.9;}
-.btab.active.t-stor{color:#7E22CE;}
+.btab.active.t-stor{color:#d8b4fe;}
 body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0));}
 #seisToast{bottom:96px!important;}
 .update-banner{bottom:96px;}
@@ -922,14 +922,14 @@ body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0));}
 .search-bar{padding:14px 14px 6px;}
 .search-bar input{border-radius:16px;padding:13px 40px 13px 16px;background:var(--surface);
   border:1px solid var(--border);font-size:14.5px;transition:border-color .2s,background .2s,box-shadow .2s;}
-.search-bar input:focus{background:rgba(15,23,42,.055);border-color:rgba(124,156,255,.5);box-shadow:var(--ring);}
+.search-bar input:focus{background:rgba(255,255,255,.055);border-color:rgba(124,156,255,.5);box-shadow:var(--ring);}
 .search-clear{right:22px;}
 .sort-bar{margin:6px 14px 8px;padding:4px;gap:4px;border-radius:14px;background:var(--surface);border:1px solid var(--border);}
 .sort-btn{border-radius:10px;padding:8px;font-size:13px;transition:background .2s,color .2s;}
 .sort-btn:hover{color:var(--text);}
 .sort-btn.active{background:linear-gradient(180deg,rgba(124,156,255,.28),rgba(124,156,255,.14));color:#fff;
   box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 6px 14px -8px rgba(124,156,255,.7);}
-.time-section{padding:16px 18px 6px;font-size:11px;letter-spacing:.12em;color:#4338CA;display:flex;align-items:center;gap:10px;}
+.time-section{padding:16px 18px 6px;font-size:11px;letter-spacing:.12em;color:#a5b4fc;display:flex;align-items:center;gap:10px;}
 .time-section::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border-strong),transparent);}
 
 /* ── LISTA TERREMOTI: card ── */
@@ -944,13 +944,13 @@ body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0));}
 .eq-info .pl{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;overflow-wrap:anywhere;}
 .eq-mag{border-radius:15px;font-family:var(--font-display);font-variant-numeric:tabular-nums;letter-spacing:-.02em;
   box-shadow:0 1px 0 rgba(255,255,255,.08) inset;}
-.m0{background:linear-gradient(160deg,rgba(148,163,184,.22),rgba(148,163,184,.08));color:#334155;border:1px solid rgba(148,163,184,.25);}
-.m1{background:linear-gradient(160deg,rgba(52,211,153,.24),rgba(52,211,153,.08));color:#047857;border:1px solid rgba(52,211,153,.3);}
-.m2{background:linear-gradient(160deg,rgba(250,204,21,.24),rgba(250,204,21,.07));color:#A16207;border:1px solid rgba(250,204,21,.3);}
-.m3{background:linear-gradient(160deg,rgba(251,146,60,.28),rgba(251,146,60,.08));color:#C2410C;border:1px solid rgba(251,146,60,.35);}
+.m0{background:linear-gradient(160deg,rgba(148,163,184,.22),rgba(148,163,184,.08));color:#cbd5e1;border:1px solid rgba(148,163,184,.25);}
+.m1{background:linear-gradient(160deg,rgba(52,211,153,.24),rgba(52,211,153,.08));color:#6ee7b7;border:1px solid rgba(52,211,153,.3);}
+.m2{background:linear-gradient(160deg,rgba(250,204,21,.24),rgba(250,204,21,.07));color:#fde047;border:1px solid rgba(250,204,21,.3);}
+.m3{background:linear-gradient(160deg,rgba(251,146,60,.28),rgba(251,146,60,.08));color:#fdba74;border:1px solid rgba(251,146,60,.35);}
 .m4{background:linear-gradient(160deg,rgba(248,113,113,.34),rgba(248,113,113,.1));color:#fecaca;border:1px solid rgba(248,113,113,.45);
   box-shadow:0 8px 22px -10px rgba(248,113,113,.7),0 1px 0 rgba(255,255,255,.1) inset;}
-.seis-btn{border-radius:12px;background:rgba(124,156,255,.1);border:1px solid rgba(124,156,255,.28);color:#3730A3;}
+.seis-btn{border-radius:12px;background:rgba(124,156,255,.1);border:1px solid rgba(124,156,255,.28);color:#c7d2fe;}
 .seis-btn:hover{background:rgba(124,156,255,.2);}
 
 /* ── LAYOUT, PANEL, CONTROLLI ── */
@@ -989,8 +989,8 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
 .an-window-btn{border-radius:12px;background:var(--surface);}
 .an-window-btn.active{background:linear-gradient(180deg,rgba(124,156,255,.25),rgba(124,156,255,.1));border-color:rgba(124,156,255,.55);color:#e0e7ff;}
 .canvas-box,.log-box,.sta-canvas{background:#060a14;}
-.rtbl tr:hover td{background:rgba(15,23,42,.03);}
-.spin{border-color:rgba(15,23,42,.1);border-top-color:#7c9cff;}
+.rtbl tr:hover td{background:rgba(255,255,255,.03);}
+.spin{border-color:rgba(255,255,255,.1);border-top-color:#7c9cff;}
 
 /* ── DRAWER FILTRI / PROFILO ── */
 .filter-drawer{background:linear-gradient(180deg,#0e1527,#0a1020);border-left:1px solid var(--border-strong);
@@ -1001,7 +1001,7 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
   box-shadow:0 30px 60px -20px rgba(0,0,0,.85);}
 .profile-avatar,.profile-avatar-placeholder{border:2px solid transparent;
   background:linear-gradient(#0e1527,#0e1527) padding-box,linear-gradient(135deg,var(--brand-a),var(--brand-c)) border-box;}
-.profile-avatar-placeholder{color:#3730A3;}
+.profile-avatar-placeholder{color:#c7d2fe;}
 .profile-btn-notif,.profile-btn-logout{border-radius:13px;}
 
 /* ── SCHEDA EVENTO ── */
@@ -1013,7 +1013,7 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
   transition:background .2s,color .2s;}
 .eqd-tab.active{background:linear-gradient(180deg,rgba(124,156,255,.26),rgba(124,156,255,.1));color:#fff;border-color:rgba(124,156,255,.45);}
 .eqd-box{border-radius:13px;}
-.eqd-loc-band{color:#4338CA;background:rgba(124,156,255,.08);border-radius:10px;}
+.eqd-loc-band{color:#a5b4fc;background:rgba(124,156,255,.08);border-radius:10px;}
 .eqd-seis-btn{border-radius:14px;padding:13px;background:linear-gradient(135deg,#7c9cff,#4f6bff);
   box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 14px 28px -14px rgba(79,107,255,.8);}
 
@@ -1059,9 +1059,9 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
 .src-legend i{width:14px;height:3px;border-radius:2px;display:inline-block;}
 .src-note{grid-column:1/-1;font-size:9.5px;color:var(--faint);margin-top:2px;}
 
-.nn-prog{height:6px;border-radius:6px;background:rgba(15,23,42,.06);overflow:hidden;}
+.nn-prog{height:6px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden;}
 .nn-prog>div{height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#8b7cff,#f0abfc);transition:width .2s;}
-.nn-chart-title{margin:16px 0 6px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#3730A3;}
+.nn-chart-title{margin:16px 0 6px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#c7d2fe;}
 .nn-chart-title span{font-weight:500;text-transform:none;letter-spacing:0;color:var(--faint);}
 .nn-chart{background:rgba(6,10,20,.6);border:1px solid var(--border);border-radius:14px;padding:6px 4px 2px;}
 .nn-chart canvas{display:block;}
@@ -1079,12 +1079,12 @@ input:checked+.sl{background:linear-gradient(135deg,#34d399,#10b981);}
 .eq-card .eqc-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
 .eq-card .eqc-row{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text);opacity:.88;white-space:nowrap;}
 .eq-card .eqc-row .ic{font-size:13px;color:var(--faint);}
-.eq-card .eqc-near{color:#B91C1C;font-weight:700;}
+.eq-card .eqc-near{color:#fca5a5;font-weight:700;}
 .eq-card .eqc-seis{flex-shrink:0;display:flex;align-items:center;justify-content:center;
   width:40px;height:40px;padding:0;border-radius:11px;cursor:pointer;
   background:rgba(124,156,255,.1);border:1px solid rgba(124,156,255,.28);transition:background .2s;}
 .eq-card .eqc-seis:hover{background:rgba(124,156,255,.2);}
-.eq-card .eqc-seis .ic{font-size:19px;color:#047857;}
+.eq-card .eqc-seis .ic{font-size:19px;color:#6ee7b7;}
 .eq-card .eq-mag{order:0;margin-left:0;min-width:52px;height:40px;border-radius:11px;font-size:18px;}
 #sectionTerremoti .eq-item.eq-card{border-radius:15px;}
 #sectionTerremoti .eq-list{gap:7px;}
@@ -1103,7 +1103,7 @@ body::before{background:radial-gradient(700px 420px at 100% -10%,rgba(255,90,60,
 #sectionTerremoti .eq-item.eq-card{background:#111A2E;border-color:#1F2A44;position:relative;}
 .eq-card .eqc-bar{position:absolute;left:6px;top:10px;bottom:10px;width:4px;border-radius:4px;}
 .eq-card .eqc-head,.eq-card .eqc-body{padding-left:20px;}
-.m0{background:#2E3B57;color:#334155;border-color:transparent;}
+.m0{background:#2E3B57;color:#cbd5e1;border-color:transparent;}
 .m1{background:#1F5B48;color:#8BF0C4;border-color:transparent;}
 .m2{background:#5E4C12;color:#FDE68A;border-color:transparent;}
 .m3{background:#6B3416;color:#FFC79A;border-color:transparent;}
@@ -1144,7 +1144,7 @@ body::before{background:radial-gradient(600px 380px at 110% -10%,rgba(255,77,46,
 .time-section{color:var(--wave);}
 #sectionTerremoti .eq-item.eq-card{background:#0E1424;border-color:#222C45;border-radius:18px;}
 #sectionTerremoti .eq-item.eq-card:hover{background:#141C30;}
-.m0{background:#26314B;color:#334155;}
+.m0{background:#26314B;color:#cbd5e1;}
 .m1{background:#134E4A;color:#99F6E4;}
 .m2{background:#5B4A0E;color:#FDE68A;}
 .m3{background:#6E2E10;color:#FFC79A;}
@@ -1239,197 +1239,157 @@ input:checked+.sl{background:var(--magma);}
 @media (prefers-reduced-motion:reduce){.spl-ring,.spl-icon,.spl-trace,.spl-dot,.spl-title,.spl-sub,.spl-bar i,.live-dot{animation:none!important;}}
 
 /* =====================================================================
-   TEMA CHIARO "INGV" — lista e barre come l'app INGV, tutta l'app in chiaro
+   TEMA "NOTTE" — struttura della lista INGV, colori scuri ITalquake
 ===================================================================== */
-:root{--bg:#DDE9F8;--panel:#FFFFFF;--panel-2:#F3F6FB;--surface:#FFFFFF;--surface-2:#F3F6FB;
-  --border:#E5E7EB;--border-strong:#C9D8EE;--text:#111827;--muted:#4B5563;--faint:#6B7280;
-  --ingv:#2F5FB3;--accent:#2F5FB3;--accent-2:#2F5FB3;--ring:0 0 0 3px rgba(47,95,179,.3);
-  --font:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;--font-display:'Roboto',system-ui,sans-serif;
-  --shadow:0 1px 3px rgba(15,23,42,.08);}
-html,body{background:#DDE9F8;color:#111827;color-scheme:light;}
+:root{--bg:#0A0F1C;--panel:#141C2F;--panel-2:#111829;--surface:#141C2F;--surface-2:#18233B;
+  --border:#222E4A;--border-strong:#2A3756;--text:#EEF2F8;--muted:#A3AEC4;--faint:#6E7C99;
+  --accent:#7FA6F5;--accent-2:#7FA6F5;--ring:0 0 0 3px rgba(127,166,245,.35);
+  --font:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;--font-display:'Roboto',system-ui,sans-serif;--shadow:none;}
+html,body{background:#0A0F1C;color:#EEF2F8;color-scheme:dark;}
 body{font-family:var(--font);letter-spacing:0;}
-body::before{background:#DDE9F8;}
+body::before{background:#0A0F1C;}
 h1,h2,h3{font-family:var(--font);letter-spacing:0;}
-::selection{background:rgba(47,95,179,.25);}
-::-webkit-scrollbar-thumb{background:rgba(15,23,42,.18);}
-/* header */
-.top-header{background:#DDE9F8;border:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:16px 8px 10px 14px;padding-top:calc(16px + env(safe-area-inset-top,0));}
-.top-header h1{font-size:26px;font-weight:500;color:#111827;letter-spacing:-.2px;}
+/* intestazione */
+.top-header{background:#0A0F1C;border:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:16px 8px 10px 10px;padding-top:calc(16px + env(safe-area-inset-top,0));}
+.top-header h1{font-size:24px;font-weight:500;color:#EEF2F8;letter-spacing:0;}
 .top-header h1 .ic{display:none;}
-.hdr-btn{background:transparent;border:none;color:#2F5FB3;width:44px;height:44px;border-radius:50%;}
-.hdr-btn:hover{background:rgba(47,95,179,.08);}
-.hdr-btn .ic,#gpsHdrBtn .ic{color:#2F5FB3!important;font-size:22px;}
+.hdr-btn{background:transparent;border:none;width:44px;height:44px;border-radius:50%;}
+.hdr-btn:hover{background:rgba(127,166,245,.1);}
+.hdr-btn .ic,#gpsHdrBtn .ic{color:#7FA6F5!important;font-size:22px;}
 /* ricerca + ordinamento */
 .search-bar{padding:4px 12px 6px;}
-.search-bar input{background:#FFFFFF;border:1px solid #C9D8EE;border-radius:24px;color:#111827;}
-.search-bar input::placeholder{color:#6B7280;}
-.search-bar input:focus{background:#FFFFFF;border-color:#2F5FB3;}
-.sort-bar{margin:6px 12px 4px;padding:5px;border:none;border-radius:28px;background:#B5CDF0;box-shadow:0 3px 8px rgba(47,95,179,.18);gap:0;}
-.sort-btn{height:42px;border-radius:22px;color:#4B5563;font-size:16px;font-weight:400;}
-.sort-btn:hover{color:#111827;}
-.sort-bar .sort-btn.active{background:#FFFFFF!important;color:#111827!important;box-shadow:0 2px 6px rgba(47,95,179,.25)!important;}
-#sortStats .ic{color:#2F5FB3;}
-/* niente riepilogo: lista come INGV */
+.search-bar input{background:#141C2F;border:1px solid #2A3756;border-radius:24px;color:#EEF2F8;}
+.search-bar input::placeholder{color:#8592AC;}
+.search-bar input:focus{border-color:#7FA6F5;box-shadow:var(--ring);}
+.sort-bar{margin:6px 12px 4px;padding:5px;border:none;border-radius:28px;background:#18233B;box-shadow:none;gap:0;}
+.sort-btn{height:40px;border-radius:22px;color:#A3AEC4;font-size:15px;font-weight:500;}
+.sort-btn:hover{color:#EEF2F8;}
+.sort-bar .sort-btn.active{background:#EEF2F8!important;background-image:none!important;color:#0A0F1C!important;box-shadow:none!important;transition:none;}
+#sortStats .ic{color:#7FA6F5;}
 .eq-hero{display:none!important;}
-/* fasce di sezione bianche a tutta larghezza */
-#sectionTerremoti .eq-list{padding:0 12px 12px;gap:12px;}
-.time-section{background:#FFFFFF;color:#2F5FB3;font-size:17px;font-weight:700;letter-spacing:0;padding:12px 20px;margin:14px -12px 2px;}
+/* fasce di sezione */
+#sectionTerremoti .eq-list{padding:0 12px 12px;gap:10px;}
+.time-section{background:#111829;color:#7FA6F5;font-size:15px;font-weight:700;letter-spacing:.04em;padding:11px 20px;margin:14px -12px 2px;}
 .time-section::after{display:none;}
-/* card INGV */
-#sectionTerremoti .eq-item.eq-card,.eq-item.eq-card{background:#FFFFFF;border:none;border-radius:8px;box-shadow:none;}
-#sectionTerremoti .eq-item.eq-card:hover{background:#FFFFFF;box-shadow:0 2px 8px rgba(47,95,179,.15);}
+/* card come INGV, in scuro */
+#sectionTerremoti .eq-item.eq-card,.eq-item.eq-card{background:#141C2F;border:1px solid #222E4A;border-radius:10px;box-shadow:none;}
+#sectionTerremoti .eq-item.eq-card:hover{background:#18233B;border-color:#2A3756;}
 .eq-card .eqc-bar{display:none;}
-.eq-card .eqc-head{margin:0 10px;padding:12px 0 10px;border-bottom:1px solid #E5E7EB;}
-.eq-card .eqc-head .pl{font-family:var(--font);font-size:18px;font-weight:700;color:#111827;letter-spacing:0;}
-.eq-card .eqc-chev{width:22px;height:22px;color:#9CA3AF;}
-.eq-card .eqc-body{padding:10px 10px 12px;gap:10px;}
-.eq-card .eqc-meta{gap:6px;}
-.eq-card .eqc-row{font-size:16px;color:#111827;opacity:1;}
-.eq-card .eqc-row+.eqc-row{font-size:14.5px;color:#374151;}
-.eq-card .eqc-row .ic{font-size:17px;color:#9CA3AF;}
-.eq-card .eqc-near{color:#B91C1C;}
-.eq-card .eqc-seis{width:44px;height:44px;border-radius:8px;background:#EEF4FC;border:none;}
-.eq-card .eqc-seis:hover{background:#DCE8FA;}
-.eq-card .eqc-seis .ic{color:#2F5FB3;font-size:21px;}
-.eq-card .eq-mag{min-width:72px;height:54px;border-radius:6px;font-family:var(--font);font-size:27px;font-weight:700;letter-spacing:0;color:#FFFFFF!important;border:none!important;box-shadow:none!important;}
-.eq-card .eq-mag.m0,.eq-card .eq-mag.m1{background:#A8C8F0;}
-.eq-card .eq-mag.m2{background:#9FB0D4;}
-.eq-card .eq-mag.m3{background:#E8A33C;}
-.eq-card .eq-mag.m4{background:#E05A47;}
-/* classi magnitudo fuori dalle card */
-.m0{background:#E5E7EB;color:#374151;border-color:transparent;}
-.m1{background:#DCFCE7;color:#166534;border-color:transparent;}
-.m2{background:#FEF9C3;color:#854D0E;border-color:transparent;}
-.m3{background:#FFEDD5;color:#9A3412;border-color:transparent;}
-.m4{background:#FEE2E2;color:#991B1B;border-color:transparent;box-shadow:none;}
-/* barra in basso bianca, come INGV */
-.bottom-tabs{left:0;right:0;width:auto;transform:none;bottom:0;height:calc(74px + env(safe-area-inset-bottom,0));
-  padding:0 0 env(safe-area-inset-bottom,0);gap:0;border:none;border-radius:22px 22px 0 0;background:#FFFFFF;
-  -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 -2px 10px rgba(47,95,179,.15);}
-.btab,.btab.active,.btab.active.t-eq,.btab.active.t-map,.btab.active.t-seis,.btab.active.t-fm,.btab.active.t-stor{border-radius:0;background:transparent;box-shadow:none;}
-.btab{color:#374151;font-size:12px;font-weight:400;gap:4px;}
-.btab .btab-icon,.btab.t-eq .btab-icon,.btab.t-map .btab-icon,.btab.t-seis .btab-icon,.btab.t-fm .btab-icon,.btab.t-stor .btab-icon{color:#374151!important;font-size:24px;filter:none;}
-.btab.active,.btab.active.t-eq,.btab.active.t-map,.btab.active.t-seis,.btab.active.t-fm,.btab.active.t-stor{color:#2F5FB3;font-weight:700;}
-.btab.active .btab-icon,.btab.active.t-eq .btab-icon,.btab.active.t-map .btab-icon,.btab.active.t-seis .btab-icon,.btab.active.t-fm .btab-icon,.btab.active.t-stor .btab-icon{color:#2F5FB3!important;}
-body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0));}
-#seisToast{bottom:92px!important;background:#FFFFFF;color:#111827;border-color:#C9D8EE;}
-.update-banner{bottom:92px;background:#FFFFFF;color:#111827;border-color:#C9D8EE;}
-.update-banner #updateBtn{background:#2F5FB3;color:#fff;}
-#sectionMappa .mapbox{height:calc(100vh - 236px)!important;height:calc(100dvh - 236px)!important;}
-/* pannelli, controlli */
-.panel{background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,.06);-webkit-backdrop-filter:none;backdrop-filter:none;}
-.panel-header h2{color:#111827;}
-.sc,.mc,.eqd-box,.an-block,.sw-card,.an-match-card,.pl-chip,.tool-tile,.tools-list,.side-menu-item,.eq-hero-tile{background:#FFFFFF;border-color:#E5E7EB;}
-.tool-tile:hover,.side-menu-item:hover,.sw-card:hover{background:#F3F6FB;border-color:#C9D8EE;}
-.tools-list button{color:#111827;border-bottom-color:#E5E7EB;}
-.tl-badge,.side-badge{background:#EEF4FC;color:#2F5FB3;border-color:#C9D8EE;}
-.tools-lab{color:#2F5FB3;}
-label{color:#4B5563;}
-select,input{background-color:#FFFFFF;border:1px solid #C9D8EE;color:#111827;}
-select option{background:#FFFFFF;color:#111827;}
-.hint{background:#EEF4FC;border-color:#C9D8EE;color:#374151;}
-.btn-red,.btn-green,.btn-purple,.eqd-seis-btn{background:#2F5FB3;color:#FFFFFF;box-shadow:none;}
-.btn-outline{background:#FFFFFF;color:#111827;}
-.sl{background:#CBD5E1;}
-input:checked+.sl{background:#2F5FB3;}
-.status{color:#4B5563;}
-.footer-note{color:#4B5563;}
-.log-box{background:#F8FAFC;color:#374151;}
-.lo{color:#4B5563;}
-.spin{border-color:rgba(15,23,42,.12);border-top-color:#2F5FB3;}
-.an-window-btn{background:#FFFFFF;color:#111827;}
-.an-window-btn.active{background:#EEF4FC;border-color:#2F5FB3;color:#1E4690;}
-.rtbl td{border-bottom-color:#EEF2F7;}
-.rtbl tr:hover td{background:#F8FAFC;}
-#timelineTooltip,#storicoTimelineTooltip{background:#FFFFFF;color:#111827;border-color:#C9D8EE;box-shadow:0 6px 18px rgba(15,23,42,.15);}
-.prov-banner{background:#FFF4E5;border-bottom-color:#F5C58A;}
-.prov-banner-text{color:#9A3412;}.prov-banner-text b{color:#7C2D12;}.prov-banner-close{color:#9A3412;}
-/* cassetti e menu */
-.side-menu,.filter-drawer,.profile-panel{background:#FFFFFF;border-color:#E5E7EB;}
-.side-menu-header{border-bottom-color:#E5E7EB;}
-.side-menu-header h3{background:none;-webkit-text-fill-color:#111827;color:#111827;}
-.side-menu-close,.eqd-close,.filter-drawer .close-x{background:#F3F6FB;border-color:#E5E7EB;color:#111827;}
-.side-menu-overlay,.filter-overlay,.profile-overlay{background:rgba(15,23,42,.35);}
-.side-menu-hint{border-color:#C9D8EE;color:#4B5563;}
-.profile-avatar,.profile-avatar-placeholder{background:#EEF4FC;border-color:#C9D8EE;color:#2F5FB3;}
-/* scheda evento */
-.eqd-sheet{background:#DDE9F8;}
-.eqd-header{background:#DDE9F8;border-bottom:1px solid #C9D8EE;-webkit-backdrop-filter:none;backdrop-filter:none;}
-.eqd-title{font-family:var(--font);font-size:19px;color:#111827;}
-.eqd-tab{background:#FFFFFF;color:#4B5563;border-color:#E5E7EB;}
-.eqd-tab.active{background:#2F5FB3;color:#FFFFFF;border-color:#2F5FB3;}
-.eqd-row{border-bottom-color:#C9D8EE;}
-.eqd-row .k{color:#4B5563;}
-.eqd-loc-band{background:#FFFFFF;color:#2F5FB3;}
-.eqd-loc-row{border-bottom-color:#C9D8EE;}
-.eqd-footer{background:#FFFFFF;border-top-color:#E5E7EB;}
-.eqd-seis-btn{border-radius:8px;height:50px;}
-/* mappe chiare */
-.leaflet-container{background:#AAD3DF!important;}
-.leaflet-tile{filter:none!important;}
-.leaflet-bar{border:none!important;box-shadow:0 2px 8px rgba(0,0,0,.2)!important;}
-.leaflet-bar a{background:#FFFFFF!important;color:#111827!important;border-bottom-color:#E5E7EB!important;}
-.leaflet-bar a:hover{background:#F3F6FB!important;}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#FFFFFF!important;color:#111827!important;border:none;box-shadow:0 6px 18px rgba(15,23,42,.2)!important;}
-.leaflet-container a.leaflet-popup-close-button{color:#6B7280!important;}
-.leaflet-control-attribution{background:rgba(255,255,255,.85)!important;color:#4B5563!important;}
-.leaflet-control-attribution a{color:#2F5FB3!important;}
-#sectionMappa .panel-header{background:#DDE9F8;}
-.src-toggle{background:#FFFFFF;border:none;border-radius:10px;color:#111827;box-shadow:0 4px 14px rgba(0,0,0,.18);-webkit-backdrop-filter:none;backdrop-filter:none;max-width:230px;}
-.src-toggle-row{color:#111827;font-weight:500;}
-.src-check{border:2px solid #9CA3AF;border-radius:4px;}
-.src-toggle-row input:checked+.src-check{background:#2F5FB3;border-color:#2F5FB3;}
-.src-legend{display:flex;flex-direction:column;gap:6px;border-top-color:#E5E7EB;color:#374151;font-size:12px;}
-.src-legend .src-l-poly i{width:22px;height:12px;border-radius:2px;background:rgba(247,183,51,.45);border:1.2px solid #D9731A;}
-.src-legend .src-l-top i{width:22px;height:3px;border-radius:2px;background:#B4530F;}
-.src-note{color:#6B7280;}
-/* grafici canvas: restano su fondo scuro come uno strumento */
-.canvas-box{border-color:#C9D8EE;}
-.nn-prog{background:#E5E7EB;}
-/* animazione d'apertura in chiaro */
-#splash{background:#FFFFFF;color:#111827;}
-.spl-sub,.spl-foot{color:#4B5563;}
-.spl-bar{background:#E5E7EB;}
-.spl-title{font-family:var(--font);letter-spacing:-1px;}
-
-/* card un filo più compatte */
-.eq-card .eqc-head{padding:10px 0 8px;}
-.eq-card .eqc-head .pl{font-size:16.5px;}
-.eq-card .eqc-chev{width:20px;height:20px;}
+.eq-card .eqc-head{margin:0 10px;padding:10px 0 8px;border-bottom:1px solid #222E4A;}
+.eq-card .eqc-head .pl{font-family:var(--font);font-size:16.5px;font-weight:700;color:#EEF2F8;letter-spacing:0;}
+.eq-card .eqc-chev{width:20px;height:20px;color:#6E7C99;}
 .eq-card .eqc-body{padding:8px 10px 10px;gap:9px;}
 .eq-card .eqc-meta{gap:5px;}
-.eq-card .eqc-row{font-size:15px;}
-.eq-card .eqc-row+.eqc-row{font-size:13.5px;}
-.eq-card .eqc-row .ic{font-size:16px;}
-.eq-card .eqc-seis{width:40px;height:40px;}
-.eq-card .eqc-seis .ic{font-size:19px;}
-.eq-card .eq-mag{min-width:64px;height:48px;font-size:24px;}
-#sectionTerremoti .eq-list{gap:10px;}
-/* zona dei tasti di sistema (home/indietro) in azzurro: con viewport-fit=cover
-   Android disegna la pagina anche sotto la barra di navigazione */
-.bottom-tabs{background:linear-gradient(to bottom,#FFFFFF calc(100% - env(safe-area-inset-bottom,0px)),#3966B8 0);}
-/* barre di sistema blu come l'app INGV: se Android disegna la pagina sotto la
-   barra di stato, quella fascia resta blu sopra l'intestazione azzurra */
-.top-header{background:linear-gradient(to bottom,#3966B8 env(safe-area-inset-top,0px),#DDE9F8 0);}
-.eqd-header{padding-top:calc(14px + env(safe-area-inset-top,0px));background:linear-gradient(to bottom,#3966B8 env(safe-area-inset-top,0px),#DDE9F8 0);}
-.eqd-sheet{padding-top:0;}
-.eqd-footer{background:linear-gradient(to bottom,#FFFFFF calc(100% - env(safe-area-inset-bottom,0px)),#3966B8 0);}
-
-/* grafici: fondo bianco, assi leggibili (niente più riquadri grigi) */
-.canvas-box,.sta-canvas{background:#FFFFFF!important;border:1px solid #E5E7EB;}
-.nn-chart{background:#FFFFFF!important;border:1px solid #E5E7EB;}
-.nn-chart-title span{color:#4B5563;}
-.src-wms-leg{display:flex;flex-direction:column;gap:4px;}
-.src-wms-leg img{max-width:200px;height:auto;display:block;}
-.src-local-leg{display:flex;flex-direction:column;gap:6px;}
-.gen-btn{width:100%;border:none;border-radius:14px;padding:12px 14px;font:700 14px var(--font);cursor:pointer;background:#2F5FB3;color:#FFFFFF;}
+.eq-card .eqc-row{font-size:15px;color:#EEF2F8;opacity:1;}
+.eq-card .eqc-row+.eqc-row{font-size:13.5px;color:#C5CEE0;}
+.eq-card .eqc-row .ic{font-size:16px;color:#6E7C99;}
+.eq-card .eqc-near{color:#FF8A75;}
+.eq-card .eqc-seis{width:40px;height:40px;border-radius:8px;background:#1C2842;border:none;}
+.eq-card .eqc-seis:hover{background:#243354;}
+.eq-card .eqc-seis .ic{color:#7FA6F5;font-size:19px;}
+.eq-card .eq-mag{min-width:64px;height:48px;border-radius:7px;font-family:var(--font);font-size:24px;font-weight:700;letter-spacing:0;color:#FFFFFF!important;border:none!important;box-shadow:none!important;}
+.eq-card .eq-mag.m0,.eq-card .eq-mag.m1{background:#3F6CB8;}
+.eq-card .eq-mag.m2{background:#56689A;}
+.eq-card .eq-mag.m3{background:#D98A26;}
+.eq-card .eq-mag.m4{background:#D9483B;}
+.m0{background:#26314B;color:#CBD5E1;}
+.m1{background:#134E4A;color:#99F6E4;}
+.m2{background:#5B4A0E;color:#FDE68A;}
+.m3{background:#6E2E10;color:#FFC79A;}
+.m4{background:#7F1D2B;color:#FFC2C8;box-shadow:none;}
+/* barra in basso */
+.bottom-tabs{left:0;right:0;width:auto;transform:none;bottom:0;height:calc(70px + env(safe-area-inset-bottom,0));
+  padding:0 0 env(safe-area-inset-bottom,0);gap:0;border:none;border-top:1px solid #222E4A;border-radius:0;background:#111829;
+  -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;}
+.btab,.btab.active,.btab.active.t-eq,.btab.active.t-map,.btab.active.t-seis,.btab.active.t-fm,.btab.active.t-stor{border-radius:0;background:transparent;box-shadow:none;}
+.btab{color:#A3AEC4;font-size:12px;font-weight:400;gap:4px;}
+.btab .btab-icon,.btab.t-eq .btab-icon,.btab.t-map .btab-icon,.btab.t-seis .btab-icon,.btab.t-fm .btab-icon,.btab.t-stor .btab-icon{color:#A3AEC4!important;font-size:23px;filter:none;}
+.btab.active,.btab.active.t-eq,.btab.active.t-map,.btab.active.t-seis,.btab.active.t-fm,.btab.active.t-stor{color:#7FA6F5;font-weight:700;}
+.btab.active .btab-icon,.btab.active.t-eq .btab-icon,.btab.active.t-map .btab-icon,.btab.active.t-seis .btab-icon,.btab.active.t-fm .btab-icon,.btab.active.t-stor .btab-icon{color:#7FA6F5!important;}
+.btab.active::after{display:none;}
+body{padding-bottom:calc(80px + env(safe-area-inset-bottom,0));}
+#seisToast{bottom:88px!important;}
+.update-banner{bottom:88px;}
+#sectionMappa .mapbox{height:calc(100vh - 232px)!important;height:calc(100dvh - 232px)!important;}
+/* pannelli e controlli */
+.panel{background:#141C2F;border:1px solid #222E4A;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:18px;}
+.sc,.mc,.eqd-box,.an-block,.sw-card,.an-match-card,.pl-chip,.tool-tile,.tools-list,.side-menu-item{background:#141C2F;border-color:#222E4A;}
+.tool-tile:hover,.side-menu-item:hover,.sw-card:hover{background:#18233B;border-color:#2A3756;}
+.tools-lab{color:#7FA6F5;}
+.tl-badge,.side-badge{background:#18233B;color:#C5CEE0;border-color:#2A3756;}
+label{color:#A3AEC4;}
+select,input{background-color:#0F1626;border:1px solid #2A3756;color:#EEF2F8;}
+select option{background:#141C2F;color:#EEF2F8;}
+.btn,.btn-outline{box-shadow:none;}
+.btn-red,.btn-green,.btn-purple,.eqd-seis-btn{background:#3F6CB8;color:#FFFFFF;box-shadow:none;}
+.gen-btn{width:100%;border:none;border-radius:14px;padding:13px 14px;font:700 15px var(--font);cursor:pointer;background:#3F6CB8;color:#FFFFFF;}
 .gen-btn:disabled{opacity:.6;cursor:wait;}
+.hint{background:rgba(127,166,245,.07);border-color:#2A3756;color:#C5CEE0;}
+.an-warn{background:rgba(251,191,36,.07)!important;}
+.sl{background:#2A3756;}
+input:checked+.sl{background:#3F6CB8;}
 .an-block .sig-row{gap:14px;align-items:baseline;}
 .an-block .sig-row .k{flex:1 1 auto;}
 .an-block .sig-row .v{text-align:right;flex:0 1 auto;}
-.an-warn{background:#FFF8E6!important;}
-.btn,.btn-outline{box-shadow:0 1px 2px rgba(15,23,42,.08);}
-.btn-red,.btn-green,.btn-purple{box-shadow:0 1px 2px rgba(15,23,42,.12);}
+/* cassetti */
+.side-menu,.filter-drawer,.profile-panel{background:#0F1626;border-color:#222E4A;}
+.side-menu-header h3{background:none;-webkit-text-fill-color:#EEF2F8;color:#EEF2F8;}
+.side-menu-overlay,.filter-overlay,.profile-overlay{background:rgba(0,0,0,.55);}
+/* scheda evento */
+.eqd-sheet{background:#0A0F1C;padding-top:0;}
+.eqd-header{background:#0A0F1C;border-bottom:1px solid #222E4A;padding-top:calc(14px + env(safe-area-inset-top,0px));-webkit-backdrop-filter:none;backdrop-filter:none;}
+.eqd-title{font-family:var(--font);font-size:19px;color:#EEF2F8;}
+.eqd-tab{background:#141C2F;color:#A3AEC4;border-color:#222E4A;}
+.eqd-tab.active{background:#3F6CB8;color:#FFFFFF;border-color:#3F6CB8;}
+.eqd-footer{background:#111829;border-top-color:#222E4A;}
+.eqd-seis-btn{border-radius:10px;height:50px;}
+/* mappe: le immagini del DISS non vanno invertite dal filtro scuro */
+.leaflet-srcPane-pane .leaflet-tile{filter:none!important;}
+.src-toggle{background:rgba(17,24,41,.96);border:1px solid #2A3756;border-radius:12px;color:#EEF2F8;max-width:230px;}
+.src-toggle-row{color:#EEF2F8;font-weight:500;}
+.src-check{border:2px solid #6E7C99;border-radius:4px;}
+.src-toggle-row input:checked+.src-check{background:#3F6CB8;border-color:#3F6CB8;}
+.src-legend{display:flex;flex-direction:column;gap:6px;border-top-color:#222E4A;color:#C5CEE0;font-size:12px;}
+.src-wms-leg{display:flex;flex-direction:column;gap:4px;}
+.src-wms-leg img{max-width:200px;height:auto;display:block;background:#FFFFFF;border-radius:6px;padding:4px;}
+.src-local-leg{display:flex;flex-direction:column;gap:6px;}
+.src-legend .src-l-poly i{width:22px;height:12px;border-radius:2px;background:rgba(247,183,51,.45);border:1.2px solid #D9731A;}
+.src-legend .src-l-top i{width:22px;height:3px;border-radius:2px;background:#B4530F;}
+.src-note{color:#8592AC;}
+/* grafici: fondo scuro uniforme, etichette chiare */
+.canvas-box,.sta-canvas{background:#0F1626!important;border:1px solid #222E4A;}
+.nn-chart{background:#0F1626!important;border:1px solid #222E4A;}
+.nn-chart-title span{color:#A3AEC4;}
+/* ── Sismogrammi e Focali: intro e passi in linguaggio semplice ── */
+.sx-intro{display:flex;gap:14px;align-items:center;padding:16px;margin:4px 0 14px;border-radius:18px;background:#141C2F;border:1px solid #222E4A;position:relative;overflow:hidden;}
+.sx-intro.col{flex-direction:column;align-items:stretch;gap:12px;}
+.sx-ic{width:48px;height:48px;border-radius:14px;background:rgba(127,166,245,.14);color:#7FA6F5;font-size:26px;flex-shrink:0;}
+.sx-t{font-size:17px;font-weight:700;color:#EEF2F8;}
+.sx-d{font-size:14px;color:#C5CEE0;line-height:1.45;margin-top:3px;}
+.sx-wave{position:absolute;right:-10px;top:6px;width:120px;height:48px;opacity:.16;pointer-events:none;}
+.sx-intro>div{position:relative;z-index:1;}
+.sx-step{display:flex;flex-direction:column;gap:8px;}
+.sx-h{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#EEF2F8;}
+.sx-num{width:22px;height:22px;border-radius:50%;background:#7FA6F5;color:#0A0F1C;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;}
+.sx-note{font-size:12.5px;color:#A3AEC4;min-height:1em;}
+.chips{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{flex:1;min-width:72px;height:42px;border-radius:12px;border:1px solid #2A3756;background:#141C2F;color:#C5CEE0;font:500 14px var(--font);cursor:pointer;transition:background .15s,color .15s;}
+.chip:hover{border-color:#7FA6F5;}
+.chip.on{background:#7FA6F5;border-color:#7FA6F5;color:#0A0F1C;}
+.chip:disabled{opacity:.4;cursor:not-allowed;}
+.chip-link{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 13px;border-radius:18px;border:1px solid #2A3756;background:transparent;color:#7FA6F5;font:500 13.5px var(--font);cursor:pointer;}
+.chip-link .ic{font-size:16px;}
+details.adv{border:1px dashed #2A3756;border-radius:12px;padding:0 12px;}
+details.adv summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:500;color:#A3AEC4;}
+details.adv summary::-webkit-details-marker{display:none;}
+details.adv summary::after{content:"▾";font-size:14px;transition:transform .2s;}
+details.adv[open] summary::after{transform:rotate(180deg);}
+details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
+.bb-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.bb-legend div{padding:10px 6px;border-radius:12px;background:#0F1626;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;}
+.bb-legend b{font-size:13px;color:#EEF2F8;}
+.bb-legend span{font-size:11.5px;color:#A3AEC4;line-height:1.3;}
+.sx-src{font-size:12px;color:#8592AC;text-align:center;}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -1473,8 +1433,6 @@ input:checked+.sl{background:#2F5FB3;}
   </div>
   <div class="spl-title">IT<span>alquake</span></div>
   <div class="spl-sub">Il respiro della terra, in tempo reale</div>
-  <div class="spl-bar"><i></i></div>
-  <div class="spl-foot">Collegamento a INGV…</div>
 </div>
 <script>
 (function(){
@@ -1501,17 +1459,17 @@ input:checked+.sl{background:#2F5FB3;}
       <p>Ricerca libera per intervallo di date su tutto il catalogo INGV</p>
     </div>
     <div class="choice-card seis" onclick="goSection('sismogrammi')">
-      <div class="icon ic" data-ic="seismo" style="color:#15803D;"></div><h2>Sismogrammi</h2>
+      <div class="icon ic" data-ic="seismo" style="color:#86efac;"></div><h2>Sismogrammi</h2>
       <p>Terremoti, sismogrammi e meccanismi focali INGV in tempo reale</p>
     </div>
     <div class="choice-card" style="border-color:rgba(251,146,60,0.4);"
          onclick="goSection('focali')">
-      <div class="icon ic" data-ic="focal" style="color:#C2410C;"></div><h2>Meccanismi Focali</h2>
+      <div class="icon ic" data-ic="focal" style="color:#fdba74;"></div><h2>Meccanismi Focali</h2>
       <p>Beach ball TDMT su mappa — geometria delle faglie attivatrici</p>
     </div>
     <div class="choice-card" style="border-color:rgba(236,72,153,0.4);"
          onclick="goSection('notifiche')">
-      <div class="icon ic" data-ic="bell" style="color:#BE185D;"></div><h2>Notifiche</h2>
+      <div class="icon ic" data-ic="bell" style="color:#f9a8d4;"></div><h2>Notifiche</h2>
       <p>Avvisi push per terremoti nella tua provincia e auto-aggiornamento</p>
     </div>
     <div class="choice-card" style="border-color:rgba(16,185,129,0.4);"
@@ -1555,49 +1513,49 @@ input:checked+.sl{background:#2F5FB3;}
     </div>
     <div class="side-menu-body">
       <button class="side-menu-item" onclick="closeSideMenu();goSection('terremoti')">
-        <span class="ic side-menu-icon" data-ic="home" style="color:#1D4ED8;"></span>
+        <span class="ic side-menu-icon" data-ic="home" style="color:#93c5fd;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Home</div>
           <div class="side-menu-desc">Torna alla lista dei terremoti recenti</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('catalogo')">
-        <span class="ic side-menu-icon" data-ic="archive" style="color:#B91C1C;"></span>
+        <span class="ic side-menu-icon" data-ic="archive" style="color:#fca5a5;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Catalogo Storico</div>
           <div class="side-menu-desc">Terremoti storici CPTI15 (dal 1005) + forti recenti da INGV, su mappa con filtri per secolo e zona</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('sciami')">
-        <span class="ic side-menu-icon" data-ic="swarm" style="color:#C2410C;"></span>
+        <span class="ic side-menu-icon" data-ic="swarm" style="color:#fdba74;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Sciami Sismici</div>
           <div class="side-menu-desc">Individua sciami e sequenze sismiche per provincia e periodo</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('analogia')">
-        <span class="ic side-menu-icon" data-ic="analogy" style="color:#4338CA;"></span>
+        <span class="ic side-menu-icon" data-ic="analogy" style="color:#a5b4fc;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Analogia Sismica <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Cerca il periodo storico che ha colpito le stesse zone del periodo attuale e mostra cosa è successo dopo</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('prospettiva')">
-        <span class="ic side-menu-icon" data-ic="forecast" style="color:#0369A1;"></span>
+        <span class="ic side-menu-icon" data-ic="forecast" style="color:#7dd3fc;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Prospettiva Sismica <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Probabilità a breve termine (clustering/Omori) e ricorrenza storica per zona</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('rete')">
-        <span class="ic side-menu-icon" data-ic="neural" style="color:#A21CAF;"></span>
+        <span class="ic side-menu-icon" data-ic="neural" style="color:#f0abfc;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Rete Neurale <span class="side-badge">Sperimentale</span></div>
           <div class="side-menu-desc">Una piccola rete neurale impara dall'ultimo anno di dati INGV e "prosegue" l'andamento degli eventi nei giorni successivi</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('pianeti')">
-        <span class="ic side-menu-icon" data-ic="planets" style="color:#6D28D9;"></span>
+        <span class="ic side-menu-icon" data-ic="planets" style="color:#c4b5fd;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Configurazioni Planetarie <span class="side-badge">Gioco</span></div>
           <div class="side-menu-desc">Trova le date con la configurazione planetaria più simile e confronta gli eventi sismici</div>
@@ -1672,7 +1630,7 @@ input:checked+.sl{background:#2F5FB3;}
       <button class="btn btn-red" id="eqFetchBtn" onclick="fetchEarthquakes();toggleFilters();" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="refresh" style="font-size:17px;"></span>Aggiorna</button>
       <div id="eqStatus" class="status">Pronto.</div>
       <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
-      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#BE185D;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="bell" style="font-size:16px;"></span>Notifiche &amp; Auto-aggiornamento →</button>
+      <button onclick="toggleFilters();goSection('notifiche');" style="width:100%;padding:9px;border:1px solid rgba(236,72,153,0.35);border-radius:10px;background:rgba(236,72,153,0.08);color:#f9a8d4;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="bell" style="font-size:16px;"></span>Notifiche &amp; Auto-aggiornamento →</button>
     </div>
   </div>
 
@@ -1722,8 +1680,8 @@ input:checked+.sl{background:#2F5FB3;}
       </div>
       <div id="eqSumRow" class="summary-row" style="display:none;padding:8px 16px;">
         <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="sTot">—</div></div>
-        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#B91C1C">—</div></div>
-        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#15803D">—</div></div>
+        <div class="sc"><div class="k">Mag. max</div><div class="v" id="sMaxM" style="color:#fca5a5">—</div></div>
+        <div class="sc"><div class="k">Mag. min</div><div class="v" id="sMinM" style="color:#86efac">—</div></div>
         <div class="sc"><div class="k">Prof. media</div><div class="v" id="sAvgD">—</div></div>
       </div>
       <div style="padding:0 16px 4px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Per Regione</div>
@@ -1866,8 +1824,8 @@ input:checked+.sl{background:#2F5FB3;}
           </section>
           <div id="stSumRow" class="summary-row" style="display:none">
             <div class="sc"><div class="k">Tot. eventi</div><div class="v" id="stTot">—</div></div>
-            <div class="sc"><div class="k">Mag. max</div><div class="v" id="stMaxV" style="color:#B91C1C">—</div></div>
-            <div class="sc"><div class="k">Mag. min</div><div class="v" id="stMinV" style="color:#15803D">—</div></div>
+            <div class="sc"><div class="k">Mag. max</div><div class="v" id="stMaxV" style="color:#fca5a5">—</div></div>
+            <div class="sc"><div class="k">Mag. min</div><div class="v" id="stMinV" style="color:#86efac">—</div></div>
             <div class="sc"><div class="k">Prof. media</div><div class="v" id="stAvgD">—</div></div>
           </div>
           <section class="panel">
@@ -1875,11 +1833,11 @@ input:checked+.sl{background:#2F5FB3;}
             <div class="tl-header">
               <label>Filtra provincia:</label>
               <select id="stTlProv" onchange="applyTlFilter('st')"
-                style="background:#FFFFFF;color:var(--text);border:1px solid rgba(15,23,42,0.1);">
+                style="background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
                 <option value="">Tutta Italia</option></select>
             </div>
             <div style="padding:10px 16px 16px">
-              <canvas id="stTlCanvas" width="1200" height="175" style="width:100%;display:block;background:#FFFFFF;cursor:crosshair;border-radius:10px;"></canvas>
+              <canvas id="stTlCanvas" width="1200" height="175" style="width:100%;display:block;background:#0F1626;cursor:crosshair;border-radius:10px;"></canvas>
             </div>
           </section>
           <section class="panel">
@@ -1993,8 +1951,8 @@ input:checked+.sl{background:#2F5FB3;}
           </section>
           <div id="swSumRow" class="summary-row" style="display:none">
             <div class="sc"><div class="k">Eventi analizzati</div><div class="v" id="swTotEv">—</div></div>
-            <div class="sc"><div class="k">Sciami sismici</div><div class="v" id="swTotSwarm" style="color:#C2410C">—</div></div>
-            <div class="sc"><div class="k">Sequenze sismiche</div><div class="v" id="swTotSeq" style="color:#B91C1C">—</div></div>
+            <div class="sc"><div class="k">Sciami sismici</div><div class="v" id="swTotSwarm" style="color:#fdba74">—</div></div>
+            <div class="sc"><div class="k">Sequenze sismiche</div><div class="v" id="swTotSeq" style="color:#fca5a5">—</div></div>
           </div>
           <section class="panel">
             <div class="panel-header"><h2>Cluster individuati</h2></div>
@@ -2012,7 +1970,7 @@ input:checked+.sl{background:#2F5FB3;}
       <div class="header">
         <div class="title-wrap"><h1>Analogia Sismica</h1>
           <p>Cerca nel catalogo INGV <b>dal 2000 in poi</b> i periodi storici che hanno colpito <b>le stesse zone geografiche</b> del periodo attuale (o zone limitrofe, entro celle di ~30 km) e mostra i primi 4 più simili in ordine, con l'evento più forte accaduto nel periodo successivo a ciascuno.</p></div>
-        <span class="badge" style="background:rgba(165,180,252,.14);color:#4338CA;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
+        <span class="badge" style="background:rgba(165,180,252,.14);color:#a5b4fc;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
       </div>
       <section class="panel">
         <div class="panel-header"><h2>Finestra temporale</h2><p>Su quale intervallo del periodo attuale eseguire il confronto</p></div>
@@ -2076,7 +2034,7 @@ input:checked+.sl{background:#2F5FB3;}
         </section>
         <div id="hcSumRow" class="summary-row" style="display:none;margin-top:12px;">
           <div class="sc"><div class="k">Eventi mostrati</div><div class="v" id="hcTot">—</div></div>
-          <div class="sc"><div class="k">Mag. max</div><div class="v" id="hcMax" style="color:#B91C1C">—</div></div>
+          <div class="sc"><div class="k">Mag. max</div><div class="v" id="hcMax" style="color:#fca5a5">—</div></div>
           <div class="sc"><div class="k">Più recente</div><div class="v" id="hcLast">—</div></div>
         </div>
         <section class="panel">
@@ -2098,9 +2056,9 @@ input:checked+.sl{background:#2F5FB3;}
       <div class="header">
         <div class="title-wrap"><h1>Prospettiva Sismica</h1>
           <p>Stima statistica della probabilità sismica: a breve termine dai terremoti recenti (clustering e legge di Omori), a lungo termine dalla ricorrenza storica per zona.</p></div>
-        <span class="badge" style="background:rgba(125,211,252,.14);color:#0369A1;border:1px solid rgba(125,211,252,.4);">Sperimentale</span>
+        <span class="badge" style="background:rgba(125,211,252,.14);color:#7dd3fc;border:1px solid rgba(125,211,252,.4);">Sperimentale</span>
       </div>
-      <div class="an-warn" style="color:#B45309;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
+      <div class="an-warn" style="color:#fbbf24;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
         ⚠️ <b>Non è una previsione ufficiale né un allarme.</b> I terremoti <b>non si possono predire</b> (data, ora, luogo esatti).
         Qui si stima solo come varia la <b>probabilità</b>, con gli stessi principi statistici dell'Operational Earthquake
         Forecasting dell'INGV: numeri piccoli, che salgono dopo un evento forte e poi ricalano. Per la pericolosità ufficiale
@@ -2135,31 +2093,31 @@ input:checked+.sl{background:#2F5FB3;}
     <div class="container">
       <div class="tools-lab">Esplora</div>
       <div class="tools-grid">
-        <button class="tool-tile" onclick="goSection('storico')" style="--tc:#6D28D9">
+        <button class="tool-tile" onclick="goSection('storico')" style="--tc:#c4b5fd">
           <span class="tool-top"><span class="tool-ic ic" data-ic="storico"></span></span>
           <span class="tool-t">Storico</span><span class="tool-d">Terremoti INGV in un periodo a scelta</span>
         </button>
-        <button class="tool-tile" onclick="goSection('catalogo')" style="--tc:#B91C1C">
+        <button class="tool-tile" onclick="goSection('catalogo')" style="--tc:#fca5a5">
           <span class="tool-top"><span class="tool-ic ic" data-ic="archive"></span></span>
           <span class="tool-t">Catalogo storico</span><span class="tool-d">Dal 1005 a oggi, per secolo e zona</span>
         </button>
-        <button class="tool-tile" onclick="goSection('sciami')" style="--tc:#C2410C">
+        <button class="tool-tile" onclick="goSection('sciami')" style="--tc:#fdba74">
           <span class="tool-top"><span class="tool-ic ic" data-ic="swarm"></span></span>
           <span class="tool-t">Sciami sismici</span><span class="tool-d">Sequenze per provincia e periodo</span>
         </button>
-        <button class="tool-tile" onclick="goSection('rete')" style="--tc:#A21CAF">
+        <button class="tool-tile" onclick="goSection('rete')" style="--tc:#f0abfc">
           <span class="tool-top"><span class="tool-ic ic" data-ic="neural"></span><span class="tl-badge">Nuovo</span></span>
           <span class="tool-t">Rete neurale</span><span class="tool-d">Prosegue l'andamento degli eventi</span>
         </button>
-        <button class="tool-tile" onclick="goSection('prospettiva')" style="--tc:#0369A1">
+        <button class="tool-tile" onclick="goSection('prospettiva')" style="--tc:#7dd3fc">
           <span class="tool-top"><span class="tool-ic ic" data-ic="forecast"></span><span class="tl-badge">Beta</span></span>
           <span class="tool-t">Prospettiva</span><span class="tool-d">Probabilità a breve e lungo termine</span>
         </button>
-        <button class="tool-tile" onclick="goSection('analogia')" style="--tc:#4338CA">
+        <button class="tool-tile" onclick="goSection('analogia')" style="--tc:#a5b4fc">
           <span class="tool-top"><span class="tool-ic ic" data-ic="analogy"></span><span class="tl-badge">Beta</span></span>
           <span class="tool-t">Analogia sismica</span><span class="tool-d">Il passato più simile a oggi</span>
         </button>
-        <button class="tool-tile" onclick="goSection('pianeti')" style="--tc:#6D28D9">
+        <button class="tool-tile" onclick="goSection('pianeti')" style="--tc:#c4b5fd">
           <span class="tool-top"><span class="tool-ic ic" data-ic="planets"></span><span class="tl-badge">Gioco</span></span>
           <span class="tool-t">Pianeti</span><span class="tool-d">Configurazioni e terremoti, per gioco</span>
         </button>
@@ -2167,7 +2125,7 @@ input:checked+.sl{background:#2F5FB3;}
       <div class="tools-lab">Impostazioni</div>
       <div class="tools-list">
         <button onclick="goSection('notifiche')"><span class="ic" data-ic="bell" style="color:#f472b6"></span><span class="tl-t">Notifiche</span><span class="tl-chev">›</span></button>
-        <button onclick="goSection('localizzazione')"><span class="ic" data-ic="locate" style="color:#0E7490"></span><span class="tl-t">Localizzazione</span><span class="tl-s">Sperimentale</span><span class="tl-chev">›</span></button>
+        <button onclick="goSection('localizzazione')"><span class="ic" data-ic="locate" style="color:#5ee6ff"></span><span class="tl-t">Localizzazione</span><span class="tl-s">Sperimentale</span><span class="tl-chev">›</span></button>
       </div>
     </div>
   </div>
@@ -2178,9 +2136,9 @@ input:checked+.sl{background:#2F5FB3;}
       <div class="header">
         <div class="title-wrap"><h1>Rete Neurale</h1>
           <p>Una rete neurale (ensemble di 5 percettroni multistrato) viene addestrata direttamente sul tuo dispositivo con l'ultimo anno di terremoti INGV della zona scelta, poi "prosegue" la serie: numero di eventi al giorno e magnitudo massima giornaliera.</p></div>
-        <span class="badge" style="background:rgba(240,171,252,.14);color:#A21CAF;border:1px solid rgba(240,171,252,.4);">Sperimentale</span>
+        <span class="badge" style="background:rgba(240,171,252,.14);color:#f0abfc;border:1px solid rgba(240,171,252,.4);">Sperimentale</span>
       </div>
-      <div class="an-warn" style="color:#B45309;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
+      <div class="an-warn" style="color:#fbbf24;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
         ⚠️ <b>Non è una previsione dei terremoti.</b> La rete estrapola solo la tendenza statistica dell'attività
         (quanti eventi, di che taglia tipica): <b>non può anticipare</b> un forte terremoto improvviso, e tende a riportarsi
         verso la media man mano che si allontana da oggi. Usala come curiosità per vedere se uno sciame tende a calare o a crescere.
@@ -2230,7 +2188,7 @@ input:checked+.sl{background:#2F5FB3;}
       <div class="header">
         <div class="title-wrap"><h1>Configurazioni Planetarie</h1>
           <p>Inserisci una data: l'app calcola la posizione di Sole, Luna e pianeti in quel giorno, cerca nel passato e nel futuro (dal 1750 al 2250) le date con la configurazione più simile, e mostra i terremoti di quelle date — dal catalogo strumentale INGV per le date dal 1985, dal catalogo storico CPTI15 (per anno) per quelle precedenti.</p></div>
-        <span class="badge" style="background:rgba(196,181,253,.14);color:#6D28D9;border:1px solid rgba(196,181,253,.4);">Gioco</span>
+        <span class="badge" style="background:rgba(196,181,253,.14);color:#c4b5fd;border:1px solid rgba(196,181,253,.4);">Gioco</span>
       </div>
       <section class="panel">
         <div class="panel-header"><h2>Data di riferimento</h2><p>Configurazione planetaria calcolata a mezzogiorno UTC</p></div>
@@ -2239,7 +2197,7 @@ input:checked+.sl{background:#2F5FB3;}
             <input id="plDate" type="date"/></div>
           <button class="btn btn-purple" id="plRunBtn" onclick="fetchPianeti()" style="margin-top:14px;">🔭 Cerca configurazioni simili</button>
           <div id="plStatus" class="status">Scegli una data e avvia la ricerca.</div>
-          <div class="an-warn" style="color:#BE185D;background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.3);">
+          <div class="an-warn" style="color:#f9a8d4;background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.3);">
             🎲 <b>Questo è un gioco, non uno strumento di previsione.</b> Non esiste alcuna correlazione scientifica dimostrata
             tra le configurazioni planetarie e i terremoti: le maree gravitazionali indotte dai pianeti sulla crosta terrestre
             sono di ordini di grandezza inferiori a quelle lunisolari, a loro volta troppo deboli per innescare un sisma.
@@ -2278,39 +2236,63 @@ input:checked+.sl{background:#2F5FB3;}
   <!-- ═══ SISMOGRAMMI ═══ -->
   <div class="section" id="sectionSismogrammi">
     <div class="container">
-      <div class="header">
-        <div class="title-wrap"><h1>Sismogrammi EIDA / INGV</h1>
-          <p>Waveform e dayplot dalle stazioni della rete <strong>IV</strong>.</p></div>
-        <span class="badge badge-green">Default: rete IV</span>
+      <div class="sx-intro">
+        <span class="sx-ic ic" data-ic="seismo"></span>
+        <div><div class="sx-t">Come ha tremato la terra</div>
+          <div class="sx-d">Scegli una stazione sismica e guarda il tracciato che ha registrato.</div></div>
+        <svg class="sx-wave" viewBox="0 0 150 60" fill="none" aria-hidden="true"><path d="M0 30h30l5-12 6 24 7-34 7 30 5-10h18l4-6 5 14 5-20 5 16h53" stroke="#7FA6F5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="grid">
         <section class="panel">
-          <div class="panel-header"><h2>Controlli</h2></div>
           <div class="controls">
-            <div class="field"><label>Rete</label>
-              <select id="networkSelect">
-                <option value="IV" selected>IV - Italian Seismic Network</option>
-                <option value="IX">IX</option></select></div>
-            <div class="field"><label>Stazione</label><select id="stationSelect"></select></div>
-            <div class="field"><label>Canale</label><select id="channelSelect"></select></div>
-            <div class="row-2">
-              <div class="field"><label>Ore da visualizzare</label>
-                <input id="hoursInput" type="number" min="1" max="48" value="24"/></div>
-              <div class="field"><label>Punti max grafico</label>
-                <input id="sampleLimitInput" type="number" min="200" max="30000" value="5000"/></div>
+            <div class="sx-step">
+              <div class="sx-h"><span class="sx-num">1</span>Stazione</div>
+              <select id="stationSelect" aria-label="Stazione sismica"></select>
+              <button type="button" class="chip-link" onclick="useNearestStation()"><span class="ic" data-ic="locate"></span>Usa la più vicina a me</button>
+              <div class="sx-note" id="stationNote"></div>
             </div>
-            <!-- datetime inputs STACKED (fix clipping) -->
-            <div class="field"><label>Inizio (UTC)</label>
-              <input id="startInput" type="datetime-local"/></div>
-            <div class="field"><label>Fine (UTC)</label>
-              <input id="endInput" type="datetime-local"/></div>
-
-            <div class="fsec">
-              <h3>Filtri segnale</h3>
+            <div class="sx-step">
+              <div class="sx-h"><span class="sx-num">2</span>Movimento del terreno</div>
+              <div class="chips" id="dirChips">
+                <button type="button" class="chip" data-dir="Z" onclick="pickSeisDir('Z')">Su e giù</button>
+                <button type="button" class="chip" data-dir="N" onclick="pickSeisDir('N')">Nord-Sud</button>
+                <button type="button" class="chip" data-dir="E" onclick="pickSeisDir('E')">Est-Ovest</button>
+              </div>
+            </div>
+            <div class="sx-step">
+              <div class="sx-h"><span class="sx-num">3</span>Periodo</div>
+              <div class="chips" id="hourChips">
+                <button type="button" class="chip" data-h="1" onclick="pickSeisHours(1)">1 ora</button>
+                <button type="button" class="chip" data-h="6" onclick="pickSeisHours(6)">6 ore</button>
+                <button type="button" class="chip" data-h="24" onclick="pickSeisHours(24)">24 ore</button>
+                <button type="button" class="chip" data-h="48" onclick="pickSeisHours(48)">2 giorni</button>
+              </div>
+            </div>
+            <button class="btn btn-green" id="generateBtn" style="display:inline-flex;align-items:center;justify-content:center;gap:9px;"><span class="ic" data-ic="seismo" style="font-size:19px;"></span>Mostra il sismogramma</button>
+            <div id="status" class="status">Caricamento stazioni...</div>
+            <details class="adv"><summary>Impostazioni avanzate (rete, canale, orari esatti, filtri)</summary>
+              <div class="adv-body">
+                <div class="field"><label>Rete</label>
+                  <select id="networkSelect">
+                    <option value="IV" selected>IV — Rete Sismica Nazionale</option>
+                    <option value="IX">IX</option></select></div>
+                <div class="field"><label>Canale</label><select id="channelSelect"></select></div>
+                <div class="row-2">
+                  <div class="field"><label>Ore da visualizzare</label>
+                    <input id="hoursInput" type="number" min="1" max="48" value="24"/></div>
+                  <div class="field"><label>Punti nel grafico</label>
+                    <input id="sampleLimitInput" type="number" min="200" max="30000" value="5000"/></div>
+                </div>
+                <div class="field"><label>Inizio (UTC)</label>
+                  <input id="startInput" type="datetime-local"/></div>
+                <div class="field"><label>Fine (UTC)</label>
+                  <input id="endInput" type="datetime-local"/></div>
+                <div class="fsec">
+              <h3>Filtri del segnale</h3>
               <div class="toggle-row">
                 <label class="sw"><input type="checkbox" id="filterEnabled" checked/>
                   <span class="sl"></span></label>
-                <span class="tl">Bandpass attivo</span>
+                <span class="tl">Filtro passa-banda</span>
               </div>
               <div class="row-2">
                 <div class="field"><label>Freq. min (Hz)</label>
@@ -2319,29 +2301,29 @@ input:checked+.sl{background:#2F5FB3;}
                   <input id="freqMaxInput" type="number" min=".01" max="100" step=".1" value="3.0"/></div>
               </div>
               <div class="row-2">
-                <div class="field"><label>Poli (corners)</label>
+                <div class="field"><label>Poli del filtro</label>
                   <input id="cornersInput" type="number" min="1" max="8" step="1" value="4"/></div>
-                <div class="field"><label>Decimate factor</label>
+                <div class="field"><label>Riduzione campioni</label>
                   <input id="decimateInput" type="number" min="1" max="10" step="1" value="2"/></div>
               </div>
               <div class="toggle-row" style="margin-top:6px">
                 <label class="sw"><input type="checkbox" id="demeanEnabled" checked/>
-                  <span class="sl"></span></label><span class="tl">Demean</span>
+                  <span class="sl"></span></label><span class="tl">Centra sullo zero</span>
               </div>
               <div class="toggle-row">
                 <label class="sw"><input type="checkbox" id="detrendEnabled" checked/>
-                  <span class="sl"></span></label><span class="tl">Detrend lineare</span>
+                  <span class="sl"></span></label><span class="tl">Rimuovi la deriva</span>
               </div>
             </div>
-            <button class="btn btn-green" id="generateBtn">Scarica e visualizza waveform</button>
-            <div id="status" class="status">Caricamento stazioni...</div>
-            <div class="hint">⚠️ Non tutti i sismogrammi potrebbero essere disponibili o avere registrazioni nella finestra temporale desiderata.</div>
+              </div>
+            </details>
+            <div class="hint">Non tutte le stazioni hanno registrazioni per ogni periodo: se il tracciato non arriva, prova un'altra stazione o un periodo diverso.</div>
           </div>
         </section>
 
         <section class="main">
           <section class="panel panel-map">
-            <div class="panel-header"><h2>Mappa stazioni</h2></div>
+            <div class="panel-header"><h2>Stazioni sulla mappa</h2><p>Tocca un punto per scegliere la stazione</p></div>
             <div id="map" class="mapbox"></div>
           </section>
           <section class="panel">
@@ -2350,79 +2332,101 @@ input:checked+.sl{background:#2F5FB3;}
           </section>
           <section class="panel">
             <div class="panel-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-              <div><h2 id="plotTitle">Waveform</h2><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Grafico traccia selezionata.</p></div>
+              <div><h2 id="plotTitle">Tracciato</h2><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Il movimento del terreno registrato dalla stazione.</p></div>
               <div class="seis-view-ctrl" style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
-                <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#FFFFFF;color:var(--text);border:1px solid rgba(15,23,42,0.1);">
-                  <option value="waveform">Waveform</option>
-                  <option value="dayplot">Dayplot</option></select>
+                <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
+                  <option value="waveform">Tracciato</option>
+                  <option value="dayplot">Giornata a righe</option></select>
                 <div id="dayplotControls" style="display:none;align-items:center;gap:7px;">
                   <label style="font-size:11px;color:var(--muted);white-space:nowrap;">Min/riga</label>
                   <input id="dayplotInterval" type="number" min="1" max="120" value="30"
-                    style="width:60px;padding:7px 9px;font-size:13px;border-radius:9px;background:#FFFFFF;color:var(--text);border:1px solid rgba(15,23,42,0.1);"/>
+                    style="width:60px;padding:7px 9px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);"/>
                 </div>
                 <button id="downloadSeisBtn" onclick="downloadSeisImage()" title="Scarica come immagine"
-                  style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:13px;font-weight:600;border-radius:9px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#15803D;cursor:pointer;">
+                  style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:13px;font-weight:600;border-radius:9px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#86efac;cursor:pointer;">
                   <span class="ic" data-ic="download" style="font-size:15px;"></span>PNG
                 </button>
               </div>
             </div>
             <div style="padding:16px">
               <div class="canvas-box">
-                <canvas id="waveCanvas" width="1200" height="320" style="width:100%;height:320px;display:block;background:#FFFFFF;border-radius:10px;"></canvas>
+                <canvas id="waveCanvas" width="1200" height="320" style="width:100%;height:320px;display:block;background:#0F1626;border-radius:10px;"></canvas>
               </div>
             </div>
           </section>
-          <section class="panel">
-            <div class="panel-header"><h2>Log</h2></div>
+          <details class="adv" style="background:var(--panel);">
+            <summary>Registro tecnico</summary>
             <div id="log" class="log-box"></div>
-          </section>
+          </details>
         </section>
       </div>
       <div class="footer-note">
-        <code>webservices.ingv.it/fdsnws/station/1/query</code> ·
-        <code>webservices.ingv.it/fdsnws/dataselect/1/query</code>
+        Dati delle stazioni e dei tracciati: INGV.
       </div>
     </div>
   </div>
   <!-- ═══ MECCANISMI FOCALI ═══ -->
   <div class="section" id="sectionFocali">
     <div class="container">
-      <div class="header">
-        <div class="title-wrap"><h1>Meccanismi Focali</h1>
-          <p>Soluzioni TDMT (Time Domain Moment Tensor) — INGV.</p></div>
-        <span class="badge" style="background:rgba(251,146,60,.12);color:#C2410C;border:1px solid rgba(251,146,60,.35);">INGV TDMT</span>
+      <div class="sx-intro col">
+        <div><div class="sx-t">Come si è mossa la faglia</div>
+          <div class="sx-d">Ogni “pallina” riassume il movimento della roccia durante un terremoto forte.</div></div>
+        <div class="bb-legend">
+          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia normale"><circle cx="20" cy="20" r="18" fill="#FF5A3C"/><path d="M20 2 C10 12 10 28 20 38 C30 28 30 12 20 2 Z" fill="#F5F7FB"/><circle cx="20" cy="20" r="18" fill="none" stroke="#0A0F1C" stroke-width="1.5"/></svg><b>Normale</b><span>la crosta si allunga</span></div>
+          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia inversa"><circle cx="20" cy="20" r="18" fill="#F5F7FB"/><path d="M20 2 C10 12 10 28 20 38 C30 28 30 12 20 2 Z" fill="#FF5A3C"/><circle cx="20" cy="20" r="18" fill="none" stroke="#0A0F1C" stroke-width="1.5"/></svg><b>Inversa</b><span>la crosta si comprime</span></div>
+          <div><svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Pallina di faglia trascorrente"><circle cx="20" cy="20" r="18" fill="#F5F7FB"/><path d="M20 20 L7.3 7.3 A18 18 0 0 1 32.7 7.3 Z M20 20 L32.7 32.7 A18 18 0 0 1 7.3 32.7 Z" fill="#FF5A3C"/><circle cx="20" cy="20" r="18" fill="none" stroke="#0A0F1C" stroke-width="1.5"/></svg><b>Trascorrente</b><span>i blocchi scorrono di lato</span></div>
+        </div>
       </div>
       <div class="eq-grid">
         <!-- filtri -->
         <section class="panel">
-          <div class="panel-header"><h2>Filtri</h2></div>
           <div class="controls">
-            <div class="field"><label>Dal</label>
-              <input id="fmFrom" type="date"/></div>
-            <div class="field"><label>Al</label>
-              <input id="fmTo" type="date"/></div>
-            <div class="row-2">
-              <div class="field"><label>Mag. min</label>
-                <input id="fmMinMag" type="number" min="0" max="9" step="0.5" value="3.0"/></div>
-              <div class="field"><label>Mag. max</label>
-                <input id="fmMaxMag" type="number" min="0" max="10" step="0.5" value="10"/></div>
+            <div class="sx-step">
+              <div class="sx-h">Periodo</div>
+              <div class="chips" id="fmPerChips">
+                <button type="button" class="chip" data-d="30" onclick="pickFmDays(30)">Ultimo mese</button>
+                <button type="button" class="chip" data-d="90" onclick="pickFmDays(90)">3 mesi</button>
+                <button type="button" class="chip" data-d="365" onclick="pickFmDays(365)">Ultimo anno</button>
+              </div>
             </div>
-            <div class="field"><label>Limite risultati</label>
-              <select id="fmLimit">
-                <option value="50">50</option>
-                <option value="100" selected>100</option>
-                <option value="200">200</option>
-                <option value="500">500</option>
-              </select></div>
-            <button class="gen-btn" onclick="fetchFocalMechanisms()">🔍 Cerca</button>
-            <div class="status" id="fmStatus">Premi Cerca per caricare.</div>
+            <div class="sx-step">
+              <div class="sx-h">Solo terremoti di magnitudo almeno</div>
+              <div class="chips" id="fmMagChips">
+                <button type="button" class="chip" data-m="3" onclick="pickFmMag(3)">M 3+</button>
+                <button type="button" class="chip" data-m="4" onclick="pickFmMag(4)">M 4+</button>
+                <button type="button" class="chip" data-m="5" onclick="pickFmMag(5)">M 5+</button>
+              </div>
+            </div>
+            <button class="gen-btn" onclick="fetchFocalMechanisms()" style="display:inline-flex;align-items:center;justify-content:center;gap:9px;"><span class="ic" data-ic="focal" style="font-size:18px;"></span>Mostra i meccanismi</button>
+            <div class="status" id="fmStatus">Scegli periodo e magnitudo, poi premi il pulsante.</div>
+            <details class="adv"><summary>Date esatte e numero di risultati</summary>
+              <div class="adv-body">
+                <div class="row-2">
+                  <div class="field"><label>Dal</label><input id="fmFrom" type="date"/></div>
+                  <div class="field"><label>Al</label><input id="fmTo" type="date"/></div>
+                </div>
+                <div class="row-2">
+                  <div class="field"><label>Magnitudo min</label>
+                    <input id="fmMinMag" type="number" min="0" max="9" step="0.5" value="3.0"/></div>
+                  <div class="field"><label>Magnitudo max</label>
+                    <input id="fmMaxMag" type="number" min="0" max="10" step="0.5" value="10"/></div>
+                </div>
+                <div class="field"><label>Numero massimo di risultati</label>
+                  <select id="fmLimit">
+                    <option value="50">50</option>
+                    <option value="100" selected>100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                  </select></div>
+              </div>
+            </details>
           </div>
           <div style="padding:0 16px 16px;">
             <div id="fmSumRow" style="display:none;margin-top:12px;">
               <div class="summary-row">
                 <div class="sc"><div class="k">Soluzioni</div><div class="v" id="fmTot">—</div></div>
-                <div class="sc"><div class="k">Mag. max</div><div class="v" id="fmMaxM" style="color:#B91C1C">—</div></div>
-                <div class="sc"><div class="k">Mag. min</div><div class="v" id="fmMinM" style="color:#15803D">—</div></div>
+                <div class="sc"><div class="k">Mag. max</div><div class="v" id="fmMaxM" style="color:#fca5a5">—</div></div>
+                <div class="sc"><div class="k">Mag. min</div><div class="v" id="fmMinM" style="color:#86efac">—</div></div>
               </div>
             </div>
           </div>
@@ -2430,17 +2434,17 @@ input:checked+.sl{background:#2F5FB3;}
         <!-- mappa -->
         <div class="main">
           <section class="panel panel-map">
-            <div class="panel-header"><h2>Mappa beach ball</h2>
-              <p>Ogni simbolo rappresenta la geometria del piano di faglia stimato con TDMT.</p></div>
+            <div class="panel-header"><h2>Sulla mappa</h2>
+              <p>Ogni pallina mostra come si è mossa la faglia. Toccala per i dettagli.</p></div>
             <div id="fmMap" class="mapbox"></div>
           </section>
           <section class="panel">
-            <div class="panel-header"><h2>Lista soluzioni</h2></div>
-            <div class="eq-list" id="fmList"><div class="lo">Premi Cerca.</div></div>
+            <div class="panel-header"><h2>Elenco</h2></div>
+            <div class="eq-list" id="fmList"><div class="lo">Premi “Mostra i meccanismi”.</div></div>
           </section>
         </div>
       </div>
-      <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> (QuakeML con focalMechanism) · <a href="https://terremoti.ingv.it/tdmt" target="_blank" style="color:var(--muted)">terremoti.ingv.it/tdmt</a></div>
+      <div class="footer-note">Dati: INGV — meccanismi calcolati per i terremoti più forti (<a href="https://terremoti.ingv.it/tdmt" target="_blank" rel="noopener" style="color:var(--muted)">terremoti.ingv.it/tdmt</a>).</div>
     </div>
   </div>
 
@@ -2449,18 +2453,18 @@ input:checked+.sl{background:#2F5FB3;}
   <div class="section" id="sectionNotifiche">
     <div class="container">
       <div class="header">
-        <div class="title-wrap"><h1><span class="ic" data-ic="bell" style="color:#BE185D;"></span>Notifiche</h1>
+        <div class="title-wrap"><h1><span class="ic" data-ic="bell" style="color:#f9a8d4;"></span>Notifiche</h1>
           <p>Configura avvisi push personalizzati per la tua area.</p></div>
-        <span class="badge" style="background:rgba(236,72,153,0.12);color:#BE185D;border:1px solid rgba(236,72,153,0.35);">Firebase</span>
+        <span class="badge" style="background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.35);">Firebase</span>
       </div>
 
       <!-- ACCOUNT -->
       <section class="panel" style="margin-bottom:18px;">
-        <div class="panel-header"><h2 style="display:inline-flex;align-items:center;gap:9px;"><span class="ic" data-ic="user" style="font-size:0.9em;color:#1D4ED8;"></span>Account</h2>
+        <div class="panel-header"><h2 style="display:inline-flex;align-items:center;gap:9px;"><span class="ic" data-ic="user" style="font-size:0.9em;color:#93c5fd;"></span>Account</h2>
           <p>Accedi per salvare le tue preferenze nel cloud e ricevere notifiche push.</p></div>
         <div class="controls">
           <div id="authStatus" style="padding:8px 0;font-size:14px;color:var(--muted);">Non collegato.</div>
-          <button class="btn" id="loginBtn" onclick="handleAuth()" style="background:rgba(66,133,244,0.15);border-color:rgba(66,133,244,0.4);color:#1D4ED8;">
+          <button class="btn" id="loginBtn" onclick="handleAuth()" style="background:rgba(66,133,244,0.15);border-color:rgba(66,133,244,0.4);color:#93c5fd;">
             <span id="loginBtnText">🔑 Accedi con Google</span>
           </button>
         </div>
@@ -2535,7 +2539,7 @@ input:checked+.sl{background:#2F5FB3;}
           <h1><span class="ic" data-ic="locate" style="color:#5eead4;"></span>Localizzazione Sperimentale</h1>
           <p>Stima dell'area epicentrale da tempi S-P su stazioni vicine. Solo indicativa — errori dell'ordine delle decine di km.</p>
         </div>
-        <span class="badge" style="background:rgba(16,185,129,0.12);color:#047857;border:1px solid rgba(16,185,129,0.35);">⚗️ SPERIMENTALE</span>
+        <span class="badge" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border:1px solid rgba(16,185,129,0.35);">⚗️ SPERIMENTALE</span>
       </div>
 
       <!-- Monitor + controlli -->
@@ -2546,8 +2550,8 @@ input:checked+.sl{background:#2F5FB3;}
             <p>Controlla automaticamente terremoti.ingv.it ogni 30 secondi.</p>
           </div>
           <div class="loc-monitor-btns" style="display:flex;gap:8px;">
-            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#047857;" onclick="startLocMonitor()">▶ Avvia monitor</button>
-            <button class="btn" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#B91C1C;" onclick="stopLocMonitor()">⏹ Ferma</button>
+            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="startLocMonitor()">▶ Avvia monitor</button>
+            <button class="btn" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#fca5a5;" onclick="stopLocMonitor()">⏹ Ferma</button>
           </div>
         </div>
         <div style="padding:0 18px 16px;">
@@ -2555,9 +2559,9 @@ input:checked+.sl{background:#2F5FB3;}
           <!-- Analisi manuale -->
           <div class="loc-manual">
             <span style="font-size:12px;color:var(--muted);">Oppure analisi manuale:</span>
-            <input id="locProvInput" type="text" placeholder="Provincia (es. Palermo)" style="width:180px;padding:7px 11px;border-radius:9px;border:1px solid rgba(15,23,42,0.1);background:#FFFFFF;color:var(--text);font-size:13px;"/>
-            <input id="locTimeInput" type="datetime-local" style="padding:7px 11px;border-radius:9px;border:1px solid rgba(15,23,42,0.1);background:#FFFFFF;color:var(--text);font-size:13px;"/>
-            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#047857;" onclick="runLocAnalysis(document.getElementById('locProvInput').value, document.getElementById('locTimeInput').value||null)">🔍 Analizza</button>
+            <input id="locProvInput" type="text" placeholder="Provincia (es. Palermo)" style="width:180px;padding:7px 11px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:var(--text);font-size:13px;"/>
+            <input id="locTimeInput" type="datetime-local" style="padding:7px 11px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:var(--text);font-size:13px;"/>
+            <button class="btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#6ee7b7;" onclick="runLocAnalysis(document.getElementById('locProvInput').value, document.getElementById('locTimeInput').value||null)">🔍 Analizza</button>
           </div>
         </div>
       </section>
@@ -3152,18 +3156,18 @@ function renderMarkers(events,leafletMap,markersArr,onSeis,autoZoom=true){
         :'';
       this.getPopup().setContent(`<div style="font-family:sans-serif;min-width:180px;">
       <b style="font-size:14px;">${_popupEv.place}</b><br>
-      <span style="color:#4B5563;font-size:12px;">${_popupEv.time.replace('T',' ').slice(0,19)} UTC</span>
+      <span style="color:#8d9ab5;font-size:12px;">${_popupEv.time.replace('T',' ').slice(0,19)} UTC</span>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;">
-        <div style="background:rgba(15,23,42,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
-          <div style="font-size:9px;color:#4B5563;text-transform:uppercase;">Magnitudo</div>
-          <div style="font-size:18px;font-weight:800;color:#B91C1C;">${_popupEv.mag.toFixed(1)}</div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
+          <div style="font-size:9px;color:#8d9ab5;text-transform:uppercase;">Magnitudo</div>
+          <div style="font-size:18px;font-weight:800;color:#fca5a5;">${_popupEv.mag.toFixed(1)}</div>
         </div>
-        <div style="background:rgba(15,23,42,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
-          <div style="font-size:9px;color:#4B5563;text-transform:uppercase;">Profondità</div>
-          <div style="font-size:18px;font-weight:800;color:#1D4ED8;">${_popupEv.depth.toFixed(0)} km</div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">
+          <div style="font-size:9px;color:#8d9ab5;text-transform:uppercase;">Profondità</div>
+          <div style="font-size:18px;font-weight:800;color:#93c5fd;">${_popupEv.depth.toFixed(0)} km</div>
         </div>
       </div>
-      <div style="font-size:10px;color:#4B5563;margin-top:6px;">Lat ${_popupEv.lat.toFixed(3)} · Lon ${_popupEv.lon.toFixed(3)}</div>
+      <div style="font-size:10px;color:#8d9ab5;margin-top:6px;">Lat ${_popupEv.lat.toFixed(3)} · Lon ${_popupEv.lon.toFixed(3)}</div>
       ${distRow}
       ${_popupOnSeis?`<button onclick="${_popupOnSeis}(${_popupI})" style="margin-top:9px;width:100%;padding:7px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">📈 Sismogramma</button>`:''}
     </div>`);
@@ -3212,7 +3216,7 @@ function renderList(events,containerId,onSeis){
     }
     const sb=onSeis?`<button class="seis-btn" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic" style="font-size:19px;">${IC.seismo}</span><span style="font-size:9px;display:block;margin-top:1px;">Sismogramma</span></button>`:'';
     const _distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
-    const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#64748B;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
+    const distStr=_distVal!=null?`<span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.pin}</span> <span${_distVal<100?' style="color:#ef4444;font-weight:700;"':''}>${_distVal.toFixed(0)} km</span>`:'';
     const sbc=onSeis?`<button class="eqc-seis" onclick="event.stopPropagation();${onSeis}(${i})" title="Sismogramma"><span class="ic">${IC.seismo}</span></button>`:'';
     html+=`<div class="eq-item eq-card" onclick="openEqDetail('${containerId}',${i})">
       <span class="eqc-bar" style="background:${magCol(ev.mag)}" aria-hidden="true"></span>
@@ -3411,10 +3415,10 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
   const ctx=canvas.getContext('2d');
   const W=canvas.width,H=canvas.height;
   const evs=provFilter?events.filter(ev=>extractProv(ev.place)===provFilter):events;
-  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#0F1626';ctx.fillRect(0,0,W,H);
   TL_HITS[hitsKey]=[];
   if(!evs.length){
-    ctx.fillStyle='#374151';ctx.font='14px sans-serif';ctx.textAlign='center';
+    ctx.fillStyle='#AAB4C8';ctx.font='14px sans-serif';ctx.textAlign='center';
     ctx.fillText('Nessun evento',W/2,H/2);return;
   }
   const pL=55,pR=18,pT=18,pB=30,plotW=W-pL-pR,plotH=H-pT-pB;
@@ -3424,9 +3428,9 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
   /* grid */
   for(let gm=1;gm<=Math.ceil(mMax);gm++){
     const y=pT+plotH-((gm/mMax)*plotH);
-    ctx.strokeStyle='rgba(15,23,42,0.11)';ctx.lineWidth=1;
+    ctx.strokeStyle='rgba(255,255,255,0.07)';ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+plotW,y);ctx.stroke();
-    ctx.fillStyle='#374151';ctx.font='10px sans-serif';ctx.textAlign='right';
+    ctx.fillStyle='#AAB4C8';ctx.font='10px sans-serif';ctx.textAlign='right';
     ctx.fillText('M'+gm,pL-3,y+4);
   }
   /* dots */
@@ -3442,14 +3446,14 @@ function drawTimeline(events,canvasId,hitsKey,provFilter=''){
     TL_HITS[hitsKey].push({ev,x,y,r});
   });
   /* X axis */
-  ctx.fillStyle='#374151';ctx.font='10px sans-serif';ctx.textAlign='center';
+  ctx.fillStyle='#AAB4C8';ctx.font='10px sans-serif';ctx.textAlign='center';
   for(let i=0;i<=5;i++){
     const t=tMin+(tR/5)*i,x=pL+(i/5)*plotW;
     const d=new Date(t);
     const lb=`${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')} `
             +`${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}`;
     ctx.fillText(lb,x,H-5);
-    ctx.strokeStyle='rgba(15,23,42,0.08)';ctx.lineWidth=0.5;
+    ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=0.5;
     ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+plotH);ctx.stroke();
   }
 }
@@ -3488,7 +3492,7 @@ function updateProvSelect(events,selectId){
         c.style.cursor='pointer';tt.style.display='block';
         tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-38)+'px';
         const dt=h.ev.time.replace('T',' ').slice(0,19);
-        tt.innerHTML=`<strong>M${h.ev.mag.toFixed(1)}</strong> — ${h.ev.place}<br><small style="color:#64748B;">${dt} UTC · ${h.ev.depth.toFixed(0)} km</small>`;
+        tt.innerHTML=`<strong>M${h.ev.mag.toFixed(1)}</strong> — ${h.ev.place}<br><small style="color:#94a3b8;">${dt} UTC · ${h.ev.depth.toFixed(0)} km</small>`;
       }else{c.style.cursor='crosshair';tt.style.display='none';}
     }
   });
@@ -3575,7 +3579,7 @@ function renderEqdDati(ev){
   const distVal=userLat!=null?haverDist(userLat,userLon,ev.lat,ev.lon):null;
   document.getElementById('eqdPaneDati').innerHTML=`
     <div class="eqd-grid">
-      <div class="eqd-box"><div class="k">Magnitudo</div><div class="v" style="color:#B91C1C;">${ev.mag.toFixed(1)}</div></div>
+      <div class="eqd-box"><div class="k">Magnitudo</div><div class="v" style="color:#fca5a5;">${ev.mag.toFixed(1)}</div></div>
       <div class="eqd-box"><div class="k">Profondità</div><div class="v">${ev.depth.toFixed(1)} km</div></div>
     </div>
     <div class="eqd-row"><span class="k">Data e ora (locale)</span><span class="v">${localStr}</span></div>
@@ -3651,8 +3655,8 @@ function initEqMap(){
 function addLegend(m){
   const lg=L.control({position:'bottomright'});
   lg.onAdd=()=>{const d=L.DomUtil.create('div');
-    d.style.cssText='background:rgba(255,255,255,.97);border:1px solid rgba(15,23,42,.12);border-radius:11px;padding:9px 13px;color:#111827;font-size:12px;line-height:1.9;';
-    d.innerHTML='<b style="font-size:10px;color:#64748B;text-transform:uppercase">Profondità</b><br>'
+    d.style.cssText='background:rgba(11,17,32,.97);border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:9px 13px;color:#e5e7eb;font-size:12px;line-height:1.9;';
+    d.innerHTML='<b style="font-size:10px;color:#94a3b8;text-transform:uppercase">Profondità</b><br>'
       +'<span style="color:#ef4444">●</span> 0–10 km<br>'
       +'<span style="color:#f97316">●</span> 10–30 km<br>'
       +'<span style="color:#eab308">●</span> 30–70 km<br>'
@@ -4945,7 +4949,7 @@ async function renderProspettivaLong(){
     return `<div class="an-match-card" style="margin-bottom:10px;">
       <div class="an-match-header">
         <span class="an-rank ${cls}">${r.p30.toFixed(0)}%</span>
-        <h3 style="color:#0369A1;">${r.z.n}</h3>
+        <h3 style="color:#7dd3fc;">${r.z.n}</h3>
       </div>
       <div class="an-match-body">
         <div class="sig-row"><span class="k">Eventi M≥${PR_ZONE_MINMAG} dal ${PR_ZONE_SINCE}</span><span class="v">${r.n} · ~1 ogni ${r.recur||'—'} anni</span></div>
@@ -5098,8 +5102,8 @@ function hcRender(arr){
   listEl.innerHTML=shown.map((e,i)=>`
     <div class="eq-item" onclick="hcFocus(${i})">
       <div class="eq-info">
-        <div class="pl">${e.area||'—'}${e.src==='INGV'?' <span class="badge" style="font-size:9px;padding:1px 5px;background:rgba(59,130,246,.15);color:#1D4ED8;border:1px solid rgba(59,130,246,.4);vertical-align:1px;">INGV</span>':''}</div>
-        <div class="dt"><span><span class="ic" style="font-size:12px;vertical-align:-2px;color:#64748B;">${IC.clock}</span> ${_hcDateStr(e)}</span></div>
+        <div class="pl">${e.area||'—'}${e.src==='INGV'?' <span class="badge" style="font-size:9px;padding:1px 5px;background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.4);vertical-align:1px;">INGV</span>':''}</div>
+        <div class="dt"><span><span class="ic" style="font-size:12px;vertical-align:-2px;color:#94a3b8;">${IC.clock}</span> ${_hcDateStr(e)}</span></div>
       </div>
       <div class="eq-mag ${magCls(e.mw)}">${e.mw.toFixed(1)}</div>
     </div>`).join('');
@@ -5500,44 +5504,44 @@ function updateDefaultRange(){
 function getSta(){return stations.find(s=>s.code===stationSelect.value)||null;}
 
 function drawEmpty(msg='Nessun dato'){
-  wCtx.fillStyle='#FFFFFF';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
-  wCtx.fillStyle='#374151';wCtx.font='22px sans-serif';wCtx.textAlign='center';
+  wCtx.fillStyle='#0F1626';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  wCtx.fillStyle='#AAB4C8';wCtx.font='22px sans-serif';wCtx.textAlign='center';
   wCtx.fillText(msg,waveCanvas.width/2,waveCanvas.height/2);
 }
 
 function drawWaveform(samples,title){
-  wCtx.fillStyle='#FFFFFF';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  wCtx.fillStyle='#0F1626';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
   if(!samples||!samples.length){drawEmpty('Nessun campione');return;}
   const pL=60,pR=20,pT=30,pB=35,W=waveCanvas.width,H=waveCanvas.height;
   const pW=W-pL-pR,pH=H-pT-pB;
   const amp=Math.max(Math.abs(Math.min(...samples)),Math.abs(Math.max(...samples)))||1;
-  wCtx.strokeStyle='rgba(15,23,42,0.16)';wCtx.lineWidth=1;
+  wCtx.strokeStyle='rgba(255,255,255,0.10)';wCtx.lineWidth=1;
   for(let i=0;i<=4;i++){const y=pT+(pH/4)*i;wCtx.beginPath();wCtx.moveTo(pL,y);wCtx.lineTo(pL+pW,y);wCtx.stroke();}
-  wCtx.strokeStyle='#1D4ED8';wCtx.lineWidth=1.3;wCtx.beginPath();
+  wCtx.strokeStyle='#7FA6F5';wCtx.lineWidth=1.3;wCtx.beginPath();
   samples.forEach((v,i)=>{const x=pL+(i/(samples.length-1||1))*pW,y=pT+pH/2-(v/amp)*(pH/2-6);i===0?wCtx.moveTo(x,y):wCtx.lineTo(x,y);});
   wCtx.stroke();
-  wCtx.fillStyle='#111827';wCtx.font='15px sans-serif';wCtx.textAlign='left';wCtx.fillText(title,16,20);
-  wCtx.fillStyle='#374151';wCtx.font='11px sans-serif';wCtx.fillText('amp max: '+amp.toFixed(2),16,H-10);
+  wCtx.fillStyle='#E6EBF4';wCtx.font='15px sans-serif';wCtx.textAlign='left';wCtx.fillText(title,16,20);
+  wCtx.fillStyle='#AAB4C8';wCtx.font='11px sans-serif';wCtx.fillText('amp max: '+amp.toFixed(2),16,H-10);
 }
 
 function drawDayplot(samples,eSR,startMs,title,intMin=30){
   const spr=Math.round(eSR*intMin*60),numR=Math.ceil(samples.length/spr);
   const pL=72,pR=16,pT=34,pB=26,rH=28;
   waveCanvas.width=1200;waveCanvas.height=Math.max(pT+numR*rH+pB,200);
-  wCtx.fillStyle='#FFFFFF';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
-  wCtx.fillStyle='#111827';wCtx.font='bold 13px sans-serif';wCtx.textAlign='center';
+  wCtx.fillStyle='#0F1626';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+  wCtx.fillStyle='#E6EBF4';wCtx.font='bold 13px sans-serif';wCtx.textAlign='center';
   wCtx.fillText(title,waveCanvas.width/2,22);
   const pW=waveCanvas.width-pL-pR;
   let amp=0;for(const v of samples){const a=Math.abs(v);if(a>amp)amp=a;}if(!amp)amp=1;
-  const COLS=['#111827','#ef4444','#3b82f6'];
+  const COLS=['#E6EBF4','#F87171','#7FA6F5'];
   for(let row=0;row<numR;row++){
     const rs=row*spr,re=Math.min(rs+spr,samples.length),rS=samples.slice(rs,re);
     const yC=pT+row*rH+rH/2;
-    wCtx.strokeStyle='rgba(15,23,42,0.09)';wCtx.lineWidth=.5;
+    wCtx.strokeStyle='rgba(255,255,255,0.05)';wCtx.lineWidth=.5;
     wCtx.beginPath();wCtx.moveTo(pL,yC);wCtx.lineTo(pL+pW,yC);wCtx.stroke();
     const rMs=startMs+(rs/eSR)*1000,d=new Date(rMs);
     const hh=String(d.getUTCHours()).padStart(2,'0'),mm=String(d.getUTCMinutes()).padStart(2,'0');
-    wCtx.fillStyle='#374151';wCtx.font='10px monospace';wCtx.textAlign='right';
+    wCtx.fillStyle='#AAB4C8';wCtx.font='10px monospace';wCtx.textAlign='right';
     wCtx.fillText(hh+':'+mm,pL-6,yC+4);
     wCtx.strokeStyle=COLS[row%COLS.length];wCtx.lineWidth=.9;wCtx.beginPath();
     const hH=rH/2-2;
@@ -5545,14 +5549,14 @@ function drawDayplot(samples,eSR,startMs,title,intMin=30){
     wCtx.stroke();
   }
   const ts=intMin<=10?5:intMin<=30?10:30;
-  wCtx.fillStyle='#374151';wCtx.font='10px sans-serif';wCtx.textAlign='center';
+  wCtx.fillStyle='#AAB4C8';wCtx.font='10px sans-serif';wCtx.textAlign='center';
   for(let m=0;m<=intMin;m+=ts){
     const x=pL+(m/intMin)*pW;if(x>waveCanvas.width-pR)break;
     wCtx.fillText(m,x,waveCanvas.height-8);
-    wCtx.strokeStyle='rgba(15,23,42,0.11)';wCtx.lineWidth=.5;
+    wCtx.strokeStyle='rgba(255,255,255,0.07)';wCtx.lineWidth=.5;
     wCtx.beginPath();wCtx.moveTo(x,pT);wCtx.lineTo(x,waveCanvas.height-pB);wCtx.stroke();
   }
-  wCtx.fillStyle='#374151';wCtx.font='10px sans-serif';wCtx.textAlign='center';
+  wCtx.fillStyle='#AAB4C8';wCtx.font='10px sans-serif';wCtx.textAlign='center';
   wCtx.fillText('time in minutes',waveCanvas.width/2,waveCanvas.height-1);
 }
 
@@ -5623,7 +5627,8 @@ async function loadNetwork(){
     if(!r.ok)throw new Error('HTTP '+r.status);
     stations=parseSta(await r.text(),net);
     if(!stations.length)throw new Error('Nessuna stazione');
-    stationSelect.innerHTML=stations.map(s=>`<option value="${s.code}">${s.code}${s.name?' ('+s.name+')':''}</option>`).join('');
+    stationSelect.innerHTML=stations.map(s=>`<option value="${s.code}">${s.name?s.name+' — '+s.code:s.code}</option>`).join('');
+    updateStationNote();
     renderMapStations();
     await populateChannels(stationSelect.value);
     setStatus(stations.length+' stazioni caricate.','ok');
@@ -5736,8 +5741,8 @@ async function fetchWaveformAndPlot(){
 
 /* listeners */
 networkSelect.addEventListener('change',()=>{chCache.clear();loadNetwork();saveFilters();});
-stationSelect.addEventListener('change',()=>{populateChannels(stationSelect.value);renderMapStations();updateMeta();});
-hoursInput.addEventListener('change',()=>{updateDefaultRange();saveFilters();});
+stationSelect.addEventListener('change',()=>{populateChannels(stationSelect.value);renderMapStations();updateMeta();updateStationNote();});
+hoursInput.addEventListener('change',()=>{updateDefaultRange();saveFilters();syncHourChips();});
 generateBtn.addEventListener('click',fetchWaveformAndPlot);
 /* Salva filtri terremoti e storico ad ogni modifica */
 ['eqGeo','eqPeriod','eqMinMag','eqMaxDepth',
@@ -5793,7 +5798,7 @@ function drawBeachball(canvas,strike,dip,rake){
   }
   ctx.putImageData(img,0,0);
   ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);
-  ctx.strokeStyle='rgba(15,23,42,0.16)';ctx.lineWidth=1;ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=1;ctx.stroke();
 }
 
 function makeBeachBallIcon(strike,dip,rake,size){
@@ -5817,7 +5822,85 @@ function initFmDates(){
   const to=new Date(),from=new Date(to-90*86400000);
   document.getElementById('fmTo').value=to.toISOString().slice(0,10);
   document.getElementById('fmFrom').value=from.toISOString().slice(0,10);
+  if(typeof syncFmChips==='function')syncFmChips();
 }
+/* ================================================================
+   SISMOGRAMMI / FOCALI — scelte semplici (pulsanti) sopra ai campi tecnici
+================================================================ */
+function _chipOn(boxId,attr,val){
+  document.querySelectorAll('#'+boxId+' .chip').forEach(b=>b.classList.toggle('on',String(b.dataset[attr])===String(val)));
+}
+/* canale → direzione: ...Z verticale, ...N/1 nord-sud, ...E/2 est-ovest */
+function _chanFor(dir){
+  const opts=[...channelSelect.options].map(o=>o.value);
+  const ok=c=>dir==='Z'?/Z$/.test(c):dir==='N'?/[N1]$/.test(c):/[E2]$/.test(c);
+  const pref=['HH','EH','BH','HN'];
+  const m=opts.filter(ok).sort((a,b)=>{const ia=pref.indexOf(a.slice(0,2)),ib=pref.indexOf(b.slice(0,2));return (ia<0?9:ia)-(ib<0?9:ib);});
+  return m[0]||null;
+}
+function updateSeisChips(){
+  if(typeof channelSelect==='undefined')return;
+  document.querySelectorAll('#dirChips .chip').forEach(b=>{b.disabled=!_chanFor(b.dataset.dir);});
+  const c=channelSelect.value||'';
+  const d=/Z$/.test(c)?'Z':/[N1]$/.test(c)?'N':/[E2]$/.test(c)?'E':'';
+  _chipOn('dirChips','dir',d);
+}
+function pickSeisDir(dir){
+  const c=_chanFor(dir);if(!c)return;
+  channelSelect.value=c;channelSelect.dispatchEvent(new Event('change'));
+  updateSeisChips();if(typeof updateMeta==='function')updateMeta();
+}
+function syncHourChips(){_chipOn('hourChips','h',Number(hoursInput.value||24));}
+function pickSeisHours(h){
+  hoursInput.value=h;hoursInput.dispatchEvent(new Event('change'));syncHourChips();
+}
+function updateStationNote(){
+  const el=document.getElementById('stationNote');if(!el||typeof getSta!=='function')return;
+  const sta=getSta();if(!sta||isNaN(sta.lat)){el.textContent='';return;}
+  const parts=[];
+  if(userLat!=null)parts.push(haverDist(userLat,userLon,sta.lat,sta.lon).toFixed(0)+' km da te');
+  if(typeof eqData!=='undefined'&&eqData.length){
+    const last=eqData.reduce((a,e)=>new Date(e.time)>new Date(a.time)?e:a,eqData[0]);
+    parts.push(haverDist(last.lat,last.lon,sta.lat,sta.lon).toFixed(0)+' km dall\'ultimo terremoto ('+last.place+')');
+  }
+  el.textContent=parts.join(' · ');
+}
+async function useNearestStation(){
+  if(!stations||!stations.length){if(typeof showToast==='function')showToast('Le stazioni non sono ancora caricate');return;}
+  if(userLat==null){
+    if(typeof showToast==='function')showToast('Rilevo la tua posizione…');
+    locateUser();
+    for(let i=0;i<30&&userLat==null;i++)await new Promise(r=>setTimeout(r,400));
+    if(userLat==null)return;
+  }
+  let best=null,bd=1e9;
+  stations.forEach(st=>{if(isNaN(st.lat)||isNaN(st.lon))return;const d=haverDist(userLat,userLon,st.lat,st.lon);if(d<bd){bd=d;best=st;}});
+  if(!best)return;
+  stationSelect.value=best.code;stationSelect.dispatchEvent(new Event('change'));
+  if(typeof showToast==='function')showToast('Stazione più vicina: '+(best.name||best.code)+' ('+bd.toFixed(0)+' km)');
+}
+function syncFmChips(){
+  const f=document.getElementById('fmFrom'),t=document.getElementById('fmTo'),m=document.getElementById('fmMinMag');
+  if(f&&t&&f.value&&t.value){const d=Math.round((new Date(t.value)-new Date(f.value))/86400000);_chipOn('fmPerChips','d',d);}
+  if(m)_chipOn('fmMagChips','m',Number(m.value));
+}
+function pickFmDays(days){
+  const to=new Date(),from=new Date(to-days*86400000);
+  document.getElementById('fmTo').value=to.toISOString().slice(0,10);
+  document.getElementById('fmFrom').value=from.toISOString().slice(0,10);
+  syncFmChips();
+}
+function pickFmMag(m){document.getElementById('fmMinMag').value=m;syncFmChips();}
+window.addEventListener('load',()=>{
+  try{
+    new MutationObserver(updateSeisChips).observe(channelSelect,{childList:true});
+    channelSelect.addEventListener('change',updateSeisChips);
+    syncHourChips();updateSeisChips();
+    ['fmFrom','fmTo','fmMinMag'].forEach(id=>{const e=document.getElementById(id);if(e)e.addEventListener('input',syncFmChips);});
+    syncFmChips();
+  }catch(e){console.warn('chips',e);}
+});
+
 
 /* QuakeML INGV blocca CORS da file://.
    Strategia: prova diretta → proxy A (raw) → proxy B (get+json) → proxy C → errore chiaro. */
@@ -5945,16 +6028,16 @@ function fmPopupHtml(ev){
   const np2=!isNaN(ev.strike2)?ev.strike2.toFixed(0)+'/'+ev.dip2.toFixed(0)+'/'+ev.rake2.toFixed(0):'N/D';
   return '<div style="font-family:sans-serif;min-width:200px;">'
     +'<b style="font-size:14px">'+ev.place+'</b><br>'
-    +'<span style="font-size:12px;color:#4B5563">'+ev.time.replace('T',' ').slice(0,19)+' UTC</span>'
+    +'<span style="font-size:12px;color:#8d9ab5">'+ev.time.replace('T',' ').slice(0,19)+' UTC</span>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;">'
-    +'<div style="background:rgba(15,23,42,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
-    +'<div style="font-size:9px;color:#4B5563;text-transform:uppercase">Magnitudo</div>'
-    +'<div style="font-size:18px;font-weight:800;color:#B91C1C">'+ev.mag.toFixed(1)+' '+ev.magType+'</div></div>'
-    +'<div style="background:rgba(15,23,42,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
-    +'<div style="font-size:9px;color:#4B5563;text-transform:uppercase">Profondita</div>'
-    +'<div style="font-size:18px;font-weight:800;color:#1D4ED8">'+ev.depth.toFixed(0)+' km</div></div></div>'
-    +'<div style="margin-top:8px;font-size:12px;background:rgba(15,23,42,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:7px 10px;">'
-    +'<div style="color:#4B5563;font-size:10px;text-transform:uppercase;margin-bottom:3px">Piani nodali (str/dip/rake)</div>'
+    +'<div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
+    +'<div style="font-size:9px;color:#8d9ab5;text-transform:uppercase">Magnitudo</div>'
+    +'<div style="font-size:18px;font-weight:800;color:#fca5a5">'+ev.mag.toFixed(1)+' '+ev.magType+'</div></div>'
+    +'<div style="background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:5px 9px;">'
+    +'<div style="font-size:9px;color:#8d9ab5;text-transform:uppercase">Profondita</div>'
+    +'<div style="font-size:18px;font-weight:800;color:#93c5fd">'+ev.depth.toFixed(0)+' km</div></div></div>'
+    +'<div style="margin-top:8px;font-size:12px;background:rgba(255,255,255,.06);border:1px solid rgba(148,163,209,.18);border-radius:7px;padding:7px 10px;">'
+    +'<div style="color:#8d9ab5;font-size:10px;text-transform:uppercase;margin-bottom:3px">Piani nodali (str/dip/rake)</div>'
     +'<div>NP1: <b>'+np1+'</b></div><div>NP2: <b>'+np2+'</b></div></div></div>';
 }
 
@@ -6333,11 +6416,11 @@ function gridSearchEpicenter(results){
 function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
   const W=canvas.width,H=canvas.height;
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#0F1626';ctx.fillRect(0,0,W,H);
   const n=samples.length;
   if(!n) return;
   const mi=Math.min(...samples),ma=Math.max(...samples),range=ma-mi||1;
-  ctx.strokeStyle='#111827';ctx.lineWidth=1;ctx.beginPath();
+  ctx.strokeStyle='#E6EBF4';ctx.lineWidth=1;ctx.beginPath();
   for(let i=0;i<n;i++){
     const x=i/n*W,y=H-(samples[i]-mi)/range*(H-4)-2;
     i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
@@ -6345,9 +6428,9 @@ function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
   ctx.stroke();
   /* Pick P — verde */
   if(pickP>=0){
-    ctx.strokeStyle='#1D4ED8';ctx.lineWidth=1.5;ctx.beginPath();
+    ctx.strokeStyle='#7FA6F5';ctx.lineWidth=1.5;ctx.beginPath();
     const xP=pickP/n*W;ctx.moveTo(xP,0);ctx.lineTo(xP,H);ctx.stroke();
-    ctx.fillStyle='#1D4ED8';ctx.font='9px sans-serif';ctx.fillText('P',xP+2,9);
+    ctx.fillStyle='#7FA6F5';ctx.font='9px sans-serif';ctx.fillText('P',xP+2,9);
   }
   /* Pick S — rosso */
   if(pickS>=0){
@@ -6358,8 +6441,8 @@ function drawLocTrace(canvas,samples,sr,pickP,pickS,startMs){
 }
 function drawLocEmpty(canvas,msg){
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle='#374151';ctx.font='11px sans-serif';ctx.textAlign='center';
+  ctx.fillStyle='#0F1626';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#AAB4C8';ctx.font='11px sans-serif';ctx.textAlign='center';
   ctx.fillText(msg,canvas.width/2,canvas.height/2+4);
 }
 
@@ -6816,7 +6899,7 @@ function _nnRender(R){
     <div class="eqd-box"><div class="k">Eventi attesi (${H} gg)</div><div class="v">${Math.round(fut)}</div>
       <div style="font-size:11px;color:var(--muted);margin-top:2px;">range ${Math.round(futLo)}–${Math.round(futHi)}</div></div>
     <div class="eqd-box"><div class="k">Osservati ultimi ${H} gg</div><div class="v" style="color:var(--muted);">${Math.round(past)}</div></div>
-    <div class="eqd-box"><div class="k">Mag. max giornaliera tipica</div><div class="v" style="color:#C2410C;">${mxFut.toFixed(1)}</div></div>
+    <div class="eqd-box"><div class="k">Mag. max giornaliera tipica</div><div class="v" style="color:#fdba74;">${mxFut.toFixed(1)}</div></div>
     <div class="eqd-box"><div class="k">Mag. max ultimi ${H} gg</div><div class="v" style="color:var(--muted);">${mxPast?mxPast.toFixed(1):'—'}</div></div>`;
   const better=R.maeNN<R.maePers;
   document.getElementById('nnVal').innerHTML=`<b>Verifica sugli ultimi ${NN_VAL} giorni</b> (dati nascosti alla rete durante l'addestramento):
@@ -6835,16 +6918,16 @@ function _nnDraw(R){
   const obsN=S.nAdj.slice(-SHOW),obsM=S.mx.slice(-SHOW),tot=SHOW+H;
   const pad={l:34,r:8,t:10,b:22};
   const axisDates=(ctx,w,h)=>{
-    ctx.fillStyle='#374151';ctx.font='11px Roboto,system-ui,sans-serif';ctx.textAlign='center';
+    ctx.fillStyle='#AAB4C8';ctx.font='11px Roboto,system-ui,sans-serif';ctx.textAlign='center';
     const day0=Date.now()-(SHOW-1)*86400000,step=Math.ceil(tot/6);
     for(let i=0;i<tot;i+=step){const x=pad.l+(i+.5)*(w-pad.l-pad.r)/tot;
       ctx.fillText(new Date(day0+i*86400000).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'}),x,h-6);}
   };
   const today=(ctx,w,h)=>{const x=pad.l+SHOW*(w-pad.l-pad.r)/tot;
-    ctx.strokeStyle='rgba(162,28,175,.6)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillStyle='#A21CAF';ctx.font='600 11px Roboto,system-ui,sans-serif';ctx.textAlign='left';ctx.fillText('oggi',x+4,pad.t+9);};
+    ctx.strokeStyle='rgba(240,171,252,.6)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#F0ABFC';ctx.font='600 11px Roboto,system-ui,sans-serif';ctx.textAlign='left';ctx.fillText('oggi',x+4,pad.t+9);};
   const grid=(ctx,w,h,ymax,yfmt,ymin=0)=>{
-    ctx.strokeStyle='rgba(15,23,42,.10)';ctx.fillStyle='#374151';ctx.font='11px Roboto,system-ui,sans-serif';ctx.textAlign='right';
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.fillStyle='#AAB4C8';ctx.font='11px Roboto,system-ui,sans-serif';ctx.textAlign='right';
     for(let g=0;g<=3;g++){const v=ymin+(ymax-ymin)*g/3,y=h-pad.b-(h-pad.t-pad.b)*g/3;
       ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillText(yfmt(v),pad.l-5,y+3);}
   };
@@ -6853,12 +6936,12 @@ function _nnDraw(R){
    const ymax=Math.max(1,...obsN,...fN.map(v=>v.hi))*1.1,bw=(w-pad.l-pad.r)/tot;
    const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/ymax,Xc=i=>pad.l+(i+.5)*bw;
    grid(ctx,w,h,ymax,v=>v.toFixed(0));
-   ctx.fillStyle='rgba(47,95,179,.55)';
+   ctx.fillStyle='rgba(127,166,245,.6)';
    obsN.forEach((v,i)=>{const y=Y(v);ctx.fillRect(pad.l+i*bw+bw*.12,y,Math.max(1,bw*.76),h-pad.b-y);});
-   ctx.fillStyle='rgba(162,28,175,.14)';ctx.beginPath();
+   ctx.fillStyle='rgba(240,171,252,.18)';ctx.beginPath();
    fN.forEach((v,i)=>{const x=Xc(SHOW+i);i?ctx.lineTo(x,Y(v.hi)):ctx.moveTo(x,Y(v.hi));});
    for(let i=fN.length-1;i>=0;i--)ctx.lineTo(Xc(SHOW+i),Y(fN[i].lo));ctx.closePath();ctx.fill();
-   ctx.strokeStyle='#A21CAF';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(Xc(SHOW-1),Y(obsN[SHOW-1]));
+   ctx.strokeStyle='#F0ABFC';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(Xc(SHOW-1),Y(obsN[SHOW-1]));
    fN.forEach((v,i)=>ctx.lineTo(Xc(SHOW+i),Y(v.mean)));ctx.stroke();ctx.lineWidth=1;
    today(ctx,w,h);axisDates(ctx,w,h);}
   /* --- magnitudo massima --- */
@@ -6868,10 +6951,10 @@ function _nnDraw(R){
    const Y=v=>h-pad.b-(h-pad.t-pad.b)*(v-ymin)/(ymax-ymin),Xc=i=>pad.l+(i+.5)*bw;
    grid(ctx,w,h,ymax,v=>v.toFixed(1),ymin);
    obsM.forEach((v,i)=>{if(v==null)return;ctx.fillStyle=magCol(v);ctx.beginPath();ctx.arc(Xc(i),Y(v),Math.max(1.6,Math.min(4,bw*.4)),0,7);ctx.fill();});
-   ctx.fillStyle='rgba(194,65,12,.14)';ctx.beginPath();
+   ctx.fillStyle='rgba(253,186,116,.16)';ctx.beginPath();
    fM.forEach((v,i)=>{const x=Xc(SHOW+i);i?ctx.lineTo(x,Y(v.hi)):ctx.moveTo(x,Y(v.hi));});
    for(let i=fM.length-1;i>=0;i--)ctx.lineTo(Xc(SHOW+i),Y(fM[i].lo));ctx.closePath();ctx.fill();
-   ctx.strokeStyle='#C2410C';ctx.lineWidth=2.2;ctx.beginPath();
+   ctx.strokeStyle='#FDBA74';ctx.lineWidth=2.2;ctx.beginPath();
    fM.forEach((v,i)=>{const x=Xc(SHOW+i);i?ctx.lineTo(x,Y(v.mean)):ctx.moveTo(x,Y(v.mean));});ctx.stroke();ctx.lineWidth=1;
    today(ctx,w,h);axisDates(ctx,w,h);}
 }
