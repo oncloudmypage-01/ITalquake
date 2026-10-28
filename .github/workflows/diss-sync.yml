@@ -1,0 +1,33 @@
+name: DISS sync
+
+# Scarica dal DISS INGV le sorgenti sismogeniche e le schede informative,
+# così la webapp le mostra "offline" senza interrogare ogni volta il servizio.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 1 * *'   # una volta al mese
+  push:
+    branches: ['claude/**']
+    paths:
+      - '.github/workflows/diss-sync.yml'
+      - 'tools/build_diss.py'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Esplora i servizi DISS
+        run: |
+          set +e
+          for base in https://services.seismofaults.eu/DISS331 https://services.seismofaults.eu/geoserver/DISS331; do
+            echo "=== $base WFS GetCapabilities"
+            curl -sSL -m 60 "$base/wfs?service=WFS&request=GetCapabilities&version=2.0.0" -o caps.xml -w "HTTP %{http_code} %{size_download}\n"
+            grep -o '<Name>[^<]*</Name>' caps.xml | head -60
+            grep -o '<ows:Value>[^<]*json[^<]*</ows:Value>' caps.xml | sort -u | head
+          done
+          echo "=== download page"
+          curl -sSL -m 60 https://diss.ingv.it/download-diss-3-3-1 -o dl.html -w "HTTP %{http_code} %{size_download}\n"
+          grep -oiE 'href="[^"]+\.(zip|geojson|json|kmz)[^"]*"' dl.html | sort -u | head -60
