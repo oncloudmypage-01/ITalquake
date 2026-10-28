@@ -1418,6 +1418,23 @@ details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
 .diss-refs b{color:#E7F3F2;font-weight:600;}
 .src-legend .dl i{width:22px;height:12px;border-radius:2px;border:1.4px solid;display:inline-block;}
 .src-legend .dl{display:flex;align-items:center;gap:8px;}
+/* legenda DISS compatta */
+.src-toggle{max-width:200px;padding:6px 9px;}
+.src-toggle-row{font-size:12.5px;}
+.src-legend{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;margin-top:6px;padding-top:6px;font-size:10.5px;}
+.src-legend .dl{gap:5px;}
+.src-legend .dl i{width:14px;height:9px;border-width:1.2px;}
+.src-legend .src-note{grid-column:1/-1;font-size:9.5px;line-height:1.3;color:#7F989C;}
+/* mappa a tutto schermo */
+.map-fs-btn a{display:flex!important;align-items:center;justify-content:center;width:34px!important;height:34px!important;
+  background:#11232A!important;color:#E7F3F2!important;border-color:#26444C!important;}
+.map-fs-btn a:hover{background:#132A2E!important;}
+.map-fs-btn svg{width:18px;height:18px;display:block;}
+.leaflet-container.map-fs{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;
+  z-index:410!important;margin:0!important;border-radius:0!important;border:none!important;max-width:none!important;max-height:none!important;}
+.leaflet-container.map-fs .leaflet-top{top:env(safe-area-inset-top,0px);}
+.leaflet-container.map-fs .leaflet-bottom{bottom:env(safe-area-inset-bottom,0px);}
+body.map-fs-on{overflow:hidden;}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -1439,8 +1456,7 @@ details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
   .btab{font-size:9.5px;}
   #sectionTerremoti .eq-list{padding:0 10px 8px;}
   #sectionTerremoti .eq-item{padding:12px;}
-  .src-toggle{max-width:200px;padding:7px 9px;}
-  .src-legend{grid-template-columns:1fr;}
+  .src-toggle{max-width:190px;padding:6px 8px;}
   #sectionMappa .mapbox{height:calc(100vh - 222px)!important;height:calc(100dvh - 222px)!important;}
 }
 </style>
@@ -2674,6 +2690,53 @@ details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+/* ── Pulsante "tutto schermo" su ogni mappa: la mappa viene spostata in <body>
+   (così nessun contenitore la limita) e rimessa al suo posto all'uscita.
+   Il tasto indietro del telefono chiude il tutto schermo. ── */
+const FS_IN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+const FS_OUT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+let _fsMap=null,_fsHolder=null,_fsPushed=false;
+function _fsRefresh(m){requestAnimationFrame(()=>{m.invalidateSize();setTimeout(()=>m.invalidateSize(),250);});}
+function mapFsEnter(m){
+  if(_fsMap) mapFsExit();
+  const el=m.getContainer();
+  _fsHolder=document.createElement('div');
+  _fsHolder.style.height=el.offsetHeight+'px';
+  el.parentNode.insertBefore(_fsHolder,el);
+  document.body.appendChild(el);
+  el.classList.add('map-fs');document.body.classList.add('map-fs-on');
+  _fsMap=m;m._fsBtn.innerHTML=FS_OUT;m._fsBtn.title=m._fsBtn.ariaLabel='Esci da tutto schermo';
+  history.pushState(Object.assign({},history.state,{mapfs:1}),'');_fsPushed=true;
+  _fsRefresh(m);
+}
+function mapFsExit(){
+  const m=_fsMap;if(!m)return;
+  const el=m.getContainer();
+  el.classList.remove('map-fs');document.body.classList.remove('map-fs-on');
+  if(_fsHolder){_fsHolder.parentNode.insertBefore(el,_fsHolder);_fsHolder.remove();_fsHolder=null;}
+  m._fsBtn.innerHTML=FS_IN;m._fsBtn.title=m._fsBtn.ariaLabel='Mappa a tutto schermo';
+  _fsMap=null;_fsRefresh(m);
+}
+window.addEventListener('popstate',e=>{
+  if(_fsMap){_fsPushed=false;mapFsExit();e.stopImmediatePropagation();}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_fsMap) mapFsToggle(_fsMap);});
+function mapFsToggle(m){
+  if(_fsMap===m){ if(_fsPushed){history.back();} else mapFsExit(); }
+  else mapFsEnter(m);
+}
+L.Map.addInitHook(function(){
+  const m=this,ctl=L.control({position:'topleft'});
+  ctl.onAdd=()=>{
+    const d=L.DomUtil.create('div','leaflet-bar map-fs-btn');
+    const a=L.DomUtil.create('a','',d);
+    a.href='#';a.setAttribute('role','button');a.title=a.ariaLabel='Mappa a tutto schermo';a.innerHTML=FS_IN;
+    L.DomEvent.disableClickPropagation(d);
+    L.DomEvent.on(a,'click',ev=>{L.DomEvent.preventDefault(ev);mapFsToggle(m);});
+    m._fsBtn=a;return d;
+  };
+  ctl.addTo(m);
+});
 /* ================================================================
    NAVIGAZIONE
 ================================================================ */
