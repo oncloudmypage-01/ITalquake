@@ -1435,6 +1435,50 @@ details.adv .adv-body{display:grid;gap:12px;padding:4px 0 14px;}
 .leaflet-container.map-fs .leaflet-top{top:env(safe-area-inset-top,0px);}
 .leaflet-container.map-fs .leaflet-bottom{bottom:env(safe-area-inset-bottom,0px);}
 body.map-fs-on{overflow:hidden;}
+/* ── sismogramma su fondo bianco + visore navigabile ── */
+.canvas-box.seis-box{background:#FFFFFF!important;border:1px solid #1D353C;padding:6px;position:relative;cursor:zoom-in;overflow:hidden;}
+.canvas-box.seis-box:focus-visible{outline:2px solid #2DD4BF;outline-offset:2px;}
+.seis-exp{position:absolute;right:12px;top:12px;width:32px;height:32px;border-radius:9px;background:rgba(9,19,21,.08);color:#0E2A30;
+  display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.seis-exp svg{width:17px;height:17px;}
+.seis-explore{margin-top:12px;width:100%;display:flex!important;align-items:center;justify-content:center;gap:8px;}
+.seis-explore[hidden]{display:none!important;}
+.seis-explore svg{width:18px;height:18px;}
+.sv{position:fixed;inset:0;z-index:430;background:#FFFFFF;color:#0E2A30;display:flex;flex-direction:column;font-family:Inter,system-ui,sans-serif;}
+.sv[hidden]{display:none;}
+.sv-h{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px 6px;
+  background:#0E1B1E;color:#E7F3F2;border-bottom:1px solid #1D353C;}
+.sv-back{width:44px;height:44px;flex-shrink:0;border:none;background:transparent;color:#2DD4BF;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;}
+.sv-back svg{width:22px;height:22px;}
+.sv-ht{min-width:0;display:flex;flex-direction:column;gap:2px;}
+.sv-t{font-size:15.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sv-s{font-size:12px;color:#9DB4B7;}
+.sv-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:12px 12px 10px;}
+.sv-read{display:flex;justify-content:space-between;gap:8px;}
+.sv-read div{display:flex;flex-direction:column;gap:1px;}
+.sv-read .r{align-items:flex-end;}
+.sv-read span{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#5B6E72;}
+.sv-read b{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;}
+.sv-read .r b{color:#0F766E;}
+.sv-plot{flex:1;min-height:180px;border:1px solid #DCE5E5;border-radius:12px;overflow:hidden;}
+#svCanvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;}
+.sv-ovh{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:#5B6E72;}
+.sv-ovh b{color:#0E2A30;font-weight:600;white-space:nowrap;}
+#svOverview{display:block;width:100%;height:54px;border-radius:9px;background:#F3F7F7;touch-action:none;cursor:pointer;}
+.sv-hint{margin:0;font-size:12px;line-height:1.45;color:#5B6E72;}
+.sv-bar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:#0E1B1E;border-top:1px solid #1D353C;}
+.sv-bar button{width:48px;height:48px;flex-shrink:0;border-radius:12px;border:1px solid #26444C;background:#11232A;color:#E7F3F2;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+.sv-bar button svg{width:20px;height:20px;}
+.sv-bar .sv-all{flex:1;width:auto;border:none;background:#14B8A6;color:#04201C;font:600 14px Inter,system-ui,sans-serif;}
+body.sv-on{overflow:hidden;}
+/* stazioni della sezione Sismogrammi */
+.sta-ic svg{display:block;overflow:visible;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35));}
+.leaflet-tooltip.sta-tip{background:#0E1B1E;color:#E7F3F2;border:1px solid #2DD4BF;border-radius:11px;padding:7px 11px 8px;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);font-family:Inter,system-ui,sans-serif;white-space:nowrap;}
+.leaflet-tooltip-top.sta-tip::before{border-top-color:#2DD4BF;}
+.sta-tip b{display:block;font-size:13.5px;font-weight:700;letter-spacing:.2px;}
+.sta-tip span{display:block;font-size:12px;color:#C2D6D8;margin-top:1px;}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -2376,7 +2420,7 @@ body.map-fs-on{overflow:hidden;}
           </section>
           <section class="panel">
             <div class="panel-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-              <div><h2 id="plotTitle">Tracciato</h2><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Il movimento del terreno registrato dalla stazione.</p></div>
+              <div><h2 id="plotTitle">Tracciato</h2><p id="plotSub" style="margin:4px 0 0;color:var(--muted);font-size:13px;">Il movimento del terreno registrato dalla stazione. Tocca il grafico per esplorarlo.</p></div>
               <div class="seis-view-ctrl" style="display:flex;gap:8px;align-items:center;padding:4px 16px 0 0;flex-wrap:wrap;">
                 <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#0b1220;color:var(--text);border:1px solid rgba(255,255,255,0.1);">
                   <option value="waveform">Tracciato</option>
@@ -2393,9 +2437,11 @@ body.map-fs-on{overflow:hidden;}
               </div>
             </div>
             <div style="padding:16px">
-              <div class="canvas-box">
-                <canvas id="waveCanvas" width="1200" height="320" style="width:100%;height:320px;display:block;background:#0B1A1D;border-radius:10px;"></canvas>
+              <div class="canvas-box seis-box" id="seisBox" role="button" tabindex="0" aria-label="Apri il sismogramma a tutto schermo per esplorarlo">
+                <canvas id="waveCanvas" width="1200" height="320" style="width:100%;height:260px;display:block;background:#FFFFFF;border-radius:10px;"></canvas>
+                <span class="seis-exp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></span>
               </div>
+              <button type="button" class="btn btn-green seis-explore" id="seisExploreBtn" hidden onclick="openSeisViewer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M11 8v6M8 11h6"/></svg>Esplora il tracciato</button>
             </div>
           </section>
           <details class="adv" style="background:var(--panel);">
@@ -2656,6 +2702,29 @@ body.map-fs-on{overflow:hidden;}
   </nav>
 
   <!-- SCHEDA SORGENTE SISMOGENICA (dati DISS INGV salvati in locale) -->
+  <div class="sv" id="seisViewer" hidden role="dialog" aria-modal="true" aria-labelledby="svTitle">
+    <header class="sv-h">
+      <button type="button" class="sv-back" onclick="closeSeisViewer()" aria-label="Chiudi il sismogramma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="sv-ht"><div class="sv-t" id="svTitle"></div><div class="sv-s" id="svSub"></div></div>
+    </header>
+    <div class="sv-body">
+      <div class="sv-read">
+        <div><span>Punto scelto</span><b id="svTime">—</b></div>
+        <div class="r"><span>Ampiezza</span><b id="svVal">—</b></div>
+      </div>
+      <div class="sv-plot"><canvas id="svCanvas"></canvas></div>
+      <div class="sv-ovh"><span>Tutta la registrazione · tocca per spostarti</span><b id="svSpan"></b></div>
+      <canvas id="svOverview"></canvas>
+      <p class="sv-hint">Due dita per ingrandire, un dito per scorrere, un tocco per leggere ora e ampiezza.</p>
+    </div>
+    <nav class="sv-bar" aria-label="Navigazione nel tracciato">
+      <button type="button" onclick="svPan(-1)" aria-label="Indietro nel tempo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button type="button" onclick="svZoom(0.5)" aria-label="Rimpicciolisci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8 11h6"/></svg></button>
+      <button type="button" class="sv-all" onclick="svReset()">Tutto</button>
+      <button type="button" onclick="svZoom(2)" aria-label="Ingrandisci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M11 8v6M8 11h6"/></svg></button>
+      <button type="button" onclick="svPan(1)" aria-label="Avanti nel tempo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </nav>
+  </div>
   <div class="eqd-sheet" id="dissSheet" role="dialog" aria-modal="true" aria-labelledby="dissTitle">
     <div class="eqd-header">
       <div style="flex:1;min-width:0;"><div class="eqd-title" id="dissTitle">—</div><div class="diss-sub" id="dissSub"></div></div>
@@ -2718,7 +2787,8 @@ function mapFsExit(){
   _fsMap=null;_fsRefresh(m);
 }
 window.addEventListener('popstate',e=>{
-  if(_fsMap){_fsPushed=false;mapFsExit();e.stopImmediatePropagation();}
+  if(_fsMap){_fsPushed=false;mapFsExit();e.stopImmediatePropagation();return;}
+  if(window._svOpen){closeSeisViewer(true);e.stopImmediatePropagation();}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_fsMap) mapFsToggle(_fsMap);});
 function mapFsToggle(m){
@@ -3184,9 +3254,9 @@ function buildDissLayer(d){
   });
   return g;
 }
-function addSourcesToggle(map){
+function addSourcesToggle(map,pos){
   let layer=null,wms=null;
-  const ctl=L.control({position:'topright'});
+  const ctl=L.control({position:pos||'topright'});
   ctl.onAdd=()=>{
     const d=L.DomUtil.create('div','src-toggle');
     d.innerHTML='<label class="src-toggle-row"><input type="checkbox"/><span class="src-check"></span><span>Sorgenti sismogeniche</span></label>'
@@ -5533,7 +5603,7 @@ async function openSeisForEq(i){
   const floorMin=Math.floor(evT.getTime()/60000)*60000;
   startInput.value=toLocal(new Date(floorMin-2*60000));
   endInput.value=toLocal(new Date(floorMin+8*60000));
-  renderMapStations();updateMeta();
+  selectMapStation(true);updateMeta();
   document.getElementById('viewModeSelect').value='dayplot';
   document.getElementById('dayplotInterval').value='10';
   document.getElementById('dayplotControls').style.display='flex';
@@ -5554,7 +5624,7 @@ async function openSeisForSt(i){
   const floorMin=Math.floor(evT.getTime()/60000)*60000;
   startInput.value=toLocal(new Date(floorMin-2*60000));
   endInput.value=toLocal(new Date(floorMin+8*60000));
-  renderMapStations();updateMeta();
+  selectMapStation(true);updateMeta();
   document.getElementById('viewModeSelect').value='dayplot';
   document.getElementById('dayplotInterval').value='10';
   document.getElementById('dayplotControls').style.display='flex';
@@ -5687,62 +5757,248 @@ function updateDefaultRange(){
 }
 function getSta(){return stations.find(s=>s.code===stationSelect.value)||null;}
 
+/* ── Disegno del sismogramma: fondo bianco, tracciato scuro, scale leggibili.
+   La tela segue la densità di pixel dello schermo, così testi e linee
+   restano nitidi. ── */
+const SEIS_INK='#0E2A30',SEIS_GRID='#E6ECEC',SEIS_AXIS='#55666A';
+function _seisCanvas(cv,cssH){
+  const dpr=Math.min(window.devicePixelRatio||1,3);
+  if(cssH)cv.style.height=cssH+'px';
+  const w=Math.max(280,Math.round(cv.clientWidth||cv.parentNode.clientWidth||600));
+  const h=Math.round(cssH||cv.clientHeight||260);
+  if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+  const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,w,h);
+  return{ctx,w,h};
+}
+function _niceAmp(m){
+  if(!(m>0))return 1;
+  const e=Math.pow(10,Math.floor(Math.log10(m)));
+  for(const k of[1,2,2.5,5,10])if(k*e>=m)return k*e;
+  return 10*e;
+}
+function _fmtAmp(v){
+  const a=Math.abs(v);
+  const t=a>=100?Math.round(a).toLocaleString('it-IT'):a>=1?a.toFixed(1).replace('.',','):a.toPrecision(2).replace('.',',');
+  return (v>0?'+':v<0?'−':'')+t;
+}
+function _hm(ms,sec){
+  const d=new Date(ms),p=n=>String(n).padStart(2,'0');
+  return p(d.getHours())+':'+p(d.getMinutes())+(sec?':'+p(d.getSeconds()):'');
+}
+/* Inviluppo min/max di una riga di campioni, una colonna per pixel */
+function _envelope(ctx,data,a,b,x0,pW,Y){
+  const n=b-a;
+  if(n<=pW*2){
+    for(let i=a;i<b;i++){const x=x0+(i-a)/(n-1||1)*pW,y=Y(data[i]);i===a?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    return;
+  }
+  const cols=Math.round(pW);
+  for(let c=0;c<cols;c++){
+    const s0=a+Math.floor(c/cols*n),s1=Math.max(s0+1,a+Math.floor((c+1)/cols*n));
+    let lo=Infinity,hi=-Infinity;for(let i=s0;i<s1;i++){const v=data[i];if(v<lo)lo=v;if(v>hi)hi=v;}
+    const x=x0+c+.5;if(c===0)ctx.moveTo(x,Y(hi));else ctx.lineTo(x,Y(hi));ctx.lineTo(x,Y(lo));
+  }
+}
+/* Disegna i campioni [a,b): griglia, asse dei tempi (ora locale), scala delle ampiezze */
+function drawTrace(ctx,w,h,data,sr,startMs,a,b){
+  const pL=50,pR=10,pT=12,pB=24;
+  const pW=w-pL-pR,pH=h-pT-pB,mid=pT+pH/2;
+  a=Math.max(0,Math.floor(a));b=Math.min(data.length,Math.ceil(b));
+  let m=0;for(let i=a;i<b;i++){const v=Math.abs(data[i]);if(v>m)m=v;}
+  const top=_niceAmp(m*1.05);
+  const Y=v=>mid-(v/top)*(pH/2);
+  ctx.strokeStyle=SEIS_GRID;ctx.lineWidth=1;ctx.beginPath();
+  for(let k=0;k<=4;k++){const y=Math.round(pT+pH*k/4)+.5;ctx.moveTo(pL,y);ctx.lineTo(pL+pW,y);}
+  ctx.stroke();
+  const t0=startMs+a/sr*1000,t1=startMs+(b-1)/sr*1000,span=(t1-t0)/1000;
+  const steps=[1,2,5,10,15,30,60,120,300,600,900,1800,3600,7200,10800,21600,43200];
+  const want=Math.max(4,Math.floor(pW/64));
+  const st=steps.find(x=>span/x<=want)||86400;
+  ctx.font='11px Inter,system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+  for(let t=Math.ceil(t0/1000/st)*st*1000;t<=t1;t+=st*1000){
+    const x=Math.round(pL+(t-t0)/(t1-t0||1)*pW)+.5;
+    ctx.strokeStyle=SEIS_GRID;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+pH);ctx.stroke();
+    ctx.fillStyle=SEIS_AXIS;ctx.fillText(_hm(t,st<60),x,h-7);
+  }
+  ctx.textAlign='right';ctx.fillStyle=SEIS_AXIS;
+  ctx.fillText(_fmtAmp(top),pL-6,pT+4);ctx.fillText('0',pL-6,mid+4);ctx.fillText(_fmtAmp(-top),pL-6,pT+pH+4);
+  ctx.strokeStyle='#C9D5D5';ctx.beginPath();ctx.moveTo(pL,Math.round(mid)+.5);ctx.lineTo(pL+pW,Math.round(mid)+.5);ctx.stroke();
+  ctx.save();ctx.beginPath();ctx.rect(pL,pT-1,pW,pH+2);ctx.clip();
+  ctx.strokeStyle=SEIS_INK;ctx.lineWidth=1;ctx.lineJoin='round';ctx.beginPath();
+  _envelope(ctx,data,a,b,pL,pW,Y);
+  ctx.stroke();ctx.restore();
+  return{pL,pW,pT,pH,Y,a,b};
+}
+let _seisEmptyMsg=null;
 function drawEmpty(msg='Nessun dato'){
-  wCtx.fillStyle='#0B1A1D';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
-  wCtx.fillStyle='#AAB4C8';wCtx.font='22px sans-serif';wCtx.textAlign='center';
-  wCtx.fillText(msg,waveCanvas.width/2,waveCanvas.height/2);
+  _seisEmptyMsg=msg;
+  const{ctx,w,h}=_seisCanvas(waveCanvas,260);
+  ctx.fillStyle=SEIS_AXIS;ctx.font='14px Inter,system-ui,sans-serif';ctx.textAlign='center';
+  ctx.fillText(msg,w/2,h/2);
+  const b=document.getElementById('seisExploreBtn');if(b)b.hidden=true;
 }
-
-function drawWaveform(samples,title){
-  wCtx.fillStyle='#0B1A1D';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
+function drawWaveform(samples,sr,startMs){
   if(!samples||!samples.length){drawEmpty('Nessun campione');return;}
-  const pL=60,pR=20,pT=30,pB=35,W=waveCanvas.width,H=waveCanvas.height;
-  const pW=W-pL-pR,pH=H-pT-pB;
-  const amp=Math.max(Math.abs(Math.min(...samples)),Math.abs(Math.max(...samples)))||1;
-  wCtx.strokeStyle='rgba(255,255,255,0.10)';wCtx.lineWidth=1;
-  for(let i=0;i<=4;i++){const y=pT+(pH/4)*i;wCtx.beginPath();wCtx.moveTo(pL,y);wCtx.lineTo(pL+pW,y);wCtx.stroke();}
-  wCtx.strokeStyle='#2DD4BF';wCtx.lineWidth=1.3;wCtx.beginPath();
-  samples.forEach((v,i)=>{const x=pL+(i/(samples.length-1||1))*pW,y=pT+pH/2-(v/amp)*(pH/2-6);i===0?wCtx.moveTo(x,y):wCtx.lineTo(x,y);});
-  wCtx.stroke();
-  wCtx.fillStyle='#E6EBF4';wCtx.font='15px sans-serif';wCtx.textAlign='left';wCtx.fillText(title,16,20);
-  wCtx.fillStyle='#AAB4C8';wCtx.font='11px sans-serif';wCtx.fillText('amp max: '+amp.toFixed(2),16,H-10);
+  _seisEmptyMsg=null;
+  const{ctx,w,h}=_seisCanvas(waveCanvas,260);
+  drawTrace(ctx,w,h,samples,sr,startMs,0,samples.length);
 }
-
 function drawDayplot(samples,eSR,startMs,title,intMin=30){
   const spr=Math.round(eSR*intMin*60),numR=Math.ceil(samples.length/spr);
-  const pL=72,pR=16,pT=34,pB=26,rH=28;
-  waveCanvas.width=1200;waveCanvas.height=Math.max(pT+numR*rH+pB,200);
-  wCtx.fillStyle='#0B1A1D';wCtx.fillRect(0,0,waveCanvas.width,waveCanvas.height);
-  wCtx.fillStyle='#E6EBF4';wCtx.font='bold 13px sans-serif';wCtx.textAlign='center';
-  wCtx.fillText(title,waveCanvas.width/2,22);
-  const pW=waveCanvas.width-pL-pR;
+  const pL=50,pR=10,pT=10,pB=30,rH=24;
+  _seisEmptyMsg=null;
+  const{ctx,w,h}=_seisCanvas(waveCanvas,Math.max(pT+numR*rH+pB,160));
+  const pW=w-pL-pR;
   let amp=0;for(const v of samples){const a=Math.abs(v);if(a>amp)amp=a;}if(!amp)amp=1;
-  const COLS=['#E6EBF4','#F87171','#2DD4BF'];
-  for(let row=0;row<numR;row++){
-    const rs=row*spr,re=Math.min(rs+spr,samples.length),rS=samples.slice(rs,re);
-    const yC=pT+row*rH+rH/2;
-    wCtx.strokeStyle='rgba(255,255,255,0.05)';wCtx.lineWidth=.5;
-    wCtx.beginPath();wCtx.moveTo(pL,yC);wCtx.lineTo(pL+pW,yC);wCtx.stroke();
-    const rMs=startMs+(rs/eSR)*1000,d=new Date(rMs);
-    const hh=String(d.getUTCHours()).padStart(2,'0'),mm=String(d.getUTCMinutes()).padStart(2,'0');
-    wCtx.fillStyle='#AAB4C8';wCtx.font='10px monospace';wCtx.textAlign='right';
-    wCtx.fillText(hh+':'+mm,pL-6,yC+4);
-    wCtx.strokeStyle=COLS[row%COLS.length];wCtx.lineWidth=.9;wCtx.beginPath();
-    const hH=rH/2-2;
-    rS.forEach((v,i)=>{const x=pL+(i/(spr-1||1))*pW,y=yC-(v/amp)*hH;i===0?wCtx.moveTo(x,y):wCtx.lineTo(x,y);});
-    wCtx.stroke();
-  }
-  const ts=intMin<=10?5:intMin<=30?10:30;
-  wCtx.fillStyle='#AAB4C8';wCtx.font='10px sans-serif';wCtx.textAlign='center';
+  const COLS=[SEIS_INK,'#C2410C','#1D4ED8'];
+  const ts=intMin<=10?2:intMin<=30?5:intMin<=60?10:30;
+  ctx.font='11px Inter,system-ui,sans-serif';ctx.textAlign='center';
   for(let m=0;m<=intMin;m+=ts){
-    const x=pL+(m/intMin)*pW;if(x>waveCanvas.width-pR)break;
-    wCtx.fillText(m,x,waveCanvas.height-8);
-    wCtx.strokeStyle='rgba(255,255,255,0.07)';wCtx.lineWidth=.5;
-    wCtx.beginPath();wCtx.moveTo(x,pT);wCtx.lineTo(x,waveCanvas.height-pB);wCtx.stroke();
+    const x=Math.round(pL+(m/intMin)*pW)+.5;
+    ctx.strokeStyle=SEIS_GRID;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,h-pB);ctx.stroke();
+    ctx.fillStyle=SEIS_AXIS;ctx.fillText(m,x,h-16);
   }
-  wCtx.fillStyle='#AAB4C8';wCtx.font='10px sans-serif';wCtx.textAlign='center';
-  wCtx.fillText('time in minutes',waveCanvas.width/2,waveCanvas.height-1);
+  ctx.fillText('minuti dall\'inizio della riga',pL+pW/2,h-3);
+  for(let row=0;row<numR;row++){
+    const rs=row*spr,re=Math.min(rs+spr,samples.length);
+    const yC=pT+row*rH+rH/2,hH=rH/2-2;
+    ctx.fillStyle=SEIS_AXIS;ctx.textAlign='right';ctx.fillText(_hm(startMs+(rs/eSR)*1000),pL-6,yC+4);
+    ctx.strokeStyle=COLS[row%COLS.length];ctx.lineWidth=.9;ctx.beginPath();
+    _envelope(ctx,samples,rs,re,pL,pW*(re-rs)/spr,v=>yC-(v/amp)*hH);
+    ctx.stroke();
+  }
 }
+
+/* ── Visore a tutto schermo: ingrandisci, scorri, leggi il valore ── */
+const SV={a:0,b:0,cur:null,geo:null,ptrs:new Map(),gest:null};
+window._svOpen=false;
+function _svData(){return lastPlot&&lastPlot.filtered;}
+function openSeisViewer(){
+  const d=_svData();if(!d||!d.length)return;
+  const sta=getSta();
+  const code=lastPlot.title.split('.').slice(0,2).join('.'),chan=lastPlot.title.split('.').pop();
+  const place=sta?(_staPlace[sta.network+'.'+sta.code]||_titleCase(sta.name)):'';
+  document.getElementById('svTitle').textContent=code+(place?' · '+place:'');
+  const t0=lastPlot.startMs,t1=t0+(d.length-1)/lastPlot.effectiveSR*1000;
+  const dd=new Date(t0).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const dir={Z:'Su e giù',N:'Nord-Sud',E:'Est-Ovest'}[chan.slice(-1)]||'';
+  document.getElementById('svSub').textContent=(dir?dir+' ('+chan+') · ':chan+' · ')+dd+' · '+_hm(t0)+'–'+_hm(t1)+' (ora locale)';
+  SV.a=0;SV.b=d.length;SV.cur=null;SV.ovMax=0;
+  document.getElementById('seisViewer').hidden=false;document.body.classList.add('sv-on');
+  window._svOpen=true;
+  history.pushState(Object.assign({},history.state,{sv:1}),'');
+  requestAnimationFrame(svDraw);
+}
+function closeSeisViewer(fromHistory){
+  if(!window._svOpen)return;
+  if(!fromHistory){history.back();return;}
+  window._svOpen=false;
+  document.getElementById('seisViewer').hidden=true;document.body.classList.remove('sv-on');
+}
+function _svClamp(a,b){
+  const n=_svData().length,minSpan=Math.min(n,Math.max(20,Math.round(lastPlot.effectiveSR*2)));
+  let span=Math.max(minSpan,Math.min(n,b-a));
+  a=Math.max(0,Math.min(n-span,a));
+  SV.a=a;SV.b=a+span;
+}
+function svZoom(f,centerFrac){
+  const c=centerFrac==null?(SV.cur!=null&&SV.cur>=SV.a&&SV.cur<=SV.b?(SV.cur-SV.a)/(SV.b-SV.a):.5):centerFrac;
+  const span=(SV.b-SV.a)/f,mid=SV.a+(SV.b-SV.a)*c;
+  _svClamp(mid-span*c,mid-span*c+span);svDraw();
+}
+function svPan(dir){const s=SV.b-SV.a;_svClamp(SV.a+dir*s*.4,SV.b+dir*s*.4);svDraw();}
+function svReset(){_svClamp(0,_svData().length);svDraw();}
+function svDraw(){
+  const d=_svData();if(!d||!window._svOpen)return;
+  const sr=lastPlot.effectiveSR,t0=lastPlot.startMs;
+  const cv=document.getElementById('svCanvas');
+  const{ctx,w,h}=_seisCanvas(cv,0);
+  SV.geo=drawTrace(ctx,w,h,d,sr,t0,SV.a,SV.b);
+  const g=SV.geo;
+  if(SV.cur!=null&&SV.cur>=g.a&&SV.cur<g.b){
+    const x=g.pL+(SV.cur-g.a)/((g.b-g.a-1)||1)*g.pW,y=g.Y(d[SV.cur]);
+    ctx.strokeStyle='#0F766E';ctx.lineWidth=1.4;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(x,g.pT);ctx.lineTo(x,g.pT+g.pH);ctx.stroke();ctx.setLineDash([]);
+    ctx.beginPath();ctx.arc(x,Math.max(g.pT,Math.min(g.pT+g.pH,y)),4.5,0,Math.PI*2);
+    ctx.fillStyle='#14B8A6';ctx.fill();ctx.strokeStyle='#FFFFFF';ctx.lineWidth=2;ctx.stroke();
+    const tm=t0+SV.cur/sr*1000,ms=String(Math.floor(tm%1000/100));
+    document.getElementById('svTime').textContent=_hm(tm,true)+','+ms;
+    document.getElementById('svVal').textContent=_fmtAmp(d[SV.cur]);
+  }else{
+    document.getElementById('svTime').textContent='—';document.getElementById('svVal').textContent='—';
+  }
+  const sec=(SV.b-SV.a)/sr;
+  document.getElementById('svSpan').textContent='Finestra: '+(sec>=7200?(sec/3600).toFixed(1).replace('.',',')+' ore':sec>=120?Math.round(sec/60)+' min':sec>=10?Math.round(sec)+' s':sec.toFixed(1).replace('.',',')+' s');
+  /* panoramica */
+  const ov=document.getElementById('svOverview');
+  const o=_seisCanvas(ov,54);
+  o.ctx.fillStyle='#F3F7F7';o.ctx.fillRect(0,0,o.w,o.h);
+  if(!SV.ovMax){let m=0;for(const v of d){const a=Math.abs(v);if(a>m)m=a;}SV.ovMax=m||1;}
+  o.ctx.strokeStyle='#8A9A9D';o.ctx.lineWidth=.8;o.ctx.beginPath();
+  _envelope(o.ctx,d,0,d.length,0,o.w,v=>o.h/2-(v/SV.ovMax)*(o.h/2-4));o.ctx.stroke();
+  const x0=SV.a/d.length*o.w,x1=Math.max(x0+4,SV.b/d.length*o.w);
+  o.ctx.fillStyle='rgba(20,184,166,.16)';o.ctx.fillRect(x0,2,x1-x0,o.h-4);
+  o.ctx.strokeStyle='#0F766E';o.ctx.lineWidth=1.6;o.ctx.strokeRect(x0+.8,2.8,x1-x0-1.6,o.h-5.6);
+}
+function _svIdxAt(clientX){
+  const g=SV.geo,r=document.getElementById('svCanvas').getBoundingClientRect();
+  const f=Math.max(0,Math.min(1,(clientX-r.left-g.pL)/g.pW));
+  return{f,i:Math.round(g.a+f*((g.b-g.a-1)||1))};
+}
+(function(){
+  const cv=document.getElementById('svCanvas'),ov=document.getElementById('svOverview');
+  cv.addEventListener('pointerdown',e=>{
+    cv.setPointerCapture(e.pointerId);SV.ptrs.set(e.pointerId,e.clientX);
+    if(SV.ptrs.size===1)SV.gest={type:'tap',x:e.clientX,a:SV.a,b:SV.b};
+    else if(SV.ptrs.size===2){const xs=[...SV.ptrs.values()];SV.gest={type:'pinch',d:Math.abs(xs[0]-xs[1])||1,mid:(xs[0]+xs[1])/2,a:SV.a,b:SV.b};}
+  });
+  cv.addEventListener('pointermove',e=>{
+    if(!SV.ptrs.has(e.pointerId)||!SV.gest)return;
+    SV.ptrs.set(e.pointerId,e.clientX);
+    const g=SV.gest,pW=SV.geo.pW;
+    if(g.type==='pinch'&&SV.ptrs.size===2){
+      const xs=[...SV.ptrs.values()],dd=Math.abs(xs[0]-xs[1])||1;
+      const r=cv.getBoundingClientRect(),f=Math.max(0,Math.min(1,(g.mid-r.left-SV.geo.pL)/pW));
+      const span=(g.b-g.a)*g.d/dd,mid=g.a+(g.b-g.a)*f;
+      _svClamp(mid-span*f,mid-span*f+span);svDraw();
+    }else if(g.type!=='pinch'){
+      const dx=e.clientX-g.x;
+      if(g.type==='tap'&&Math.abs(dx)>6)g.type='pan';
+      if(g.type==='pan'){const s=g.b-g.a;_svClamp(g.a-dx/pW*s,g.b-dx/pW*s);svDraw();}
+    }
+  });
+  const up=e=>{
+    if(!SV.ptrs.has(e.pointerId))return;
+    SV.ptrs.delete(e.pointerId);
+    if(SV.gest&&SV.gest.type==='tap'&&SV.ptrs.size===0){SV.cur=_svIdxAt(e.clientX).i;svDraw();}
+    if(SV.ptrs.size===0)SV.gest=null;
+    else if(SV.gest&&SV.gest.type==='pinch')SV.gest={type:'pan-hold',x:[...SV.ptrs.values()][0],a:SV.a,b:SV.b};
+  };
+  cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+  cv.addEventListener('wheel',e=>{e.preventDefault();svZoom(e.deltaY<0?1.4:1/1.4,_svIdxAt(e.clientX).f);},{passive:false});
+  let ovDrag=false;
+  const ovMove=e=>{const d=_svData(),r=ov.getBoundingClientRect(),c=(e.clientX-r.left)/r.width*d.length,s=SV.b-SV.a;_svClamp(c-s/2,c+s/2);svDraw();};
+  ov.addEventListener('pointerdown',e=>{ov.setPointerCapture(e.pointerId);ovDrag=true;ovMove(e);});
+  ov.addEventListener('pointermove',e=>{if(ovDrag)ovMove(e);});
+  ov.addEventListener('pointerup',()=>{ovDrag=false;});ov.addEventListener('pointercancel',()=>{ovDrag=false;});
+  window.addEventListener('resize',()=>{if(window._svOpen)svDraw();});
+  /* ridisegna quando la tela cambia larghezza (rotazione, sezione appena aperta) */
+  let _lastW=0;
+  if(window.ResizeObserver)new ResizeObserver(()=>{
+    const w=Math.round(waveCanvas.clientWidth);if(!w||w===_lastW)return;_lastW=w;
+    if(_seisEmptyMsg!=null)drawEmpty(_seisEmptyMsg);else if(lastPlot)renderMode();
+  }).observe(waveCanvas);
+  const box=document.getElementById('seisBox');
+  box.addEventListener('click',openSeisViewer);
+  box.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSeisViewer();}});
+  document.addEventListener('keydown',e=>{
+    if(!window._svOpen)return;
+    if(e.key==='Escape')closeSeisViewer();
+    else if(e.key==='ArrowLeft')svPan(-1);else if(e.key==='ArrowRight')svPan(1);
+    else if(e.key==='+'||e.key==='=')svZoom(2);else if(e.key==='-')svZoom(.5);
+  });
+})();
 
 function updateMeta(extra={}){
   const sta=getSta();if(!sta){metaGrid.innerHTML='';return;}
@@ -5759,21 +6015,73 @@ function initMap(){
   map=L.map('map').setView([42.5,12.5],6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(map);
+  /* le sorgenti DISS sotto le stazioni: si vede quanto è fitta la rete sopra le faglie.
+     In basso a sinistra, così la legenda non copre l'etichetta della stazione scelta */
+  addSourcesToggle(map,'bottomleft');
+  if(!map.getPane('staPane')){const pn=map.createPane('staPane');pn.style.zIndex=620;}
 }
-function renderMapStations(){
-  stationMarkers.forEach(m=>map.removeLayer(m));stationMarkers=[];
+/* Stazioni come triangoli (simbolo classico dei sismometri) */
+function _staIcon(sel){
+  const s=sel?24:15;
+  return L.divIcon({className:'sta-ic',iconSize:[s,s],iconAnchor:[s/2,s*0.62],tooltipAnchor:[0,-s*0.55],
+    html:`<svg width="${s}" height="${s}" viewBox="0 0 24 24"><path d="M12 3l10 17H2z" fill="${sel?'#2DD4BF':'#14B8A6'}" stroke="${sel?'#FFFFFF':'#04201C'}" stroke-width="${sel?2.6:2}" stroke-linejoin="round"/></svg>`});
+}
+function _titleCase(t){return String(t||'').toLowerCase().replace(/(^|[\s'(\-\/])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());}
+/* Località della stazione (comune e provincia), da OpenStreetMap; salvata per non richiederla di nuovo */
+const _staPlace={};
+try{Object.assign(_staPlace,JSON.parse(localStorage.getItem('itq_sta_place')||'{}'));}catch(e){}
+async function staPlace(s){
+  const k=s.network+'.'+s.code;
+  if(_staPlace[k])return _staPlace[k];
+  try{
+    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=it&lat=${s.lat}&lon=${s.lon}`);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json(),a=j.address||{};
+    const town=a.city||a.town||a.village||a.municipality||a.hamlet||a.county||'';
+    const iso=a['ISO3166-2-lvl6']||'',prov=/^IT-[A-Z]{2}$/.test(iso)?iso.slice(3):'';
+    const place=town?(town+(prov?' ('+prov+')':'')):(a.state||a.country||'');
+    if(place){_staPlace[k]=place;try{localStorage.setItem('itq_sta_place',JSON.stringify(_staPlace));}catch(e){}}
+    return place;
+  }catch(e){return '';}
+}
+function _staTip(s,place){
+  const nm=s.name?_titleCase(s.name):'';
+  const where=place||nm||'';
+  return `<b>${_esc(s.network+'.'+s.code)}</b><span>${_esc(where||'Località in caricamento…')}</span>`+
+    (place&&nm&&nm.toLowerCase()!==place.replace(/\s*\(.*$/,'').toLowerCase()?`<span>Stazione: ${_esc(nm)}</span>`:'');
+}
+let _staByCode={},_staSelMarker=null;
+/* fit=true solo al primo caricamento: scegliere una stazione non sposta né rimpicciolisce la mappa */
+function renderMapStations(fit){
+  stationMarkers.forEach(m=>map.removeLayer(m));stationMarkers=[];_staByCode={};_staSelMarker=null;
   const bounds=[];
   stations.forEach(s=>{
     if(isNaN(s.lat)||isNaN(s.lon))return;
-    const sel=s.code===stationSelect.value;
-    const m=L.circleMarker([s.lat,s.lon],{
-      radius:sel?9:6,color:sel?'#ef4444':'#3b82f6',fillColor:sel?'#ef4444':'#3b82f6',
-      fillOpacity:.85,weight:1.5
-    }).bindPopup(`<strong>${s.code}</strong><br>${s.name||'-'}<br>Rete ${s.network}`).addTo(map);
-    m.on('click',()=>{stationSelect.value=s.code;populateChannels(s.code);renderMapStations();updateMeta();});
-    stationMarkers.push(m);bounds.push([s.lat,s.lon]);
+    const m=L.marker([s.lat,s.lon],{icon:_staIcon(false),pane:'staPane',keyboard:true,title:s.code+(s.name?' · '+_titleCase(s.name):'')}).addTo(map);
+    m.on('click',()=>{
+      if(stationSelect.value===s.code){showStationTip(s);return;}
+      stationSelect.value=s.code;populateChannels(s.code);selectMapStation(false);updateMeta();updateStationNote();
+    });
+    _staByCode[s.code]=m;stationMarkers.push(m);bounds.push([s.lat,s.lon]);
   });
-  if(bounds.length)map.fitBounds(bounds,{padding:[28,28]});
+  if(fit&&bounds.length)map.fitBounds(bounds,{padding:[28,28]});
+  selectMapStation(!fit);
+}
+/* evidenzia la stazione scelta; pan=true la porta in vista solo se è fuori dalla mappa (lo zoom non cambia) */
+function selectMapStation(pan){
+  if(_staSelMarker){_staSelMarker.setIcon(_staIcon(false));_staSelMarker.unbindTooltip();_staSelMarker.setZIndexOffset(0);}
+  const s=getSta(),m=s&&_staByCode[s.code];_staSelMarker=m||null;
+  if(!m)return;
+  m.setIcon(_staIcon(true));m.setZIndexOffset(1000);
+  if(pan&&!map.getBounds().pad(-0.1).contains(m.getLatLng()))map.panTo(m.getLatLng());
+  showStationTip(s);
+}
+function showStationTip(s){
+  const m=_staByCode[s.code];if(!m)return;
+  const k=s.network+'.'+s.code;
+  m.unbindTooltip();
+  m.bindTooltip(_staTip(s,_staPlace[k]),{permanent:true,direction:'top',className:'sta-tip',opacity:1}).openTooltip();
+  if(!_staPlace[k])staPlace(s).then(pl=>{if(pl&&_staSelMarker===m&&m.getTooltip())m.setTooltipContent(_staTip(s,pl));});
 }
 
 function parseSta(text,net){
@@ -5813,7 +6121,7 @@ async function loadNetwork(){
     if(!stations.length)throw new Error('Nessuna stazione');
     stationSelect.innerHTML=stations.map(s=>`<option value="${s.code}">${s.name?s.name+' — '+s.code:s.code}</option>`).join('');
     updateStationNote();
-    renderMapStations();
+    renderMapStations(true);
     await populateChannels(stationSelect.value);
     setStatus(stations.length+' stazioni caricate.','ok');
     logMsg(stations.length+' stazioni','ok');
@@ -5890,12 +6198,12 @@ function renderMode(){
   if(mode==='dayplot'){
     const im=parseInt(document.getElementById('dayplotInterval').value)||30;
     drawDayplot(filtered,effectiveSR,startMs,title,im);
-    document.getElementById('plotTitle').textContent='Dayplot';
+    document.getElementById('plotTitle').textContent='Giornata a righe · '+title;
   }else{
-    waveCanvas.height=320;
-    drawWaveform(downsample(filtered,Number(sampleLimitInput.value||5000)),title);
-    document.getElementById('plotTitle').textContent='Waveform';
+    drawWaveform(filtered,effectiveSR,startMs);
+    document.getElementById('plotTitle').textContent='Tracciato · '+title;
   }
+  const b=document.getElementById('seisExploreBtn');if(b)b.hidden=false;
 }
 
 async function fetchWaveformAndPlot(){
@@ -5925,7 +6233,7 @@ async function fetchWaveformAndPlot(){
 
 /* listeners */
 networkSelect.addEventListener('change',()=>{chCache.clear();loadNetwork();saveFilters();});
-stationSelect.addEventListener('change',()=>{populateChannels(stationSelect.value);renderMapStations();updateMeta();updateStationNote();});
+stationSelect.addEventListener('change',()=>{populateChannels(stationSelect.value);selectMapStation(true);updateMeta();updateStationNote();});
 hoursInput.addEventListener('change',()=>{updateDefaultRange();saveFilters();syncHourChips();});
 generateBtn.addEventListener('click',fetchWaveformAndPlot);
 /* Salva filtri terremoti e storico ad ogni modifica */
@@ -5947,7 +6255,7 @@ document.getElementById('dayplotInterval').addEventListener('change',renderMode)
 
 /* init */
 updateDefaultRange();
-drawEmpty('Seleziona una stazione e scarica la waveform');
+drawEmpty('Scegli una stazione e premi «Mostra il sismogramma»');
 
 /* ================================================================
    MECCANISMI FOCALI — beach ball + TDMT via QuakeML INGV
