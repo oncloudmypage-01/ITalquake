@@ -39,7 +39,9 @@ self.addEventListener('notificationclick', e => {
    è il modo in cui il Service Worker rileva l'aggiornamento e
    mostra il banner "Nuova versione disponibile" agli utenti
    che hanno già installato l'app. */
-const CACHE = 'italquake-v25';
+const CACHE = 'italquake-v26';
+/* Dati DISS (sorgenti, schede, immagini): cache separata che sopravvive agli aggiornamenti */
+const DISS_CACHE = 'italquake-diss';
 const PRECACHE = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e =>
@@ -50,7 +52,7 @@ self.addEventListener('install', e =>
   ))
 );
 self.addEventListener('activate', e =>
-  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k=>k!==CACHE&&k!==DISS_CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))
 );
 /* L'app invia questo messaggio quando l'utente clicca "Aggiorna" nel banner */
 self.addEventListener('message', e => {
@@ -65,7 +67,7 @@ self.addEventListener('fetch', e => {
   e.respondWith(
     fetch(e.request).then(resp => {
       const copy = resp.clone();
-      caches.open(CACHE).then(c => c.put(e.request, copy)).catch(()=>{});
+      caches.open(e.request.url.includes('/diss/') ? DISS_CACHE : CACHE).then(c => c.put(e.request, copy)).catch(()=>{});
       return resp;
     }).catch(() => caches.match(e.request))
   );
