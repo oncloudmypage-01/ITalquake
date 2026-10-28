@@ -1582,6 +1582,20 @@ body.sv-on{overflow:hidden;}
 .sv-read span,.sv-ovh,.sv-hint{color:#6B6259;}
 .sv-plot{border-color:#E3DBCC;}
 #svOverview{background:#F5F1EA;}
+/* distanza ravvicinata: salta all'occhio (sotto 100 km arancio chiaro, sotto 30 km vermiglio pieno) */
+.eq-card .eqc-near{display:inline-flex;align-items:center;gap:5px;padding:2px 10px 2px 8px;border-radius:999px;
+  background:#FBE3D6;color:#9A3412;font-weight:700;font-size:13.5px;}
+.eq-card .eqc-near::before{content:"";width:7px;height:7px;border-radius:50%;background:#C2410C;}
+.eq-card .eqc-near.vnear{background:#C2410C;color:#FFFFFF;}
+.eq-card .eqc-near.vnear::before{background:#FFFFFF;animation:nearPulse 1.8s infinite;}
+@keyframes nearPulse{50%{opacity:.35;}}
+@media (prefers-reduced-motion:reduce){.eq-card .eqc-near.vnear::before{animation:none;}}
+/* ordinamento: selezione nel colore del tema */
+.sort-bar .sort-btn.active{background:#C2410C!important;color:#FFFFFF!important;}
+.sort-bar .sort-btn.active .ic,#sortStats.active .ic{color:#FFFFFF!important;}
+/* avvisi a comparsa leggibili */
+#seisToast{background:#1C1917;color:#F5F1EA;border:1px solid #3F3833;box-shadow:0 10px 28px rgba(28,25,23,.35);}
+#seisToast strong,#seisToast b{color:#FDBA74;}
 /* ── LANDING ── */
 #landing{background:var(--bg);}
 .brand h1{font-family:var(--font-display);background:linear-gradient(90deg,var(--brand-a),var(--brand-b),var(--brand-c));
@@ -3671,7 +3685,7 @@ function renderList(events,containerId,onSeis){
         <div class="eqc-meta">
           <div class="eqc-row"><span class="ic">${IC.clock}</span>${agoStr}</div>
           ${_distVal!=null
-            ?`<div class="eqc-row"><span class="ic">${IC.locate}</span><span${_distVal<100?' class="eqc-near"':''}>${_distVal.toFixed(_distVal<100?1:0)} km da te</span></div>`
+            ?`<div class="eqc-row"><span class="ic">${IC.locate}</span><span${_distVal<30?' class="eqc-near vnear"':_distVal<100?' class="eqc-near"':''}>${_distVal.toFixed(_distVal<100?1:0)} km da te</span></div>`
             :`<div class="eqc-row"><span class="ic">${IC.locate}</span>Prof. ${ev.depth.toFixed(0)} km</div>`}
         </div>
         ${sbc}
@@ -5796,7 +5810,7 @@ async function openSeisForEq(i){
   document.getElementById('viewModeSelect').value='dayplot';
   document.getElementById('dayplotInterval').value='10';
   document.getElementById('dayplotControls').style.display='flex';
-  showToast(`📡 Stazione più vicina: <strong>${near.code}</strong> (${near.dist.toFixed(0)} km)<br>Dayplot 10 min/riga`);
+  showToast(`Stazione più vicina: <strong>${near.code}</strong> (${near.dist.toFixed(0)} km)<br>Giornata a righe, 10 minuti per riga`);
   setStatus('Stazione '+near.code+' · '+near.dist.toFixed(0)+' km · Scarico...','ok');
   await fetchWaveformAndPlot();
 }
@@ -5817,7 +5831,7 @@ async function openSeisForSt(i){
   document.getElementById('viewModeSelect').value='dayplot';
   document.getElementById('dayplotInterval').value='10';
   document.getElementById('dayplotControls').style.display='flex';
-  showToast(`📡 Stazione più vicina: <strong>${near.code}</strong> (${near.dist.toFixed(0)} km)<br>Dayplot 10 min/riga`);
+  showToast(`Stazione più vicina: <strong>${near.code}</strong> (${near.dist.toFixed(0)} km)<br>Giornata a righe, 10 minuti per riga`);
   setStatus('Stazione '+near.code+' · '+near.dist.toFixed(0)+' km · Scarico...','ok');
   await fetchWaveformAndPlot();
 }
