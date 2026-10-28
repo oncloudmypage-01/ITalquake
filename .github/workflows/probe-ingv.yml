@@ -1,0 +1,34 @@
+name: Probe INGV (temporaneo)
+on:
+  push:
+    branches: ['claude/**']
+    paths: ['.github/workflows/probe-ingv.yml']
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Home terremoti.ingv.it
+        run: |
+          UA='Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36'
+          curl -sL -A "$UA" https://terremoti.ingv.it/ -o home.html; wc -c home.html
+          echo '--- provvisori'; grep -o -i '.\{200\}provvisori.\{300\}' home.html | head -20
+          echo '--- scripts'; grep -o '<script[^>]*src="[^"]*"' home.html | head -30
+          echo '--- api urls'; grep -o -i '["'"'"'][^"'"'"' ]*\(api\|json\|feed\|events\)[^"'"'"' ]*["'"'"']' home.html | sort -u | head -60
+          curl -sL -A "$UA" 'https://terremoti.ingv.it/events' -o ev.html; wc -c ev.html
+          echo '--- ev provvisori'; grep -o -i '.\{200\}provvisori.\{300\}' ev.html | head -20
+          echo '--- ev api'; grep -o -i '["'"'"'][^"'"'"' ]*\(api\|json\|feed\)[^"'"'"' ]*["'"'"']' ev.html | sort -u | head -60
+          for f in $(grep -o '<script[^>]*src="[^"]*"' home.html ev.html | sed 's/.*src="//;s/"$//' | sort -u | head -15); do
+            case "$f" in http*) u="$f";; //*) u="https:$f";; *) u="https://terremoti.ingv.it/${f#/}";; esac
+            echo "=== JS $u"; curl -sL -A "$UA" "$u" -o s.js; wc -c s.js
+            grep -o -i '.\{120\}provvisori.\{200\}' s.js | head -8
+            grep -o -i '["'"'"'`][^"'"'"'` ]*\(/api/\|\.json\|webservices\|fdsnws\)[^"'"'"'` ]*["'"'"'`]' s.js | sort -u | head -25
+          done
+      - name: Endpoint candidati
+        run: |
+          UA='Mozilla/5.0'
+          for u in 'https://terremoti.ingv.it/api/events' 'https://terremoti.ingv.it/events?format=json' \
+                   'https://webservices.ingv.it/fdsnws/event/1/query?format=text&limit=5&orderby=time' \
+                   'https://webservices.ingv.it/ingvws/eqk/1/query?format=json' \
+                   'https://terremoti.ingv.it/stima-provvisoria' ; do
+            echo "=== $u"; curl -sL -m 20 -A "$UA" -w '\nHTTP %{http_code} %{content_type}\n' "$u" | head -c 1500; echo
+          done
