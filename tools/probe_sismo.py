@@ -23,6 +23,6 @@ for u in URLS:
         for kw in ['©','copyright','Copyright','licenz','Licenz','Creative','CC BY','riprodu','Riprodu','consentit','autorizz','vietat','Vietat','uso ','utilizz','fonte','Fonte','divulgativ','aggiorn','Aggiorn','gestit','Gestit','stazion','Stazion']:
             for m in re.finditer(re.escape(kw), txt):
                 print('KW', kw, '::', txt[max(0,m.start()-160):m.start()+200]); break
-        print('TEXT', txt[:2500])
+        print('TEXT', txt[:2500] if 'fdsnws' not in u else t[:40000])
     except Exception as e:
         print('ERR', repr(e))
