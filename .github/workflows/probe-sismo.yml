@@ -1,0 +1,51 @@
+name: Probe sismografi locali
+on:
+  push:
+    branches: ['claude/**']
+    paths: ['.github/workflows/probe-sismo.yml']
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          set +e
+          echo "== YouTube"
+          curl -sSL -m 30 -A "Mozilla/5.0" -H "Accept-Language: it" -b "CONSENT=YES+1" "https://www.youtube.com/@GlobalQuakeItalia/live" -o yt.html
+          grep -oE '"(channelId|externalId)":"UC[^"]+"' yt.html | sort -u | head
+          grep -oE '"videoId":"[^"]{11}"' yt.html | sort | uniq -c | sort -rn | head -5
+          grep -oE '"(isLive|isLiveContent|playableInEmbed)":(true|false)' yt.html | sort | uniq -c
+          grep -oE '<link rel="canonical" href="[^"]+"' yt.html
+          V=$(grep -oE '<link rel="canonical" href="https://www.youtube.com/watch\?v=[^"]+"' yt.html | grep -oE 'v=[^"]+' | cut -c3-); echo "V=$V"
+          curl -sS -m 20 "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=$V&format=json"; echo
+          curl -sSL -m 30 -A "Mozilla/5.0" "https://www.youtube.com/@GlobalQuakeItalia/streams" -o st.html; grep -oE '"videoId":"[^"]{11}"' st.html | sort | uniq -c | sort -rn | head -5
+          grep -oE '"title":\{"runs":\[\{"text":"[^"]{0,120}' st.html | head -5
+          echo "== INGV latency"
+          NOW=$(date -u +%s)
+          for s in "IV ARVD HHZ" "IV CAFR HHZ" "IV MSAG HHZ" "IV AQU HHZ" "IV ACER HHZ" "IV ROM9 HHZ"; do set -- $s
+            S=$(date -u -d @$((NOW-600)) +%Y-%m-%dT%H:%M:%S); E=$(date -u -d @$((NOW)) +%Y-%m-%dT%H:%M:%S)
+            curl -sS -m 40 "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=$1&station=$2&channel=$3&starttime=$S&endtime=$E" -o d.ms -w "$2 %{http_code} %{size_download} %{time_total}s\n"
+            python3 -c "
+          import struct,datetime,sys
+          b=open('d.ms','rb').read();last=None
+          for o in range(0,len(b),512):
+            r=b[o:o+512]
+            if len(r)<48:break
+            y,d,h,m,s,_,t=struct.unpack('>HHBBBBH',r[20:30]);n=struct.unpack('>H',r[30:32])[0];f,mu=struct.unpack('>hh',r[32:36])
+            sr=f*mu if f>0 and mu>0 else (f/-mu if f>0 else 1)
+            st=datetime.datetime(y,1,1)+datetime.timedelta(days=d-1,hours=h,minutes=m,seconds=s,microseconds=t*100)
+            e=st+datetime.timedelta(seconds=n/sr);last=e if (last is None or e>last) else last
+          if last: print('  ultimo campione', last, 'ritardo s', (datetime.datetime.utcnow()-last).total_seconds())
+          " 2>&1 | tail -1
+          done
+          echo "== EMSC websocket"
+          pip -q install websockets >/dev/null 2>&1
+          timeout 25 python3 -c "
+          import asyncio,websockets
+          async def m():
+            async with websockets.connect('wss://www.seismicportal.eu/standing_order/websocket',origin='https://example.github.io') as ws:
+              print('connesso');
+              try:
+                msg=await asyncio.wait_for(ws.recv(),20);print(msg[:600])
+              except Exception as e: print('nessun messaggio in 20s',type(e).__name__)
+          asyncio.run(m())"
+          curl -sS -m 30 "https://www.seismicportal.eu/fdsnws/event/1/query?limit=2&format=json&minlat=35&maxlat=48&minlon=6&maxlon=19" -D h.txt -o e.json; grep -i access-control h.txt; head -c 500 e.json; echo
