@@ -1,7 +1,7 @@
 import re, sys, urllib.request, ssl, html
 ctx = ssl.create_default_context(); ctx.check_hostname=False; ctx.verify_mode=ssl.CERT_NONE
 URLS = sys.argv[1:]
-UA = {'User-Agent':'Mozilla/5.0 (ITalquake probe)'}
+UA = {'User-Agent':'Mozilla/5.0 (ITalquake probe)','Origin':'https://example.github.io'}
 for u in URLS:
     full = u.startswith('FULL:'); u = u[5:] if full else u
     print('='*20, u)
