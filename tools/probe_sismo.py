@@ -3,12 +3,15 @@ ctx = ssl.create_default_context(); ctx.check_hostname=False; ctx.verify_mode=ss
 URLS = sys.argv[1:]
 UA = {'User-Agent':'Mozilla/5.0 (ITalquake probe)'}
 for u in URLS:
+    full = u.startswith('FULL:'); u = u[5:] if full else u
     print('='*20, u)
     try:
         r = urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=25, context=ctx)
         b = r.read(); t = b.decode('utf-8','replace')
         print('STATUS', r.status, r.headers.get('Content-Type'), len(b), 'ACAO', r.headers.get('Access-Control-Allow-Origin'), 'XFO', r.headers.get('X-Frame-Options'), 'LM', r.headers.get('Last-Modified'))
         if 'image' in (r.headers.get('Content-Type') or ''): continue
+        if full:
+            print('FULLHTML', re.sub(r'<script.*?</script>|<style.*?</style>', ' ', t, flags=re.S|re.I)[:60000]); continue
         ti = re.search(r'<title[^>]*>(.*?)</title>', t, re.S|re.I)
         print('TITLE', ti and ti.group(1).strip()[:150])
         for m in re.findall(r'<(?:img|iframe|embed|source)[^>]+(?:src|data-src)=["\']([^"\']+)', t, re.I)[:80]:
