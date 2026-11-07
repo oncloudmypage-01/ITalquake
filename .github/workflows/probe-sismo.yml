@@ -1,0 +1,29 @@
+name: Probe sismografi locali
+on:
+  push:
+    branches: ['claude/**']
+    paths: ['.github/workflows/probe-sismo.yml','tools/probe_sismo.py']
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 tools/probe_sismo.py \
+            https://nuke.nprotezionecivile.it/Sismogrammiindiretta/tabid/647/Default.aspx \
+            https://protezionecivileairola.altervista.org/sismogramma/ \
+            https://cmprotezionecivile.wordpress.com/webcam-e-sismografo-live/ \
+            http://protezionecivileurbania.altervista.org/SISMOGRAFO.html \
+            https://www.protezionecivilepomigliano.it/protezione-civile/sonde-vesuvio-e-campi-flegrei \
+            http://rete-cornegliano.crs.inogs.it/it/dati-sismici \
+            http://rete-collalto.crs.inogs.it/it/content/sismogrammi-tempo-reale \
+            "https://distav.unige.it/rsni/helicorder.php?lang=it" \
+            https://www.provincia.tn.it/News/Approfondimenti/Rete-sismometrica \
+            http://portale2.ov.ingv.it/segnali/CSOB_HHZ_attuale.html \
+            https://www.sismogrammi.com/ \
+            https://www.earthquake.it/tempo-reale.php \
+            https://www.gaib.it/tracce_sismiche.html \
+            https://www.meteoariccia.it/sismografi/ \
+            https://www.iesn.it/drum-sismogrammi-in-diretta/ \
+            https://tellus.iaresp.it/terremoti/sismografo-in-diretta \
+            https://www.emergenza24.org/sismografi-real-time/
