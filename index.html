@@ -1474,6 +1474,58 @@ body.map-fs-on{overflow:hidden;}
 .sv-seg{display:flex;background:#EEF3F3;border-radius:11px;padding:3px;gap:3px;}
 .sv-seg button{flex:1;height:36px;border:none;border-radius:9px;background:transparent;color:#41575B;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;}
 .sv-seg button[aria-pressed="true"]{background:#FFFFFF;color:#0E2A30;box-shadow:0 1px 3px rgba(14,42,48,.15);}
+/* ── Sismogrammi: fonte (INGV / reti regionali / sismografi locali) ── */
+.src-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;margin:0 0 14px;background:#ECE5D8;border-radius:14px;}
+.src-seg button{min-height:52px;border:none;border-radius:11px;background:transparent;color:#3F3833;font:600 14px var(--font);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;line-height:1.15;text-align:center;}
+.src-seg button small{font-size:11.5px;font-weight:500;color:#5F574F;}
+.src-seg button.on{background:#FFFFFF;color:#1C1917;box-shadow:0 1px 3px rgba(28,25,23,.16);}
+.src-seg button.on small{color:#C2410C;}
+.reg-box{margin:0 0 14px;}
+.reg-h{font-size:14.5px;font-weight:700;color:#1C1917;margin:0 0 8px;}
+.reg-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;}
+.reg-card{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:11px 12px;border-radius:14px;border:1px solid #E3DBCC;background:#FFFFFF;color:#1C1917;cursor:pointer;font:inherit;min-height:44px;}
+.reg-card:hover{border-color:#C2410C;}
+.reg-card.on{border-color:#C2410C;box-shadow:inset 0 0 0 1px #C2410C;background:#FFF8F3;}
+.reg-card b{font-size:14.5px;font-weight:700;}
+.reg-card span{font-size:12.5px;color:#5F574F;line-height:1.35;}
+.reg-card i{font-style:normal;font-size:11.5px;font-weight:600;color:#C2410C;}
+.reg-credit{margin-top:10px;font-size:12.5px;color:#5F574F;line-height:1.5;}
+.reg-credit a,.loc-cite a,.loc-note a{color:#C2410C;}
+.loc-view{display:flex;flex-direction:column;gap:14px;}
+.loc-view[hidden]{display:none;}
+.loc-intro{font-size:14px;color:#3F3833;line-height:1.5;}
+.loc-grp{background:#FFFFFF;border:1px solid #E3DBCC;border-radius:18px;padding:14px;}
+.loc-gh{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.loc-gh h3{margin:0;font-size:16px;font-weight:700;color:#1C1917;}
+.loc-ente{margin:3px 0 0;font-size:12.5px;color:#5F574F;line-height:1.4;}
+.loc-tag{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:12px;background:#EFE8DC;color:#3F3833;font-size:11.5px;font-weight:600;white-space:nowrap;}
+.loc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:12px;}
+.loc-card{display:flex;flex-direction:column;gap:7px;padding:8px;border-radius:12px;border:1px solid #E3DBCC;background:#FFFFFF;cursor:pointer;text-align:left;font:inherit;color:#1C1917;}
+.loc-card:hover{border-color:#C2410C;}
+.loc-img{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#F5F1EA;}
+.loc-img img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;}
+.loc-img.err::after{content:"Tracciato non disponibile";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#8A8075;}
+.loc-card b{font-size:13.5px;font-weight:600;}
+.loc-card span{font-size:12px;color:#5F574F;}
+.loc-cite{margin:10px 0 0;font-size:11.5px;color:#8A8075;line-height:1.45;}
+.loc-note{margin:10px 0 0;padding:10px 12px;border-radius:12px;background:#F5F1EA;font-size:12.5px;color:#3F3833;line-height:1.45;}
+.loc-prov{margin-top:12px;}
+.loc-prov h4{margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#8A8075;}
+.loc-row{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 4px;border-top:1px solid #EFE8DC;}
+.loc-row:first-of-type{border-top:none;}
+.loc-row .n{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+.loc-row .n b{font-size:14px;font-weight:600;color:#1C1917;}
+.loc-row .n span{font-size:12px;color:#5F574F;}
+.loc-open{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 12px;border-radius:18px;border:1px solid #D3C9B8;background:#FFFFFF;color:#C2410C;font:600 13px var(--font);text-decoration:none;cursor:pointer;white-space:nowrap;}
+.loc-open:hover{border-color:#C2410C;}
+.loc-open svg{width:14px;height:14px;}
+.loc-refresh{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:17px;border:1px solid #D3C9B8;background:#FFFFFF;color:#3F3833;font:500 13px var(--font);cursor:pointer;}
+.hv-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;background:#F5F1EA;-webkit-overflow-scrolling:touch;}
+.hv-body img{display:block;width:100%;height:auto;background:#FFFFFF;}
+.hv-body.z img{width:220%;max-width:none;}
+.hv-foot{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid #E3DBCC;font-size:12px;color:#5F574F;}
+.hv-foot button{flex-shrink:0;}
 .seis-tip{position:absolute;z-index:3;pointer-events:none;background:#FFFFFF;color:#1C1917;border-radius:8px;padding:5px 8px;font:12px Inter,system-ui,sans-serif;
   display:flex;gap:8px;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.25);}
 .seis-tip[hidden],.seis-line[hidden]{display:none;}
@@ -2454,7 +2506,18 @@ body.sv-on{overflow:hidden;}
           <div class="sx-d">Scegli una stazione sismica e guarda il tracciato che ha registrato.</div></div>
         <svg class="sx-wave" viewBox="0 0 150 60" fill="none" aria-hidden="true"><path d="M0 30h30l5-12 6 24 7-34 7 30 5-10h18l4-6 5 14 5-20 5 16h53" stroke="#C2410C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="grid">
+      <div class="src-seg" id="seisSrcSeg" role="tablist" aria-label="Da dove arrivano i sismogrammi">
+        <button type="button" role="tab" data-src="ingv" class="on" aria-selected="true" onclick="setSeisSource('ingv')">Rete nazionale<small>INGV</small></button>
+        <button type="button" role="tab" data-src="reg" aria-selected="false" onclick="setSeisSource('reg')">Reti regionali<small>Università ed enti</small></button>
+        <button type="button" role="tab" data-src="loc" aria-selected="false" onclick="setSeisSource('loc')">Sismografi locali<small>Osservatori e comuni</small></button>
+      </div>
+      <div class="reg-box" id="regBox" hidden>
+        <div class="reg-h">Scegli la rete della tua zona</div>
+        <div class="reg-list" id="regList" role="list"></div>
+        <div class="reg-credit" id="regCredit"></div>
+      </div>
+      <div id="locView" class="loc-view" hidden></div>
+      <div class="grid" id="seisGrid">
         <section class="panel">
           <div class="controls">
             <div class="sx-step">
@@ -2574,7 +2637,7 @@ body.sv-on{overflow:hidden;}
           </details>
         </section>
       </div>
-      <div class="footer-note">
+      <div class="footer-note" id="seisFoot">
         Dati delle stazioni e dei tracciati: INGV.
       </div>
     </div>
@@ -2830,6 +2893,16 @@ body.sv-on{overflow:hidden;}
       <span class="btab-icon ic" data-ic="grid"></span>Strumenti</button>
   </nav>
 
+  <!-- TRACCIATO GIORNALIERO DI UN SISMOGRAFO LOCALE (immagine dell'ente, a tutto schermo) -->
+  <div class="sv" id="heliViewer" hidden role="dialog" aria-modal="true" aria-labelledby="hvTitle">
+    <header class="sv-h">
+      <button type="button" class="sv-back" onclick="closeHeli()" aria-label="Chiudi il tracciato"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="sv-ht"><div class="sv-t" id="hvTitle"></div><div class="sv-s" id="hvSub"></div></div>
+    </header>
+    <div class="hv-body" id="hvBody" onclick="heliZoom()"><img id="hvImg" alt=""/></div>
+    <div class="hv-foot"><span id="hvCite"></span><button type="button" class="loc-refresh" id="hvZoomBtn" onclick="heliZoom()">Ingrandisci</button></div>
+  </div>
+
   <!-- SCHEDA SORGENTE SISMOGENICA (dati DISS INGV salvati in locale) -->
   <div class="sv" id="seisViewer" hidden role="dialog" aria-modal="true" aria-labelledby="svTitle">
     <header class="sv-h">
@@ -2921,6 +2994,7 @@ function mapFsExit(){
 }
 window.addEventListener('popstate',e=>{
   if(_fsMap){_fsPushed=false;mapFsExit();e.stopImmediatePropagation();return;}
+  if(window._hvOpen){closeHeli(true);e.stopImmediatePropagation();return;}
   if(window._svOpen){closeSeisViewer(true);e.stopImmediatePropagation();}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_fsMap) mapFsToggle(_fsMap);});
@@ -5607,7 +5681,7 @@ function restoreFilters(){
       const el=document.getElementById(id);
       if(el&&saved[id]!=null&&saved[id]!=='') el.value=saved[id];
     });
-    if(saved.networkSelect) networkSelect.value=saved.networkSelect;
+    if(saved.networkSelect&&[...networkSelect.options].some(o=>o.value===saved.networkSelect)) networkSelect.value=saved.networkSelect;
   }catch(e){}
 }
 /* Legge un campo numerico delle preferenze notifica in modo "robusto":

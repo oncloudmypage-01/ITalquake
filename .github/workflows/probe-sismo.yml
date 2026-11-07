@@ -10,14 +10,21 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           python3 tools/probe_sismo.py \
-            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=GU&station=GENL&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
-            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OX&station=BAD&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
-            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=RF&station=GORI&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
-            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=ST&station=CARE&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
-            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=SI&station=BOSI&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
-            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=VM&station=AMEN&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
-            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=IX&station=BENI&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
-            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OT&station=OT15&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
-            "https://webservices.ingv.it/fdsnws/station/1/query?network=GU,OX,RF,ST,SI,VM,IX,OT&level=channel&format=text&station=GENL,BAD,GORI,CARE,BOSI,AMEN,BENI,OT15" \
-            "https://www.fdsn.org/networks/detail/VM/" \
-            "FULL:https://rete-cornegliano.crs.inogs.it/pages/note-legali.html"
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=RF&station=PALM&location=*&channel=HN?&starttime=2026-11-07T10:05:32&endtime=2026-11-07T10:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=RF&station=PALM&location=*&channel=HN?&starttime=2026-11-07T05:05:32&endtime=2026-11-07T05:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=RF&station=PALM&location=*&channel=HN?&starttime=2026-11-06T11:05:32&endtime=2026-11-06T11:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=RF&station=CESC&location=*&channel=HN?&starttime=2026-11-07T10:05:32&endtime=2026-11-07T10:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=RF&station=CESC&location=*&channel=HN?&starttime=2026-11-07T05:05:32&endtime=2026-11-07T05:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=RF&station=CESC&location=*&channel=HN?&starttime=2026-11-06T11:05:32&endtime=2026-11-06T11:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=SI&station=ROSI&location=*&channel=HH?&starttime=2026-11-07T10:05:32&endtime=2026-11-07T10:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=SI&station=ROSI&location=*&channel=HH?&starttime=2026-11-07T05:05:32&endtime=2026-11-07T05:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=SI&station=ROSI&location=*&channel=HH?&starttime=2026-11-06T11:05:32&endtime=2026-11-06T11:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=SI&station=KOSI&location=*&channel=HH?&starttime=2026-11-07T10:05:32&endtime=2026-11-07T10:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=SI&station=KOSI&location=*&channel=HH?&starttime=2026-11-07T05:05:32&endtime=2026-11-07T05:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=SI&station=KOSI&location=*&channel=HH?&starttime=2026-11-06T11:05:32&endtime=2026-11-06T11:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OT&station=OT03&location=*&channel=*&starttime=2026-11-07T10:05:32&endtime=2026-11-07T10:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OT&station=OT03&location=*&channel=*&starttime=2026-11-07T05:05:32&endtime=2026-11-07T05:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OT&station=OT03&location=*&channel=*&starttime=2026-11-06T11:05:32&endtime=2026-11-06T11:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OT&station=TAR1&location=*&channel=*&starttime=2026-11-07T10:05:32&endtime=2026-11-07T10:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OT&station=TAR1&location=*&channel=*&starttime=2026-11-07T05:05:32&endtime=2026-11-07T05:15:32" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OT&station=TAR1&location=*&channel=*&starttime=2026-11-06T11:05:32&endtime=2026-11-06T11:15:32"
