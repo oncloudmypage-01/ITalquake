@@ -1474,6 +1474,58 @@ body.map-fs-on{overflow:hidden;}
 .sv-seg{display:flex;background:#EEF3F3;border-radius:11px;padding:3px;gap:3px;}
 .sv-seg button{flex:1;height:36px;border:none;border-radius:9px;background:transparent;color:#41575B;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;}
 .sv-seg button[aria-pressed="true"]{background:#FFFFFF;color:#0E2A30;box-shadow:0 1px 3px rgba(14,42,48,.15);}
+/* ── Scheda terremoto: a casa tua, chi l'ha sentito, registrazioni ── */
+.felt-card{margin-top:14px;background:#FFFFFF;border:1px solid #E3DBCC;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.felt-h{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#8A8075;}
+.felt-main{display:flex;align-items:center;gap:14px;}
+.felt-badge{width:64px;height:64px;border-radius:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.felt-badge b{font-size:23px;line-height:1;font-weight:700;}
+.felt-badge small{font-size:10px;font-weight:600;}
+.felt-t{font-size:17px;font-weight:700;color:#1C1917;margin-bottom:3px;}
+.felt-p{margin:0;font-size:13.5px;color:#3F3833;line-height:1.45;}
+.felt-scale{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;}
+.felt-scale span{height:8px;border-radius:4px;}
+.felt-scale span.on{box-shadow:0 0 0 2px #1C1917;}
+.felt-scale-l{display:flex;justify-content:space-between;font-size:11px;color:#5F574F;margin-top:-4px;}
+.felt-note{font-size:12px;color:#5F574F;line-height:1.45;}
+.hs-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.hs-live{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#15803D;}
+.hs-live span{width:8px;height:8px;border-radius:50%;background:#16A34A;animation:hsPulse 1.6s ease-in-out infinite;}
+@keyframes hsPulse{50%{opacity:.35;}}
+.hs-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.hs-stats div{background:#F5F1EA;border-radius:12px;padding:9px 10px;display:flex;flex-direction:column;gap:1px;min-width:0;}
+.hs-stats b{font-size:19px;font-weight:700;color:#1C1917;}
+.hs-stats span{font-size:11.5px;color:#5F574F;}
+.hs-link{align-self:flex-start;border:none;background:none;padding:6px 0;min-height:36px;color:#C2410C;font:600 14px var(--font);cursor:pointer;}
+.hs-compile{display:flex;align-items:center;justify-content:center;min-height:46px;margin-top:12px;border-radius:12px;border:1px solid #D3C9B8;background:#FFFFFF;color:#C2410C;font-weight:600;font-size:14px;text-decoration:none;text-align:center;padding:0 12px;}
+.eqd-sub-btn{width:100%;margin-top:8px;min-height:40px;border:none;background:none;color:#C2410C;font:600 13.5px var(--font);cursor:pointer;}
+.rs-leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#3F3833;}
+.rs-leg span{display:inline-flex;align-items:center;gap:5px;}
+.rs-leg i{width:14px;border-top:2px dashed;}
+.rs-plot{position:relative;flex:1;min-height:200px;overflow-y:auto;border:1px solid #E3DBCC;border-radius:12px;background:#FFFFFF;overscroll-behavior:contain;}
+#rsCanvas{display:block;width:100%;cursor:pointer;}
+.rs-status{position:absolute;left:0;right:0;top:40%;text-align:center;font-size:13.5px;color:#5F574F;padding:0 16px;pointer-events:none;}
+.rs-status[hidden]{display:none;}
+.sv-hint{font-size:12.5px;color:#5F574F;line-height:1.45;}
+.hs-body{flex:1;min-height:0;overflow-y:auto;padding:12px 12px calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px;background:#F5F1EA;}
+.hs-map{height:260px;flex-shrink:0;border-radius:14px;overflow:hidden;border:1px solid #E3DBCC;}
+.hs-map[hidden],.hs-last[hidden]{display:none;}
+.hs-last img{display:block;width:100%;max-width:460px;margin:0 auto;border-radius:12px;border:1px solid #E3DBCC;background:#FFFFFF;}
+.hs-last .felt-p{margin-top:8px;}
+.hs-upd{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#5F574F;flex-wrap:wrap;}
+.hs-list{background:#FFFFFF;border:1px solid #E3DBCC;border-radius:14px;padding:4px 12px;}
+.hs-list:empty{display:none;}
+.hs-row{display:flex;align-items:center;gap:10px;min-height:48px;border-top:1px solid #EFE8DC;}
+.hs-row:first-child{border-top:none;}
+.hs-row.me{background:#FFF8F3;margin:0 -12px;padding:0 12px;}
+.hs-row .n{flex:1;min-width:0;display:flex;flex-direction:column;}
+.hs-row .n b{font-size:14px;font-weight:600;color:#1C1917;}
+.hs-row .n span{font-size:12px;color:#5F574F;}
+.hs-i{width:38px;height:26px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;}
+.hs-cta{display:flex!important;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;}
+.hs-cite{margin:0;font-size:11.5px;color:#8A8075;line-height:1.45;}
+.hs-epi{background:none;border:none;}
+
 /* ── Sismogrammi: fonte (INGV / reti regionali / sismografi locali) ── */
 .src-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;margin:0 0 14px;background:#ECE5D8;border-radius:14px;}
 .src-seg button{min-height:52px;border:none;border-radius:11px;background:transparent;color:#3F3833;font:600 14px var(--font);cursor:pointer;
@@ -2638,6 +2690,14 @@ body.sv-on{overflow:hidden;}
             <div class="field"><label>Profondità massima (km) — 0 = qualsiasi</label>
               <input id="notifMaxDepth" type="text" inputmode="decimal" value="0"
                 oninput="this.value=this.value.replace(/,/g,'.').replace(/[^0-9.]/g,'');markNotifDirty()" placeholder="es. 100"/></div>
+            <div class="field"><label>Avvisami anche quando lo sento a casa mia</label>
+              <select id="notifFelt" onchange="markNotifDirty()">
+                <option value="0">No, solo con i filtri qui sopra</option>
+                <option value="2">Sì, anche se appena percettibile (intensità II o più)</option>
+                <option value="3" selected>Sì, quando probabilmente lo sento (III o più)</option>
+                <option value="4">Sì, quando lo sento chiaramente (IV o più)</option>
+              </select>
+              <div class="hint" style="margin-top:6px;">Stima dalla magnitudo, dalla profondità e dalla distanza dalla tua posizione: ricevi l'avviso anche se il terremoto è sotto la magnitudo minima o fuori dalla distanza scelta.</div></div>
             <button class="btn btn-green" id="saveNotifBtn" onclick="saveNotifPrefsBtn()" style="margin-top:14px;width:100%;">💾 Salva modifiche</button>
             <div id="saveNotifStatus" style="font-size:12px;margin-top:8px;color:var(--muted);min-height:16px;"></div>
             <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.6;">
@@ -2755,6 +2815,44 @@ body.sv-on{overflow:hidden;}
       <span class="btab-icon ic" data-ic="grid"></span>Strumenti</button>
   </nav>
 
+  <!-- COME L'HANNO REGISTRATO: stazioni più vicine in ordine di distanza -->
+  <div class="sv" id="rsViewer" hidden role="dialog" aria-modal="true" aria-labelledby="rsTitle">
+    <header class="sv-h">
+      <button type="button" class="sv-back" onclick="closeRecordSection()" aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="sv-ht"><div class="sv-t" id="rsTitle">Come l'hanno registrato</div><div class="sv-s" id="rsSub"></div></div>
+    </header>
+    <div class="sv-body">
+      <div class="sv-seg" id="rsSeg" role="group" aria-label="Scala dei tracciati">
+        <button type="button" data-m="each" aria-pressed="true" onclick="rsSetScale(false)">Ogni stazione in scala</button>
+        <button type="button" data-m="same" aria-pressed="false" onclick="rsSetScale(true)">Stessa scala</button>
+      </div>
+      <div class="rs-leg"><span><i style="border-color:#1D4ED8"></i>arrivo onda P</span><span><i style="border-color:#C2410C"></i>arrivo onda S</span><span>movimento su e giù</span></div>
+      <div class="rs-plot" id="rsPlot"><div class="rs-status" id="rsStatus"></div><canvas id="rsCanvas" onclick="rsTap(event)"></canvas></div>
+      <div class="sv-hint">Le stazioni sono in ordine di distanza: prima arriva l'onda P, più veloce, poi l'onda S, più forte. Più la stazione è lontana, più le due si separano. Tocca un tracciato per esplorarlo. Arrivi stimati con velocità medie della crosta.</div>
+    </div>
+  </div>
+
+  <!-- CHI L'HA SENTITO: segnalazioni "Hai sentito il terremoto?" -->
+  <div class="sv" id="hsViewer" hidden role="dialog" aria-modal="true" aria-labelledby="hsTitle">
+    <header class="sv-h">
+      <button type="button" class="sv-back" onclick="closeHsitViewer()" aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="sv-ht"><div class="sv-t" id="hsTitle">Chi l'ha sentito</div><div class="sv-s" id="hsSub"></div></div>
+    </header>
+    <div class="hs-body">
+      <div class="sv-seg" id="hsSeg" role="group" aria-label="Segnalazioni">
+        <button type="button" data-m="event" aria-pressed="true" onclick="hsitSetMode('event')">Questo terremoto</button>
+        <button type="button" data-m="last" aria-pressed="false" onclick="hsitSetMode('last')">Ultima ora in Italia</button>
+      </div>
+      <div id="hsMap" class="hs-map"></div>
+      <div id="hsLast" class="hs-last" hidden></div>
+      <div class="hs-stats" id="hsStats"></div>
+      <div class="hs-upd"><span class="hs-live"><span></span>in diretta</span><span id="hsUpd"></span></div>
+      <div id="hsList" class="hs-list"></div>
+      <a class="eqd-seis-btn hs-cta" href="https://www.hsit.it/compile.html" target="_blank" rel="noopener">L'hai sentito? Compila il questionario</a>
+      <p class="hs-cite">Dati: "Hai sentito il terremoto?" (HSIT), INGV – Tosi et al. (2007), doi:10.13127/HSIT, licenza CC BY 4.0. Intensità in scala Mercalli (MCS) stimata dai questionari.</p>
+    </div>
+  </div>
+
   <!-- TRACCIATO GIORNALIERO DI UN SISMOGRAFO LOCALE (immagine dell'ente, a tutto schermo) -->
   <div class="sv" id="heliViewer" hidden role="dialog" aria-modal="true" aria-labelledby="hvTitle">
     <header class="sv-h">
@@ -2819,7 +2917,8 @@ body.sv-on{overflow:hidden;}
       <div class="eqd-pane" id="eqdPaneLoc"></div>
     </div>
     <div class="eqd-footer">
-      <button class="eqd-seis-btn" id="eqdSeisBtn" onclick="eqdGoSeismo()">Vai al sismogramma</button>
+      <button class="eqd-seis-btn" id="eqdRsBtn" onclick="openRecordSection()" style="display:flex;align-items:center;justify-content:center;gap:9px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h4l2-6 3 12 3-9 2 3h6"/></svg>Guarda come l'hanno registrato</button>
+      <button class="eqd-sub-btn" id="eqdSeisBtn" onclick="eqdGoSeismo()">Apri la stazione più vicina in Sismogrammi</button>
     </div>
   </div>
 
@@ -2857,7 +2956,9 @@ function mapFsExit(){
 window.addEventListener('popstate',e=>{
   if(_fsMap){_fsPushed=false;mapFsExit();e.stopImmediatePropagation();return;}
   if(window._hvOpen){closeHeli(true);e.stopImmediatePropagation();return;}
-  if(window._svOpen){closeSeisViewer(true);e.stopImmediatePropagation();}
+  if(window._svOpen){closeSeisViewer(true);e.stopImmediatePropagation();return;}
+  if(window._hsOpen){closeHsitViewer(true);e.stopImmediatePropagation();return;}
+  if(window._rsOpen){closeRecordSection(true);e.stopImmediatePropagation();}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_fsMap) mapFsToggle(_fsMap);});
 function mapFsToggle(m){
@@ -3083,6 +3184,8 @@ function _bootLoadPrefs(){
     if(dist) document.getElementById('notifDist').value=dist;
     const md=localStorage.getItem('itq_notifMaxDepth');
     if(md) document.getElementById('notifMaxDepth').value=md;
+    const nf=localStorage.getItem('itq_notifFelt');
+    if(nf!=null) document.getElementById('notifFelt').value=nf;
     const ar=localStorage.getItem('itq_autoRefresh');
     if(ar){
       document.getElementById('autoRefreshSel').value=ar;
@@ -3976,7 +4079,10 @@ function renderEqdDati(ev){
     <div class="eqd-row"><span class="k">Tipo magnitudo</span><span class="v">${ev.magType||'—'}</span></div>
     ${distVal!=null?`<div class="eqd-row"><span class="k">Distanza da te</span><span class="v">${distVal.toFixed(0)} km</span></div>`:''}
     <div class="eqd-row"><span class="k">ID evento INGV</span><span class="v" style="font-size:11px;">${ev.id}</span></div>
+    <div id="eqdFelt"></div><div id="eqdHsit"></div>
+    <a class="hs-compile" href="${HSIT_COMPILE}" target="_blank" rel="noopener">L'hai sentito? Compila il questionario INGV</a>
   `;
+  renderEqdFelt(ev);renderEqdHsit(ev);
 }
 
 function loadComuniData(){
@@ -4026,6 +4132,266 @@ function eqdGoSeismo(){
   if(containerId==='eqList') openSeisForEq(i);
   else openSeisForSt(i);
 }
+
+/* ================================================================
+   COSA HAI SENTITO TU · COME L'HANNO REGISTRATO · CHI L'HA SENTITO
+================================================================ */
+/* Intensità attesa (scala Mercalli) in un punto: legge di attenuazione
+   di Allen, Wald e Worden (2012), versione con distanza ipocentrale. */
+function feltIntensity(mag,depthKm,distKm){
+  const R=Math.hypot(distKm,Math.max(depthKm,1)),Rm=-0.209+2.042*Math.exp(mag-5);
+  let I=2.085+1.428*mag-1.402*Math.log(Math.sqrt(R*R+Rm*Rm));
+  if(R>50)I+=0.078*Math.log(R/50);
+  return Math.max(1,Math.min(12,I));
+}
+const _ROMAN=['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+function intRoman(v){return _ROMAN[Math.max(1,Math.min(12,Math.round(v)))];}
+function intColor(v){const i=Math.round(v);
+  return i<=1?'#EEF2F5':i===2?'#DCE6EE':i===3?'#A7C7E7':i===4?'#7FC4A4':i===5?'#F2D16B':i===6?'#F0A04B':i===7?'#D9480F':i===8?'#B42318':'#7F1D1D';}
+function intInk(v){return Math.round(v)>=7?'#FFFFFF':'#1C1917';}
+function feltTitle(v){return v<1.5?'Non avvertito':v<2.5?'Forse avvertito da pochi':v<3.5?'Avvertito debolmente':v<4.5?'Probabilmente sentito':v<5.5?'Sentito chiaramente':v<6.5?'Forte':'Molto forte, possibili danni';}
+function feltText(v){const i=Math.round(v);return [ '',
+  'Non avvertito dalle persone: solo gli strumenti lo registrano.',
+  'Avvertito solo da pochi, a riposo e ai piani alti.',
+  'Avvertito da alcuni in casa, come il passaggio di un camion leggero.',
+  'Avvertito da molti in casa: vetri, porte e stoviglie vibrano. Nessun danno atteso.',
+  'Avvertito da quasi tutti, molti si svegliano; oggetti instabili possono cadere.',
+  'Avvertito da tutti, spavento; possibili lievi danni come crepe negli intonaci.',
+  'Danni moderati agli edifici più vulnerabili.','Danni gravi a molti edifici.'][Math.min(8,i)]||'Danni gravi a molti edifici.';}
+function feltScaleBar(v){
+  const lv=[2,3,4,5,6,7,8],cur=Math.max(2,Math.min(8,Math.round(v)));
+  return `<div class="felt-scale">${lv.map(l=>`<span style="background:${intColor(l)}"${l===cur?' class="on"':''}></span>`).join('')}</div>
+    <div class="felt-scale-l"><span>II · non sentito</span><span>VIII+ · danni</span></div>`;
+}
+function renderEqdFelt(ev){
+  const box=document.getElementById('eqdFelt');if(!box)return;
+  if(userLat==null){
+    box.innerHTML=`<div class="felt-card"><div class="felt-h">A casa tua</div>
+      <p class="felt-p">Attiva la posizione per sapere quanto potresti averlo sentito.</p>
+      <button type="button" class="chip-link" onclick="locateUser();setTimeout(()=>_eqdCtx&&renderEqdFelt(_eqdCtx.ev),2500)">Usa la mia posizione</button></div>`;
+    return;
+  }
+  const d=haverDist(userLat,userLon,ev.lat,ev.lon),I=feltIntensity(ev.mag,ev.depth,d);
+  box.innerHTML=`<div class="felt-card"><div class="felt-h">A casa tua · ${d<10?d.toFixed(1).replace('.',','):Math.round(d)} km</div>
+    <div class="felt-main"><div class="felt-badge" style="background:${intColor(I)};color:${intInk(I)}"><b>${intRoman(I)}</b><small>MCS</small></div>
+      <div><div class="felt-t">${feltTitle(I)}</div><div class="felt-p">${feltText(I)}</div></div></div>
+    ${feltScaleBar(I)}
+    <div class="felt-note">Stima dalla magnitudo, dalla profondità e dalla distanza (Allen et al., 2012). Gli effetti reali cambiano con il piano e il terreno.</div></div>`;
+}
+
+/* ── Chi l'ha sentito: questionari "Hai sentito il terremoto?" (HSIT, INGV, CC BY 4.0) ── */
+const HSIT_EV='https://e.hsit.it/',HSIT_COMPILE='https://www.hsit.it/compile.html',HSIT_LASTHOUR='https://www.hsit.it/lastHourMap/lastHourMap.jpg';
+const _hsitCache={};
+async function hsitLoad(id,force){
+  const c=_hsitCache[id];
+  if(c&&!force&&Date.now()-c.at<60000)return c.data;
+  let data=null;
+  try{
+    const r=await fetch(`${HSIT_EV}${id}/${id}_mcs_municipality.json?t=${Math.floor(Date.now()/60000)}`,{signal:AbortSignal.timeout(20000)});
+    if(r.ok){const j=await r.json();const q=j&&j.Quakes&&Object.values(j.Quakes)[0];
+      if(q&&q.MacroseismicData){
+        const mdps=Object.values(q.MacroseismicData.MDPs||{}).map(m=>({name:m.TerritorialUnit.Name,prov:(m.TerritorialUnit.GeographicalRegion||{}).Name||'',
+          lat:m.TerritorialUnit.Coordinates.Latitude,lon:m.TerritorialUnit.Coordinates.Longitude,dist:m.Distance,I:+m.Value,
+          n:(m.QuestNumber||{}).Total||0,felt:(m.QuestNumber||{}).Felt||0})).filter(m=>!isNaN(m.lat)&&!isNaN(m.I));
+        const upd=((q.MacroseismicData.Description||{}).TimeLastUpdate||{}).Value||null;
+        data={mdps,upd,tot:mdps.reduce((a,m)=>a+m.n,0),max:mdps.reduce((a,m)=>Math.max(a,m.I),0),far:mdps.reduce((a,m)=>Math.max(a,m.dist||0),0)};
+      }}
+  }catch(e){}
+  _hsitCache[id]={at:Date.now(),data};
+  return data;
+}
+function _hsitMine(data){
+  if(!data||userLat==null)return null;
+  let best=null,bd=1e9;for(const m of data.mdps){const d=haverDist(userLat,userLon,m.lat,m.lon);if(d<bd){bd=d;best=m;}}
+  return bd<=6?best:null;
+}
+async function renderEqdHsit(ev){
+  const box=document.getElementById('eqdHsit');if(!box)return;
+  box.innerHTML=`<div class="felt-card"><div class="felt-h">Chi l'ha sentito</div><div class="felt-p"><span class="spin"></span> Cerco le segnalazioni…</div></div>`;
+  const data=await hsitLoad(ev.id);
+  if(!_eqdCtx||_eqdCtx.ev!==ev)return;
+  const live=`<span class="hs-live"><span></span>in diretta</span>`;
+  if(!data||!data.mdps.length){
+    box.innerHTML=`<div class="felt-card"><div class="hs-hd"><div class="felt-h">Chi l'ha sentito</div>${live}</div>
+      <p class="felt-p">Per questo terremoto non c'è ancora una mappa delle segnalazioni. Se l'hai sentito, il tuo questionario aiuta l'INGV a crearla.</p>
+      <button type="button" class="hs-link" onclick="openHsitViewer('last')">Segnalazioni dell'ultima ora in Italia →</button></div>`;
+    return;
+  }
+  const mine=_hsitMine(data);
+  box.innerHTML=`<div class="felt-card"><div class="hs-hd"><div class="felt-h">Chi l'ha sentito</div>${live}</div>
+    <div class="hs-stats"><div><b>${data.tot.toLocaleString('it-IT')}</b><span>questionari</span></div><div><b>${data.mdps.length}</b><span>comuni</span></div><div><b>${intRoman(data.max)}</b><span>massima</span></div></div>
+    ${mine?`<p class="felt-p">Nel tuo comune (${_esc(mine.name)}): intensità <b>${intRoman(mine.I)}</b> da ${mine.n} questionar${mine.n===1?'io':'i'}.</p>`:''}
+    <button type="button" class="hs-link" onclick="openHsitViewer('event')">Vedi le segnalazioni per comune →</button></div>`;
+}
+/* Visore segnalazioni */
+let _hsMap=null,_hsLayer=null,_hsTimer=null,_hsMode='event';window._hsOpen=false;
+async function openHsitViewer(mode){
+  const ev=_eqdCtx&&_eqdCtx.ev;
+  _hsMode=mode||'event';
+  document.getElementById('hsViewer').hidden=false;document.body.classList.add('sv-on');
+  window._hsOpen=true;history.pushState(Object.assign({},history.state,{hs:1}),'');
+  document.getElementById('hsSub').textContent=ev?`M${ev.mag.toFixed(1)} · ${ev.place}`:'Hai sentito il terremoto? · INGV';
+  await hsitRender(true);
+  clearInterval(_hsTimer);_hsTimer=setInterval(()=>{if(window._hsOpen)hsitRender(false,true);},60000);
+}
+function closeHsitViewer(fromHistory){
+  if(!window._hsOpen)return;
+  if(!fromHistory){history.back();return;}
+  window._hsOpen=false;clearInterval(_hsTimer);
+  document.getElementById('hsViewer').hidden=true;
+  if(!window._svOpen&&!window._rsOpen)document.body.classList.remove('sv-on');
+}
+function hsitSetMode(m){_hsMode=m;hsitRender(true);}
+async function hsitRender(fit,force){
+  const ev=_eqdCtx&&_eqdCtx.ev;
+  document.querySelectorAll('#hsSeg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===_hsMode)));
+  const mapEl=document.getElementById('hsMap'),last=document.getElementById('hsLast'),list=document.getElementById('hsList'),stats=document.getElementById('hsStats'),upd=document.getElementById('hsUpd');
+  if(_hsMode==='last'){
+    mapEl.hidden=true;stats.innerHTML='';list.innerHTML='';last.hidden=false;
+    last.innerHTML=`<img alt="Mappa delle segnalazioni arrivate nell'ultima ora" src="${HSIT_LASTHOUR}?t=${Math.floor(Date.now()/60000)}">
+      <p class="felt-p">Comuni da cui sono arrivati questionari nell'ultima ora, per qualsiasi terremoto. Si aggiorna ogni minuto.</p>`;
+    upd.textContent='Aggiornata alle '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+    return;
+  }
+  last.hidden=true;mapEl.hidden=false;
+  if(!ev){list.innerHTML='';return;}
+  if(fit)list.innerHTML='<div class="felt-p" style="padding:12px 0"><span class="spin"></span> Carico le segnalazioni…</div>';
+  const data=await hsitLoad(ev.id,force);
+  if(!_hsMap){
+    _hsMap=L.map(mapEl,{zoomControl:true}).setView([ev.lat,ev.lon],8);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(_hsMap);
+  }
+  setTimeout(()=>_hsMap.invalidateSize(),50);
+  if(_hsLayer)_hsMap.removeLayer(_hsLayer);
+  _hsLayer=L.layerGroup().addTo(_hsMap);
+  L.marker([ev.lat,ev.lon],{icon:L.divIcon({className:'hs-epi',html:'<svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 2l2.6 6.6L21.5 9l-5.3 4.6L18 21l-6-3.8L6 21l1.8-7.4L2.5 9l6.9-.4z" fill="#1C1917" stroke="#fff" stroke-width="1.5"/></svg>',iconSize:[22,22],iconAnchor:[11,11]}),interactive:false}).addTo(_hsLayer);
+  if(userLat!=null)L.circleMarker([userLat,userLon],{radius:6,color:'#fff',weight:2,fillColor:'#1D4ED8',fillOpacity:1}).bindTooltip('Tu').addTo(_hsLayer);
+  if(!data||!data.mdps.length){
+    stats.innerHTML='';upd.textContent='';
+    list.innerHTML=`<p class="felt-p" style="padding:10px 0">Nessuna mappa ancora per questo terremoto: compare quando arrivano abbastanza questionari. Intanto puoi guardare le segnalazioni dell'ultima ora.</p>`;
+    if(fit)_hsMap.setView([ev.lat,ev.lon],8);
+    return;
+  }
+  const b=[[ev.lat,ev.lon]];
+  data.mdps.slice().sort((x,y)=>x.I-y.I).forEach(m=>{
+    L.circleMarker([m.lat,m.lon],{radius:Math.max(5,Math.min(13,4+Math.sqrt(m.n)*1.6)),color:'#fff',weight:1.5,fillColor:intColor(m.I),fillOpacity:.95})
+      .bindTooltip(`<b>${_esc(m.name)}</b> (${_esc(m.prov)})<br>Intensità ${intRoman(m.I)} · ${m.n} questionari`).addTo(_hsLayer);
+    if(m.dist<300)b.push([m.lat,m.lon]);
+  });
+  if(fit&&b.length>1)_hsMap.fitBounds(b,{padding:[24,24],maxZoom:10});
+  stats.innerHTML=`<div><b>${data.tot.toLocaleString('it-IT')}</b><span>questionari</span></div><div><b>${data.mdps.length}</b><span>comuni</span></div><div><b>${Math.round(data.far)} km</b><span>più lontano</span></div>`;
+  upd.textContent=data.upd?'Elaborata da HSIT alle '+new Date(data.upd).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})+' del '+new Date(data.upd).toLocaleDateString('it-IT'):'';
+  const mine=_hsitMine(data);
+  list.innerHTML=data.mdps.slice().sort((x,y)=>y.I-x.I||x.dist-y.dist).slice(0,80).map(m=>`<div class="hs-row${mine===m?' me':''}">
+    <span class="hs-i" style="background:${intColor(m.I)};color:${intInk(m.I)}">${intRoman(m.I)}</span>
+    <div class="n"><b>${_esc(m.name)}${m.prov?' ('+_esc(m.prov)+')':''}${mine===m?' · tu':''}</b><span>${Math.round(m.dist)} km · ${m.n} questionar${m.n===1?'io':'i'}</span></div></div>`).join('')
+    +(data.mdps.length>80?`<p class="felt-p">Mostrati gli 80 comuni con l'intensità più alta su ${data.mdps.length}.</p>`:'');
+}
+
+/* ── Come l'hanno registrato: le stazioni più vicine, in ordine di distanza ── */
+const RS={ev:null,traces:[],t0:0,t1:0,same:false};window._rsOpen=false;
+function _rsTimes(distKm,depth){const R=Math.hypot(distKm,Math.max(depth,1));return{p:R/6.0,s:R/3.5};}
+async function openRecordSection(ev){
+  ev=ev||(_eqdCtx&&_eqdCtx.ev);if(!ev)return;
+  RS.ev=ev;RS.traces=[];
+  document.getElementById('rsSub').textContent=`M${ev.mag.toFixed(1)} · ${ev.place} · ${_hm(Date.parse(ev.time))}`;
+  document.getElementById('rsViewer').hidden=false;document.body.classList.add('sv-on');
+  window._rsOpen=true;history.pushState(Object.assign({},history.state,{rs:1}),'');
+  const st=document.getElementById('rsStatus');st.innerHTML='<span class="spin"></span> Cerco le stazioni più vicine…';st.hidden=false;
+  rsDraw();
+  try{
+    const ot=Date.parse(ev.time);
+    const radius=ev.mag<2.5?0.8:ev.mag<3.5?1.3:ev.mag<4.5?2:3;
+    const fmt=t=>new Date(t).toISOString().slice(0,19);
+    const r=await fetch(`${ST_BASE}?level=channel&format=text&latitude=${ev.lat}&longitude=${ev.lon}&maxradius=${radius}&channel=HHZ,EHZ,HNZ&starttime=${fmt(ot)}&endtime=${fmt(ot+60000)}`,{signal:AbortSignal.timeout(30000)});
+    if(!r.ok)throw new Error(r.status===204?'nessuna stazione attiva vicino all\'epicentro':'HTTP '+r.status);
+    const pref={HHZ:0,EHZ:1,HNZ:2},by={};
+    (await r.text()).split(/\r?\n/).filter(l=>l&&!l.startsWith('#')).forEach(l=>{const p=l.split('|');if(p.length<6)return;
+      const k=p[0]+'.'+p[1],c={net:p[0],sta:p[1],loc:p[2],cha:p[3],lat:+p[4],lon:+p[5]};
+      if(!by[k]||pref[c.cha]<pref[by[k].cha])by[k]=c;});
+    const list=Object.values(by).map(c=>({...c,dist:haverDist(ev.lat,ev.lon,c.lat,c.lon)})).sort((a,b)=>a.dist-b.dist);
+    /* le più vicine, poi qualcuna più lontana per vedere le onde che "viaggiano" */
+    const pick=list.slice(0,5);const rest=list.slice(5);
+    for(let k=1;k<=3&&rest.length;k++)pick.push(rest[Math.min(rest.length-1,Math.floor(rest.length*k/3)-1)]);
+    const sel=[...new Map(pick.map(c=>[c.net+'.'+c.sta,c])).values()].sort((a,b)=>a.dist-b.dist);
+    if(!sel.length)throw new Error('nessuna stazione attiva vicino all\'epicentro');
+    const far=sel[sel.length-1];
+    RS.t0=ot-10000;RS.t1=ot+Math.min(200,Math.max(50,_rsTimes(far.dist,ev.depth).s+35))*1000;
+    RS.traces=sel.map(c=>({...c,state:'load'}));
+    st.innerHTML=`<span class="spin"></span> Scarico ${sel.length} tracciati…`;rsDraw();
+    let done=0;
+    await Promise.all(RS.traces.map(async tr=>{
+      try{
+        const u=`${DS_BASE}?network=${tr.net}&station=${tr.sta}&location=${tr.loc||'--'}&channel=${tr.cha}&starttime=${fmt(RS.t0)}&endtime=${fmt(RS.t1)}`;
+        const resp=await fetch(u,{signal:AbortSignal.timeout(45000)});
+        if(resp.status===204||!resp.ok)throw new Error('nodata');
+        const res=MiniSEED.parse(await resp.arrayBuffer());
+        if(!res||!res.samples||res.samples.length<20)throw new Error('nodata');
+        let s=demean(res.samples);const sr=res.sampleRate;
+        s=bandpass(s,sr,1,Math.min(15,sr*0.42),4);
+        tr.sr=sr;tr.start=res.startMs;tr.data=s;tr.raw=res.samples;
+        let mx=0;for(const v of s){const a=Math.abs(v);if(a>mx)mx=a;}tr.max=mx||1;tr.state='ok';
+      }catch(e){tr.state='none';}
+      done++;st.innerHTML=`<span class="spin"></span> Scarico i tracciati… ${done} di ${RS.traces.length}`;rsDraw();
+    }));
+    const ok=RS.traces.filter(t=>t.state==='ok').length;
+    st.hidden=ok>0;if(!ok)st.textContent='Nessuna stazione ha ancora dati per questo terremoto. Se è appena avvenuto, riprova tra qualche minuto.';
+    rsDraw();
+  }catch(e){st.hidden=false;st.textContent='Non riesco a caricare le registrazioni: '+e.message+'.';}
+}
+function closeRecordSection(fromHistory){
+  if(!window._rsOpen)return;
+  if(!fromHistory){history.back();return;}
+  window._rsOpen=false;
+  document.getElementById('rsViewer').hidden=true;
+  if(!window._svOpen&&!window._hsOpen)document.body.classList.remove('sv-on');
+}
+function rsSetScale(same){RS.same=same;document.querySelectorAll('#rsSeg button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.m==='same')===same)));rsDraw();}
+function rsGeo(){const cv=document.getElementById('rsCanvas'),w=cv.clientWidth||340,n=Math.max(1,RS.traces.length);
+  const rowH=Math.max(52,Math.min(84,Math.floor(((document.getElementById('rsPlot').clientHeight||480)-26)/n)));return{w,h:rowH*n+26,rowH,L:84,n};}
+function rsDraw(){
+  const cv=document.getElementById('rsCanvas');if(!cv||!window._rsOpen)return;
+  const g=rsGeo(),dpr=window.devicePixelRatio||1;
+  cv.width=g.w*dpr;cv.height=g.h*dpr;cv.style.height=g.h+'px';
+  const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,g.w,g.h);
+  c.fillStyle='#FFFFFF';c.fillRect(0,0,g.w,g.h);
+  if(!RS.traces.length||!RS.t1)return;
+  const ev=RS.ev,ot=Date.parse(ev.time),pw=g.w-g.L-8,T=RS.t1-RS.t0;
+  const X=t=>g.L+(t-RS.t0)/T*pw;
+  const gmax=Math.max(...RS.traces.filter(t=>t.state==='ok').map(t=>t.max),1);
+  /* tacche ogni 10 s dall'ora del terremoto */
+  c.font='10.5px Inter,system-ui,sans-serif';c.fillStyle='#8A8075';c.strokeStyle='#EFE8DC';c.lineWidth=1;
+  for(let s=0;ot+s*1000<=RS.t1;s+=10){const x=X(ot+s*1000);c.beginPath();c.moveTo(x,0);c.lineTo(x,g.h-20);c.stroke();
+    if(s%20===0)c.fillText(s===0?_hm(ot)+(new Date(ot).getSeconds()?':'+String(new Date(ot).getSeconds()).padStart(2,'0'):''):'+'+s+' s',x-(s===0?14:10),g.h-6);}
+  RS.traces.forEach((tr,i)=>{
+    const y0=i*g.rowH,mid=y0+g.rowH/2,amp=g.rowH*0.46;
+    if(i){c.strokeStyle='#EFE8DC';c.beginPath();c.moveTo(0,y0);c.lineTo(g.w,y0);c.stroke();}
+    c.fillStyle='#1C1917';c.font='600 12px Inter,system-ui,sans-serif';c.fillText(tr.net+'.'+tr.sta,6,mid-2);
+    c.fillStyle='#5F574F';c.font='11px Inter,system-ui,sans-serif';c.fillText(Math.round(tr.dist)+' km',6,mid+13);
+    const tt=_rsTimes(tr.dist,ev.depth);
+    [[tt.p,'#1D4ED8'],[tt.s,'#C2410C']].forEach(([s,col])=>{const x=X(ot+s*1000);if(x<g.L||x>g.w)return;
+      c.strokeStyle=col;c.setLineDash([3,3]);c.lineWidth=1.3;c.beginPath();c.moveTo(x,y0+3);c.lineTo(x,y0+g.rowH-3);c.stroke();c.setLineDash([]);});
+    if(tr.state!=='ok'){c.fillStyle='#8A8075';c.font='12px Inter,system-ui,sans-serif';c.fillText(tr.state==='load'?'in caricamento…':'nessun dato',g.L+8,mid+4);return;}
+    const sc=amp/(RS.same?gmax:tr.max),d=tr.data,n=d.length,dt=1000/tr.sr;
+    c.strokeStyle='#1C1917';c.lineWidth=1;c.beginPath();
+    const step=Math.max(1,Math.floor(n/(pw*2)));
+    for(let k=0;k<n;k+=step){let lo=d[k],hi=d[k];for(let j=k;j<Math.min(n,k+step);j++){if(d[j]<lo)lo=d[j];if(d[j]>hi)hi=d[j];}
+      const x=X(tr.start+k*dt);if(x<g.L)continue;if(x>g.w)break;
+      const yl=mid-Math.max(-amp,Math.min(amp,hi*sc)),yh=mid-Math.max(-amp,Math.min(amp,lo*sc));
+      if(k===0)c.moveTo(x,yl);c.lineTo(x,yl);c.lineTo(x,yh);}
+    c.stroke();
+  });
+}
+function rsTap(e){
+  const cv=document.getElementById('rsCanvas'),r=cv.getBoundingClientRect(),g=rsGeo();
+  const i=Math.floor((e.clientY-r.top)/g.rowH),tr=RS.traces[i];
+  if(!tr||tr.state!=='ok')return;
+  lastPlot={filtered:tr.data,effectiveSR:tr.sr,startMs:tr.start,title:`${tr.net}.${tr.sta}..${tr.cha}`};
+  document.getElementById('viewModeSelect').value='waveform';
+  openSeisViewer();svSetMode('wave');
+  document.getElementById('svTitle').textContent=`${tr.net}.${tr.sta} · ${Math.round(tr.dist)} km dall'epicentro`;
+}
+window.addEventListener('resize',()=>{if(window._rsOpen)rsDraw();});
 
 /* ================================================================
    TERREMOTI RECENTI
@@ -4594,6 +4960,7 @@ async function saveNotifPrefsBtn(){
     localStorage.setItem('itq_notifProv',    document.getElementById('notifProv').value.trim().toUpperCase());
     localStorage.setItem('itq_notifDist',    String(notifNum('notifDist',0)));
     localStorage.setItem('itq_notifMaxDepth',String(notifNum('notifMaxDepth',0)));
+    localStorage.setItem('itq_notifFelt',   document.getElementById('notifFelt').value);
     localStorage.setItem('itq_autoRefresh',  document.getElementById('autoRefreshSel').value);
     /* Riallinea anche i campi a schermo al valore numerico "pulito" appena salvato */
     document.getElementById('notifMag').value=notifNum('notifMag',3);
@@ -4695,6 +5062,9 @@ async function quietRefresh(){
 
 function shouldNotif(ev){
   if(!notifOn||typeof Notification==='undefined'||Notification.permission!=='granted')return false;
+  /* "lo sento a casa mia": basta che l'intensità stimata superi la soglia scelta */
+  const fl=Number((document.getElementById('notifFelt')||{}).value)||0;
+  if(fl>0&&userLat!=null&&feltIntensity(ev.mag,ev.depth,haverDist(userLat,userLon,ev.lat,ev.lon))>=fl-0.5)return true;
   if(ev.mag<notifNum('notifMag',3))return false;
   const p=document.getElementById('notifProv').value.trim().toUpperCase();
   if(p){const ep=extractProv(ev.place);if(!ep||ep!==p)return false;}
@@ -4712,8 +5082,9 @@ function shouldNotif(ev){
 }
 function sendNotif(ev){
   const title='🔴 Terremoto M'+ev.mag.toFixed(1);
+  const felt=userLat!=null?feltIntensity(ev.mag,ev.depth,haverDist(userLat,userLon,ev.lat,ev.lon)):null;
   const opts={
-    body:ev.place+'\n'+ev.time.replace('T',' ').slice(0,19)+' UTC · '+ev.depth.toFixed(0)+' km',
+    body:ev.place+(felt!=null&&felt>=1.5?'\nA casa tua: '+feltTitle(felt).toLowerCase()+' (intensità '+intRoman(felt)+')':'')+'\n'+ev.time.replace('T',' ').slice(0,19)+' UTC · '+ev.depth.toFixed(0)+' km',
     icon:'./icon-192.png',
     tag:ev.id,
     data:{url:'./'}
@@ -6629,6 +7000,7 @@ async function syncPrefsToFirestore(){
       maxDist: notifNum('notifDist',0),
       province: document.getElementById('notifProv').value.trim().toUpperCase(),
       maxDepth: notifNum('notifMaxDepth',0),
+      feltLevel: Number(document.getElementById('notifFelt').value)||0,
       autoRefresh: document.getElementById('autoRefreshSel').value,
       userLat: userLat||null,
       userLon: userLon||null,
@@ -6651,6 +7023,7 @@ async function loadPrefsFromFirestore(){
     if(d.maxDist!=null) document.getElementById('notifDist').value=d.maxDist;
     if(d.province!=null) document.getElementById('notifProv').value=d.province;
     if(d.maxDepth!=null) document.getElementById('notifMaxDepth').value=d.maxDepth;
+    if(d.feltLevel!=null){document.getElementById('notifFelt').value=String(d.feltLevel);localStorage.setItem('itq_notifFelt',String(d.feltLevel));}
     if(d.autoRefresh) {document.getElementById('autoRefreshSel').value=d.autoRefresh;if(d.autoRefresh!=='0')setAutoRefresh(d.autoRefresh);}
     /* Save to local too */
     localStorage.setItem('itq_notifEnabled',d.notifEnabled?'1':'0');
