@@ -8,17 +8,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
+          set +e
           get(){ echo; echo "==== $1"; curl -4 -sSL -m 40 -A "Mozilla/5.0" -H "Origin: https://example.github.io" -D hdr.txt "$1" -o out.txt -w "HTTP %{http_code} %{content_type} %{size_download}\n"; grep -iE '^(access-control-allow-origin|content-type|last-modified|cache-control)' hdr.txt; }
-          get "https://www.hsit.it/lasthour.html"; grep -oiE '(src|href)="[^"]+"' out.txt | grep -viE 'css|png|svg|html' | sort -u; grep -oiE '.{0,120}(json|xml-server|fetch|ajax|XMLHttp).{0,160}' out.txt | head -20
-          for j in lasthour settings setcounter datemanager; do get "https://www.hsit.it/js/$j.js"; head -c 3500 out.txt; echo; done
-          get "https://www.hsit.it/json/counter.json"; head -c 600 out.txt
-          get "https://www.hsit.it/json/lasthour.json"; head -c 1500 out.txt
-          get "https://www.hsit.it/compile.html"; grep -oiE '.{0,100}(eventid|event_id|evid|\?id=|location\.search|getParam).{0,120}' out.txt | head
-          E=47861452
-          get "https://e.hsit.it/$E/index.html"; sed -e 's/<[^>]*>/ /g' out.txt | tr -s ' \n' ' ' | grep -oiE 'Questionari.{0,160}'
-          get "https://e.hsit.it/$E/${E}_mcs_municipality.json"; python3 -c "
-          import json;d=json.load(open('out.txt'));q=list(d['Quakes'].values())[0];m=q['MacroseismicData'];print(json.dumps(m['Description'])[:400]);k=list(m['MDPs'].keys());print(len(k));print(json.dumps(m['MDPs'][k[0]],indent=0)[:1500]);print([x for x in q.keys()]);print([x for x in m.keys()])" || head -c 800 out.txt
-          get "https://shakemap.ingv.it/js/config-base.js"; head -c 4000 out.txt
+          get "https://www.hsit.it/lasthour.html"; sed -e 's/<script.*<\/script>//g;s/<[^>]*>/ /g' out.txt | tr -s ' \n\t' ' ' | grep -oiE '.{0,300}(ultima ora|segnalazion|questionari).{0,400}' | head -5
+          get "https://www.hsit.it/lastHourMap/lastHourMap.jpg"; file out.txt
+          get "https://www.hsit.it/"; E=$(grep -oE 'e\.hsit\.it/[0-9]+/index' out.txt | head -1 | cut -d/ -f2); echo "E=$E"
+          get "https://e.hsit.it/$E/index.html"; sed -e 's/<[^>]*>/ /g' out.txt | tr -s ' \n\t' ' ' | grep -oiE '(Evento sismico|Questionari|Compilazione).{0,200}' | head -4
+          get "https://e.hsit.it/$E/${E}_mcs_municipality.json"
+          python3 - <<'PY'
+          import json
+          d=json.load(open('out.txt'));q=list(d['Quakes'].values())[0];m=q['MacroseismicData']
+          print(list(q.keys()),list(m.keys()))
+          print(json.dumps({k:v for k,v in m.items() if k!='MDPs'})[:1500])
+          ks=list(m['MDPs'].keys());print('n',len(ks))
+          for k in ks[:2]: print(json.dumps(m['MDPs'][k])[:1800])
+          PY
+          get "https://shakemap.ingv.it/js/config-base.js"; head -c 3000 out.txt
           get "https://shakemap.ingv.it/js/config-env.js"; head -c 1500 out.txt
-          get "https://shakemap.ingv.it/js/products.js"; grep -oiE '.{0,100}(\.jpg|\.png|\.json|products/|/data/).{0,100}' out.txt | head -20
-          get "https://shakemap.ingv.it/js/archive.js"; grep -oiE '.{0,100}(\.json|/data/|fetch\().{0,140}' out.txt | head -15
+          get "https://shakemap.ingv.it/js/products.js"; grep -oiE '.{0,120}(\.jpg|\.png|\.json|products|/data/).{0,120}' out.txt | head -20
+          get "https://shakemap.ingv.it/js/archive.js"; grep -oiE '.{0,120}(\.json|/data/|fetch\().{0,160}' out.txt | head -15
