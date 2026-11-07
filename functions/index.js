@@ -75,7 +75,23 @@ function parseEqText(text) {
 }
 
 /* ── Logica di matching utente ↔ evento ── */
+/* Intensità attesa (scala Mercalli) a casa dell'utente: Allen, Wald e Worden (2012),
+   distanza ipocentrale. Stessa formula usata nell'app. */
+function feltIntensity(mag, depthKm, distKm) {
+  const R = Math.hypot(distKm, Math.max(depthKm, 1));
+  const Rm = -0.209 + 2.042 * Math.exp(mag - 5);
+  let I = 2.085 + 1.428 * mag - 1.402 * Math.log(Math.sqrt(R * R + Rm * Rm));
+  if (R > 50) I += 0.078 * Math.log(R / 50);
+  return Math.max(1, Math.min(12, I));
+}
+
 function userMatchesEvent(user, ev) {
+  /* "Avvisami quando lo sento a casa mia": vale anche sotto la magnitudo minima */
+  const felt = typeof user.feltLevel === 'number' ? user.feltLevel : 0;
+  if (felt > 0 && user.userLat != null && user.userLon != null) {
+    const I = feltIntensity(ev.mag, ev.depth, haverDist(user.userLat, user.userLon, ev.lat, ev.lon));
+    if (I >= felt - 0.5) return true;
+  }
   const minMag = typeof user.minMag === 'number' ? user.minMag : 3;
   if (ev.mag < minMag) return false;
 
