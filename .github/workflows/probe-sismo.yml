@@ -7,31 +7,10 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - run: |
-          python3 tools/probe_sismo.py \
-            "FULL:https://www.mvobsv.org/earthquakes/" \
-            "https://www.mvobsv.org/" \
-            "FULL:https://www.mvobsv.org/terms-of-use/" \
-            "https://www.mvobsv.org/copyright/" \
-            "https://www.mvobsv.org/disclaimer/" \
-            "https://nuke.nprotezionecivile.it/drums/bn.bn013.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.air06.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.bas04.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.cep32.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/am.r4e40.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.cum07.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.cau40.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.alt12.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.BON33.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.car22.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/am.ra877.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.cisch.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.for28.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.fer23.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/am.r5c0a.shz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.ric12.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.pet25.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.bpsg.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/bn.bvig.ehz.png" \
-            "https://nuke.nprotezionecivile.it/drums/ot.ot15.ehz.png"
+          for u in https://www.mvobsv.org/earthquakes/ http://www.mvobsv.org/earthquakes/ https://mvobsv.org/earthquakes/; do
+            echo "==== $u"; dig +short www.mvobsv.org A; dig +short www.mvobsv.org AAAA
+            curl -4 -sSL -m 40 -A "Mozilla/5.0" -D - "$u" -o page.html && sed -e 's/<script[^>]*>.*<\/script>//g' page.html | grep -oiE '(src|href|data-src)="[^"]+"' | grep -viE '\.css|\.js|wp-includes|fonts' | sort -u | head -80
+            grep -oiE '.{0,200}(copyright|©|licen|riprodu|raspberry|shake|sismograf|seismo|stazione|AM\.|R[0-9A-F]{4}).{0,200}' page.html | head -40
+            [ -s page.html ] && break
+          done
