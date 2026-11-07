@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          for u in https://www.mvobsv.org/earthquakes/ http://www.mvobsv.org/earthquakes/ https://mvobsv.org/earthquakes/; do
-            echo "==== $u"; dig +short www.mvobsv.org A; dig +short www.mvobsv.org AAAA
-            curl -4 -sSL -m 40 -A "Mozilla/5.0" -D - "$u" -o page.html && sed -e 's/<script[^>]*>.*<\/script>//g' page.html | grep -oiE '(src|href|data-src)="[^"]+"' | grep -viE '\.css|\.js|wp-includes|fonts' | sort -u | head -80
-            grep -oiE '.{0,200}(copyright|©|licen|riprodu|raspberry|shake|sismograf|seismo|stazione|AM\.|R[0-9A-F]{4}).{0,200}' page.html | head -40
-            [ -s page.html ] && break
-          done
+          for c in EHZ EHN EHE; do for s in https http; do
+            u="$s://meteomio.altervista.org/sismografo/drum_CMVG_$c.gif"
+            echo "==== $u"; curl -4 -sS -m 40 -A "Mozilla/5.0" -e "https://example.github.io/" -o x.gif -w "%{http_code} %{content_type} %{size_download} %{redirect_url}\n" "$u"; file x.gif
+          done; done
+          curl -4 -sSI -m 30 https://meteomio.altervista.org/sismografo/drum_CMVG_EHZ.gif | head -20
+          curl -4 -sSL -m 30 -A "Mozilla/5.0" https://www.mvobsv.org/about-us/ | grep -oiE '.{0,200}(copyright|©|diritti|licen|riprodu).{0,200}' | head
