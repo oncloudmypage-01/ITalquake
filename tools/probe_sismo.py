@@ -9,7 +9,7 @@ for u in URLS:
         r = urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=25, context=ctx)
         b = r.read(); t = b.decode('utf-8','replace')
         print('STATUS', r.status, r.headers.get('Content-Type'), len(b), 'ACAO', r.headers.get('Access-Control-Allow-Origin'), 'XFO', r.headers.get('X-Frame-Options'), 'LM', r.headers.get('Last-Modified'))
-        if 'image' in (r.headers.get('Content-Type') or ''): continue
+        if 'image' in (r.headers.get('Content-Type') or '') or 'mseed' in (r.headers.get('Content-Type') or '') or 'octet' in (r.headers.get('Content-Type') or ''): continue
         if full:
             print('FULLHTML', re.sub(r'<script.*?</script>|<style.*?</style>', ' ', t, flags=re.S|re.I)[:60000]); continue
         ti = re.search(r'<title[^>]*>(.*?)</title>', t, re.S|re.I)

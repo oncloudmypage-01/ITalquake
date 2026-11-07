@@ -10,9 +10,14 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           python3 tools/probe_sismo.py \
-            "FULL:https://rete-cornegliano.crs.inogs.it/assets/helicorder/rt/index.html" \
-            "https://rete-collalto.crs.inogs.it/DATI/helicorder/rt/ED01_z_hp-heli.png" \
-            "FULL:https://rete-collalto.crs.inogs.it/DATI/helicorder/rt/DbheliTable_readme_it.php" \
-            "https://rete-collalto.crs.inogs.it/pages/descrizione-stazioni.html" \
-            "https://webservices.ingv.it/fdsnws/station/1/query?network=EV&level=station&format=text" \
-            "https://www.orfeus-eu.org/eidaws/routing/1/query?network=EV,OL&format=post"
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=GU&station=GENL&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OX&station=BAD&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=RF&station=GORI&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=ST&station=CARE&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=SI&station=BOSI&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=VM&station=AMEN&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=IX&station=BENI&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
+            "https://webservices.ingv.it/fdsnws/dataselect/1/query?network=OT&station=OT15&location=*&channel=*&starttime=2026-11-07T10:33:27&endtime=2026-11-07T10:43:27" \
+            "https://webservices.ingv.it/fdsnws/station/1/query?network=GU,OX,RF,ST,SI,VM,IX,OT&level=channel&format=text&station=GENL,BAD,GORI,CARE,BOSI,AMEN,BENI,OT15" \
+            "https://www.fdsn.org/networks/detail/VM/" \
+            "FULL:https://rete-cornegliano.crs.inogs.it/pages/note-legali.html"
