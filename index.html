@@ -1482,14 +1482,9 @@ body.map-fs-on{overflow:hidden;}
 .src-seg button.on{background:#FFFFFF;color:#1C1917;box-shadow:0 1px 3px rgba(28,25,23,.16);}
 .src-seg button.on small{color:#C2410C;}
 .reg-box{margin:0 0 14px;}
-.reg-h{font-size:14.5px;font-weight:700;color:#1C1917;margin:0 0 8px;}
-.reg-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;}
-.reg-card{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:11px 12px;border-radius:14px;border:1px solid #E3DBCC;background:#FFFFFF;color:#1C1917;cursor:pointer;font:inherit;min-height:44px;}
-.reg-card:hover{border-color:#C2410C;}
-.reg-card.on{border-color:#C2410C;box-shadow:inset 0 0 0 1px #C2410C;background:#FFF8F3;}
-.reg-card b{font-size:14.5px;font-weight:700;}
-.reg-card span{font-size:12.5px;color:#5F574F;line-height:1.35;}
-.reg-card i{font-style:normal;font-size:11.5px;font-weight:600;color:#C2410C;}
+.reg-h{display:block;font-size:14.5px;font-weight:700;color:#1C1917;margin:0 0 8px;text-transform:none;letter-spacing:0;}
+.reg-select{width:100%;}
+.reg-who{margin-top:8px;font-size:13px;color:#3F3833;}
 .reg-credit{margin-top:10px;font-size:12.5px;color:#5F574F;line-height:1.5;}
 .reg-credit a,.loc-cite a,.loc-note a{color:#C2410C;}
 .loc-view{display:flex;flex-direction:column;gap:14px;}
@@ -1504,7 +1499,8 @@ body.map-fs-on{overflow:hidden;}
 .loc-card{display:flex;flex-direction:column;gap:7px;padding:8px;border-radius:12px;border:1px solid #E3DBCC;background:#FFFFFF;cursor:pointer;text-align:left;font:inherit;color:#1C1917;}
 .loc-card:hover{border-color:#C2410C;}
 .loc-img{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#F5F1EA;}
-.loc-img img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;}
+.loc-img{background:#FFFFFF;}
+.loc-img img{width:100%;height:100%;object-fit:contain;display:block;}
 .loc-img.err::after{content:"Tracciato non disponibile";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#8A8075;}
 .loc-card b{font-size:13.5px;font-weight:600;}
 .loc-card span{font-size:12px;color:#5F574F;}
@@ -1527,9 +1523,6 @@ body.map-fs-on{overflow:hidden;}
 .hv-foot{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid #E3DBCC;font-size:12px;color:#5F574F;}
 .hv-foot button{flex-shrink:0;}
 @media (max-width:700px){
-  .reg-list{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 6px;scrollbar-width:none;}
-  .reg-list::-webkit-scrollbar{display:none;}
-  .reg-card{flex:0 0 72%;scroll-snap-align:start;}
   .loc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
   .loc-card{padding:6px;}
   .loc-card b{font-size:12.5px;}
@@ -1577,6 +1570,15 @@ body.sv-on{overflow:hidden;}
 /* rete neurale: pseudo-epicentri */
 #nnEpiPanel{display:none;}
 .nn-map{height:300px;border-radius:12px;overflow:hidden;border:1px solid #E3DBCC;}
+.nn-hist{margin-top:14px;padding:14px;border-radius:14px;background:#FFFFFF;border:1px solid #E3DBCC;}
+.nn-hist-h{font-size:14.5px;font-weight:700;color:#1C1917;margin-bottom:10px;}
+.nn-hist-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.nn-hist-g div{display:flex;flex-direction:column;gap:2px;padding:10px;border-radius:10px;background:#F5F1EA;min-width:0;}
+.nn-hist-g span{font-size:11.5px;color:#5F574F;}
+.nn-hist-g b{font-size:18px;font-weight:700;color:#1C1917;}
+.nn-hist-g small{font-size:11.5px;color:#5F574F;line-height:1.3;overflow-wrap:anywhere;}
+.nn-hist p{margin:10px 0 0;font-size:13px;color:#3F3833;line-height:1.5;}
+@media(max-width:520px){.nn-hist-g{grid-template-columns:1fr;}}
 .nn-epi{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
 .nn-epi li{display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #E3DBCC;border-radius:12px;padding:10px 10px 10px 12px;}
 .nn-rk{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#EFE8DC;color:#C2410C;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;}
@@ -1803,32 +1805,11 @@ body.sv-on{overflow:hidden;}
           <div class="side-menu-desc">Individua sciami e sequenze sismiche per provincia e periodo</div>
         </div>
       </button>
-      <button class="side-menu-item" onclick="closeSideMenu();goSection('analogia')">
-        <span class="ic side-menu-icon" data-ic="analogy" style="color:#4338CA;"></span>
-        <div class="side-menu-text">
-          <div class="side-menu-title">Analogia Sismica <span class="side-badge">Sperimentale</span></div>
-          <div class="side-menu-desc">Cerca il periodo storico che ha colpito le stesse zone del periodo attuale e mostra cosa è successo dopo</div>
-        </div>
-      </button>
-      <button class="side-menu-item" onclick="closeSideMenu();goSection('prospettiva')">
-        <span class="ic side-menu-icon" data-ic="forecast" style="color:#0369A1;"></span>
-        <div class="side-menu-text">
-          <div class="side-menu-title">Prospettiva Sismica <span class="side-badge">Sperimentale</span></div>
-          <div class="side-menu-desc">Probabilità a breve termine (clustering/Omori) e ricorrenza storica per zona</div>
-        </div>
-      </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('rete')">
         <span class="ic side-menu-icon" data-ic="neural" style="color:#A21CAF;"></span>
         <div class="side-menu-text">
           <div class="side-menu-title">Rete Neurale <span class="side-badge">Sperimentale</span></div>
-          <div class="side-menu-desc">Una piccola rete neurale impara dall'ultimo anno di dati INGV e "prosegue" l'andamento degli eventi nei giorni successivi</div>
-        </div>
-      </button>
-      <button class="side-menu-item" onclick="closeSideMenu();goSection('pianeti')">
-        <span class="ic side-menu-icon" data-ic="planets" style="color:#6D28D9;"></span>
-        <div class="side-menu-text">
-          <div class="side-menu-title">Configurazioni Planetarie <span class="side-badge">Gioco</span></div>
-          <div class="side-menu-desc">Trova le date con la configurazione planetaria più simile e confronta gli eventi sismici</div>
+          <div class="side-menu-desc">Reti neurali addestrate su tutto il catalogo INGV dal 1985, con il confronto storico dal 1005, "proseguono" l'andamento degli eventi</div>
         </div>
       </button>
       <div class="side-menu-hint">Altri strumenti in arrivo…</div>
@@ -2225,38 +2206,6 @@ body.sv-on{overflow:hidden;}
     </div>
   </div>
 
-  <!-- ═══ ANALOGIA SISMICA (sperimentale) ═══ -->
-  <div class="section" id="sectionAnalogia">
-    <div class="container">
-      <div class="header">
-        <div class="title-wrap"><h1>Analogia Sismica</h1>
-          <p>Cerca nel catalogo INGV <b>dal 2000 in poi</b> i periodi storici che hanno colpito <b>le stesse zone geografiche</b> del periodo attuale (o zone limitrofe, entro celle di ~30 km) e mostra i primi 4 più simili in ordine, con l'evento più forte accaduto nel periodo successivo a ciascuno.</p></div>
-        <span class="badge" style="background:rgba(165,180,252,.14);color:#4338CA;border:1px solid rgba(165,180,252,.4);">Sperimentale</span>
-      </div>
-      <section class="panel">
-        <div class="panel-header"><h2>Finestra temporale</h2><p>Su quale intervallo del periodo attuale eseguire il confronto</p></div>
-        <div style="padding:14px 16px 4px;">
-          <div class="an-window-picker">
-            <button class="an-window-btn active" data-hours="24" onclick="anSelectWindow(24)">Ultime 24 ore</button>
-            <button class="an-window-btn" data-hours="48" onclick="anSelectWindow(48)">Ultime 48 ore</button>
-            <button class="an-window-btn" data-hours="168" onclick="anSelectWindow(168)">Ultima settimana</button>
-          </div>
-          <button class="btn btn-purple" id="anRunBtn" onclick="fetchAnalogia()" style="margin-top:14px;">🔍 Cerca analogia</button>
-          <div id="anStatus" class="status">Scegli la finestra e avvia la ricerca. La prima analisi può richiedere qualche decina di secondi (scarica il catalogo dal 2000 in poi).</div>
-          <div class="an-warn">⚠️ Analisi <b>puramente sperimentale</b>. I "periodi più simili" sono calcolati con una <b>similarità spaziale</b> (indice di Jaccard pesato sui conteggi per cella): sono considerati simili i periodi che hanno interessato le stesse zone (o zone vicine, entro ~30 km) con intensità di attività confrontabile. Gli eventi successivi mostrati per ciascun match non sono previsioni: sono solo cosa accadde storicamente in quei periodi.</div>
-        </div>
-      </section>
-      <div id="anResult" class="an-result" style="display:none;">
-        <div class="an-block current">
-          <h3>Periodo attuale</h3>
-          <div id="anCurrentBody"></div>
-        </div>
-        <div id="anMatches"></div>
-      </div>
-      <div class="footer-note">Fonte: <code>webservices.ingv.it/fdsnws/event/1/query</code> · Ricerca analogia calcolata lato client sul catalogo Italia.</div>
-    </div>
-  </div>
-
   <!-- ═══ CATALOGO STORICO (CPTI15 + forti recenti) ═══ -->
   <div class="section" id="sectionCatalogo">
     <div class="container">
@@ -2311,44 +2260,6 @@ body.sv-on{overflow:hidden;}
     </div>
   </div>
 
-  <!-- ═══ PROSPETTIVA SISMICA (sperimentale) ═══ -->
-  <div class="section" id="sectionProspettiva">
-    <div class="container">
-      <div class="header">
-        <div class="title-wrap"><h1>Prospettiva Sismica</h1>
-          <p>Stima statistica della probabilità sismica: a breve termine dai terremoti recenti (clustering e legge di Omori), a lungo termine dalla ricorrenza storica per zona.</p></div>
-        <span class="badge" style="background:rgba(125,211,252,.14);color:#0369A1;border:1px solid rgba(125,211,252,.4);">Sperimentale</span>
-      </div>
-      <div class="an-warn" style="color:#B45309;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
-        ⚠️ <b>Non è una previsione ufficiale né un allarme.</b> I terremoti <b>non si possono predire</b> (data, ora, luogo esatti).
-        Qui si stima solo come varia la <b>probabilità</b>, con gli stessi principi statistici dell'Operational Earthquake
-        Forecasting dell'INGV: numeri piccoli, che salgono dopo un evento forte e poi ricalano. Per la pericolosità ufficiale
-        vedi <b>INGV</b> (mappa MPS04) e la Protezione Civile.
-      </div>
-
-      <section class="panel" style="margin-top:16px;">
-        <div class="panel-header"><h2>Breve termine — prossimi 7 giorni</h2><p>In Italia, probabilità di un evento M≥5 alla luce dell'attività recente</p></div>
-        <div style="padding:14px 16px;">
-          <button class="btn btn-purple" id="prRunBtn" onclick="fetchProspettiva()">Calcola la prospettiva</button>
-          <div id="prStatus" class="status">Premi per calcolare con i dati INGV più recenti.</div>
-          <div id="prShort" style="display:none;margin-top:14px;"></div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-header"><h2>Lungo termine — ricorrenza per zona</h2><p>Tasso storico di M≥5.5 (CPTI15, dal 1650) e probabilità nei prossimi 10 e 30 anni</p></div>
-        <div id="prLong" style="padding:8px 16px 16px;"><div class="lo" style="color:var(--muted);padding:20px 0;text-align:center;">—</div></div>
-      </section>
-
-      <div class="footer-note">
-        Breve termine: modello aftershock generico di Reasenberg-Jones (legge di Omori-Utsu) alimentato dagli eventi INGV
-        degli ultimi 60 giorni. Lungo termine: modello di Poisson sui tassi del catalogo storico CPTI15. Entrambi sono
-        approssimazioni statistiche a scopo illustrativo, non sostituiscono le stime ufficiali INGV.
-        Fonti: <code>webservices.ingv.it/fdsnws/event/1/query</code> · CPTI15 v4.0.
-      </div>
-    </div>
-  </div>
-
   <!-- ═══ STRUMENTI (griglia) ═══ -->
   <div class="section" id="sectionStrumenti">
     <div class="container">
@@ -2370,18 +2281,6 @@ body.sv-on{overflow:hidden;}
           <span class="tool-top"><span class="tool-ic ic" data-ic="neural"></span><span class="tl-badge">Nuovo</span></span>
           <span class="tool-t">Rete neurale</span><span class="tool-d">Prosegue l'andamento degli eventi</span>
         </button>
-        <button class="tool-tile" onclick="goSection('prospettiva')" style="--tc:#0369A1">
-          <span class="tool-top"><span class="tool-ic ic" data-ic="forecast"></span><span class="tl-badge">Beta</span></span>
-          <span class="tool-t">Prospettiva</span><span class="tool-d">Probabilità a breve e lungo termine</span>
-        </button>
-        <button class="tool-tile" onclick="goSection('analogia')" style="--tc:#4338CA">
-          <span class="tool-top"><span class="tool-ic ic" data-ic="analogy"></span><span class="tl-badge">Beta</span></span>
-          <span class="tool-t">Analogia sismica</span><span class="tool-d">Il passato più simile a oggi</span>
-        </button>
-        <button class="tool-tile" onclick="goSection('pianeti')" style="--tc:#6D28D9">
-          <span class="tool-top"><span class="tool-ic ic" data-ic="planets"></span><span class="tl-badge">Gioco</span></span>
-          <span class="tool-t">Pianeti</span><span class="tool-d">Configurazioni e terremoti, per gioco</span>
-        </button>
       </div>
       <div class="tools-lab">Impostazioni</div>
       <div class="tools-list">
@@ -2396,7 +2295,7 @@ body.sv-on{overflow:hidden;}
     <div class="container">
       <div class="header">
         <div class="title-wrap"><h1>Rete Neurale</h1>
-          <p>Cinque reti neurali vengono addestrate direttamente sul tuo dispositivo con fino a 5 anni di terremoti INGV della zona scelta, poi "proseguono" la serie: quanti eventi al giorno, quanto forti e in quali punti della zona è più probabile che avvengano.</p></div>
+          <p>Cinque reti neurali vengono addestrate direttamente sul tuo dispositivo con i terremoti INGV della zona scelta, fino all'intero catalogo dal 1985, poi "proseguono" la serie: quanti eventi al giorno, quanto forti e in quali punti della zona è più probabile che avvengano. Il catalogo storico (dall'anno 1005) serve per il confronto con i forti terremoti del passato.</p></div>
         <span class="badge" style="background:rgba(162,28,175,.14);color:#A21CAF;border:1px solid rgba(162,28,175,.4);">Sperimentale</span>
       </div>
       <div class="an-warn" style="color:#B45309;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);">
@@ -2416,7 +2315,10 @@ body.sv-on{overflow:hidden;}
               <select id="nnHorizon"><option value="7">7 giorni</option><option value="14" selected>14 giorni</option><option value="30">30 giorni</option></select></div>
           </div>
           <div class="field"><label>Dati per l'addestramento</label>
-            <select id="nnDays"><option value="365">Ultimo anno (più veloce)</option><option value="1095" selected>Ultimi 3 anni</option><option value="1826">Ultimi 5 anni (più preciso, più lento)</option></select></div>
+            <select id="nnDays"><option value="365">Ultimo anno (più veloce)</option><option value="1095">Ultimi 3 anni</option><option value="3652">Ultimi 10 anni</option><option value="7305">Ultimi 20 anni</option><option value="all" selected>Tutto il catalogo INGV, dal 1985 (più completo)</option></select>
+            <div class="hint" style="margin-top:6px;">La prima volta lo scarico del catalogo completo può richiedere qualche minuto; poi resta salvato sul dispositivo e si aggiornano solo i giorni nuovi.</div></div>
+          <label class="toggle-row" style="cursor:pointer;"><span class="sw"><input type="checkbox" id="nnHist" checked/><span class="sl"></span></span>
+            <span class="tl">Usa anche i terremoti storici (catalogo CPTI15 dal 1005 e forti eventi INGV recenti) per il confronto e per le zone</span></label>
           <button class="btn btn-purple" id="nnRunBtn" onclick="runRete()" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;"><span class="ic" data-ic="neural" style="font-size:17px;"></span>Addestra e prosegui</button>
           <div class="nn-prog" id="nnProg" style="display:none;"><div id="nnProgBar"></div></div>
           <div id="nnStatus" class="status">Premi per scaricare i dati e addestrare la rete.</div>
@@ -2432,6 +2334,7 @@ body.sv-on{overflow:hidden;}
           <div class="nn-chart"><canvas id="nnChart"></canvas></div>
           <div class="nn-chart-title">Magnitudo massima giornaliera</div>
           <div class="nn-chart"><canvas id="nnMagChart"></canvas></div>
+          <div id="nnHistBox"></div>
           <div id="nnVal" class="hint" style="margin-top:12px;"></div>
         </div>
       </section>
@@ -2455,57 +2358,6 @@ body.sv-on{overflow:hidden;}
     </div>
   </div>
 
-  <!-- ═══ CONFIGURAZIONI PLANETARIE (gioco) ═══ -->
-  <div class="section" id="sectionPianeti">
-    <div class="container">
-      <div class="header">
-        <div class="title-wrap"><h1>Configurazioni Planetarie</h1>
-          <p>Inserisci una data: l'app calcola la posizione di Sole, Luna e pianeti in quel giorno, cerca nel passato e nel futuro (dal 1750 al 2250) le date con la configurazione più simile, e mostra i terremoti di quelle date — dal catalogo strumentale INGV per le date dal 1985, dal catalogo storico CPTI15 (per anno) per quelle precedenti.</p></div>
-        <span class="badge" style="background:rgba(196,181,253,.14);color:#6D28D9;border:1px solid rgba(196,181,253,.4);">Gioco</span>
-      </div>
-      <section class="panel">
-        <div class="panel-header"><h2>Data di riferimento</h2><p>Configurazione planetaria calcolata a mezzogiorno UTC</p></div>
-        <div style="padding:14px 16px 4px;">
-          <div class="field" style="max-width:280px;"><label>Data</label>
-            <input id="plDate" type="date"/></div>
-          <button class="btn btn-purple" id="plRunBtn" onclick="fetchPianeti()" style="margin-top:14px;">🔭 Cerca configurazioni simili</button>
-          <div id="plStatus" class="status">Scegli una data e avvia la ricerca.</div>
-          <div class="an-warn" style="color:#BE185D;background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.3);">
-            🎲 <b>Questo è un gioco, non uno strumento di previsione.</b> Non esiste alcuna correlazione scientifica dimostrata
-            tra le configurazioni planetarie e i terremoti: le maree gravitazionali indotte dai pianeti sulla crosta terrestre
-            sono di ordini di grandezza inferiori a quelle lunisolari, a loro volta troppo deboli per innescare un sisma.
-            Le coincidenze che vedrai sono esattamente questo: coincidenze.
-          </div>
-        </div>
-      </section>
-      <div id="plResult" style="display:none;">
-        <div class="an-block current" style="margin-top:14px;">
-          <h3>Data scelta</h3>
-          <div id="plCurrentBody"></div>
-        </div>
-        <div id="plPast"></div>
-        <div id="plFuture"></div>
-      </div>
-      <div class="footer-note">
-        La somiglianza è calcolata sulle <b>separazioni angolari fra ogni coppia di corpi</b> (Sole, Luna e 7 pianeti — gli
-        "aspetti"), non sulle longitudini assolute: è la geometria relativa a definire una configurazione, ed è l'unica che
-        possa davvero ripresentarsi — le longitudini assolute dei pianeti esterni derivano così lentamente che, confrontando
-        quelle, risulterebbero "più simili" sempre e solo le date più vicine nel tempo. Sono escluse le date entro 3 anni
-        dalla data scelta e fra un risultato e l'altro, per saltare i ritorni annuali banali.
-        <br><br>
-        Effemeridi calcolate lato client con gli elementi kepleriani medi JPL (tabella 1800–2050) e, per la Luna, il metodo a
-        bassa precisione di Schlyter: nell'intervallo 1800–2050 l'errore tipico è di frazioni di grado, fuori cresce
-        progressivamente (per questo la ricerca è limitata al 1750–2250). Le longitudini mostrate sono
-        <b>eclittiche geocentriche</b> riferite all'eclittica J2000.
-        <br><br>
-        Eventi sismici: catalogo strumentale <code>webservices.ingv.it/fdsnws/event/1/query</code> (dal 1985) e catalogo
-        storico <b>CPTI15 v4.0</b> (Rovida et al., INGV) per le date precedenti. Per le date storiche il confronto è
-        <b>per anno</b> — il giorno e il mese nel catalogo storico sono spesso incerti — quindi vengono mostrati tutti gli
-        eventi di quell'anno (es. per il 1688 compare il terremoto del Sannio, Mw&nbsp;7.1).
-      </div>
-    </div>
-  </div>
-
   <!-- ═══ SISMOGRAMMI ═══ -->
   <div class="section" id="sectionSismogrammi">
     <div class="container">
@@ -2521,8 +2373,9 @@ body.sv-on{overflow:hidden;}
         <button type="button" role="tab" data-src="loc" aria-selected="false" onclick="setSeisSource('loc')">Locali<small>Osservatori</small></button>
       </div>
       <div class="reg-box" id="regBox" hidden>
-        <div class="reg-h">Scegli la rete della tua zona</div>
-        <div class="reg-list" id="regList" role="list"></div>
+        <label class="reg-h" for="regSelect">Scegli la zona</label>
+        <select id="regSelect" class="reg-select" onchange="pickRegNet(this.value)"></select>
+        <div class="reg-who" id="regWho"></div>
         <div class="reg-credit" id="regCredit"></div>
       </div>
       <div id="locView" class="loc-view" hidden></div>
@@ -3045,8 +2898,7 @@ function goSection(sec){
   /* top header context */
   const titles={terremoti:['quake','Terremoti'],mappa:['map','Mappa'],sismogrammi:['seismo','Sismogrammi'],
     focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],
-    localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],analogia:['analogy','Analogia Sismica'],
-    pianeti:['planets','Configurazioni Planetarie'],prospettiva:['forecast','Prospettiva Sismica'],
+    localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],
     catalogo:['archive','Catalogo Storico'],rete:['neural','Rete Neurale'],strumenti:['grid','Strumenti']};
   const _tt=titles[sec];
   document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
@@ -3085,14 +2937,6 @@ function goSection(sec){
     document.getElementById('sectionSciami').classList.add('active');
     if(!swMapInited){initSwarmYearSelect();initSwMap();swMapInited=true;}
     else setTimeout(()=>swMap&&swMap.invalidateSize(),80);
-  } else if(sec==='analogia'){
-    document.getElementById('sectionAnalogia').classList.add('active');
-  } else if(sec==='pianeti'){
-    document.getElementById('sectionPianeti').classList.add('active');
-    initPlDate();
-  } else if(sec==='prospettiva'){
-    document.getElementById('sectionProspettiva').classList.add('active');
-    renderProspettivaLong();
   } else if(sec==='strumenti'){
     document.getElementById('sectionStrumenti').classList.add('active');
   } else if(sec==='rete'){
@@ -3113,7 +2957,7 @@ function goSection(sec){
 }
 /* le sezioni raggiungibili da "Strumenti" tengono acceso quel tab */
 (function(){const _gs=goSection;goSection=function(sec){_gs(sec);
-  if(['strumenti','storico','catalogo','sciami','rete','prospettiva','analogia','pianeti','notifiche','localizzazione'].includes(sec)){
+  if(['strumenti','storico','catalogo','sciami','rete','notifiche','localizzazione'].includes(sec)){
     const b=document.getElementById('btStor');if(b)b.classList.add('active');}};})();
 /* Frecce avanti/indietro e tasto back mobile */
 window.addEventListener('popstate',e=>{
@@ -4514,567 +4358,6 @@ function focusSwarm(i){
   if(swMarkers[i])swMarkers[i].openTooltip();
 }
 
-/* ================================================================
-   ANALOGIA SISMICA (sperimentale) — trova il periodo storico più
-   simile a quello attuale confrontando "firme" sismiche (n. eventi,
-   magnitudo massima, energia rilasciata) e mostra l'evento più
-   forte avvenuto nella finestra IMMEDIATAMENTE SUCCESSIVA.
-   Non è una previsione: è pura analisi retrospettiva del catalogo.
-================================================================ */
-let _anHours=24, _anRunning=false;
-
-function anSelectWindow(h){
-  _anHours=h;
-  document.querySelectorAll('.an-window-btn').forEach(b=>{
-    b.classList.toggle('active', Number(b.dataset.hours)===h);
-  });
-}
-
-/* Firma sismica SPAZIALE: mappa "cella geografica → n. eventi".
-   L'analogia si basa sulle zone effettivamente colpite (celle di ~30 km
-   di lato), non sull'energia. Per ogni cella teniamo anche il centroide
-   e la magnitudo massima, così possiamo mostrare le "aree principali"
-   agganciandole al comune più vicino tramite comuni.json. */
-const AN_CELL_DEG=0.3;   // ~30 km a latitudini italiane
-const AN_SIG_MIN_MAG=2.0; // eventi < M2 esclusi dalla firma (rumore/mal-localizzati)
-
-function _anCellKey(lat,lon){
-  return Math.floor(lat/AN_CELL_DEG)+','+Math.floor(lon/AN_CELL_DEG);
-}
-
-function _anSignature(events){
-  const cells=new Map();
-  let maxMag=-Infinity, kept=0;
-  for(const ev of events){
-    if(ev.mag<AN_SIG_MIN_MAG) continue;
-    kept++;
-    if(ev.mag>maxMag) maxMag=ev.mag;
-    const k=_anCellKey(ev.lat,ev.lon);
-    let c=cells.get(k);
-    if(!c){c={count:0,latSum:0,lonSum:0,maxMag:-Infinity};cells.set(k,c);}
-    c.count++;
-    c.latSum+=ev.lat;
-    c.lonSum+=ev.lon;
-    if(ev.mag>c.maxMag) c.maxMag=ev.mag;
-  }
-  return {n:events.length, kept, maxMag, cells};
-}
-
-/* Distanza spaziale (Jaccard pesata sui conteggi per cella):
-   sim = Σ min(a[c],b[c]) / Σ max(a[c],b[c])
-   Alta se le stesse aree sono state attivate con intensità simile,
-   bassa se le zone sono diverse. Distanza = 1 - sim. */
-function _anDistance(a,b){
-  if(!a.cells.size||!b.cells.size) return 1;
-  const keys=new Set([...a.cells.keys(),...b.cells.keys()]);
-  let sMin=0, sMax=0;
-  for(const k of keys){
-    const va=a.cells.get(k)?.count||0;
-    const vb=b.cells.get(k)?.count||0;
-    sMin+=Math.min(va,vb);
-    sMax+=Math.max(va,vb);
-  }
-  return sMax===0 ? 1 : (1 - sMin/sMax);
-}
-
-/* Estrae le N aree più attive dalla firma e le denomina col comune più vicino
-   (tramite comuni.json, già usato dalla scheda terremoto). */
-async function _anTopAreas(sig, maxN=5){
-  if(!sig.cells.size) return [];
-  const arr=[...sig.cells.values()].map(c=>({
-    count:c.count,
-    lat:c.latSum/c.count,
-    lon:c.lonSum/c.count,
-    maxMag:c.maxMag
-  })).sort((a,b)=>b.count-a.count).slice(0,maxN);
-  const comuni=await loadComuniData();
-  return arr.map(a=>{
-    let best=null,bestD=Infinity;
-    if(comuni&&comuni.length){
-      for(const c of comuni){
-        const d=haverDist(a.lat,a.lon,c[2],c[3]);
-        if(d<bestD){bestD=d;best=c;}
-      }
-    }
-    return {...a,
-      name: best ? `${best[0]} (${best[1]})` : `${a.lat.toFixed(2)}, ${a.lon.toFixed(2)}`,
-      nearbyKm: best ? bestD : null
-    };
-  });
-}
-
-/* Scarica un semestre INGV. Split per semestre (invece che per anno intero):
-   il limite INGV è 20000 eventi per query, e gli anni ad alta attività
-   (Amatrice 2016, L'Aquila 2009) rischiano di essere troncati se presi
-   in un colpo solo. Con i semestri restiamo sotto la soglia. */
-async function _anFetchHalfYear(year, half, minMag){
-  const start = half===1 ? `${year}-01-01T00:00:00` : `${year}-07-01T00:00:00`;
-  const end   = half===1 ? `${year}-06-30T23:59:59` : `${year}-12-31T23:59:59`;
-  const url=`${EQ_BASE}?format=text&starttime=${start}&endtime=${end}&orderby=time&limit=20000`
-    +`&minmagnitude=${minMag}&minlat=33&maxlat=49&minlon=4&maxlon=21`;
-  const resp=await fetch(url,{signal:AbortSignal.timeout(30000)});
-  if(resp.status===204)return [];
-  if(!resp.ok)throw new Error('HTTP '+resp.status+' '+year+' H'+half);
-  return parseEqText(await resp.text(),999);
-}
-
-/* Scarica tutti i semestri [startYear, endYear] con concorrenza limitata
-   per non aspettare 50+ fetch sequenziali. */
-async function _anFetchHistorical(startYear, endYear, minMag, statusEl){
-  const tasks=[];
-  for(let y=startYear; y<=endYear; y++){
-    tasks.push({year:y, half:1});
-    tasks.push({year:y, half:2});
-  }
-  const results=new Array(tasks.length);
-  const total=tasks.length;
-  let next=0, done=0;
-  const CONCURRENCY=4;
-  async function worker(){
-    while(true){
-      const my=next++;
-      if(my>=total) return;
-      const t=tasks[my];
-      try{
-        results[my]=await _anFetchHalfYear(t.year, t.half, minMag);
-      }catch(e){
-        console.warn('Errore fetch', t.year, 'H'+t.half, e.message);
-        results[my]=[];
-      }
-      done++;
-      if(statusEl){
-        statusEl.textContent=`Scarico catalogo INGV… ${done}/${total} semestri (dal ${startYear} al ${endYear})`;
-        statusEl.className='status';
-      }
-    }
-  }
-  await Promise.all(Array(CONCURRENCY).fill(0).map(()=>worker()));
-  return results.flat();
-}
-
-const AN_TOP_N=4;         // numero di match da restituire
-const AN_HIST_MIN_MAG=2.0;
-const AN_HIST_START=2000; // catalogo dal 2000 in poi
-
-async function fetchAnalogia(){
-  if(_anRunning)return;
-  const btn=document.getElementById('anRunBtn');
-  const st=document.getElementById('anStatus');
-  const resultBox=document.getElementById('anResult');
-  _anRunning=true;
-  btn.disabled=true;
-  resultBox.style.display='none';
-  st.textContent='Preparo l\'analisi…';st.className='status';
-
-  try{
-    const windowMs=_anHours*3600000;
-    const now=new Date();
-    const currentStart=new Date(now.getTime()-windowMs);
-    const fmt=d=>d.toISOString().slice(0,19);
-
-    /* 1. Finestra attuale */
-    st.textContent='Scarico eventi del periodo attuale…';
-    const curUrl=`${EQ_BASE}?format=text&starttime=${fmt(currentStart)}&endtime=${fmt(now)}`
-      +`&orderby=time&limit=5000&minmagnitude=0&minlat=33&maxlat=49&minlon=4&maxlon=21`;
-    const curResp=await fetch(curUrl,{signal:AbortSignal.timeout(20000)});
-    const curEvents = curResp.status===204 ? [] : (curResp.ok ? parseEqText(await curResp.text(),999) : []);
-    const curSig=_anSignature(curEvents);
-
-    /* 2. Catalogo storico dal 2000 (compreso), filtrato a M≥2.0.
-       Escludiamo l'anno corrente per evitare che la finestra attuale
-       si trovi da sola nel catalogo. Scaricato a semestri in parallelo. */
-    const endHistYear=now.getFullYear()-1;
-    const startHistYear=AN_HIST_START;
-    let histEvents=await _anFetchHistorical(startHistYear, endHistYear, AN_HIST_MIN_MAG, st);
-
-    histEvents.sort((a,b)=>new Date(a.time)-new Date(b.time));
-    const times=histEvents.map(e=>new Date(e.time).getTime());
-
-    if(histEvents.length<20){
-      st.textContent='Catalogo storico troppo piccolo per l\'analisi.';st.className='status warn';
-      return;
-    }
-
-    st.textContent=`Confronto la firma attuale con ${histEvents.length.toLocaleString('it-IT')} eventi storici (dal ${startHistYear})…`;
-    /* Sospendiamo brevemente per consentire il repaint della UI prima
-       di un ciclo potenzialmente lungo. */
-    await new Promise(r=>setTimeout(r,0));
-
-    /* 3. Slide della finestra sul catalogo storico (step giornaliero),
-       raccogliamo TUTTI i candidati, poi ordiniamo per distanza. */
-    const stepMs=86400000;
-    const tStart=times[0], tEnd=times[times.length-1]-windowMs;
-    const candidates=[];
-    let iL=0, iR=0;
-    for(let t=tStart; t<=tEnd; t+=stepMs){
-      const wEnd=t+windowMs;
-      while(iL<times.length && times[iL]<t) iL++;
-      while(iR<times.length && times[iR]<wEnd) iR++;
-      if(iR<=iL) continue;
-      const winEv=histEvents.slice(iL,iR);
-      const sig=_anSignature(winEv);
-      if(!sig.kept) continue;
-      const d=_anDistance(curSig,sig);
-      candidates.push({dist:d, start:t, end:wEnd, sig});
-    }
-
-    if(!candidates.length){
-      st.textContent='Nessun periodo storico confrontabile trovato.';st.className='status warn';
-      return;
-    }
-    candidates.sort((a,b)=>a.dist-b.dist);
-
-    /* 4. Non-max suppression temporale: due candidati troppo ravvicinati
-       nel tempo condividono la maggior parte degli eventi, quindi sono
-       essenzialmente lo stesso "periodo storico". Ne teniamo uno solo
-       (il migliore) e chiediamo che gli altri distino almeno 1.5 finestre
-       l'uno dall'altro. Così i top-N mostrati sono periodi realmente diversi. */
-    const minGapMs=windowMs*1.5;
-    const topMatches=[];
-    for(const c of candidates){
-      if(topMatches.length>=AN_TOP_N) break;
-      if(topMatches.some(m=>Math.abs(m.start-c.start)<minGapMs)) continue;
-      topMatches.push(c);
-    }
-
-    /* 5. Per ognuno dei top-N: scarichiamo il periodo IMMEDIATAMENTE
-       SUCCESSIVO (stessa durata) e identifichiamo l'evento più forte
-       realmente accaduto. Nessuna soglia mag, così non perdiamo
-       nessun evento significativo. */
-    for(let i=0;i<topMatches.length;i++){
-      st.textContent=`Scarico periodo successivo del match #${i+1}/${topMatches.length}…`;
-      const m=topMatches[i];
-      const nStart=new Date(m.end);
-      const nEnd=new Date(m.end+windowMs);
-      const nUrl=`${EQ_BASE}?format=text&starttime=${fmt(nStart)}&endtime=${fmt(nEnd)}`
-        +`&orderby=time&limit=5000&minmagnitude=0&minlat=33&maxlat=49&minlon=4&maxlon=21`;
-      try{
-        const nResp=await fetch(nUrl,{signal:AbortSignal.timeout(20000)});
-        const nEvents = nResp.status===204 ? [] : (nResp.ok ? parseEqText(await nResp.text(),999) : []);
-        m.nextEvents=nEvents;
-        m.largest = nEvents.length ? nEvents.reduce((a,b)=>b.mag>a.mag?b:a) : null;
-      }catch(e){
-        m.nextEvents=[];m.largest=null;
-      }
-    }
-
-    /* 6. Render */
-    st.textContent='Identifico le aree principali…';
-    await renderAnalogia({
-      hours:_anHours,
-      curRange:[currentStart,now],
-      curSig, curCount:curEvents.length,
-      matches: topMatches.map(m=>({
-        start:new Date(m.start), end:new Date(m.end),
-        sig:m.sig, dist:m.dist,
-        nextRange:[new Date(m.end), new Date(m.end+windowMs)],
-        nextEvents:m.nextEvents, largest:m.largest
-      }))
-    });
-    resultBox.style.display='flex';
-    const bestSim=((1-Math.min(topMatches[0].dist,1))*100).toFixed(0);
-    st.textContent=`Trovati ${topMatches.length} periodi analoghi (miglior similarità ≈ ${bestSim}%, catalogo dal ${startHistYear}).`;
-    st.className='status ok';
-  }catch(err){
-    st.textContent='Errore: '+err.message;st.className='status err';
-  }finally{
-    _anRunning=false;btn.disabled=false;
-  }
-}
-
-function _anFmtDateRange(d0,d1){
-  const dtFmt=d=>d.toLocaleString('it-IT',{timeZone:'Europe/Rome',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  return `${dtFmt(d0)} → ${dtFmt(d1)}`;
-}
-function _anSigRows(sig,count){
-  const rows=[
-    ['Eventi rilevati', (count!=null?count:sig.n).toLocaleString('it-IT')],
-    ['Aree geografiche attivate', sig.cells.size.toLocaleString('it-IT')+' celle ~30 km'],
-    ['Eventi ≥ M'+AN_SIG_MIN_MAG.toFixed(1)+' (firma)', sig.kept.toLocaleString('it-IT')],
-    ['Magnitudo massima', sig.maxMag>-Infinity ? 'M '+sig.maxMag.toFixed(1) : '—']
-  ];
-  return rows.map(r=>`<div class="sig-row"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('');
-}
-
-function _anAreasHtml(title,areas){
-  if(!areas.length) return '';
-  const rows=areas.map(a=>{
-    const nearby=a.nearbyKm!=null&&a.nearbyKm>0.5 ? ` <span style="color:var(--muted);font-size:11px;">(~${a.nearbyKm.toFixed(0)} km)</span>` : '';
-    return `<div class="sig-row"><span class="k">${a.name}${nearby}</span><span class="v">${a.count} ev · M ${a.maxMag.toFixed(1)}</span></div>`;
-  }).join('');
-  return `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);">
-    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px;">${title}</div>
-    ${rows}
-  </div>`;
-}
-
-function _anNextHtml(match){
-  const rangeRow=`<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(match.nextRange[0],match.nextRange[1])}</span></div>`
-    +`<div class="sig-row"><span class="k">Eventi totali</span><span class="v">${match.nextEvents.length.toLocaleString('it-IT')}</span></div>`;
-  if(match.largest){
-    const t=new Date(match.largest.time);
-    const localStr=t.toLocaleString('it-IT',{timeZone:'Europe/Rome',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    return rangeRow+`
-      <div class="an-big-event">
-        <div class="m">M ${match.largest.mag.toFixed(1)}</div>
-        <div class="p">${match.largest.place}</div>
-        <div class="t">${localStr} · profondità ${match.largest.depth.toFixed(0)} km</div>
-      </div>`;
-  }
-  return rangeRow+`<div class="an-none">Nessun evento significativo registrato nel periodo successivo.</div>`;
-}
-
-async function renderAnalogia(r){
-  /* pre-carica comuni.json una sola volta */
-  await loadComuniData();
-
-  /* aree principali per ogni firma coinvolta (attuale + top-N) */
-  const [curAreas, ...matchAreasList] = await Promise.all([
-    _anTopAreas(r.curSig,5),
-    ...r.matches.map(m=>_anTopAreas(m.sig,3))
-  ]);
-
-  document.getElementById('anCurrentBody').innerHTML=
-    `<div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(r.curRange[0],r.curRange[1])}</span></div>`
-    +_anSigRows(r.curSig,r.curCount)
-    +_anAreasHtml('Aree principali colpite',curAreas);
-
-  const container=document.getElementById('anMatches');
-  container.innerHTML=r.matches.map((m,i)=>{
-    const areas=matchAreasList[i]||[];
-    const sim=((1-Math.min(m.dist,1))*100).toFixed(1);
-    const rankCls=i===0?'an-rank-1':(i===1?'an-rank-2':(i===2?'an-rank-3':'an-rank-4'));
-    return `<div class="an-match-card">
-      <div class="an-match-header">
-        <span class="an-rank ${rankCls}">#${i+1}</span>
-        <h3>Periodo storico simile</h3>
-        <span class="an-sim">${sim}%</span>
-      </div>
-      <div class="an-match-body">
-        <div class="sig-row"><span class="k">Intervallo</span><span class="v">${_anFmtDateRange(m.start,m.end)}</span></div>
-        ${_anSigRows(m.sig)}
-        ${_anAreasHtml('Aree principali colpite',areas)}
-        <div class="an-next-divider">Cosa successe nel periodo successivo</div>
-        ${_anNextHtml(m)}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-/* ================================================================
-   CONFIGURAZIONI PLANETARIE (gioco)
-
-   Effemeridi a bassa precisione dagli elementi kepleriani medi JPL
-   ("Approximate Positions of the Major Planets", tabella 1800–2050).
-   Per ogni pianeta: elemento al J2000 + variazione per secolo giuliano.
-   a  = semiasse maggiore (AU)      e = eccentricità
-   I  = inclinazione (°)            L = longitudine media (°)
-   wb = longitudine del perielio(°) Om = longitudine del nodo asc. (°)
-
-   NB: nessuna correlazione dimostrata tra configurazioni planetarie e
-   sismicità — questa sezione è dichiaratamente un gioco.
-================================================================ */
-const PL_BODIES=[
-  /* nome        a0,        adot,        e0,        edot,       I0,        Idot,      L0,          Ldot,          wb0,        wbdot,     Om0,        Omdot,     peso */
-  {n:'Mercurio', a:0.38709927, ad:0.00000037, e:0.20563593, ed:0.00001906, I:7.00497902, Id:-0.00594749, L:252.25032350, Ld:149472.67411175, w:77.45779628,  wd:0.16047689, O:48.33076593, Od:-0.12534081, wt:0.4},
-  {n:'Venere',   a:0.72333566, ad:0.00000390, e:0.00677672, ed:-0.00004107,I:3.39467605, Id:-0.00078890, L:181.97909950, Ld:58517.81538729,  w:131.60246718, wd:0.00268329, O:76.67984255, Od:-0.27769418, wt:0.6},
-  {n:'Terra',    a:1.00000261, ad:0.00000562, e:0.01671123, ed:-0.00004392,I:-0.00001531,Id:-0.01294668, L:100.46457166, Ld:35999.37244981,  w:102.93768193, wd:0.32327364, O:0.0,         Od:0.0,         wt:0.0},
-  {n:'Marte',    a:1.52371034, ad:0.00001847, e:0.09339410, ed:0.00007882, I:1.84969142, Id:-0.00813131, L:-4.55343205,  Ld:19140.30268499,  w:-23.94362959, wd:0.44441088, O:49.55953891, Od:-0.29257343, wt:0.9},
-  {n:'Giove',    a:5.20288700, ad:-0.00011607,e:0.04838624, ed:-0.00013253,I:1.30439695, Id:-0.00183714, L:34.39644051,  Ld:3034.74612775,   w:14.72847983,  wd:0.21252668, O:100.47390909,Od:0.20469106,  wt:1.3},
-  {n:'Saturno',  a:9.53667594, ad:-0.00125060,e:0.05386179, ed:-0.00050991,I:2.48599187, Id:0.00193609,  L:49.95424423,  Ld:1222.49362201,   w:92.59887831,  wd:-0.41897216,O:113.66242448,Od:-0.28867794, wt:1.4},
-  {n:'Urano',    a:19.18916464,ad:-0.00196176,e:0.04725744, ed:-0.00004397,I:0.77263783, Id:-0.00242939, L:313.23810451, Ld:428.48202785,    w:170.95427630, wd:0.40805281, O:74.01692503, Od:0.04240589,  wt:1.2},
-  {n:'Nettuno',  a:30.06992276,ad:0.00026291, e:0.00859048, ed:0.00005105, I:1.77004347, Id:0.00035372,  L:-55.12002969, Ld:218.45945325,    w:44.96476227,  wd:-0.32241464,O:131.78422574,Od:-0.00508664, wt:1.2}
-];
-/* Il Sole non è un corpo della tabella: la sua longitudine geocentrica è
-   quella eliocentrica della Terra + 180°. Peso alto perché fissa il
-   periodo dell'anno (quindi il giorno del calendario). */
-const PL_SUN_WEIGHT=1.0;
-
-const _plD2R=Math.PI/180, _plR2D=180/Math.PI;
-function _plNorm360(x){x=x%360;return x<0?x+360:x;}
-/* differenza angolare minima fra due angoli, 0..180 */
-function _plAngDiff(a,b){const d=Math.abs(_plNorm360(a)-_plNorm360(b));return d>180?360-d:d;}
-
-/* Giorno giuliano a 12:00 UTC della data indicata */
-function _plJD(date){
-  return Math.floor(date.getTime()/86400000)+2440587.5+0.5;
-}
-
-/* Equazione di Keplero: E - e*sinE = M  (gradi, e adimensionale) */
-function _plKepler(M,e){
-  const eStar=_plR2D*e;
-  let E=M+eStar*Math.sin(M*_plD2R);
-  for(let k=0;k<8;k++){
-    const dM=M-(E-eStar*Math.sin(E*_plD2R));
-    const dE=dM/(1-e*Math.cos(E*_plD2R));
-    E+=dE;
-    if(Math.abs(dE)<1e-9)break;
-  }
-  return E;
-}
-
-/* Posizione eliocentrica (AU) nel piano dell'eclittica J2000 */
-function _plHelio(p,T){
-  const a=p.a+p.ad*T, e=p.e+p.ed*T, I=p.I+p.Id*T;
-  const L=p.L+p.Ld*T, wb=p.w+p.wd*T, Om=p.O+p.Od*T;
-  const argPeri=wb-Om;
-  let M=L-wb;
-  M=((M+180)%360+360)%360-180;   /* riporta in -180..180 */
-  const E=_plKepler(M,e);
-  /* coordinate nel piano orbitale */
-  const xo=a*(Math.cos(E*_plD2R)-e);
-  const yo=a*Math.sqrt(1-e*e)*Math.sin(E*_plD2R);
-  const cw=Math.cos(argPeri*_plD2R), sw=Math.sin(argPeri*_plD2R);
-  const cO=Math.cos(Om*_plD2R),      sO=Math.sin(Om*_plD2R);
-  const cI=Math.cos(I*_plD2R),       sI=Math.sin(I*_plD2R);
-  return {
-    x:(cw*cO-sw*sO*cI)*xo+(-sw*cO-cw*sO*cI)*yo,
-    y:(cw*sO+sw*cO*cI)*xo+(-sw*sO+cw*cO*cI)*yo,
-    z:(sw*sI)*xo+(cw*sI)*yo
-  };
-}
-
-/* Longitudine eclittica GEOCENTRICA della Luna (°).
-   Metodo a bassa precisione di Paul Schlyter (stjarnhimlen.se): elementi
-   orbitali medi + i 12 termini di perturbazione principali (evezione,
-   variazione, equazione annua, …). Precisione tipica ~0,1–0,2°, più che
-   sufficiente per un gioco. Epoca degli elementi: 1999-12-31 0:00 UT
-   (JD 2451543.5). */
-function _plMoonLon(date){
-  const d=_plJD(date)-2451543.5;
-  const r=_plD2R;
-  /* Sole (serve per le perturbazioni lunari) */
-  const ws=282.9404+4.70935e-5*d;
-  const Ms=_plNorm360(356.0470+0.9856002585*d);
-  const Ls=_plNorm360(ws+Ms);
-  /* Luna */
-  const N=_plNorm360(125.1228-0.0529538083*d);   /* nodo ascendente */
-  const iM=5.1454;                                /* inclinazione */
-  const w=_plNorm360(318.0634+0.1643573223*d);    /* argomento del perigeo */
-  const a=60.2666, e=0.054900;
-  const M=_plNorm360(115.3654+13.0649929509*d);   /* anomalia media */
-  /* eccentrica */
-  let E=M+_plR2D*e*Math.sin(M*r)*(1+e*Math.cos(M*r));
-  for(let k=0;k<6;k++) E=E-(E-_plR2D*e*Math.sin(E*r)-M)/(1-e*Math.cos(E*r));
-  const xv=a*(Math.cos(E*r)-e), yv=a*Math.sqrt(1-e*e)*Math.sin(E*r);
-  const v=_plNorm360(Math.atan2(yv,xv)*_plR2D);
-  const rr=Math.sqrt(xv*xv+yv*yv);
-  const xh=rr*(Math.cos(N*r)*Math.cos((v+w)*r)-Math.sin(N*r)*Math.sin((v+w)*r)*Math.cos(iM*r));
-  const yh=rr*(Math.sin(N*r)*Math.cos((v+w)*r)+Math.cos(N*r)*Math.sin((v+w)*r)*Math.cos(iM*r));
-  let lon=_plNorm360(Math.atan2(yh,xh)*_plR2D);
-  /* perturbazioni principali (gradi) */
-  const Lm=_plNorm360(N+w+M);   /* long. media Luna */
-  const D=_plNorm360(Lm-Ls);    /* elongazione media */
-  const F=_plNorm360(Lm-N);     /* argomento di latitudine */
-  lon+=-1.274*Math.sin((M-2*D)*r);
-  lon+= 0.658*Math.sin((2*D)*r);
-  lon+=-0.186*Math.sin(Ms*r);
-  lon+=-0.059*Math.sin((2*M-2*D)*r);
-  lon+=-0.057*Math.sin((M-2*D+Ms)*r);
-  lon+= 0.053*Math.sin((M+2*D)*r);
-  lon+= 0.046*Math.sin((2*D-Ms)*r);
-  lon+= 0.041*Math.sin((M-Ms)*r);
-  lon+=-0.035*Math.sin(D*r);
-  lon+=-0.031*Math.sin((M+Ms)*r);
-  lon+=-0.015*Math.sin((2*F-2*D)*r);
-  lon+= 0.011*Math.sin((M-4*D)*r);
-  return _plNorm360(lon);
-}
-
-/* Longitudini eclittiche GEOCENTRICHE (°) di Sole, Luna e pianeti per la data.
-   Restituisce {sun:…, moon:…, bodies:{Mercurio:…, …}} */
-function plLongitudes(date){
-  const T=(_plJD(date)-2451545.0)/36525;
-  const earth=_plHelio(PL_BODIES.find(b=>b.n==='Terra'),T);
-  const out={};
-  for(const p of PL_BODIES){
-    if(p.n==='Terra')continue;
-    const h=_plHelio(p,T);
-    out[p.n]=_plNorm360(Math.atan2(h.y-earth.y,h.x-earth.x)*_plR2D);
-  }
-  /* Sole visto dalla Terra = direzione opposta alla Terra vista dal Sole */
-  const sun=_plNorm360(Math.atan2(-earth.y,-earth.x)*_plR2D);
-  return {sun,moon:_plMoonLon(date),bodies:out};
-}
-
-const PL_NAMES=['Sole','Luna','Mercurio','Venere','Marte','Giove','Saturno','Urano','Nettuno'];
-/* Più peso alla Luna e ai corpi fino a Saturno; Urano e Nettuno pesano meno
-   (sono anche i più incerti nell'effemeride e i più lenti, quindi poco
-   discriminanti). */
-const PL_WEIGHTS={Sole:1.1,Luna:1.5,Mercurio:0.6,Venere:0.9,Marte:1.1,Giove:1.6,Saturno:1.6,Urano:0.6,Nettuno:0.5};
-/* Tutte le coppie di corpi, con peso = media geometrica dei pesi dei due */
-const PL_PAIRS=(()=>{
-  const out=[];
-  for(let i=0;i<PL_NAMES.length;i++)
-    for(let j=i+1;j<PL_NAMES.length;j++)
-      out.push({i,j,wt:Math.sqrt(PL_WEIGHTS[PL_NAMES[i]]*PL_WEIGHTS[PL_NAMES[j]])});
-  return out;
-})();
-
-/* Firma della configurazione.
-   lons = longitudini assolute (solo per la visualizzazione)
-   seps = separazioni angolari fra ogni coppia di corpi (gli "aspetti").
-
-   Il confronto usa le SEPARAZIONI, non le longitudini assolute: è la
-   geometria relativa a definire una "configurazione planetaria", ed è
-   invariante per rotazione. È anche l'unico modo perché una configurazione
-   possa davvero ripresentarsi: le longitudini assolute dei pianeti esterni
-   derivano lentamente e non tornano mai identiche in pochi secoli, per cui
-   confrontandole vincerebbero sempre e solo le date più vicine nel tempo. */
-function plSignature(date){
-  const L=plLongitudes(date);
-  const lons=PL_NAMES.map(n=> n==='Sole'?L.sun : (n==='Luna'?L.moon : L.bodies[n]));
-  const seps=PL_PAIRS.map(p=>_plAngDiff(lons[p.i],lons[p.j]));
-  return {lons,seps};
-}
-
-/* Distanza fra due configurazioni: media pesata degli scarti fra le
-   separazioni di coppia, normalizzata 0 (identiche) → 1 */
-function plDistance(a,b){
-  let num=0,den=0;
-  for(let k=0;k<PL_PAIRS.length;k++){
-    num+=PL_PAIRS[k].wt*Math.abs(a.seps[k]-b.seps[k]);
-    den+=PL_PAIRS[k].wt;
-  }
-  return (num/den)/180;
-}
-
-/* Scansione: trova le date con la firma più vicina a quella di riferimento.
-   minGapDays evita di restituire i giorni immediatamente adiacenti (che
-   sarebbero banalmente i più simili) e le date troppo vicine fra loro. */
-function plSearch(refSig, fromDate, toDate, topN, minGapDays, refDate){
-  const DAY=86400000;
-  const coarseStep=3;   /* con la Luna nel confronto la rifinitura ±3 gg recupera l'allineamento esatto */
-  const cands=[];
-  for(let t=fromDate.getTime(); t<=toDate.getTime(); t+=coarseStep*DAY){
-    if(Math.abs(t-refDate.getTime())<minGapDays*DAY) continue;
-    cands.push({t,dist:plDistance(refSig,plSignature(new Date(t)))});
-  }
-  if(!cands.length)return [];
-  cands.sort((a,b)=>a.dist-b.dist);
-
-  /* soppressione dei duplicati temporali + rifinitura giorno per giorno */
-  const picked=[];
-  for(const c of cands){
-    if(picked.length>=topN)break;
-    if(picked.some(p=>Math.abs(p.t-c.t)<minGapDays*DAY))continue;
-    /* rifinisci ±3 giorni a passo giornaliero (per centrare bene la Luna) */
-    let best={t:c.t,dist:c.dist};
-    for(let k=-3;k<=3;k++){
-      const tt=c.t+k*DAY;
-      if(tt<fromDate.getTime()||tt>toDate.getTime())continue;
-      if(Math.abs(tt-refDate.getTime())<minGapDays*DAY)continue;
-      const dd=plDistance(refSig,plSignature(new Date(tt)));
-      if(dd<best.dist)best={t:tt,dist:dd};
-    }
-    picked.push(best);
-  }
-  /* riordina per distanza REALE dopo la rifinitura, così il ranking mostrato
-     è corretto anche se il campione grezzo aveva la Luna leggermente sfasata */
-  picked.sort((a,b)=>a.dist-b.dist);
-  return picked;
-}
-
 /* ── Catalogo storico CPTI15 (INGV) ── caricato on-demand.
    Struttura per evento: [anno, mese, giorno, area, lat, lon, Mw, Io]
    (mese/giorno/Mw/Io possono essere null). Usato per le date storiche
@@ -5094,421 +4377,6 @@ function loadCptiData(){
   }).catch(()=>{cptiData=[];cptiByYear=new Map();return cptiData;});
   return cptiLoading;
 }
-/* Eventi CPTI di un intero ANNO, ordinati per magnitudo decrescente.
-   Il match è per anno (non per giorno esatto): le date storiche hanno
-   spesso giorno/mese incerti, quindi se la configurazione simile cade
-   nel 1688 mostriamo comunque il terremoto del Sannio di quell'anno. */
-async function plFetchQuakesCPTI(year){
-  await loadCptiData();
-  const list=(cptiByYear&&cptiByYear.get(year))||[];
-  return list.slice().sort((a,b)=>(b[6]||0)-(a[6]||0));
-}
-
-/* Terremoti registrati in Italia in un dato giorno (00:00–23:59 UTC) */
-async function plFetchQuakes(date){
-  const d0=new Date(Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),0,0,0));
-  const d1=new Date(d0.getTime()+86399000);
-  const fmt=x=>x.toISOString().slice(0,19);
-  const url=`${EQ_BASE}?format=text&starttime=${fmt(d0)}&endtime=${fmt(d1)}`
-    +`&orderby=time&limit=5000&minmagnitude=0&minlat=33&maxlat=49&minlon=4&maxlon=21`;
-  try{
-    const r=await fetch(url,{signal:AbortSignal.timeout(20000)});
-    if(r.status===204)return [];
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    return parseEqText(await r.text(),999);
-  }catch(e){ return null; }   /* null = dato non disponibile */
-}
-
-/* Copertura del catalogo sismico INGV: eventi mostrabili solo in questo
-   intervallo. La RICERCA delle configurazioni, invece, spazia molto più
-   ampiamente (PL_SEARCH_FLOOR..PL_SEARCH_CEIL), così funziona anche con
-   date molto vecchie o molto future — semplicemente per quelle fuori
-   copertura non ci saranno eventi sismici da mostrare. */
-const PL_INGV_START=new Date(Date.UTC(1985,0,1));
-const PL_SEARCH_FLOOR=new Date(Date.UTC(1750,0,1));
-const PL_SEARCH_CEIL=new Date(Date.UTC(2250,11,31));
-/* 3 anni: esclude sia i giorni adiacenti sia i "ritorni" annuali banali
-   (stessa data del calendario, in cui il Sole torna dov'era e i pianeti
-   esterni si sono mossi di poco), lasciando emergere le ricorrenze vere. */
-const PL_MIN_GAP_DAYS=3*365;
-
-/* Risolve la sismicità da mostrare per una data, scegliendo la fonte giusta:
-   - futuro       → nessun dato
-   - dal 1985 a oggi → catalogo strumentale INGV (FDSN), giorno esatto
-   - prima del 1985  → catalogo storico CPTI15, per ANNO */
-async function plResolveSeismicity(date){
-  const t=date.getTime();
-  if(t>Date.now()) return {kind:'future'};
-  if(t>=PL_INGV_START.getTime()){
-    return {kind:'fdsn', quakes:await plFetchQuakes(date)};
-  }
-  const y=date.getUTCFullYear();
-  return {kind:'cpti', year:y, events:await plFetchQuakesCPTI(y)};
-}
-
-function initPlDate(){
-  const el=document.getElementById('plDate');
-  if(el&&!el.value) el.value=new Date().toISOString().slice(0,10);
-}
-
-let _plRunning=false;
-async function fetchPianeti(){
-  if(_plRunning)return;
-  const btn=document.getElementById('plRunBtn');
-  const st=document.getElementById('plStatus');
-  const box=document.getElementById('plResult');
-  const val=document.getElementById('plDate').value;
-  if(!val){st.textContent='Seleziona una data.';st.className='status err';return;}
-
-  _plRunning=true;btn.disabled=true;box.style.display='none';
-  st.textContent='Calcolo la configurazione planetaria…';st.className='status';
-
-  try{
-    const refDate=new Date(val+'T12:00:00Z');
-    const refSig=plSignature(refDate);
-
-    /* Passato: dalla data scelta indietro fino al 1750.
-       Futuro: dalla data scelta in avanti fino al 2250.
-       (La ricerca è indipendente dalla copertura sismica: gli eventi
-       verranno mostrati solo per le date che ricadono nel catalogo INGV.) */
-    const gapMs=PL_MIN_GAP_DAYS*86400000;
-    const pastTo=new Date(refDate.getTime()-gapMs);
-    const pastFrom=PL_SEARCH_FLOOR;
-    const futFrom=new Date(refDate.getTime()+gapMs);
-    const futTo=PL_SEARCH_CEIL;
-
-    st.textContent='Cerco nel passato le configurazioni più simili…';
-    await new Promise(r=>setTimeout(r,0));
-    const past = pastTo>pastFrom
-      ? plSearch(refSig,pastFrom,pastTo,3,PL_MIN_GAP_DAYS,refDate)
-      : [];
-
-    st.textContent='Cerco le prossime ricorrenze future…';
-    await new Promise(r=>setTimeout(r,0));
-    const future = futFrom<futTo
-      ? plSearch(refSig,futFrom,futTo,3,PL_MIN_GAP_DAYS,refDate)
-      : [];
-
-    /* Sismicità: per la data scelta e per ogni data trovata scegliamo la
-       fonte adatta (strumentale INGV dal 1985, storico CPTI15 prima). */
-    st.textContent='Carico gli eventi sismici delle date individuate…';
-    const refSeis = await plResolveSeismicity(refDate);
-    for(const m of past)   m.seis = await plResolveSeismicity(new Date(m.t));
-    for(const m of future) m.seis = await plResolveSeismicity(new Date(m.t));
-
-    renderPianeti({refDate,refSig,refSeis,past,future});
-    box.style.display='block';
-    st.textContent=`Trovate ${past.length} date passate e ${future.length} ricorrenze future con configurazione simile.`;
-    st.className='status ok';
-  }catch(err){
-    st.textContent='Errore: '+err.message;st.className='status err';
-  }finally{
-    _plRunning=false;btn.disabled=false;
-  }
-}
-
-function _plFmtDate(d){
-  return d.toLocaleDateString('it-IT',{timeZone:'UTC',weekday:'long',day:'2-digit',month:'long',year:'numeric'});
-}
-/* Longitudine in gradi → "123,4° Leone" */
-const PL_SIGNS=['Ariete','Toro','Gemelli','Cancro','Leone','Vergine','Bilancia','Scorpione','Sagittario','Capricorno','Acquario','Pesci'];
-function _plFmtLon(v){
-  return v.toFixed(1).replace('.',',')+'° '+PL_SIGNS[Math.floor(_plNorm360(v)/30)];
-}
-
-/* Chip con la longitudine di ogni corpo. Se passata una configurazione di
-   riferimento, evidenzia in verde/rosso quanto la geometria attorno a quel
-   corpo si discosta (media degli scarti delle sue coppie). */
-function _plChips(sig,refSig){
-  return '<div class="pl-planets">'+sig.lons.map((v,i)=>{
-    let cls='';
-    if(refSig){
-      let num=0,den=0;
-      PL_PAIRS.forEach((p,k)=>{
-        if(p.i!==i&&p.j!==i)return;
-        num+=Math.abs(sig.seps[k]-refSig.seps[k]);den++;
-      });
-      const d=den?num/den:0;
-      cls=d<=10?' near':(d>=35?' off':'');
-    }
-    return `<div class="pl-chip${cls}"><span class="n">${PL_NAMES[i]}</span><span class="v">${v.toFixed(0)}°</span></div>`;
-  }).join('')+'</div>';
-}
-
-function _plQuakesHtml(quakes){
-  if(quakes===undefined){
-    return `<div class="an-none">Data fuori dalla copertura del catalogo INGV (eventi disponibili dal 1985 a oggi).</div>`;
-  }
-  if(quakes===null){
-    return `<div class="an-none">Dati sismici non disponibili per questa data.</div>`;
-  }
-  if(!quakes.length){
-    return `<div class="an-none">Nessun evento sismico registrato in Italia in questa data.</div>`;
-  }
-  const maxMag=quakes.reduce((a,b)=>Math.max(a,b.mag),-Infinity);
-  /* tutti gli eventi in ordine cronologico */
-  const sorted=quakes.slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
-  const rows=sorted.map(ev=>{
-    const t=new Date(ev.time);
-    const hh=t.toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit'});
-    const strong=ev.mag===maxMag?' pl-eq-strong':'';
-    return `<div class="pl-eq-row${strong}">
-      <span class="pl-eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</span>
-      <span class="pl-eq-place">${ev.place}</span>
-      <span class="pl-eq-time">${hh} · ${ev.depth.toFixed(0)} km</span>
-    </div>`;
-  }).join('');
-  return `<div class="sig-row"><span class="k">Eventi registrati</span><span class="v">${quakes.length.toLocaleString('it-IT')} · max M ${maxMag.toFixed(1)}</span></div>
-    <div class="pl-eq-list">${rows}</div>`;
-}
-
-/* Eventi storici (CPTI15) di un anno: località + magnitudo Mw + intensità.
-   Il match è per anno, quindi mostriamo tutti gli eventi di quell'anno
-   ordinati per magnitudo (il più forte in evidenza). */
-function _plCptiHtml(res){
-  const evs=res.events||[];
-  if(!evs.length){
-    return `<div class="an-none">Nessun terremoto nel catalogo storico CPTI15 per il ${res.year}.</div>`;
-  }
-  const maxMw=evs.reduce((a,e)=>Math.max(a,e[6]||0),0);
-  const rows=evs.map(e=>{
-    const mw=e[6];
-    const dd=e[1]?((e[2]?String(e[2]).padStart(2,'0')+'/':'')+String(e[1]).padStart(2,'0')):'—';
-    const io=e[7]?' · Io '+e[7]:'';
-    const strong=(mw&&mw===maxMw)?' pl-eq-strong':'';
-    return `<div class="pl-eq-row${strong}">
-      <span class="pl-eq-mag ${mw?magCls(mw):'m0'}">${mw?mw.toFixed(1):'?'}</span>
-      <span class="pl-eq-place">${e[3]||'—'}</span>
-      <span class="pl-eq-time">${dd}${io}</span>
-    </div>`;
-  }).join('');
-  return `<div class="sig-row"><span class="k">Eventi nel ${res.year} (CPTI15)</span><span class="v">${evs.length} · max Mw ${maxMw?maxMw.toFixed(1):'—'}</span></div>
-    <div class="pl-eq-list">${rows}</div>`;
-}
-
-/* Blocco sismicità completo (titolo + contenuto) in base alla fonte.
-   Ritorna '' per le date future (niente da mostrare). */
-function _plSeismicBlock(res){
-  if(!res||res.kind==='future') return '';
-  const title = res.kind==='cpti'
-    ? 'Terremoti storici di quell\'anno (CPTI15)'
-    : 'Sismicità in Italia quel giorno';
-  const inner = res.kind==='cpti' ? _plCptiHtml(res) : _plQuakesHtml(res.quakes);
-  return `<div class="pl-eq"><div class="pl-eq-title">${title}</div>${inner}</div>`;
-}
-
-function renderPianeti(r){
-  document.getElementById('plCurrentBody').innerHTML=
-    `<div class="sig-row"><span class="k">Data</span><span class="v">${_plFmtDate(r.refDate)}</span></div>`
-    +`<div class="sig-row"><span class="k">Sole</span><span class="v">${_plFmtLon(r.refSig.lons[0])}</span></div>`
-    +_plChips(r.refSig,null)
-    +_plSeismicBlock(r.refSeis);
-
-  document.getElementById('plPast').innerHTML=
-    (r.past.length?`<div class="pl-group-title">Date passate con configurazione più simile</div>`:'')
-    +r.past.map((m,i)=>{
-      const d=new Date(m.t), sig=plSignature(d);
-      const sim=((1-Math.min(m.dist,1))*100).toFixed(1);
-      return `<div class="an-match-card">
-        <div class="an-match-header">
-          <span class="an-rank ${i===0?'an-rank-1':(i===1?'an-rank-2':'an-rank-3')}">#${i+1}</span>
-          <h3>${_plFmtDate(d)}</h3>
-          <span class="an-sim">${sim}%</span>
-        </div>
-        <div class="an-match-body">
-          <div class="sig-row"><span class="k">Scarto medio pesato</span><span class="v">${(m.dist*180).toFixed(1)}°</span></div>
-          ${_plChips(sig,r.refSig)}
-          ${_plSeismicBlock(m.seis)}
-        </div>
-      </div>`;
-    }).join('');
-
-  document.getElementById('plFuture').innerHTML=
-    (r.future.length?`<div class="pl-group-title">Prossime ricorrenze della stessa configurazione</div>`:'')
-    +r.future.map((m,i)=>{
-      const d=new Date(m.t), sig=plSignature(d);
-      const sim=((1-Math.min(m.dist,1))*100).toFixed(1);
-      /* per le date "future" che però ricadono nel passato/copertura
-         (caso di una data di riferimento antica) mostriamo la sismicità */
-      return `<div class="an-match-card">
-        <div class="an-match-header">
-          <span class="an-rank ${i===0?'an-rank-1':(i===1?'an-rank-2':'an-rank-3')}">#${i+1}</span>
-          <h3>${_plFmtDate(d)}</h3>
-          <span class="an-sim">${sim}%</span>
-        </div>
-        <div class="an-match-body">
-          <div class="sig-row"><span class="k">Scarto medio pesato</span><span class="v">${(m.dist*180).toFixed(1)}°</span></div>
-          ${_plChips(sig,r.refSig)}
-          ${_plSeismicBlock(m.seis)}
-        </div>
-      </div>`;
-    }).join('');
-}
-
-/* ================================================================
-   PROSPETTIVA SISMICA (sperimentale)
-   - Breve termine: modello aftershock generico di Reasenberg-Jones
-     (legge di Omori-Utsu) alimentato dagli eventi INGV recenti.
-   - Lungo termine: Poisson sui tassi storici del CPTI15 per zona.
-   Solo statistica: NON è previsione né allarme.
-================================================================ */
-
-/* Parametri generici di Reasenberg-Jones (Omori-Utsu). Il tasso di eventi
-   ≥M al tempo t (giorni) dopo un evento di magnitudo Mm è
-      λ(t) = 10^(a + b(Mm − M)) · (t + c)^(−p)   [eventi/giorno]
-   Valori generici largamente usati in letteratura (California/Italia). */
-const PR_RJ={a:-1.67,b:0.91,p:1.08,c:0.05};
-const PR_TARGET=5.0;   // magnitudo bersaglio del pronostico a breve
-const PR_WIN=7;        // giorni della finestra di previsione
-const PR_LOOKBACK=60;  // giorni di storia che alimentano il modello
-const PR_MIN_TRIG=3.5; // sotto questa magnitudo il contributo è trascurabile
-
-/* Numero atteso di eventi ≥PR_TARGET fra T1 e T2 giorni dopo un evento Mm */
-function _prOmoriN(Mm,T1,T2){
-  const {a,b,p,c}=PR_RJ;
-  const prod=Math.pow(10, a+b*(Mm-PR_TARGET));
-  const integ=(Math.pow(T2+c,1-p)-Math.pow(T1+c,1-p))/(1-p);
-  return prod*Math.max(0,integ);
-}
-
-/* Tasso di fondo di M≥PR_TARGET in Italia (eventi/giorno) dal CPTI15, 1650→2020 */
-async function _prBackgroundDaily(){
-  await loadCptiData();
-  const since=1650, until=2020;
-  let n=0;
-  for(const e of (cptiData||[])) if(e[0]>=since && (e[6]||0)>=PR_TARGET) n++;
-  return n/((until-since)*365.25);
-}
-
-let _prRunning=false;
-async function fetchProspettiva(){
-  if(_prRunning)return;
-  const btn=document.getElementById('prRunBtn');
-  const st=document.getElementById('prStatus');
-  const box=document.getElementById('prShort');
-  _prRunning=true;btn.disabled=true;box.style.display='none';
-  st.textContent='Scarico l\'attività sismica recente…';st.className='status';
-  try{
-    const now=new Date();
-    const start=new Date(now.getTime()-PR_LOOKBACK*86400000);
-    const fmt=d=>d.toISOString().slice(0,19);
-    const url=`${EQ_BASE}?format=text&starttime=${fmt(start)}&endtime=${fmt(now)}`
-      +`&orderby=time&limit=20000&minmagnitude=${PR_MIN_TRIG}&minlat=33&maxlat=49&minlon=4&maxlon=21`;
-    const resp=await fetch(url,{signal:AbortSignal.timeout(25000)});
-    const recent = resp.status===204 ? [] : (resp.ok ? parseEqText(await resp.text(),999) : []);
-    if(!resp.ok && resp.status!==204) throw new Error('HTTP '+resp.status);
-
-    /* somma dei contributi di Omori di ogni evento recente sulla finestra
-       [ora, ora+7gg] → numero atteso di M≥5 innescati */
-    let Ntrig=0, strongest=null;
-    for(const ev of recent){
-      const tdays=(now-new Date(ev.time))/86400000;
-      if(tdays<0) continue;
-      Ntrig += _prOmoriN(ev.mag, tdays, tdays+PR_WIN);
-      if(!strongest || ev.mag>strongest.mag) strongest=ev;
-    }
-    const bgDaily=await _prBackgroundDaily();
-    const Nbg=bgDaily*PR_WIN;
-    const Ntot=Ntrig+Nbg;
-    const P=(1-Math.exp(-Ntot))*100;
-    const Pbg=(1-Math.exp(-Nbg))*100;
-    const gain=Nbg>0?Ntot/Nbg:1;
-
-    let state,cls;
-    if(gain>=5){state='ELEVATA';cls='pr-hi';}
-    else if(gain>=1.8){state='MODERATA';cls='pr-mid';}
-    else{state='ORDINARIA';cls='pr-lo';}
-
-    const big=recent.filter(e=>e.mag>=PR_MIN_TRIG).sort((a,b)=>b.mag-a.mag).slice(0,5);
-    const bigHtml = big.length
-      ? `<div class="pl-eq-title" style="margin-top:12px;">Eventi recenti che alimentano il modello</div>
-         <div class="pl-eq-list">`+big.map(ev=>{
-            const t=new Date(ev.time);
-            const g=t.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'});
-            const dd=((now-t)/86400000).toFixed(0);
-            return `<div class="pl-eq-row"><span class="pl-eq-mag ${magCls(ev.mag)}">${ev.mag.toFixed(1)}</span>
-              <span class="pl-eq-place">${ev.place}</span>
-              <span class="pl-eq-time">${g} · ${dd} gg fa</span></div>`;
-          }).join('')+`</div>`
-      : `<div class="an-none">Nessun evento M≥${PR_MIN_TRIG} negli ultimi ${PR_LOOKBACK} giorni: prospettiva ai valori di fondo.</div>`;
-
-    box.innerHTML=`
-      <div class="pr-state ${cls}">
-        <div class="pr-state-lab">Probabilità attuale</div>
-        <div class="pr-state-val">${state}</div>
-        <div class="pr-state-sub">${gain>=1.5?('≈ '+gain.toFixed(1)+'× rispetto al fondo'):'in linea col fondo'}</div>
-      </div>
-      <div class="eqd-grid" style="margin-top:12px;">
-        <div class="eqd-box"><div class="k">P(M≥5) prossimi 7 gg</div><div class="v">${P.toFixed(1)}%</div></div>
-        <div class="eqd-box"><div class="k">Livello di fondo</div><div class="v" style="color:var(--muted);">${Pbg.toFixed(1)}%</div></div>
-      </div>
-      ${bigHtml}
-      <div class="hint" style="margin-top:10px;">Il valore è per <b>tutta Italia</b> e per i <b>prossimi 7 giorni</b>. Anche in stato
-      "ELEVATA" la probabilità assoluta resta bassa: significa solo che, dopo un evento forte, per qualche giorno un altro
-      evento è più probabile del solito (aftershock). Poi torna ai valori di fondo.</div>`;
-    box.style.display='block';
-    st.textContent=`Attività recente: ${recent.length} eventi M≥${PR_MIN_TRIG} negli ultimi ${PR_LOOKBACK} giorni.`;
-    st.className='status ok';
-  }catch(err){
-    st.textContent='Errore: '+err.message;st.className='status err';
-  }finally{
-    _prRunning=false;btn.disabled=false;
-  }
-}
-
-/* ── Lungo termine: ricorrenza per macro-area dal CPTI15 ── */
-const PR_ZONES=[
-  {n:'Appennino centrale',        lat:42.6, lon:13.3, r:80},
-  {n:'Appennino meridionale',     lat:40.9, lon:15.2, r:80},
-  {n:'Calabria e Stretto',        lat:38.8, lon:16.1, r:90},
-  {n:'Sicilia orientale',         lat:37.4, lon:15.0, r:80},
-  {n:'Appennino settentrionale',  lat:44.2, lon:11.3, r:80},
-  {n:'Friuli e Alpi orientali',   lat:46.3, lon:13.1, r:70}
-];
-const PR_ZONE_SINCE=1650, PR_ZONE_MINMAG=5.5;
-
-async function renderProspettivaLong(){
-  const el=document.getElementById('prLong');
-  if(el.dataset.done)return;   /* calcola una volta sola */
-  el.innerHTML='<div class="lo" style="color:var(--muted);padding:20px 0;text-align:center;"><span class="spin"></span> Calcolo dai dati storici…</div>';
-  await loadCptiData();
-  const nowY=new Date().getFullYear();
-  const span=nowY-PR_ZONE_SINCE;
-  const rows=PR_ZONES.map(z=>{
-    let n=0,last=null;
-    for(const e of (cptiData||[])){
-      if(e[0]<PR_ZONE_SINCE || (e[6]||0)<PR_ZONE_MINMAG || e[4]==null) continue;
-      if(haverDist(z.lat,z.lon,e[4],e[5])<=z.r){ n++; if(last===null||e[0]>last) last=e[0]; }
-    }
-    const rate=n/span;                        /* eventi/anno */
-    const p10=(1-Math.exp(-rate*10))*100;
-    const p30=(1-Math.exp(-rate*30))*100;
-    const recur=n?Math.round(span/n):null;
-    const since=last?(nowY-last):null;
-    return {z,n,recur,last,since,p10,p30};
-  }).sort((a,b)=>b.p30-a.p30);
-
-  el.innerHTML=rows.map(r=>{
-    const cls=r.p30>=85?'an-rank-1':(r.p30>=65?'an-rank-2':'an-rank-3');
-    return `<div class="an-match-card" style="margin-bottom:10px;">
-      <div class="an-match-header">
-        <span class="an-rank ${cls}">${r.p30.toFixed(0)}%</span>
-        <h3 style="color:#0369A1;">${r.z.n}</h3>
-      </div>
-      <div class="an-match-body">
-        <div class="sig-row"><span class="k">Eventi M≥${PR_ZONE_MINMAG} dal ${PR_ZONE_SINCE}</span><span class="v">${r.n} · ~1 ogni ${r.recur||'—'} anni</span></div>
-        <div class="sig-row"><span class="k">Ultimo forte evento</span><span class="v">${r.last||'—'}${r.since!=null?` (${r.since} anni fa)`:''}</span></div>
-        <div class="sig-row"><span class="k">Probabilità 10 anni</span><span class="v">${r.p10.toFixed(0)}%</span></div>
-        <div class="sig-row"><span class="k">Probabilità 30 anni</span><span class="v">${r.p30.toFixed(0)}%</span></div>
-      </div>
-    </div>`;
-  }).join('')
-  +`<div class="hint" style="margin-top:4px;">Modello di Poisson (eventi indipendenti nel tempo): dà la probabilità media di
-    almeno un M≥${PR_ZONE_MINMAG} nella finestra indicata, dato il tasso storico della zona. Non "sa" da quanto tempo manca
-    l'ultimo evento — i modelli ufficiali INGV usano anche quello.</div>`;
-  el.dataset.done='1';
-}
-
 /* ================================================================
    CATALOGO STORICO (CPTI15 + forti recenti INGV)
 ================================================================ */
@@ -6688,9 +5556,12 @@ try{const s=localStorage.getItem('itq_seis_src');if(s==='reg'||s==='loc')seisSrc
 
 function _regInfo(code){return REG_NETS.find(n=>n.code===code)||null;}
 function renderRegList(){
-  const el=document.getElementById('regList');if(!el)return;
-  el.innerHTML=REG_NETS.map(n=>`<button type="button" role="listitem" class="reg-card${n.code===regNet?' on':''}" onclick="pickRegNet('${n.code}')" aria-pressed="${n.code===regNet}">
-    <b>${_esc(n.area)}</b><span>${_esc(n.ente)}</span>${n.sub?`<span>${_esc(n.sub)}</span>`:''}<i>Rete ${n.code}</i></button>`).join('');
+  const el=document.getElementById('regSelect');if(!el)return;
+  if(!el.options.length)el.innerHTML=REG_NETS.slice().sort((a,b)=>a.area.localeCompare(b.area,'it')).map(n=>
+    `<option value="${n.code}">${_esc(n.area)}${n.sub?' ('+_esc(n.sub)+')':''}</option>`).join('');
+  el.value=regNet;
+  const n=_regInfo(regNet),w=document.getElementById('regWho');
+  if(w&&n)w.innerHTML=`Rete <b>${n.code}</b> · ${_esc(n.ente)}`;
 }
 function renderSeisCredit(){
   const foot=document.getElementById('seisFoot'),cr=document.getElementById('regCredit');
@@ -6743,6 +5614,16 @@ networkSelect.addEventListener('change',()=>{
 });
 
 /* ── Sismografi locali ── */
+/* Osservatorio di Montevergine (MVOBSV, Mercogliano AV): sismografo triassiale CMVG
+   installato dalla sezione ARI di Pozzuoli con la rete sperimentale IESN */
+const LOC_MVO={id:'mvo',title:'Avellino · Montevergine',tag:'Campania',
+  ente:'Osservatorio di Montevergine (MVOBSV), con ARI Pozzuoli e rete IESN · stazione CMVG, 1263 m',
+  meta:'tracciati delle ultime ore, aggiornati di continuo',
+  base:'https://meteomio.altervista.org/sismografo/drum_CMVG_',suffix:'.gif',
+  page:'https://www.mvobsv.org/earthquakes/',
+  cite:'Osservatorio Meteorologico di Montevergine (MVOBSV) – mvobsv.org',
+  note:'Pubblicati sul sito dell\'Osservatorio.',
+  sta:[['EHZ','Su e giù','CMVG · componente verticale'],['EHN','Nord-Sud','CMVG · componente N-S'],['EHE','Est-Ovest','CMVG · componente E-O']]};
 const LOC_OGS=[
   {id:'rscl',title:'Lodi · Cornegliano Laudense',tag:'Lombardia',
     ente:'OGS e IREA-CNR – Monitoraggio di "Cornegliano Stoccaggio"',
@@ -6760,10 +5641,10 @@ const LOC_OGS=[
       ['ED06','Collalto Campo 6'],['ED07','Nervesa della Battaglia'],['ED08','Collalto Cucco'],['ED09','Susegana Castello'],['ED10','S. Croce del Montello'],
       ['MTLO','Montello'],['VARN','Col Varnada'],['CAE','Caneva'],['MGBU','Monte Grappa']]}
 ];
-/* Osservatorio Sismico "L. Palmieri" (Pesco Sannita, BN). Il sito riserva tutti i diritti:
-   i tracciati si aprono sulla loro pagina. Se l'Osservatorio autorizza per iscritto
-   la riproduzione, basta mettere PALMIERI_IMG=true per mostrarli qui come quelli OGS. */
-const PALMIERI_IMG=false;
+/* Nucleo Protezione Civile – Osservatorio Sismico "L. Palmieri" (Pesco Sannita, BN):
+   anteprima del tracciato giornaliero; toccandola si apre l'immagine intera, come sul loro sito.
+   Le condizioni d'uso del sito riservano i diritti: con PALMIERI_IMG=false si torna ai soli collegamenti. */
+const PALMIERI_IMG=true;
 const PALM_BASE='https://nuke.nprotezionecivile.it/Sismogrammiindiretta/';
 const PALMIERI=[
   ['Benevento',[['Benevento','BN013','Benevento/tabid/743/Default.aspx','bn.bn013.ehz'],['Airola','AIR06','Airola/tabid/650/Default.aspx','bn.air06.ehz'],
@@ -6776,8 +5657,8 @@ const PALMIERI=[
   ['Campobasso',[['Ferrazzano','FER23','FerrazzanoCB/tabid/752/Default.aspx','bn.fer23.ehz'],['Larino','','Larino/tabid/759/Default.aspx','am.r5c0a.shz'],
     ['Riccia','RIC12','RicciaCB/tabid/744/Default.aspx','bn.ric12.ehz']]],
   ['Isernia',[['Pettoranello del Molise','PET25','PettoranellodelMolise/tabid/767/Default.aspx','bn.pet25.ehz']]],
-  ['Potenza',[['Pescopagano','BPSG','PescoPagano/tabid/748/Default.aspx','bn.bpsg.ehz'],['Viggiano','BVIG','ViggianoPz/tabid/742/Default.aspx','']]],
-  ['Bari',[['Bari','OT15','Bari/tabid/761/Default.aspx','ot.ot15.ehz','OT']]]
+  ['Potenza',[['Pescopagano','BPSG','PescoPagano/tabid/748/Default.aspx','bn.bpsg.ehz'],['Viggiano','BVIG','ViggianoPz/tabid/742/Default.aspx','bn.bvig.ehz']]],
+  ['Bari',[['Bari','OT15','Bari/tabid/761/Default.aspx','','OT']]]
 ];
 const _EXT_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 let _locBust=Math.floor(Date.now()/600000),_locItems=[];
@@ -6790,25 +5671,25 @@ function renderLocView(){
       <div class="loc-img"><img loading="lazy" decoding="async" alt="" src="${_esc(_locImg(src))}" onerror="this.parentNode.classList.add('err');this.remove()"></div>
       <b>${_esc(title)}</b><span>${_esc(sub)}</span></button>`;};
   let h=`<div class="loc-intro">Tracciati delle ultime ore pubblicati da osservatori ed enti locali. Ogni immagine è una giornata: una riga per ora, dall'alto verso il basso. Tocca un tracciato per ingrandirlo.</div>`;
-  LOC_OGS.forEach(g=>{
-    h+=`<section class="loc-grp"><div class="loc-gh"><div><h3>${_esc(g.title)}</h3><p class="loc-ente">${_esc(g.ente)} · aggiornati ogni ora · orari UTC (in Italia +1 ora d'inverno, +2 d'estate)</p></div><span class="loc-tag">${_esc(g.tag)}</span></div>
-      <div class="loc-grid">${g.sta.map(([c,n])=>card(g.base+c+g.suffix,n,c+' · movimento su e giù',g.cite,g.page)).join('')}</div>
-      <p class="loc-cite">Fonte: ${_esc(g.cite)}. Riprodotti come consentito dal sito, con citazione della fonte. <a href="${g.page}" target="_blank" rel="noopener">Pagina originale</a></p></section>`;
-  });
-  h+=`<section class="loc-grp"><div class="loc-gh"><div><h3>Campania, Molise, Basilicata e Puglia</h3><p class="loc-ente">Osservatorio Sismico "L. Palmieri" – Nucleo Protezione Civile, Pesco Sannita (BN)</p></div><span class="loc-tag">${PALMIERI.reduce((a,p)=>a+p[1].length,0)} stazioni</span></div>`;
-  if(!PALMIERI_IMG)h+=`<div class="loc-note">L'Osservatorio riserva tutti i diritti sui suoi tracciati, quindi si aprono sul suo sito. Il colore delle tracce può cambiare anche per il rumore di fondo (traffico, attività umane), non solo per un terremoto.</div>`;
+  const grp=g=>`<section class="loc-grp"><div class="loc-gh"><div><h3>${_esc(g.title)}</h3><p class="loc-ente">${_esc(g.ente)} · ${_esc(g.meta||'aggiornati ogni ora · orari UTC (in Italia +1 ora d\'inverno, +2 d\'estate)')}</p></div><span class="loc-tag">${_esc(g.tag)}</span></div>
+      <div class="loc-grid">${g.sta.map(([c,n,sub])=>card(g.base+c+g.suffix,n,sub||c+' · movimento su e giù',g.cite,g.page)).join('')}</div>
+      <p class="loc-cite">Fonte: ${_esc(g.cite)}. ${_esc(g.note||'Riprodotti come consentito dal sito, con citazione della fonte.')} <a href="${g.page}" target="_blank" rel="noopener">Pagina originale</a></p></section>`;
+  h+=grp(LOC_MVO);
+  h+=`<section class="loc-grp"><div class="loc-gh"><div><h3>Campania, Molise, Basilicata e Puglia</h3><p class="loc-ente">Nucleo Protezione Civile – Osservatorio Sismico "L. Palmieri", Pesco Sannita (BN) · <a href="https://nuke.nprotezionecivile.it/Sismogrammiindiretta/tabid/647/Default.aspx" target="_blank" rel="noopener" style="color:#C2410C">sito ufficiale</a></p></div><span class="loc-tag">${PALMIERI.reduce((a,p)=>a+p[1].length,0)} stazioni</span></div>`;
+  h+=`<div class="loc-note">${PALMIERI_IMG?'Tracciati delle ultime 24 ore, aggiornati di continuo. ':'L\'Osservatorio riserva tutti i diritti sui suoi tracciati, quindi si aprono sul suo sito. '}Il colore delle tracce può cambiare anche per il rumore di fondo (traffico, attività umane), non solo per un terremoto.</div>`;
   PALMIERI.forEach(([prov,list])=>{
     h+=`<div class="loc-prov"><h4>Provincia di ${_esc(prov)}</h4>`;
-    if(PALMIERI_IMG){
-      h+=`<div class="loc-grid">${list.filter(s=>s[3]).map(s=>card('https://nuke.nprotezionecivile.it/drums/'+s[3]+'.png',s[0],(s[1]||'')+' · Osservatorio "L. Palmieri"','Osservatorio Sismico "L. Palmieri" – nprotezionecivile.it',PALM_BASE+s[2])).join('')}</div>`;
-    }else{
-      h+=list.map(s=>`<div class="loc-row"><div class="n"><b>${_esc(s[0])}</b><span>${s[1]?'Stazione '+_esc(s[1]):'Stazione dell\'Osservatorio'}${s[4]?' · anche in Reti regionali › Puglia':''}</span></div>
+    const imgs=PALMIERI_IMG?list.filter(s=>s[3]):[],rows=PALMIERI_IMG?list.filter(s=>!s[3]):list;
+    if(imgs.length)h+=`<div class="loc-grid">${imgs.map(s=>card('https://nuke.nprotezionecivile.it/drums/'+s[3]+'.png',s[0],(s[1]?s[1]+' · ':'')+'movimento su e giù','Nucleo Protezione Civile – Osservatorio Sismico "L. Palmieri", Pesco Sannita (BN)',PALM_BASE+s[2])).join('')}</div>`;
+    {
+      h+=rows.map(s=>`<div class="loc-row"><div class="n"><b>${_esc(s[0])}</b><span>${s[1]?'Stazione '+_esc(s[1]):'Stazione dell\'Osservatorio'}${s[4]?' · anche in Reti regionali › Puglia':''}</span></div>
         ${s[4]?`<button type="button" class="loc-open" onclick="pickRegNet('${s[4]}','${s[1]}');window.scrollTo({top:0,behavior:'smooth'})">Nell'app</button>`:''}
         <a class="loc-open" href="${PALM_BASE+s[2]}" target="_blank" rel="noopener">Apri${_EXT_IC}</a></div>`).join('');
     }
     h+=`</div>`;
   });
   h+=`<p class="loc-cite">Le stazioni dell'Osservatorio all'estero non sono elencate.</p></section>`;
+  LOC_OGS.forEach(g=>{h+=grp(g);});
   h+=`<div style="display:flex;justify-content:center"><button type="button" class="loc-refresh" onclick="refreshLocView()">Ricarica i tracciati</button></div>`;
   el.innerHTML=h;
 }
@@ -7897,43 +6778,91 @@ function _nnStep(net,bs,lr,l2){
     M[k]=b1*M[k]+(1-b1)*g;V[k]=b2*V[k]+(1-b2)*g*g;P[k]-=lr*(M[k]/c1)/(Math.sqrt(V[k]/c2)+1e-8);G[k]=0;}};
   for(const ly of net.L){upd(ly.W,ly.gW,ly.mW,ly.vW,true);upd(ly.b,ly.gb,ly.mb,ly.vb,false);}
 }
-/* Scarica fino a 5 anni a blocchi di 90 giorni (3 richieste in parallelo), così
-   nessun blocco tocca il limite di 20.000 eventi di INGV. */
+/* ── Catalogo INGV per la rete: tutto il database strumentale (dal 1985) ──
+   Scaricato a blocchi (più lunghi negli anni con meno eventi, divisi a metà se
+   toccano il limite di 20.000 di INGV) e salvato sul dispositivo (IndexedDB):
+   le volte successive si scaricano solo i giorni nuovi. */
+const NN_CAT_FROM=Date.UTC(1985,0,1);
+function _nnIdb(){
+  return new Promise((res,rej)=>{
+    try{const r=indexedDB.open('itq-nn',1);
+      r.onupgradeneeded=()=>r.result.createObjectStore('cat');
+      r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);}catch(e){rej(e);}
+  });
+}
+async function _nnIdbGet(k){try{const db=await _nnIdb();return await new Promise(r=>{const q=db.transaction('cat').objectStore('cat').get(k);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null);});}catch(e){return null;}}
+async function _nnIdbPut(k,v){try{const db=await _nnIdb();await new Promise(r=>{const tx=db.transaction('cat','readwrite');tx.objectStore('cat').put(v,k);tx.oncomplete=r;tx.onerror=r;});}catch(e){}}
+function _nnChunks(a,b,minMag){
+  const out=[];let t=a;
+  while(t<b){
+    const y=new Date(t).getUTCFullYear();
+    let len=y<2005?365:y<2012?150:90;
+    if(minMag<2)len=Math.round(len/2.5);
+    const e=Math.min(b,t+len*86400000);out.push([t,e]);t=e;
+  }
+  return out;
+}
+async function _nnFetchRange(a,b,minMag){
+  const fmt=d=>new Date(d).toISOString().slice(0,19);
+  const url=`${EQ_BASE}?format=text&starttime=${fmt(a)}&endtime=${fmt(b)}&orderby=time-asc&limit=20000`
+    +`&minmagnitude=${minMag}&minlat=35&maxlat=48&minlon=6&maxlon=19.5`;
+  for(let k=0;k<4;k++){
+    try{
+      const resp=await fetch(url,{signal:AbortSignal.timeout(90000)});
+      if(resp.status===204)return[];
+      if(!resp.ok)throw new Error('HTTP '+resp.status);
+      const got=parseEqText(await resp.text(),999);
+      if(got.length>=20000&&b-a>2*86400000){const m=a+Math.floor((b-a)/2);
+        return (await _nnFetchRange(a,m,minMag)).concat(await _nnFetchRange(m,b,minMag));}
+      return got.map(e=>[Date.parse(e.time),e.lat,e.lon,e.mag]);
+    }catch(e){if(k===3)throw e;await new Promise(r=>setTimeout(r,1500*(k+1)));}
+  }
+}
 async function _nnFetch(minMag,days,onProg){
-  if(_nnCache&&_nnCache.minMag===minMag&&_nnCache.days===days&&Date.now()-_nnCache.at<15*60000)return _nnCache;
-  const end=new Date(),start=new Date(end.getTime()-days*86400000);
-  start.setUTCHours(0,0,0,0);
-  const fmt=d=>d.toISOString().slice(0,19);
-  const parts=[];
-  for(let a=start.getTime();a<end.getTime();a+=90*86400000)parts.push([new Date(a),new Date(Math.min(end.getTime(),a+90*86400000))]);
-  const evs=[];let capped=false,done=0;
-  const one=async([a,b])=>{
-    const url=`${EQ_BASE}?format=text&starttime=${fmt(a)}&endtime=${fmt(b)}&orderby=time&limit=20000`
-      +`&minmagnitude=${minMag}&minlat=35&maxlat=48&minlon=6&maxlon=19.5`;
-    for(let k=0;k<3;k++){
-      try{
-        const resp=await fetch(url,{signal:AbortSignal.timeout(60000)});
-        if(!resp.ok&&resp.status!==204)throw new Error('HTTP '+resp.status);
-        const got=resp.status===204?[]:parseEqText(await resp.text(),999);
-        if(got.length>=20000)capped=true;
-        evs.push(...got);done++;onProg&&onProg(done,parts.length);return;
-      }catch(e){if(k===2)throw e;await new Promise(r=>setTimeout(r,1500*(k+1)));}
-    }
-  };
+  const end=Date.now();
+  const start=days==='all'?NN_CAT_FROM:(()=>{const d=new Date(end-days*86400000);d.setUTCHours(0,0,0,0);return d.getTime();})();
+  const key='m'+minMag;
+  let cat=await _nnIdbGet(key);
+  const ranges=[];
+  if(!cat||!cat.ev){cat={from:start,upTo:start,ev:[]};ranges.push([start,end]);}
+  else{
+    if(start<cat.from)ranges.push([start,cat.from]);
+    const re=Math.max(cat.from,cat.upTo-3*86400000);   /* ripassa gli ultimi 3 giorni: le magnitudo vengono riviste */
+    cat.ev=cat.ev.filter(e=>e[0]<re);ranges.push([re,end]);
+    if(start<cat.from)cat.from=start;
+  }
+  const parts=[];ranges.forEach(([a,b])=>parts.push(..._nnChunks(a,b,minMag)));
+  let done=0;const got=[];
   const queue=parts.slice();
-  await Promise.all([0,1,2].map(async()=>{while(queue.length)await one(queue.shift());}));
-  const seen=new Set(),uniq=evs.filter(e=>{const k=(e.id||'')+'|'+e.time+'|'+e.lat;if(seen.has(k))return false;seen.add(k);return true;});
-  _nnCache={minMag,days,at:Date.now(),start:start.getTime(),evs:uniq,capped};
-  return _nnCache;
+  await Promise.all([0,1,2,3].map(async()=>{while(queue.length){const p=queue.shift();got.push(...await _nnFetchRange(p[0],p[1],minMag));done++;onProg&&onProg(done,parts.length);}}));
+  const seen=new Set(),all=cat.ev.concat(got).filter(e=>{const k=e[0]+'|'+e[1].toFixed(3);if(seen.has(k))return false;seen.add(k);return true;}).sort((x,y)=>x[0]-y[0]);
+  cat={from:Math.min(cat.from,start),upTo:end,ev:all};
+  _nnIdbPut(key,cat);
+  const evs=[];for(const e of all)if(e[0]>=start)evs.push({t:e[0],lat:e[1],lon:e[2],mag:e[3]});
+  return{minMag,days,start,evs,fromCache:parts.length<=2&&cat.ev.length>got.length};
+}
+/* Forti terremoti per il confronto storico: CPTI15 (1005–2020) + INGV M≥4 dal 2021 */
+let _nnStrong=null;
+async function _nnStrongEvents(){
+  if(_nnStrong)return _nnStrong;
+  const out=[];
+  const cpti=await loadCptiData();
+  for(const e of cpti)if(e[6]!=null&&e[4]!=null)out.push({y:e[0],m:e[1],d:e[2],area:e[3],lat:e[4],lon:e[5],mag:e[6],src:'CPTI15'});
+  try{
+    const r=await fetch(`${EQ_BASE}?format=text&starttime=2021-01-01T00:00:00&orderby=time&minmagnitude=4&minlat=35&maxlat=48&minlon=6&maxlon=19.5&limit=5000`,{signal:AbortSignal.timeout(30000)});
+    if(r.ok&&r.status!==204)parseEqText(await r.text(),999).forEach(e=>{const d=new Date(e.time);
+      out.push({y:d.getUTCFullYear(),m:d.getUTCMonth()+1,d:d.getUTCDate(),area:e.place,lat:e.lat,lon:e.lon,mag:e.mag,src:'INGV'});});
+  }catch(e){}
+  _nnStrong=out;return out;
 }
 function _nnInZone(e,zone){return zone.all||haversine(e.lat,e.lon,zone.lat,zone.lon)<=zone.r;}
 /* serie giornaliere: n eventi, magnitudo massima, energia liberata, attività nella fascia circostante */
 function _nnSeries(data,zone,minMag){
   const nd=Math.floor((Date.now()-data.start)/86400000)+1;
-  const n=new Array(nd).fill(0),mx=new Array(nd).fill(null),en=new Array(nd).fill(0),ring=new Array(nd).fill(0);
+  const n=new Float64Array(nd),mx=new Array(nd).fill(null),en=new Float64Array(nd),ring=new Float64Array(nd);
   const zevs=[];
   for(const e of data.evs){
-    const d=Math.floor((Date.parse(e.time)-data.start)/86400000);
+    const d=Math.floor((e.t-data.start)/86400000);
     if(d<0||d>=nd)continue;
     if(_nnInZone(e,zone)){
       n[d]++;if(mx[d]==null||e.mag>mx[d])mx[d]=e.mag;en[d]+=Math.pow(10,1.5*e.mag);zevs.push({...e,d});
@@ -7941,14 +6870,22 @@ function _nnSeries(data,zone,minMag){
   }
   /* l'ultimo giorno è parziale: lo scaliamo alle 24 h per non falsare la coda */
   const frac=Math.max(.15,((Date.now()-data.start)/86400000)%1);
-  const nAdj=n.slice();nAdj[nd-1]=n[nd-1]/frac;
-  const ringAdj=ring.slice();ringAdj[nd-1]=ring[nd-1]/frac;
-  return{n,nAdj,mx,en,ring:ringAdj,nd,frac,floor:minMag-0.4,zevs};
+  const nAdj=Array.from(n);nAdj[nd-1]=n[nd-1]/frac;
+  const ringAdj=Array.from(ring);ringAdj[nd-1]=ring[nd-1]/frac;
+  return{n:Array.from(n),nAdj,mx,en:Array.from(en),ring:ringAdj,nd,frac,floor:minMag-0.4,zevs};
 }
-function _nnStd(arr){const mu=arr.reduce((a,b)=>a+b,0)/arr.length;
-  const sd=Math.sqrt(arr.reduce((a,b)=>a+(b-mu)**2,0)/arr.length)||1;return{mu,sd,z:arr.map(v=>(v-mu)/sd)};}
-function _nnFeat(F,t){const x=new Float64Array(NN_WIN*NN_FEAT);
-  for(let f=0;f<NN_FEAT;f++){const s=F[f],o=f*NN_WIN;for(let k=0;k<NN_WIN;k++)x[o+k]=s[t-NN_WIN+k];}return x;}
+/* Livello di fondo mobile (media dell'anno precedente): toglie le differenze dovute
+   al catalogo, che negli anni '80 e '90 registrava molti meno piccoli eventi. */
+function _nnBaseline(v,win){
+  const out=new Float64Array(v.length);let s=0,q=[];
+  for(let t=0;t<v.length;t++){
+    out[t]=q.length?s/q.length:v[0];
+    q.push(v[t]);s+=v[t];if(q.length>win)s-=q.shift();
+  }
+  return out;
+}
+function _nnStd(arr){let mu=0;for(const v of arr)mu+=v;mu/=arr.length;let ss=0;for(const v of arr)ss+=(v-mu)**2;
+  const sd=Math.sqrt(ss/arr.length)||1;return{mu,sd,z:Array.from(arr,v=>(v-mu)/sd)};}
 
 /* b-value di Gutenberg-Richter (stima di Aki, magnitudo arrotondate a 0,1) */
 function _nnBValue(mags,mc){
@@ -7958,41 +6895,111 @@ function _nnBValue(mags,mc){
 }
 /* Pseudo-epicentri: la rete dice QUANTI eventi aspettarsi; DOVE lo si ricava dalla
    sismicità recente della zona (più peso agli eventi recenti), raggruppata in celle.
-   La magnitudo massima probabile di ogni cella viene dalla legge di Gutenberg-Richter. */
-function _nnPseudoEpi(S,zone,minMag,fut,H){
+   La magnitudo massima probabile di ogni cella viene dalla legge di Gutenberg-Richter;
+   per ogni cella si riporta anche il terremoto più forte mai registrato lì vicino. */
+function _nnPseudoEpi(S,zone,minMag,fut,H,strong){
   const ev=S.zevs;if(!ev.length||fut<=0)return{list:[],b:1};
   const cell=zone.all?0.25:0.1,tau=45,now=S.nd-1;
   const cells=new Map();
   for(const e of ev){
-    const age=now-e.d,w=Math.exp(-age/tau)+0.05;
+    const age=now-e.d;if(age>730)continue;
+    const w=Math.exp(-age/tau)+0.05*Math.exp(-age/365);
     const k=Math.floor(e.lat/cell)+'|'+Math.floor(e.lon/cell);
     let c=cells.get(k);if(!c){c={w:0,lat:0,lon:0,n:0,mx:0,last:-1};cells.set(k,c);}
     c.w+=w;c.lat+=e.lat*w;c.lon+=e.lon*w;c.n++;if(e.mag>c.mx)c.mx=e.mag;if(e.d>c.last)c.last=e.d;
   }
-  /* lisciatura: ogni cella riceve un po' del peso delle 8 vicine */
   const smooth=new Map();
   cells.forEach((c,k)=>{const[i,j]=k.split('|').map(Number);let w=c.w;
     for(let di=-1;di<=1;di++)for(let dj=-1;dj<=1;dj++){if(!di&&!dj)continue;const nb=cells.get((i+di)+'|'+(j+dj));if(nb)w+=nb.w*0.15;}
     smooth.set(k,w);});
   const totW=[...smooth.values()].reduce((a,b)=>a+b,0)||1;
-  const b=_nnBValue(ev.map(e=>e.mag),minMag);
+  const recent=ev.filter(e=>now-e.d<=3650);
+  const b=_nnBValue((recent.length>=200?recent:ev).map(e=>e.mag),minMag);
   const ranked=[...cells.entries()].map(([k,c])=>{
     const N=fut*smooth.get(k)/totW;
     const mMed=N>Math.LN2?minMag+Math.log10(N/Math.LN2)/b:null;
     const p3=1-Math.exp(-N*Math.pow(10,-b*(3-minMag)));
     return{k,lat:c.lat/c.w,lon:c.lon/c.w,N,mMed,p3,hist:c.n,histMax:c.mx,lastDays:now-c.last,own:c.w/smooth.get(k)};
   }).sort((x,y)=>y.N-x.N);
-  /* niente doppioni: salta le celle attaccate a una già scelta */
   const out=[];
   for(const r of ranked){
     if(out.length>=10)break;
     const[i,j]=r.k.split('|').map(Number);
     if(out.some(o=>{const[a,c]=o.k.split('|').map(Number);return Math.abs(a-i)<=1&&Math.abs(c-j)<=1;}))continue;
     if(r.N<0.15)break;
-    if(r.own<0.5)continue;   /* cella attiva solo per riflesso delle vicine */
+    if(r.own<0.5)continue;
+    if(strong){let best=null;for(const s of strong){if(Math.abs(s.lat-r.lat)>0.2||Math.abs(s.lon-r.lon)>0.3)continue;
+      if(haversine(s.lat,s.lon,r.lat,r.lon)<=15&&(!best||s.mag>best.mag))best=s;}r.histStrong=best;}
     out.push(r);
   }
   return{list:out,b};
+}
+/* Confronto con la storia: ritmo dei terremoti M≥5 nella zona dal 1700 (CPTI15 + INGV) */
+function _nnHistory(zone,strong,H,b,fut,minMag){
+  const inz=strong.filter(s=>_nnInZone(s,zone));
+  const since=1700,yNow=new Date().getUTCFullYear(),years=yNow-since+1;
+  const m5=inz.filter(s=>s.y>=since&&s.mag>=5).sort((x,y)=>y.y-x.y||((y.m||0)-(x.m||0)));
+  const lam=m5.length/years;
+  const pHist=1-Math.exp(-lam*H/365);
+  const n5=fut*Math.pow(10,-b*(5-minMag));
+  const pNow=1-Math.exp(-n5);
+  const top=inz.slice().sort((x,y)=>y.mag-x.mag)[0]||null;
+  return{n5:m5.length,since,years,lam,pHist,pNow,last:m5[0]||null,top,all:inz.length};
+}
+
+/* ── Addestramento in un processo separato (Web Worker): l'app resta fluida ── */
+function _nnWorkerSrc(){
+  const fns=[_nnRng,_nnInit,_nnForward,_nnBackward,_nnStep].map(f=>f.toString()).join('\n');
+  return fns+`
+function feat(F,P,t,W){const nf=F.length,x=new Float64Array(W*nf+2);
+  for(let f=0;f<nf;f++){const s=F[f],o=f*W;for(let k=0;k<W;k++)x[o+k]=s[t-W+k];}
+  const c=F[0];let a90,a365;
+  if(P){a90=(P[t]-P[Math.max(0,t-90)])/Math.min(90,t);a365=(P[t]-P[Math.max(0,t-365)])/Math.min(365,t);}
+  else{let s=0,n=0;for(let k=t-1;k>=Math.max(0,t-365);k--){s+=c[k];n++;if(n===90)a90=s/90;}a365=s/n;if(a90==null)a90=a365;}
+  x[W*nf]=a90;x[W*nf+1]=a365;return x;}
+onmessage=async ev=>{
+  const{F,trainIdx,valIdx,allIdx,H,W,hid,ens,epochs,cFloor,mLo,eTail,rTail}=ev.data;
+  const P=new Float64Array(F[0].length+1);for(let t=0;t<F[0].length;t++)P[t+1]=P[t]+F[0][t];
+  const X=t=>feat(F,P,t,W),Y=t=>[F[0][t],F[1][t]];
+  const nets=[];const total=ens*(epochs*trainIdx.length+Math.round(epochs*.3)*allIdx.length);let done=0,lastP=0;
+  for(let k=0;k<ens;k++){
+    const rng=_nnRng(1234+k*977);
+    const net=_nnInit([W*F.length+2,...hid,2],rng);
+    const run=(set,eps)=>{const ord=set.slice();
+      for(let ep=0;ep<eps;ep++){
+        for(let i=ord.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));const tmp=ord[i];ord[i]=ord[j];ord[j]=tmp;}
+        const lr=0.003*(1-0.6*ep/Math.max(1,eps));
+        for(let b=0;b<ord.length;b+=32){const bt=ord.slice(b,b+32);
+          for(const t of bt)_nnBackward(net,_nnForward(net,X(t)),Y(t));
+          _nnStep(net,bt.length,lr,1e-3);}
+        done+=ord.length;const p=done/total;if(p-lastP>0.01){lastP=p;postMessage({type:'prog',p,k});}
+      }};
+    run(trainIdx,epochs);
+    net.val=valIdx.map(t=>Array.from(_nnForward(net,X(t))[hid.length+1]));
+    run(allIdx,Math.max(1,Math.round(epochs*.3)));
+    nets.push(net);
+  }
+  const traj=nets.map(net=>{
+    const FF=F.map(s=>Array.from(s)),oc=[],om=[];
+    for(let h=0;h<H;h++){
+      const t=FF[0].length,o=_nnForward(net,feat(FF,null,t,W))[hid.length+1];
+      const cv=Math.max(cFloor,o[0]),mv=Math.min(Math.max(o[1],mLo),3);
+      FF[0].push(cv);FF[1].push(mv);FF[2].push(eTail);FF[3].push(rTail);oc.push(cv);om.push(mv);
+    }
+    return{oc,om};
+  });
+  postMessage({type:'done',val:nets.map(n=>n.val),traj});
+};`;
+}
+function _nnTrain(job,onProg){
+  return new Promise((res,rej)=>{
+    let w;
+    try{w=new Worker(URL.createObjectURL(new Blob([_nnWorkerSrc()],{type:'text/javascript'})));}
+    catch(e){rej(new Error('il dispositivo non permette l\'addestramento in background'));return;}
+    w.onmessage=e=>{if(e.data.type==='prog')onProg&&onProg(e.data.p,e.data.k);else{w.terminate();res(e.data);}};
+    w.onerror=e=>{w.terminate();rej(new Error(e.message||'errore nell\'addestramento'));};
+    w.postMessage(job);
+  });
 }
 
 async function runRete(){
@@ -8001,77 +7008,57 @@ async function runRete(){
   const prog=document.getElementById('nnProg'),bar=document.getElementById('nnProgBar');
   const zone=NN_ZONES[+document.getElementById('nnZone').value]||NN_ZONES[0];
   const minMag=+document.getElementById('nnMinMag').value,H=+document.getElementById('nnHorizon').value;
-  const days=+document.getElementById('nnDays').value||1095;
+  const dv=document.getElementById('nnDays').value,days=dv==='all'?'all':(+dv||1095);
+  const useHist=document.getElementById('nnHist').checked;
   _nnRunning=true;btn.disabled=true;prog.style.display='';bar.style.width='0%';
-  st.textContent=`Scarico ${Math.round(days/365)} ann${days>=730?'i':'o'} di terremoti da INGV…`;st.className='status';
+  st.textContent=days==='all'?'Scarico tutto il catalogo INGV dal 1985 (la prima volta può volerci qualche minuto)…':`Scarico ${Math.round(days/365)} anni di terremoti da INGV…`;st.className='status';
   try{
-    const data=await _nnFetch(minMag,days,(d,t)=>{bar.style.width=(15*d/t).toFixed(0)+'%';st.textContent=`Scarico i dati INGV… (${d}/${t})`;});
+    const [data,strong]=await Promise.all([
+      _nnFetch(minMag,days,(d,t)=>{bar.style.width=(30*d/t).toFixed(0)+'%';st.textContent=`Scarico i dati INGV… (${d} di ${t} blocchi)`;}),
+      useHist?_nnStrongEvents():Promise.resolve(null)]);
     const S=_nnSeries(data,zone,minMag);
     const tot=S.n.reduce((a,b)=>a+b,0);
     if(tot<30)throw new Error(`troppi pochi eventi (${tot}) in "${zone.n}" con M≥${minMag}: prova una soglia più bassa o una zona più ampia`);
-    /* normalizzazione: log(1+n) standardizzato, magnitudo riscalata, log-energia e fascia circostante standardizzate */
-    const C=_nnStd(S.nAdj.map(v=>Math.log1p(v)));
-    const c=C.z,mu=C.mu,sd=C.sd;
+    /* conteggio: log(1+n) meno il livello di fondo dell'anno precedente, poi standardizzato */
+    const lc=S.nAdj.map(v=>Math.log1p(v));
+    const base=_nnBaseline(lc,365);
+    const C=_nnStd(lc.map((v,i)=>v-base[i]));
+    const c=C.z,mu=C.mu,sd=C.sd,bLast=lc.slice(-365).reduce((a,b)=>a+b,0)/Math.min(365,lc.length);
     const m=S.mx.map(v=>((v==null?S.floor:v)-minMag)/2);
     const E=_nnStd(S.en.map(v=>Math.log10(1+v))).z;
     const R=zone.all?c.map(()=>0):_nnStd(S.ring.map(v=>Math.log1p(v))).z;
-    const unC=v=>Math.max(0,Math.expm1(v*sd+mu)),unM=v=>v*2+minMag;
-    const idx=[];for(let t=NN_WIN;t<S.nd;t++)idx.push(t);
-    const trainIdx=idx.filter(t=>t<S.nd-NN_VAL),valIdx=idx.filter(t=>t>=S.nd-NN_VAL);
-    const F=[c,m,E,R];
-    const X=t=>_nnFeat(F,t),Y=t=>[c[t],m[t]];
-    const EPOCHS=Math.round(Math.max(35,Math.min(90,90*400/idx.length)));
-    const nets=[];
-    const totalSteps=NN_ENS*EPOCHS*1.3;let done=0;
-    for(let k=0;k<NN_ENS;k++){
-      const rng=_nnRng(1234+k*977);
-      const net=_nnInit([NN_WIN*NN_FEAT,...NN_HID,2],rng);
-      const run=async(set,epochs)=>{
-        const ord=set.slice();
-        for(let ep=0;ep<epochs;ep++){
-          for(let i=ord.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]];}
-          for(let b=0;b<ord.length;b+=16){const bt=ord.slice(b,b+16);
-            for(const t of bt)_nnBackward(net,_nnForward(net,X(t)),Y(t));
-            _nnStep(net,bt.length,0.003,2e-3);}
-          done++;
-          if(done%4===0){bar.style.width=(15+85*done/totalSteps).toFixed(0)+'%';
-            st.textContent=`Addestro la rete ${k+1} di ${NN_ENS} su ${idx.length} giorni…`;await new Promise(r=>setTimeout(r,0));}
-        }
-      };
-      await run(trainIdx,EPOCHS);
-      net.val=valIdx.map(t=>_nnForward(net,X(t))[NN_HID.length+1]);
-      await run(idx,Math.round(EPOCHS*.3));   /* rifinitura con anche gli ultimi 30 giorni */
-      nets.push(net);
-    }
+    const unC=v=>Math.max(0,Math.expm1(v*sd+mu+bLast)),unCt=(v,t)=>Math.max(0,Math.expm1(v*sd+mu+base[t])),unM=v=>v*2+minMag;
+    const W=NN_WIN;
+    const allIdx=[];for(let t=Math.max(W,30);t<S.nd;t++)allIdx.push(t);
+    const trainIdx=allIdx.filter(t=>t<S.nd-NN_VAL),valIdx=allIdx.filter(t=>t>=S.nd-NN_VAL);
+    const big=allIdx.length>3000;
+    const hid=big?[48,24]:NN_HID;
+    const epochs=Math.round(Math.max(4,Math.min(80,(big?90000:30000)/trainIdx.length)));
+    const eTail=E.slice(-14).reduce((a,b)=>a+b,0)/14,rTail=R.slice(-14).reduce((a,b)=>a+b,0)/14;
+    const yrs=(S.nd/365.25);
+    st.textContent=`Addestro ${NN_ENS} reti su ${allIdx.length.toLocaleString('it-IT')} giorni (${yrs>=2?Math.round(yrs)+' anni':'1 anno'})…`;
+    const res=await _nnTrain({F:[Float64Array.from(c),Float64Array.from(m),Float64Array.from(E),Float64Array.from(R)],
+      trainIdx,valIdx,allIdx,H,W,hid,ens:NN_ENS,epochs,cFloor:(Math.log1p(0)-bLast-mu)/sd,mLo:(S.floor-minMag)/2,eTail,rTail},
+      (p,k)=>{bar.style.width=(30+70*p).toFixed(0)+'%';st.textContent=`Addestro la rete ${k+1} di ${NN_ENS} su ${allIdx.length.toLocaleString('it-IT')} giorni… ${Math.round(p*100)}%`;});
     /* validazione onesta sugli ultimi 30 giorni (reti non ancora rifinite) */
     let maeNN=0,maePers=0;
     valIdx.forEach((t,i)=>{
-      const pred=nets.reduce((a,nt)=>a+unC(nt.val[i][0]),0)/nets.length;
+      const pred=res.val.reduce((a,v)=>a+unCt(v[i][0],t),0)/res.val.length;
       const pers=S.nAdj.slice(t-7,t).reduce((a,b)=>a+b,0)/7;
       maeNN+=Math.abs(pred-S.nAdj[t]);maePers+=Math.abs(pers-S.nAdj[t]);
     });
     maeNN/=valIdx.length;maePers/=valIdx.length;
-    /* proiezione autoregressiva per H giorni, una traiettoria per rete; energia e fascia
-       circostante proseguono con la media delle ultime 2 settimane */
-    const eTail=E.slice(-14).reduce((a,b)=>a+b,0)/14,rTail=R.slice(-14).reduce((a,b)=>a+b,0)/14;
-    const traj=nets.map(net=>{
-      const FF=F.map(s=>s.slice()),outN=[],outM=[];
-      for(let h=0;h<H;h++){
-        const t=FF[0].length,o=_nnForward(net,_nnFeat(FF,t))[NN_HID.length+1];
-        const cv=Math.max((0-mu)/sd,o[0]),mv=Math.min(Math.max(o[1],(S.floor-minMag)/2),3);
-        FF[0].push(cv);FF[1].push(mv);FF[2].push(eTail);FF[3].push(rTail);outN.push(unC(cv));outM.push(unM(mv));
-      }
-      return{outN,outM};
-    });
+    const traj=res.traj.map(tr=>({outN:tr.oc.map(unC),outM:tr.om.map(unM)}));
     const agg=(key)=>Array.from({length:H},(_,h)=>{const v=traj.map(tr=>tr[key][h]).sort((a,b)=>a-b);
       return{mean:v.reduce((a,b)=>a+b,0)/v.length,lo:v[0],hi:v[v.length-1]};});
     const fN=agg('outN'),fM=agg('outM');
     const fut=fN.reduce((a,b)=>a+b.mean,0);
-    const epi=_nnPseudoEpi(S,zone,minMag,fut,H);
+    const epi=_nnPseudoEpi(S,zone,minMag,fut,H,strong);
+    const hist=strong?_nnHistory(zone,strong,H,epi.b,fut,minMag):null;
     bar.style.width='100%';
-    _nnLast={zone,minMag,H,S,fN,fM,maeNN,maePers,capped:data.capped,tot,days,epi};
+    _nnLast={zone,minMag,H,S,fN,fM,maeNN,maePers,capped:false,tot,days,epi,hist,yrs};
     _nnRender(_nnLast);
-    st.textContent=`Fatto: ${tot.toLocaleString('it-IT')} eventi in ${S.nd} giorni, ${NN_ENS} reti addestrate.`;st.className='status ok';
+    st.textContent=`Fatto: ${tot.toLocaleString('it-IT')} eventi in ${S.nd.toLocaleString('it-IT')} giorni${days==='all'?' (tutto il catalogo INGV dal 1985)':''}, ${NN_ENS} reti addestrate${strong?', più '+strong.length.toLocaleString('it-IT')+' terremoti storici per il confronto':''}.`;st.className='status ok';
   }catch(e){
     st.textContent='Errore: '+e.message;st.className='status err';console.error('runRete:',e);
   }finally{_nnRunning=false;btn.disabled=false;setTimeout(()=>{prog.style.display='none';},600);}
@@ -8087,7 +7074,8 @@ async function _nnRenderEpi(R){
     const p=r.p3<0.01?'<1%':(r.p3*100).toFixed(0)+'%';
     return `<li><span class="nn-rk">${i+1}</span><div class="nn-ei"><b>${_esc(near(r.lat,r.lon))}</b>
       <span>${r.lat.toFixed(2)}°N ${r.lon.toFixed(2)}°E · ${r.hist} eventi nel periodo, ultimo ${r.lastDays<1?'oggi':r.lastDays===1?'ieri':r.lastDays+' giorni fa'}</span>
-      <span>≈ ${r.N<1?r.N.toFixed(1).replace('.',','):Math.round(r.N)} eventi attesi · probabilità di almeno un M3+: <b>${p}</b></span></div>
+      <span>≈ ${r.N<1?r.N.toFixed(1).replace('.',','):Math.round(r.N)} eventi attesi · probabilità di almeno un M3+: <b>${p}</b></span>
+      ${r.histStrong?`<span>Più forte nella storia entro 15 km: <b>M ${r.histStrong.mag.toFixed(1).replace('.',',')}</b> nel ${r.histStrong.y}${r.histStrong.area?' ('+_esc(r.histStrong.area)+')':''}</span>`:''}</div>
       <div class="nn-em" style="background:${r.mMed==null?'#4F6673':magCol(r.mMed)}"><small>mag. max probabile</small>${m}</div></li>`;}).join('')+`</ol>
     <div class="hint" style="margin-top:8px;">b-value stimato dai dati: <b>${R.epi.b.toFixed(2)}</b>. Le zone vengono dalla sismicità recente (più peso agli ultimi 45 giorni),
     il numero di eventi dalla rete neurale, la magnitudo dalla legge di Gutenberg-Richter. Sono zone statisticamente attive, <b>non</b> previsioni di terremoti.</div>`;
@@ -8138,7 +7126,22 @@ function _nnRender(R){
   document.getElementById('nnVal').innerHTML=`<b>Verifica sugli ultimi ${NN_VAL} giorni</b> (dati nascosti alla rete durante l'addestramento):
     errore medio <b>${R.maeNN.toFixed(1)}</b> eventi/giorno, contro <b>${R.maePers.toFixed(1)}</b> del metodo banale "media degli ultimi 7 giorni".
     ${better?'La rete ha fatto meglio del riferimento banale.':'La rete <b>non</b> ha battuto il riferimento banale: prendi la tendenza con molta cautela.'}
-    ${R.capped?'<br>⚠️ Raggiunto il limite di 20.000 eventi scaricati: alza la soglia di magnitudo per una serie completa.':''}`;
+    <br>Addestramento su ${R.S.nd.toLocaleString('it-IT')} giorni di dati INGV${R.days==='all'?' (catalogo completo dal 1985)':''}: il conteggio è misurato rispetto al livello medio dell'anno precedente, così pesano meno le differenze del catalogo nel tempo.`;
+  const hb=document.getElementById('nnHistBox'),h=R.hist;
+  if(h){
+    const pc=v=>v<0.001?'<0,1%':v<0.01?(v*100).toFixed(1).replace('.',',')+'%':(v*100).toFixed(0)+'%';
+    const fmtE=e=>e?`M ${e.mag.toFixed(1).replace('.',',')} nel ${e.y}${e.area?' · '+_esc(e.area):''}`:'—';
+    const every=h.lam>0?(1/h.lam):null;
+    hb.innerHTML=`<div class="nn-hist"><div class="nn-hist-h">Confronto con la storia della zona</div>
+      <div class="nn-hist-g">
+        <div><span>Terremoti M5+ dal ${h.since}</span><b>${h.n5}</b><small>${every?'in media uno ogni '+(every<2?every.toFixed(1).replace('.',','):Math.round(every))+' anni':'nessuno'}</small></div>
+        <div><span>Il più forte conosciuto</span><b>${h.top?'M '+h.top.mag.toFixed(1).replace('.',','):'—'}</b><small>${h.top?h.top.y+(h.top.area?' · '+_esc(h.top.area):''):''}</small></div>
+        <div><span>Ultimo M5+</span><b>${h.last?h.last.y:'—'}</b><small>${h.last?fmtE(h.last):''}</small></div>
+      </div>
+      <p>Probabilità di almeno un M5+ nella zona nei prossimi ${R.H} giorni:
+        <b>${pc(h.pHist)}</b> secondo la media storica, <b>${pc(h.pNow)}</b> secondo l'attività prevista dalla rete (legge di Gutenberg-Richter).
+        Sono medie statistiche: non dicono quando né se avverrà un terremoto.</p></div>`;
+  }else hb.innerHTML='';
   _nnDraw(R);
   document.getElementById('nnEpiPanel').style.display='block';
   _nnRenderEpi(R);
