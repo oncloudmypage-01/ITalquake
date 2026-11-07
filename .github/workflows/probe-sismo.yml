@@ -8,26 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          get(){ echo; echo "==== $1"; curl -4 -sSL -m 40 -A "Mozilla/5.0" -H "Origin: https://example.github.io" -D hdr.txt "$1" -o out.txt -w "HTTP %{http_code} %{content_type} %{size_download} %{url_effective}\n"; grep -iE '^(access-control|x-frame|content-type)' hdr.txt; }
-          show(){ sed -e 's/<script/\n<script/g' out.txt | head -c ${1:-3000}; echo; }
-          # ultimi eventi M>=3 per avere degli id
-          get "https://webservices.ingv.it/fdsnws/event/1/query?format=text&minmag=3&starttime=2026-09-01&orderby=time&limit=5"; show 1500
-          ID=$(grep -v '^#' out.txt | head -1 | cut -d'|' -f1); echo "ID=$ID"
-          for E in $(grep -v '^#' out.txt | cut -d'|' -f1 | head -3) 42782632; do
-            get "https://e.hsit.it/$E/index.html"; grep -oiE '(href|src)="[^"]+"' out.txt | sort -u | head -40
-            sed -e 's/<[^>]*>/ /g' out.txt | tr -s ' \n' ' ' | head -c 2500; echo
-            for f in $(grep -oiE 'href="[^"]+\.json"' out.txt | cut -d'"' -f2 | head -4); do get "https://e.hsit.it/$E/$f"; show 1200; done
-          done
-          get "https://www.hsit.it/"; show 4000
-          grep -oiE '(href|src|action)="[^"]+"' out.txt | sort -u | head -60
-          get "https://www.hsit.it/eventi"; show 2500
-          get "https://e.hsit.it/"; grep -oiE '(href|src)="[^"]+"' out.txt | sort -u | head -40; show 1500
-          get "https://data.ingv.it/dataset/397"; sed -e 's/<[^>]*>/ /g' out.txt | tr -s ' \n' ' ' | grep -oiE '.{0,200}(licen|CC BY|creative).{0,200}' | head -5
-          get "https://www.hsit.it/api/"; show 1500
-          get "https://terremoti.ingv.it/event/$ID"; grep -oiE '[^"]*(hsit|shakemap|questionari|felt)[^"]*' out.txt | sort -u | head -30
-          get "https://terremoti.ingv.it/event/$ID?tab=HaiSentitoIlTerremoto"; grep -oiE '[^"<>]*(hsit|questionari|intensit|json|api)[^"<>]*' out.txt | sort -u | head -40
-          get "https://shakemap.ingv.it/shake4/data/$ID/current/products/intensity.jpg"
-          get "https://shakemap.ingv.it/shake4/data/$ID/current/products/info.json"; show 800
-          get "https://shakemap.ingv.it/shake4/viewLeaflet.html?eventid=$ID"; show 1500
-          get "https://shakemap.ingv.it/"; grep -oiE '(href|src)="[^"]+"' out.txt | sort -u | head -30
-          get "https://webservices.ingv.it/fdsnws/event/1/query?eventid=$ID&format=xml&includeallorigins=false"; grep -oiE '.{0,80}(hsit|shakemap|felt|intensity).{0,120}' out.txt | head
+          get(){ echo; echo "==== $1"; curl -4 -sSL -m 40 -A "Mozilla/5.0" -H "Origin: https://example.github.io" -D hdr.txt "$1" -o out.txt -w "HTTP %{http_code} %{content_type} %{size_download}\n"; grep -iE '^(access-control-allow-origin|content-type|last-modified|cache-control)' hdr.txt; }
+          get "https://www.hsit.it/lasthour.html"; grep -oiE '(src|href)="[^"]+"' out.txt | grep -viE 'css|png|svg|html' | sort -u; grep -oiE '.{0,120}(json|xml-server|fetch|ajax|XMLHttp).{0,160}' out.txt | head -20
+          for j in lasthour settings setcounter datemanager; do get "https://www.hsit.it/js/$j.js"; head -c 3500 out.txt; echo; done
+          get "https://www.hsit.it/json/counter.json"; head -c 600 out.txt
+          get "https://www.hsit.it/json/lasthour.json"; head -c 1500 out.txt
+          get "https://www.hsit.it/compile.html"; grep -oiE '.{0,100}(eventid|event_id|evid|\?id=|location\.search|getParam).{0,120}' out.txt | head
+          E=47861452
+          get "https://e.hsit.it/$E/index.html"; sed -e 's/<[^>]*>/ /g' out.txt | tr -s ' \n' ' ' | grep -oiE 'Questionari.{0,160}'
+          get "https://e.hsit.it/$E/${E}_mcs_municipality.json"; python3 -c "
+          import json;d=json.load(open('out.txt'));q=list(d['Quakes'].values())[0];m=q['MacroseismicData'];print(json.dumps(m['Description'])[:400]);k=list(m['MDPs'].keys());print(len(k));print(json.dumps(m['MDPs'][k[0]],indent=0)[:1500]);print([x for x in q.keys()]);print([x for x in m.keys()])" || head -c 800 out.txt
+          get "https://shakemap.ingv.it/js/config-base.js"; head -c 4000 out.txt
+          get "https://shakemap.ingv.it/js/config-env.js"; head -c 1500 out.txt
+          get "https://shakemap.ingv.it/js/products.js"; grep -oiE '.{0,100}(\.jpg|\.png|\.json|products/|/data/).{0,100}' out.txt | head -20
+          get "https://shakemap.ingv.it/js/archive.js"; grep -oiE '.{0,100}(\.json|/data/|fetch\().{0,140}' out.txt | head -15
