@@ -1474,6 +1474,67 @@ body.map-fs-on{overflow:hidden;}
 .sv-seg{display:flex;background:#EEF3F3;border-radius:11px;padding:3px;gap:3px;}
 .sv-seg button{flex:1;height:36px;border:none;border-radius:9px;background:transparent;color:#41575B;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;}
 .sv-seg button[aria-pressed="true"]{background:#FFFFFF;color:#0E2A30;box-shadow:0 1px 3px rgba(14,42,48,.15);}
+/* ── Sismogrammi: fonte (INGV / reti regionali / sismografi locali) ── */
+.src-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;margin:0 0 14px;background:#ECE5D8;border-radius:14px;}
+.src-seg button{min-height:52px;border:none;border-radius:11px;background:transparent;color:#3F3833;font:600 14px var(--font);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;line-height:1.15;text-align:center;}
+.src-seg button small{font-size:11.5px;font-weight:500;color:#5F574F;}
+.src-seg button.on{background:#FFFFFF;color:#1C1917;box-shadow:0 1px 3px rgba(28,25,23,.16);}
+.src-seg button.on small{color:#C2410C;}
+.reg-box{margin:0 0 14px;}
+.reg-h{font-size:14.5px;font-weight:700;color:#1C1917;margin:0 0 8px;}
+.reg-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;}
+.reg-card{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:11px 12px;border-radius:14px;border:1px solid #E3DBCC;background:#FFFFFF;color:#1C1917;cursor:pointer;font:inherit;min-height:44px;}
+.reg-card:hover{border-color:#C2410C;}
+.reg-card.on{border-color:#C2410C;box-shadow:inset 0 0 0 1px #C2410C;background:#FFF8F3;}
+.reg-card b{font-size:14.5px;font-weight:700;}
+.reg-card span{font-size:12.5px;color:#5F574F;line-height:1.35;}
+.reg-card i{font-style:normal;font-size:11.5px;font-weight:600;color:#C2410C;}
+.reg-credit{margin-top:10px;font-size:12.5px;color:#5F574F;line-height:1.5;}
+.reg-credit a,.loc-cite a,.loc-note a{color:#C2410C;}
+.loc-view{display:flex;flex-direction:column;gap:14px;}
+.loc-view[hidden]{display:none;}
+.loc-intro{font-size:14px;color:#3F3833;line-height:1.5;}
+.loc-grp{background:#FFFFFF;border:1px solid #E3DBCC;border-radius:18px;padding:14px;}
+.loc-gh{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.loc-gh h3{margin:0;font-size:16px;font-weight:700;color:#1C1917;}
+.loc-ente{margin:3px 0 0;font-size:12.5px;color:#5F574F;line-height:1.4;}
+.loc-tag{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:12px;background:#EFE8DC;color:#3F3833;font-size:11.5px;font-weight:600;white-space:nowrap;}
+.loc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:12px;}
+.loc-card{display:flex;flex-direction:column;gap:7px;padding:8px;border-radius:12px;border:1px solid #E3DBCC;background:#FFFFFF;cursor:pointer;text-align:left;font:inherit;color:#1C1917;}
+.loc-card:hover{border-color:#C2410C;}
+.loc-img{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#F5F1EA;}
+.loc-img img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;}
+.loc-img.err::after{content:"Tracciato non disponibile";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#8A8075;}
+.loc-card b{font-size:13.5px;font-weight:600;}
+.loc-card span{font-size:12px;color:#5F574F;}
+.loc-cite{margin:10px 0 0;font-size:11.5px;color:#8A8075;line-height:1.45;}
+.loc-note{margin:10px 0 0;padding:10px 12px;border-radius:12px;background:#F5F1EA;font-size:12.5px;color:#3F3833;line-height:1.45;}
+.loc-prov{margin-top:12px;}
+.loc-prov h4{margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#8A8075;}
+.loc-row{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 4px;border-top:1px solid #EFE8DC;}
+.loc-row:first-of-type{border-top:none;}
+.loc-row .n{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+.loc-row .n b{font-size:14px;font-weight:600;color:#1C1917;}
+.loc-row .n span{font-size:12px;color:#5F574F;}
+.loc-open{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 12px;border-radius:18px;border:1px solid #D3C9B8;background:#FFFFFF;color:#C2410C;font:600 13px var(--font);text-decoration:none;cursor:pointer;white-space:nowrap;}
+.loc-open:hover{border-color:#C2410C;}
+.loc-open svg{width:14px;height:14px;}
+.loc-refresh{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:17px;border:1px solid #D3C9B8;background:#FFFFFF;color:#3F3833;font:500 13px var(--font);cursor:pointer;}
+.hv-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;background:#F5F1EA;-webkit-overflow-scrolling:touch;}
+.hv-body img{display:block;width:100%;height:auto;background:#FFFFFF;}
+.hv-body.z img{width:220%;max-width:none;}
+.hv-foot{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid #E3DBCC;font-size:12px;color:#5F574F;}
+.hv-foot button{flex-shrink:0;}
+@media (max-width:700px){
+  .reg-list{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 6px;scrollbar-width:none;}
+  .reg-list::-webkit-scrollbar{display:none;}
+  .reg-card{flex:0 0 72%;scroll-snap-align:start;}
+  .loc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .loc-card{padding:6px;}
+  .loc-card b{font-size:12.5px;}
+  .loc-card span{font-size:11px;}
+}
 .seis-tip{position:absolute;z-index:3;pointer-events:none;background:#FFFFFF;color:#1C1917;border-radius:8px;padding:5px 8px;font:12px Inter,system-ui,sans-serif;
   display:flex;gap:8px;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.25);}
 .seis-tip[hidden],.seis-line[hidden]{display:none;}
@@ -2454,7 +2515,18 @@ body.sv-on{overflow:hidden;}
           <div class="sx-d">Scegli una stazione sismica e guarda il tracciato che ha registrato.</div></div>
         <svg class="sx-wave" viewBox="0 0 150 60" fill="none" aria-hidden="true"><path d="M0 30h30l5-12 6 24 7-34 7 30 5-10h18l4-6 5 14 5-20 5 16h53" stroke="#C2410C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="grid">
+      <div class="src-seg" id="seisSrcSeg" role="tablist" aria-label="Da dove arrivano i sismogrammi">
+        <button type="button" role="tab" data-src="ingv" class="on" aria-selected="true" onclick="setSeisSource('ingv')">Nazionale<small>INGV</small></button>
+        <button type="button" role="tab" data-src="reg" aria-selected="false" onclick="setSeisSource('reg')">Regionali<small>Università ed enti</small></button>
+        <button type="button" role="tab" data-src="loc" aria-selected="false" onclick="setSeisSource('loc')">Locali<small>Osservatori</small></button>
+      </div>
+      <div class="reg-box" id="regBox" hidden>
+        <div class="reg-h">Scegli la rete della tua zona</div>
+        <div class="reg-list" id="regList" role="list"></div>
+        <div class="reg-credit" id="regCredit"></div>
+      </div>
+      <div id="locView" class="loc-view" hidden></div>
+      <div class="grid" id="seisGrid">
         <section class="panel">
           <div class="controls">
             <div class="sx-step">
@@ -2574,7 +2646,7 @@ body.sv-on{overflow:hidden;}
           </details>
         </section>
       </div>
-      <div class="footer-note">
+      <div class="footer-note" id="seisFoot">
         Dati delle stazioni e dei tracciati: INGV.
       </div>
     </div>
@@ -2830,6 +2902,16 @@ body.sv-on{overflow:hidden;}
       <span class="btab-icon ic" data-ic="grid"></span>Strumenti</button>
   </nav>
 
+  <!-- TRACCIATO GIORNALIERO DI UN SISMOGRAFO LOCALE (immagine dell'ente, a tutto schermo) -->
+  <div class="sv" id="heliViewer" hidden role="dialog" aria-modal="true" aria-labelledby="hvTitle">
+    <header class="sv-h">
+      <button type="button" class="sv-back" onclick="closeHeli()" aria-label="Chiudi il tracciato"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="sv-ht"><div class="sv-t" id="hvTitle"></div><div class="sv-s" id="hvSub"></div></div>
+    </header>
+    <div class="hv-body" id="hvBody" onclick="heliZoom()"><img id="hvImg" alt=""/></div>
+    <div class="hv-foot"><span id="hvCite"></span><button type="button" class="loc-refresh" id="hvZoomBtn" onclick="heliZoom()">Ingrandisci</button></div>
+  </div>
+
   <!-- SCHEDA SORGENTE SISMOGENICA (dati DISS INGV salvati in locale) -->
   <div class="sv" id="seisViewer" hidden role="dialog" aria-modal="true" aria-labelledby="svTitle">
     <header class="sv-h">
@@ -2921,6 +3003,7 @@ function mapFsExit(){
 }
 window.addEventListener('popstate',e=>{
   if(_fsMap){_fsPushed=false;mapFsExit();e.stopImmediatePropagation();return;}
+  if(window._hvOpen){closeHeli(true);e.stopImmediatePropagation();return;}
   if(window._svOpen){closeSeisViewer(true);e.stopImmediatePropagation();}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_fsMap) mapFsToggle(_fsMap);});
@@ -3024,7 +3107,7 @@ function goSection(sec){
     document.getElementById('sectionSismogrammi').classList.add('active');
     document.getElementById('tabSeis').classList.add('a-seis');
     document.getElementById('btSeis').classList.add('active');
-    if(!seisMapInited){seisMapInited=true;initMap();loadNetwork();}
+    if(!seisMapInited){seisMapInited=true;initMap();setSeisSource(seisSrc,{noLoad:true});if(seisSrc!=='loc')loadNetwork();}
     else setTimeout(()=>map&&map.invalidateSize(),80);
   }
 }
@@ -5607,7 +5690,7 @@ function restoreFilters(){
       const el=document.getElementById(id);
       if(el&&saved[id]!=null&&saved[id]!=='') el.value=saved[id];
     });
-    if(saved.networkSelect) networkSelect.value=saved.networkSelect;
+    if(saved.networkSelect&&[...networkSelect.options].some(o=>o.value===saved.networkSelect)) networkSelect.value=saved.networkSelect;
   }catch(e){}
 }
 /* Legge un campo numerico delle preferenze notifica in modo "robusto":
@@ -6455,6 +6538,7 @@ async function loadNetwork(){
     stations=parseSta(await r.text(),net);
     if(!stations.length)throw new Error('Nessuna stazione');
     stationSelect.innerHTML=stations.map(s=>`<option value="${s.code}">${s.name?s.name+' — '+s.code:s.code}</option>`).join('');
+    if(window._wantSta){if(stations.some(s=>s.code===window._wantSta))stationSelect.value=window._wantSta;window._wantSta=null;}
     updateStationNote();
     renderMapStations(true);
     await populateChannels(stationSelect.value);
@@ -6571,6 +6655,188 @@ networkSelect.addEventListener('change',()=>{chCache.clear();loadNetwork();saveF
 stationSelect.addEventListener('change',()=>{populateChannels(stationSelect.value);selectMapStation(true);updateMeta();updateStationNote();});
 hoursInput.addEventListener('change',()=>{updateDefaultRange();saveFilters();syncHourChips();});
 generateBtn.addEventListener('click',fetchWaveformAndPlot);
+
+/* ================================================================
+   ALTRI ENTI: reti regionali e sismografi locali
+   - Reti regionali: dati aperti ("open") di università ed enti, distribuiti
+     dal nodo EIDA Italia dell'INGV con lo stesso servizio della rete nazionale,
+     quindi l'app disegna il tracciato da sé (filtri, giornata a righe, esplora).
+   - Sismografi locali: immagini pubblicate dagli enti. Si mostrano qui solo
+     quelle il cui sito ne consente la riproduzione citando la fonte (OGS);
+     per gli altri c'è il collegamento alla pagina ufficiale.
+================================================================ */
+const REG_NETS=[
+  {code:'GU',area:'Liguria, Piemonte e Valle d\'Aosta',sub:'anche alta Toscana ed Emilia',ente:'Università di Genova (DISTAV)',
+    doi:'10.7914/SN/GU',site:'https://distav.unige.it/rsni/'},
+  {code:'OX',area:'Friuli Venezia Giulia e Veneto',sub:'anche Lombardia orientale e Trentino',ente:'OGS – Istituto Nazionale di Oceanografia e Geofisica',
+    doi:'10.7914/SN/OX',site:'http://rts.crs.inogs.it/'},
+  {code:'RF',area:'Friuli Venezia Giulia',sub:'accelerometri',ente:'Università di Trieste',
+    doi:'10.7914/SN/RF',site:'http://seisram.units.it'},
+  {code:'ST',area:'Trentino',sub:'',ente:'Provincia autonoma di Trento – Servizio geologico',
+    doi:'10.7914/SN/ST',site:'https://www.provincia.tn.it/News/Approfondimenti/Rete-sismometrica'},
+  {code:'SI',area:'Alto Adige',sub:'',ente:'Provincia autonoma di Bolzano, con GeoSphere Austria',
+    doi:'',site:''},
+  {code:'IX',area:'Irpinia',sub:'Campania e Basilicata',ente:'Università di Napoli Federico II (ISNet)',
+    doi:'',site:'http://isnet.fisica.unina.it/'},
+  {code:'OT',area:'Puglia',sub:'Gargano, Bari e Taranto',ente:'Università di Bari "Aldo Moro" (OTRIONS)',
+    doi:'10.7914/SN/OT',site:'http://www.otrions.uniba.it'}
+];
+const _INGV_NET_OPTS=networkSelect.innerHTML;
+let seisSrc='ingv',regNet='GU';
+try{const s=localStorage.getItem('itq_seis_src');if(s==='reg'||s==='loc')seisSrc=s;
+  const r=localStorage.getItem('itq_seis_reg');if(REG_NETS.some(n=>n.code===r))regNet=r;}catch(e){}
+
+function _regInfo(code){return REG_NETS.find(n=>n.code===code)||null;}
+function renderRegList(){
+  const el=document.getElementById('regList');if(!el)return;
+  el.innerHTML=REG_NETS.map(n=>`<button type="button" role="listitem" class="reg-card${n.code===regNet?' on':''}" onclick="pickRegNet('${n.code}')" aria-pressed="${n.code===regNet}">
+    <b>${_esc(n.area)}</b><span>${_esc(n.ente)}</span>${n.sub?`<span>${_esc(n.sub)}</span>`:''}<i>Rete ${n.code}</i></button>`).join('');
+}
+function renderSeisCredit(){
+  const foot=document.getElementById('seisFoot'),cr=document.getElementById('regCredit');
+  if(seisSrc==='reg'){
+    const n=_regInfo(regNet);if(!n)return;
+    const doi=n.doi?` · DOI <a href="https://doi.org/${n.doi}" target="_blank" rel="noopener">${n.doi}</a>`:'';
+    const site=n.site?` · <a href="${n.site}" target="_blank" rel="noopener">sito della rete</a>`:'';
+    const txt=`Dati della rete <b>${n.code}</b> gestita da ${_esc(n.ente)}${doi}${site}. Dati ad accesso aperto, distribuiti dal nodo EIDA Italia dell'INGV.`;
+    if(cr)cr.innerHTML=txt+' Alcune reti inviano i dati con qualche ora di ritardo: se il tracciato non arriva, scegli un periodo più lungo.';
+    if(foot)foot.innerHTML=txt;
+  }else if(seisSrc==='loc'){
+    if(foot)foot.innerHTML='Le immagini restano di proprietà degli enti indicati in ogni gruppo.';
+  }else if(foot)foot.textContent='Dati delle stazioni e dei tracciati: INGV.';
+}
+function _setNetOptions(src){
+  if(src==='reg'){networkSelect.innerHTML=REG_NETS.map(n=>`<option value="${n.code}">${n.code} — ${_esc(n.area)}</option>`).join('');}
+  else networkSelect.innerHTML=_INGV_NET_OPTS;
+}
+function setSeisSource(src,opts){
+  opts=opts||{};
+  seisSrc=src;
+  try{localStorage.setItem('itq_seis_src',src);}catch(e){}
+  document.querySelectorAll('#seisSrcSeg button').forEach(b=>{const on=b.dataset.src===src;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);});
+  document.getElementById('regBox').hidden=src!=='reg';
+  document.getElementById('seisGrid').hidden=src==='loc';
+  document.getElementById('locView').hidden=src!=='loc';
+  renderSeisCredit();
+  if(src==='loc'){renderLocView();return;}
+  if(src==='reg')renderRegList();
+  const want=src==='reg'?regNet:'IV';
+  const prev=networkSelect.value;
+  _setNetOptions(src);
+  networkSelect.value=want;
+  if(!opts.noLoad&&(prev!==want||!stations.length)){chCache.clear();loadNetwork();}
+  setTimeout(()=>{if(typeof map!=='undefined'&&map)map.invalidateSize();},60);
+}
+function pickRegNet(code,sta){
+  if(!_regInfo(code))return;
+  if(sta)window._wantSta=sta;
+  regNet=code;try{localStorage.setItem('itq_seis_reg',code);}catch(e){}
+  renderRegList();
+  if(seisSrc!=='reg')setSeisSource('reg');
+  renderSeisCredit();
+  if(networkSelect.value!==code){networkSelect.value=code;chCache.clear();loadNetwork();}
+  else if(window._wantSta&&stations.some(s=>s.code===window._wantSta)){stationSelect.value=window._wantSta;window._wantSta=null;stationSelect.dispatchEvent(new Event('change'));}
+}
+/* dal menu avanzato "Rete" in modalità regionale */
+networkSelect.addEventListener('change',()=>{
+  if(seisSrc==='reg'&&_regInfo(networkSelect.value)){regNet=networkSelect.value;try{localStorage.setItem('itq_seis_reg',regNet);}catch(e){}renderRegList();renderSeisCredit();}
+});
+
+/* ── Sismografi locali ── */
+const LOC_OGS=[
+  {id:'rscl',title:'Lodi · Cornegliano Laudense',tag:'Lombardia',
+    ente:'OGS e IREA-CNR – Monitoraggio di "Cornegliano Stoccaggio"',
+    base:'https://rete-cornegliano.crs.inogs.it/DATI/helicorder/rt/',suffix:'_Z_hp-heli.png',
+    page:'https://rete-cornegliano.crs.inogs.it/assets/helicorder/rt/index.html',
+    cite:'RSCL Working Group (2019). Rete Sismica di Cornegliano Laudense – rete-cornegliano.crs.inogs.it – doi:10.7914/SN/OL',
+    sta:[['OL01','Cornegliano Laudense'],['OL02','Massalengo'],['OL03','Cascina Castagna'],['OL04','Cascina Taietta'],['OL05','Cascina Cavrigo'],
+      ['OL06','Cascina Bracca'],['OL07','Gugnano'],['OL08','Dovera'],['OL09','Miradolo'],['OL10','Cavenago d\'Adda']]},
+  {id:'rsc',title:'Treviso · Collalto e Montello',tag:'Veneto',
+    ente:'OGS – Rete Sismica di Collalto',
+    base:'https://rete-collalto.crs.inogs.it/DATI/helicorder/rt/',suffix:'_z_hp-heli.png',
+    page:'https://rete-collalto.crs.inogs.it/assets/helicorder/rt/index.html',
+    cite:'OGS-RSC Working Group (2012). Rete Sismica di Collalto – rete-collalto.crs.inogs.it – doi:10.7914/SN/EV',
+    sta:[['ED01','Susegana S. Lucia'],['ED02','Farra di Soligo'],['ED03','Corbanese'],['ED04','S. Maria di Feletto'],['ED05','S. Michele di Feletto'],
+      ['ED06','Collalto Campo 6'],['ED07','Nervesa della Battaglia'],['ED08','Collalto Cucco'],['ED09','Susegana Castello'],['ED10','S. Croce del Montello'],
+      ['MTLO','Montello'],['VARN','Col Varnada'],['CAE','Caneva'],['MGBU','Monte Grappa']]}
+];
+/* Osservatorio Sismico "L. Palmieri" (Pesco Sannita, BN). Il sito riserva tutti i diritti:
+   i tracciati si aprono sulla loro pagina. Se l'Osservatorio autorizza per iscritto
+   la riproduzione, basta mettere PALMIERI_IMG=true per mostrarli qui come quelli OGS. */
+const PALMIERI_IMG=false;
+const PALM_BASE='https://nuke.nprotezionecivile.it/Sismogrammiindiretta/';
+const PALMIERI=[
+  ['Benevento',[['Benevento','BN013','Benevento/tabid/743/Default.aspx','bn.bn013.ehz'],['Airola','AIR06','Airola/tabid/650/Default.aspx','bn.air06.ehz'],
+    ['Baselice','BAS04','Baselice/tabid/649/Default.aspx','bn.bas04.ehz'],['Ceppaloni','CEP32','Ceppaloni/tabid/786/Default.aspx','bn.cep32.ehz'],
+    ['Circello','','Morcone/tabid/750/Default.aspx','am.r4e40.ehz'],['Cusano Mutri','CUM07','CusanoMutri/tabid/707/Default.aspx','bn.cum07.ehz'],
+    ['Pannarano','CAU40','Pannarano/tabid/653/Default.aspx','bn.cau40.ehz']]],
+  ['Avellino',[['Altavilla Irpina','ALT12','AltavillaIrpinaAV/tabid/745/Default.aspx','bn.alt12.ehz'],['Bonito','BON33','MirabellaEclano/tabid/774/Default.aspx','bn.BON33.ehz'],
+    ['Carife','CAR22','Carife/tabid/749/Default.aspx','bn.car22.ehz'],['Guardia dei Lombardi','','GuardiadeiLombardiAV/tabid/765/Default.aspx','am.ra877.ehz']]],
+  ['Napoli',[['Forio d\'Ischia','CISCH','FORIODISCHIA/tabid/766/Default.aspx','bn.cisch.ehz'],['Forio d\'Ischia – Montecorvo','FOR28','FORIO/tabid/775/Default.aspx','bn.for28.ehz']]],
+  ['Campobasso',[['Ferrazzano','FER23','FerrazzanoCB/tabid/752/Default.aspx','bn.fer23.ehz'],['Larino','','Larino/tabid/759/Default.aspx','am.r5c0a.shz'],
+    ['Riccia','RIC12','RicciaCB/tabid/744/Default.aspx','bn.ric12.ehz']]],
+  ['Isernia',[['Pettoranello del Molise','PET25','PettoranellodelMolise/tabid/767/Default.aspx','bn.pet25.ehz']]],
+  ['Potenza',[['Pescopagano','BPSG','PescoPagano/tabid/748/Default.aspx','bn.bpsg.ehz'],['Viggiano','BVIG','ViggianoPz/tabid/742/Default.aspx','']]],
+  ['Bari',[['Bari','OT15','Bari/tabid/761/Default.aspx','ot.ot15.ehz','OT']]]
+];
+const _EXT_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+let _locBust=Math.floor(Date.now()/600000),_locItems=[];
+function _locImg(url){return url+(url.includes('?')?'&':'?')+'t='+_locBust;}
+function renderLocView(){
+  const el=document.getElementById('locView');if(!el)return;
+  _locItems=[];
+  const card=(src,title,sub,cite,page)=>{const i=_locItems.push({src,title,sub,cite,page})-1;
+    return `<button type="button" class="loc-card" onclick="openHeli(${i})" aria-label="Apri il tracciato di ${_esc(title)}">
+      <div class="loc-img"><img loading="lazy" decoding="async" alt="" src="${_esc(_locImg(src))}" onerror="this.parentNode.classList.add('err');this.remove()"></div>
+      <b>${_esc(title)}</b><span>${_esc(sub)}</span></button>`;};
+  let h=`<div class="loc-intro">Tracciati delle ultime ore pubblicati da osservatori ed enti locali. Ogni immagine è una giornata: una riga per ora, dall'alto verso il basso. Tocca un tracciato per ingrandirlo.</div>`;
+  LOC_OGS.forEach(g=>{
+    h+=`<section class="loc-grp"><div class="loc-gh"><div><h3>${_esc(g.title)}</h3><p class="loc-ente">${_esc(g.ente)} · aggiornati ogni ora · orari UTC (in Italia +1 ora d'inverno, +2 d'estate)</p></div><span class="loc-tag">${_esc(g.tag)}</span></div>
+      <div class="loc-grid">${g.sta.map(([c,n])=>card(g.base+c+g.suffix,n,c+' · movimento su e giù',g.cite,g.page)).join('')}</div>
+      <p class="loc-cite">Fonte: ${_esc(g.cite)}. Riprodotti come consentito dal sito, con citazione della fonte. <a href="${g.page}" target="_blank" rel="noopener">Pagina originale</a></p></section>`;
+  });
+  h+=`<section class="loc-grp"><div class="loc-gh"><div><h3>Campania, Molise, Basilicata e Puglia</h3><p class="loc-ente">Osservatorio Sismico "L. Palmieri" – Nucleo Protezione Civile, Pesco Sannita (BN)</p></div><span class="loc-tag">${PALMIERI.reduce((a,p)=>a+p[1].length,0)} stazioni</span></div>`;
+  if(!PALMIERI_IMG)h+=`<div class="loc-note">L'Osservatorio riserva tutti i diritti sui suoi tracciati, quindi si aprono sul suo sito. Il colore delle tracce può cambiare anche per il rumore di fondo (traffico, attività umane), non solo per un terremoto.</div>`;
+  PALMIERI.forEach(([prov,list])=>{
+    h+=`<div class="loc-prov"><h4>Provincia di ${_esc(prov)}</h4>`;
+    if(PALMIERI_IMG){
+      h+=`<div class="loc-grid">${list.filter(s=>s[3]).map(s=>card('https://nuke.nprotezionecivile.it/drums/'+s[3]+'.png',s[0],(s[1]||'')+' · Osservatorio "L. Palmieri"','Osservatorio Sismico "L. Palmieri" – nprotezionecivile.it',PALM_BASE+s[2])).join('')}</div>`;
+    }else{
+      h+=list.map(s=>`<div class="loc-row"><div class="n"><b>${_esc(s[0])}</b><span>${s[1]?'Stazione '+_esc(s[1]):'Stazione dell\'Osservatorio'}${s[4]?' · anche in Reti regionali › Puglia':''}</span></div>
+        ${s[4]?`<button type="button" class="loc-open" onclick="pickRegNet('${s[4]}','${s[1]}');window.scrollTo({top:0,behavior:'smooth'})">Nell'app</button>`:''}
+        <a class="loc-open" href="${PALM_BASE+s[2]}" target="_blank" rel="noopener">Apri${_EXT_IC}</a></div>`).join('');
+    }
+    h+=`</div>`;
+  });
+  h+=`<p class="loc-cite">Le stazioni dell'Osservatorio all'estero non sono elencate.</p></section>`;
+  h+=`<div style="display:flex;justify-content:center"><button type="button" class="loc-refresh" onclick="refreshLocView()">Ricarica i tracciati</button></div>`;
+  el.innerHTML=h;
+}
+function refreshLocView(){_locBust=Date.now();renderLocView();if(typeof showToast==='function')showToast('Tracciati ricaricati');}
+window._hvOpen=false;let _hvPushed=false;
+function openHeli(i){
+  const it=_locItems[i];if(!it)return;
+  document.getElementById('hvTitle').textContent=it.title;
+  document.getElementById('hvSub').textContent=it.sub;
+  document.getElementById('hvCite').innerHTML=`Fonte: ${_esc(it.cite)} · <a href="${it.page}" target="_blank" rel="noopener" style="color:#C2410C">originale</a>`;
+  const img=document.getElementById('hvImg');img.src=_locImg(it.src);img.alt='Tracciato giornaliero di '+it.title;
+  const b=document.getElementById('hvBody');b.classList.remove('z');b.scrollTop=0;b.scrollLeft=0;
+  document.getElementById('hvZoomBtn').textContent='Ingrandisci';
+  document.getElementById('heliViewer').hidden=false;document.body.style.overflow='hidden';
+  window._hvOpen=true;
+  try{history.pushState({hv:1},'');_hvPushed=true;}catch(e){_hvPushed=false;}
+}
+function closeHeli(fromPop){
+  if(!window._hvOpen)return;
+  window._hvOpen=false;
+  document.getElementById('heliViewer').hidden=true;document.body.style.overflow='';
+  if(!fromPop&&_hvPushed){_hvPushed=false;history.back();}else _hvPushed=false;
+}
+function heliZoom(){
+  const b=document.getElementById('hvBody');const z=b.classList.toggle('z');
+  document.getElementById('hvZoomBtn').textContent=z?'Adatta allo schermo':'Ingrandisci';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&window._hvOpen)closeHeli();});
 /* Salva filtri terremoti e storico ad ogni modifica */
 ['eqGeo','eqPeriod','eqMinMag','eqMaxDepth',
  'stFrom','stTo','stMinMag','stMaxMag','stMaxDepth','stLimit'
