@@ -9,21 +9,13 @@ jobs:
     steps:
       - run: |
           set +e
-          get(){ echo; echo "==== $1"; curl -4 -sSL -m 40 -A "Mozilla/5.0" -H "Origin: https://example.github.io" -D hdr.txt "$1" -o out.txt -w "HTTP %{http_code} %{content_type} %{size_download}\n"; grep -iE '^(access-control-allow-origin|content-type|last-modified|cache-control)' hdr.txt; }
-          get "https://www.hsit.it/lasthour.html"; sed -e 's/<script.*<\/script>//g;s/<[^>]*>/ /g' out.txt | tr -s ' \n\t' ' ' | grep -oiE '.{0,300}(ultima ora|segnalazion|questionari).{0,400}' | head -5
-          get "https://www.hsit.it/lastHourMap/lastHourMap.jpg"; file out.txt
-          get "https://www.hsit.it/"; E=$(grep -oE 'e\.hsit\.it/[0-9]+/index' out.txt | head -1 | cut -d/ -f2); echo "E=$E"
-          get "https://e.hsit.it/$E/index.html"; sed -e 's/<[^>]*>/ /g' out.txt | tr -s ' \n\t' ' ' | grep -oiE '(Evento sismico|Questionari|Compilazione).{0,200}' | head -4
-          get "https://e.hsit.it/$E/${E}_mcs_municipality.json"
-          python3 - <<'PY'
-          import json
-          d=json.load(open('out.txt'));q=list(d['Quakes'].values())[0];m=q['MacroseismicData']
-          print(list(q.keys()),list(m.keys()))
-          print(json.dumps({k:v for k,v in m.items() if k!='MDPs'})[:1500])
-          ks=list(m['MDPs'].keys());print('n',len(ks))
-          for k in ks[:2]: print(json.dumps(m['MDPs'][k])[:1800])
-          PY
-          get "https://shakemap.ingv.it/js/config-base.js"; head -c 3000 out.txt
-          get "https://shakemap.ingv.it/js/config-env.js"; head -c 1500 out.txt
-          get "https://shakemap.ingv.it/js/products.js"; grep -oiE '.{0,120}(\.jpg|\.png|\.json|products|/data/).{0,120}' out.txt | head -20
-          get "https://shakemap.ingv.it/js/archive.js"; grep -oiE '.{0,120}(\.json|/data/|fetch\().{0,160}' out.txt | head -15
+          get(){ echo; echo "==== $1"; curl -4 -sSL -m 40 -A "Mozilla/5.0" -H "Origin: https://example.github.io" -D hdr.txt "$1" -o out.txt -w "HTTP %{http_code} %{content_type} %{size_download}\n"; grep -iE '^(access-control-allow-origin|content-type|last-modified)' hdr.txt; }
+          get "https://www.hsit.it/lasthour.html"; python3 -c "
+          import re;t=open('out.txt').read()
+          for m in re.findall(r'<script[^>]*>(.*?)</script>',t,re.S):
+            if len(m.strip())>20: print('SCRIPT',m.strip()[:1500])
+          i=t.find('Provincia');print(t[i-1500:i+2500])"
+          get "https://shakemap.ingv.it/data/events.json"; head -c 900 out.txt; echo
+          get "https://shakemap.ingv.it/productsListToProcess.json"; head -c 1500 out.txt; echo
+          for p in intensity.jpg intensity_overlay.png info.json; do get "https://shakemap.ingv.it/data/47612622/current/products/$p"; done
+          head -c 600 out.txt
