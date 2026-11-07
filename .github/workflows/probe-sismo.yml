@@ -13,9 +13,16 @@ jobs:
           # ultimi eventi M>=3 per avere degli id
           get "https://webservices.ingv.it/fdsnws/event/1/query?format=text&minmag=3&starttime=2026-09-01&orderby=time&limit=5"; show 1500
           ID=$(grep -v '^#' out.txt | head -1 | cut -d'|' -f1); echo "ID=$ID"
+          for E in $(grep -v '^#' out.txt | cut -d'|' -f1 | head -3) 42782632; do
+            get "https://e.hsit.it/$E/index.html"; grep -oiE '(href|src)="[^"]+"' out.txt | sort -u | head -40
+            sed -e 's/<[^>]*>/ /g' out.txt | tr -s ' \n' ' ' | head -c 2500; echo
+            for f in $(grep -oiE 'href="[^"]+\.json"' out.txt | cut -d'"' -f2 | head -4); do get "https://e.hsit.it/$E/$f"; show 1200; done
+          done
           get "https://www.hsit.it/"; show 4000
           grep -oiE '(href|src|action)="[^"]+"' out.txt | sort -u | head -60
           get "https://www.hsit.it/eventi"; show 2500
+          get "https://e.hsit.it/"; grep -oiE '(href|src)="[^"]+"' out.txt | sort -u | head -40; show 1500
+          get "https://data.ingv.it/dataset/397"; sed -e 's/<[^>]*>/ /g' out.txt | tr -s ' \n' ' ' | grep -oiE '.{0,200}(licen|CC BY|creative).{0,200}' | head -5
           get "https://www.hsit.it/api/"; show 1500
           get "https://terremoti.ingv.it/event/$ID"; grep -oiE '[^"]*(hsit|shakemap|questionari|felt)[^"]*' out.txt | sort -u | head -30
           get "https://terremoti.ingv.it/event/$ID?tab=HaiSentitoIlTerremoto"; grep -oiE '[^"<>]*(hsit|questionari|intensit|json|api)[^"<>]*' out.txt | sort -u | head -40
