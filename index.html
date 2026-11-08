@@ -1475,6 +1475,7 @@ body.map-fs-on{overflow:hidden;}
 .sv-seg button{flex:1;height:36px;border:none;border-radius:9px;background:transparent;color:#41575B;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;}
 .sv-seg button[aria-pressed="true"]{background:#FFFFFF;color:#0E2A30;box-shadow:0 1px 3px rgba(14,42,48,.15);}
 /* ── Monitor in diretta ── */
+.prov-gq{margin-top:8px;border:none;background:#FFFFFF;border-radius:10px;min-height:40px;padding:0 12px;color:#C2410C;font:600 13.5px var(--font);cursor:pointer;}
 .mon-go{width:100%;display:flex;align-items:center;gap:10px;min-height:46px;margin:0 0 12px;padding:0 14px;border-radius:14px;border:1px solid #E3DBCC;background:#FFFFFF;color:#1C1917;font:600 14px var(--font);cursor:pointer;text-align:left;}
 .mon-go>span:last-child{margin-left:auto;color:#C2410C;font-size:20px;}
 .mon-go .hs-live span{background:#DC2626;}
@@ -1484,14 +1485,6 @@ body.map-fs-on{overflow:hidden;}
 .mon-h .hs-live span{background:#DC2626;}
 .mon-clock{font-size:22px;font-weight:700;color:#1C1917;font-variant-numeric:tabular-nums;}
 .mon-sub{font-size:13px;color:#5F574F;margin-top:2px;}
-.mon-map{height:min(62vh,560px);min-height:360px;}
-.mon-leg{display:flex;flex-wrap:wrap;gap:6px 12px;padding:10px 16px 0;font-size:12px;color:#3F3833;}
-.mon-leg span{display:inline-flex;align-items:center;gap:5px;}
-.mon-leg i{width:11px;height:11px;border-radius:3px;display:inline-block;}
-.mon-leg b{width:14px;height:0;border-top:2.5px solid;display:inline-block;}
-.mon-st{padding:8px 16px 14px;font-size:12.5px;color:#5F574F;}
-.mon-alert{margin-top:10px;padding:12px 14px;border-radius:14px;background:#FFF1E8;border:1px solid #F3C8AE;color:#1C1917;font-size:14px;line-height:1.5;}
-.mon-alert[hidden]{display:none;}
 .mon-src{font-size:12px;font-weight:600;color:#5F574F;padding-right:16px;}
 .mon-feed{padding:0 8px 8px;}
 .mon-row{width:100%;display:flex;align-items:center;gap:10px;min-height:54px;padding:6px 8px;border:none;border-top:1px solid #EFE8DC;background:none;text-align:left;cursor:pointer;font:inherit;color:#1C1917;}
@@ -1504,11 +1497,6 @@ body.map-fs-on{overflow:hidden;}
 .mon-tag{font-size:10.5px;font-weight:700;color:#5F574F;background:#EFE8DC;border-radius:6px;padding:3px 6px;flex-shrink:0;}
 .mon-video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#1C1917;}
 .mon-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
-.mon-sta{background:none;border:none;}
-.mon-sta.hot svg{animation:monHot 1s ease-in-out infinite;}
-@keyframes monHot{50%{transform:scale(1.25);}}
-.leaflet-interactive.mon-pulse{animation:monPulse 1.4s ease-in-out infinite;}
-@keyframes monPulse{50%{stroke-width:6px;stroke-opacity:.35;}}
 /* ── Scheda terremoto: a casa tua, chi l'ha sentito, registrazioni ── */
 .felt-card{margin-top:14px;background:#FFFFFF;border:1px solid #E3DBCC;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;}
 .felt-h{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#8A8075;}
@@ -1895,8 +1883,8 @@ body.sv-on{overflow:hidden;}
       <button class="side-menu-item" onclick="closeSideMenu();goSection('monitor')">
         <span class="ic side-menu-icon" data-ic="seismo" style="color:#DC2626;"></span>
         <div class="side-menu-text">
-          <div class="side-menu-title">Monitor in diretta <span class="side-badge">Nuovo</span></div>
-          <div class="side-menu-desc">Stazioni che si accendono quando trema, onde P e S dall'epicentro, terremoti in tempo reale e la diretta di GlobalQuake Italia</div>
+          <div class="side-menu-title">GlobalQuake Italia <span class="side-badge">In diretta</span></div>
+          <div class="side-menu-desc">La diretta del monitor sperimentale GlobalQuake Italia, con la stima provvisoria e le localizzazioni INGV per confrontarlo</div>
         </div>
       </button>
       <button class="side-menu-item" onclick="closeSideMenu();goSection('rete')">
@@ -1984,7 +1972,7 @@ body.sv-on{overflow:hidden;}
   <!-- ═══ TERREMOTI RECENTI ═══ -->
   <div class="section" id="sectionTerremoti">
     <div id="provBox" class="prov-box" hidden role="alert" aria-live="assertive"></div>
-    <button type="button" class="mon-go" onclick="goSection('monitor')"><span class="hs-live"><span></span></span>Monitor in diretta: stazioni, onde e GlobalQuake Italia<span aria-hidden="true">›</span></button>
+    <button type="button" class="mon-go" onclick="goSection('monitor')"><span class="hs-live"><span></span></span>GlobalQuake Italia in diretta<span aria-hidden="true">›</span></button>
     <div class="search-bar">
       <input id="eqSearchInput" type="text" placeholder="Cerca per provincia, regione o località (es. Benevento, BN, Campania)" oninput="filterEqByProv()"/>
       <button id="eqSearchClear" class="search-clear" title="Cancella ricerca" onclick="clearEqSearch()">✕</button>
@@ -2374,7 +2362,7 @@ body.sv-on{overflow:hidden;}
         </button>
         <button class="tool-tile" onclick="goSection('monitor')" style="--tc:#DC2626">
           <span class="tool-top"><span class="tool-ic ic" data-ic="seismo"></span><span class="tl-badge">Live</span></span>
-          <span class="tool-t">Monitor in diretta</span><span class="tool-d">Stazioni, onde e GlobalQuake</span>
+          <span class="tool-t">GlobalQuake Italia</span><span class="tool-d">La diretta, a confronto con INGV</span>
         </button>
         <button class="tool-tile" onclick="goSection('rete')" style="--tc:#A21CAF">
           <span class="tool-top"><span class="tool-ic ic" data-ic="neural"></span><span class="tl-badge">Nuovo</span></span>
@@ -2457,38 +2445,26 @@ body.sv-on{overflow:hidden;}
     </div>
   </div>
 
-  <!-- ═══ MONITOR IN DIRETTA (stile GlobalQuake) ═══ -->
+  <!-- ═══ GLOBALQUAKE ITALIA IN DIRETTA ═══ -->
   <div class="section" id="sectionMonitor">
     <div class="container">
       <div class="mon-top">
         <div><div class="mon-h"><span class="hs-live"><span></span>IN DIRETTA</span><span id="monClock" class="mon-clock">--:--:--</span></div>
-          <div class="mon-sub">Stazioni sismiche, terremoti e onde in tempo quasi reale</div></div>
-        <button type="button" class="chip-link" id="monSoundBtn" onclick="monToggleSound()" aria-pressed="false">Suono spento</button>
+          <div class="mon-sub">GlobalQuake Italia, confrontato con i dati INGV</div></div>
       </div>
       <div id="monProv"></div>
-      <div id="monAlert" class="mon-alert" hidden></div>
-      <section class="panel panel-map" style="margin-top:12px;">
-        <div id="monMap" class="mon-map"></div>
-        <div class="mon-leg">
-          <span><i style="background:#9CA3AF"></i>nessun dato</span><span><i style="background:#22C55E"></i>calmo</span><span><i style="background:#EAB308"></i>debole</span><span><i style="background:#F97316"></i>moderato</span><span><i style="background:#DC2626"></i>forte</span>
-          <span><b style="border-color:#1D4ED8"></b>onda P</span><span><b style="border-color:#C2410C"></b>onda S</span>
+      <section class="panel" style="margin-top:12px;">
+        <div style="padding:16px;">
+          <div id="monGq" class="mon-gq"></div>
+          <a class="hs-link" href="https://www.youtube.com/channel/UCaQ9NmqngJXIqqAODuu1WDw/live" target="_blank" rel="noopener">Apri la diretta su YouTube →</a>
         </div>
-        <div class="mon-st" id="monStStatus">Avvio del monitor…</div>
       </section>
       <section class="panel" style="margin-top:12px;">
-        <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><h2>Terremoti in tempo reale</h2><span class="mon-src">INGV + EMSC</span></div>
-        <div id="monFeed" class="mon-feed"><div class="felt-p" style="padding:14px 16px">In attesa dei dati…</div></div>
-      </section>
-      <section class="panel" style="margin-top:12px;">
-        <div class="panel-header"><h2>GlobalQuake Italia</h2><p>La diretta 24 ore su 24 del progetto sperimentale GlobalQuake Italia</p></div>
-        <div style="padding:0 16px 16px;">
-          <div id="monGq" class="mon-gq"><button type="button" class="btn btn-green" onclick="monLoadGq()" style="width:100%;">Guarda la diretta</button>
-            <p class="felt-p" style="margin-top:8px">Il video si carica solo quando lo chiedi: consuma dati. GlobalQuake è sperimentale e non ufficiale: per le informazioni certe fa fede l'INGV.</p></div>
-          <a class="hs-link" href="https://www.youtube.com/channel/UCaQ9NmqngJXIqqAODuu1WDw/live" target="_blank" rel="noopener">Apri su YouTube →</a>
-        </div>
+        <div class="panel-header"><h2>Localizzazione INGV</h2><p>L'ultimo terremoto localizzato dall'INGV nell'ultima ora, per confrontarlo con quello mostrato da GlobalQuake</p></div>
+        <div id="monIngv" class="mon-feed"><div class="felt-p" style="padding:0 16px 14px">In attesa dei dati…</div></div>
       </section>
       <div class="footer-note" style="line-height:1.5">
-        Colori delle stazioni: scuotimento degli ultimi 30 secondi rispetto al rumore di fondo della stessa stazione, dai dati della rete INGV (arrivano con 1–3 minuti di ritardo). Onde P e S disegnate con velocità medie (6 e 3,5 km/s). Terremoti: INGV ed EMSC (Centro Sismologico Euro-Mediterraneo). Non è un sistema di allerta: in caso di terremoto segui le indicazioni della Protezione Civile.
+        GlobalQuake Italia è un progetto sperimentale e non ufficiale: posizione e magnitudo sono stime automatiche che possono essere sbagliate. Per le informazioni certe fa fede l'INGV. Il video parte senza audio; si ferma quando esci da questa sezione.
       </div>
     </div>
   </div>
@@ -3083,7 +3059,7 @@ function goSection(sec){
   const titles={terremoti:['quake','Terremoti'],mappa:['map','Mappa'],sismogrammi:['seismo','Sismogrammi'],
     focali:['focal','Meccanismi Focali'],storico:['storico','Storico'],notifiche:['bell','Notifiche'],
     localizzazione:['locate','Localizzazione'],sciami:['swarm','Sciami Sismici'],
-    catalogo:['archive','Catalogo Storico'],rete:['neural','Rete Neurale'],monitor:['seismo','Monitor in diretta'],strumenti:['grid','Strumenti']};
+    catalogo:['archive','Catalogo Storico'],rete:['neural','Rete Neurale'],monitor:['seismo','GlobalQuake Italia'],strumenti:['grid','Strumenti']};
   const _tt=titles[sec];
   document.getElementById('topTitle').innerHTML=_tt?('<span class="ic">'+(window.IC?IC[_tt[0]]:'')+'</span>'+_tt[1]):'ITalquake';
   document.getElementById('filterToggle').style.display=(sec==='terremoti'||sec==='mappa')?'':'none';
@@ -3223,6 +3199,7 @@ async function pollStimaProv(){
         <div class="prov-m">Terremoto di magnitudo tra <b>${_esc(it.mag_min)}</b> e <b>${_esc(it.mag_max)}</b></div>
         <div class="prov-s">ore ${_esc(it.time_it||'')} del ${_esc(String(it.date_it||'').replace(/-/g,'/'))} · prov/zona <b>${_esc(it.region||'')}</b></div>
         <div class="prov-n">Dato automatico INGV, in attesa della localizzazione rivista.</div>
+        <button type="button" class="prov-gq" onclick="goSection('monitor')">Guardalo in diretta su GlobalQuake Italia ›</button>
       </div>
       <button type="button" class="prov-x" aria-label="Nascondi la stima provvisoria" onclick="dismissProv('${_esc(_provKey(it)).replace(/'/g,"\\'")}')">✕</button>
     </div>`).join('');
@@ -3241,8 +3218,8 @@ async function _provNotify(it){
     if(localStorage.getItem('itq_notifEnabled')==='false')return;
     const reg=window._swReg||(navigator.serviceWorker&&await navigator.serviceWorker.getRegistration());
     const title='Stima provvisoria INGV';
-    const body=`Magnitudo tra ${it.mag_min} e ${it.mag_max} · ${it.region} · ore ${it.time_it}`;
-    const opt={body,icon:'./icon-192.png',badge:'./icon-192.png',tag:'stima_prov',renotify:true,data:{url:'./#terremoti'}};
+    const body=`Magnitudo tra ${it.mag_min} e ${it.mag_max} · ${it.region} · ore ${it.time_it}\nTocca per vederlo in diretta su GlobalQuake Italia`;
+    const opt={body,icon:'./icon-192.png',badge:'./icon-192.png',tag:'stima_prov',renotify:true,data:{url:'./#monitor'}};
     if(reg&&reg.showNotification)await reg.showNotification(title,opt);else new Notification(title,opt);
   }catch(e){}
 }
@@ -5984,204 +5961,56 @@ hoursInput.addEventListener('change',()=>{updateDefaultRange();saveFilters();syn
 generateBtn.addEventListener('click',fetchWaveformAndPlot);
 
 /* ================================================================
-   MONITOR IN DIRETTA — ispirato a GlobalQuake
-   - stazioni colorate per scuotimento (dati INGV, quasi tempo reale)
-   - terremoti in arrivo da INGV (ogni 30 s) ed EMSC (websocket, istantaneo)
-   - onde P e S che si allargano dall'epicentro, e arrivo previsto da te
+   GLOBALQUAKE ITALIA IN DIRETTA
+   La diretta YouTube del progetto, con accanto la stima provvisoria
+   e l'ultima localizzazione INGV per confrontarne la bontà.
 ================================================================ */
-const MON={map:null,inited:false,on:false,sta:[],staLayer:null,evLayer:null,waveLayer:null,events:new Map(),
-  timers:[],ws:null,sound:false,busy:false,lastIngv:0,rings:[]};
-const MON_VP=6.0,MON_VS=3.5,MON_MAXR=700;
-function monInit(){
-  if(MON.inited){setTimeout(()=>MON.map.invalidateSize(),80);return;}
-  MON.inited=true;
-  MON.map=L.map('monMap',{zoomControl:true}).setView([42.2,12.6],6);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap',subdomains:'abc',maxZoom:19}).addTo(MON.map);
-  MON.waveLayer=L.layerGroup().addTo(MON.map);
-  MON.staLayer=L.layerGroup().addTo(MON.map);
-  MON.evLayer=L.layerGroup().addTo(MON.map);
-  try{MON.sound=localStorage.getItem('itq_mon_sound')==='1';}catch(e){}
-  monSoundLabel();
-}
+const MON={on:false,timers:[]};
+const GQ_CHANNEL='UCaQ9NmqngJXIqqAODuu1WDw';
 function startMonitor(){
-  monInit();if(MON.on)return;MON.on=true;
-  monTick();monLoadIngv();monStations();monConnectEmsc();monRenderProv();
-  MON.timers.push(setInterval(monTick,500));
-  MON.timers.push(setInterval(monLoadIngv,30000));
-  MON.timers.push(setInterval(()=>{if(!document.hidden)monStations();},90000));
+  if(MON.on)return;MON.on=true;
+  monLoadGq();monTick();monRenderProv();monLoadIngv();
+  MON.timers.push(setInterval(monTick,1000));
   MON.timers.push(setInterval(monRenderProv,15000));
+  MON.timers.push(setInterval(monLoadIngv,30000));
+  if(typeof pollStimaProv==='function')pollStimaProv();
 }
 function stopMonitor(){
   if(!MON.on)return;MON.on=false;
   MON.timers.forEach(clearInterval);MON.timers=[];
-  try{MON.ws&&MON.ws.close();}catch(e){}MON.ws=null;
+  const g=document.getElementById('monGq');if(g)g.innerHTML='';   /* ferma video e consumo dati */
 }
-function monToggleSound(){MON.sound=!MON.sound;try{localStorage.setItem('itq_mon_sound',MON.sound?'1':'0');}catch(e){}monSoundLabel();if(MON.sound)monBeep(0.08);}
-function monSoundLabel(){const b=document.getElementById('monSoundBtn');if(!b)return;b.textContent=MON.sound?'Suono acceso':'Suono spento';b.setAttribute('aria-pressed',String(MON.sound));}
-function monBeep(vol){
-  try{const A=window.AudioContext||window.webkitAudioContext;const ctx=MON._ac||(MON._ac=new A());
-    [0,0.25].forEach(t=>{const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=880;g.gain.value=vol||0.15;
-      o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.15);});}catch(e){}
+function monTick(){const c=document.getElementById('monClock');if(c)c.textContent=new Date().toLocaleTimeString('it-IT');}
+function monLoadGq(){
+  document.getElementById('monGq').innerHTML=`<div class="mon-video"><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=${GQ_CHANNEL}&autoplay=1&mute=1&playsinline=1"
+    title="Diretta GlobalQuake Italia" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
 }
-
-/* ── stima provvisoria INGV (dallo stesso controllo della sezione Terremoti) ── */
 function monRenderProv(){
   const el=document.getElementById('monProv');if(!el)return;
   const it=(window._provItems||[])[0];
   el.innerHTML=it?`<div class="prov-item" style="margin-top:10px"><span class="prov-pulse" aria-hidden="true"></span><div class="prov-txt">
-    <div class="prov-h"><b>STIMA PROVVISORIA</b><span>${_esc(_provAgo(it.ot))}</span></div>
-    <div class="prov-m">Magnitudo tra <b>${_esc(it.mag_min)}</b> e <b>${_esc(it.mag_max)}</b> · ${_esc(it.region||'')}</div></div></div>`:'';
-}
-
-/* ── terremoti: INGV ogni 30 s + EMSC in tempo reale ── */
-function monEvKey(e){return e.src+':'+e.id;}
-function monAddEvent(e){
-  /* stessa scossa vista da INGV ed EMSC: tieni INGV, unisci */
-  for(const o of MON.events.values()){
-    if(o.src!==e.src&&Math.abs(o.t-e.t)<90000&&haverDist(o.lat,o.lon,e.lat,e.lon)<60){
-      if(e.src==='INGV'){MON.events.delete(monEvKey(o));e.also='EMSC';break;}
-      o.also=e.src;return false;
-    }
-  }
-  const k=monEvKey(e),isNew=!MON.events.has(k);
-  MON.events.set(k,Object.assign(MON.events.get(k)||{},e));
-  return isNew;
+    <div class="prov-h"><b>STIMA PROVVISORIA INGV</b><span>${_esc(_provAgo(it.ot))}</span></div>
+    <div class="prov-m">Magnitudo tra <b>${_esc(it.mag_min)}</b> e <b>${_esc(it.mag_max)}</b></div>
+    <div class="prov-s">ore ${_esc(it.time_it||'')} · prov/zona <b>${_esc(it.region||'')}</b></div>
+    <div class="prov-n">Confrontala con zona e magnitudo che GlobalQuake mostra nel video.</div></div></div>`:'';
 }
 async function monLoadIngv(){
+  const box=document.getElementById('monIngv');if(!box)return;
   try{
-    const since=new Date(Date.now()-24*3600e3).toISOString().slice(0,19);
-    const r=await fetch(`${EQ_BASE}?format=text&starttime=${since}&orderby=time&minmag=0&minlat=35&maxlat=48&minlon=6&maxlon=19.5&limit=300`,{signal:AbortSignal.timeout(20000),cache:'no-store'});
-    if(!r.ok&&r.status!==204)throw new Error();
+    const since=new Date(Date.now()-3600e3).toISOString().slice(0,19);
+    const r=await fetch(`${EQ_BASE}?format=text&starttime=${since}&orderby=time&minlat=35&maxlat=48&minlon=6&maxlon=19.5&limit=5`,{signal:AbortSignal.timeout(20000),cache:'no-store'});
     const evs=r.status===204?[]:parseEqText(await r.text(),999);
-    const first=!MON.lastIngv;
-    evs.forEach(e=>{const isNew=monAddEvent({src:'INGV',id:e.id,t:Date.parse(e.time),lat:e.lat,lon:e.lon,depth:e.depth,mag:e.mag,place:e.place});
-      if(isNew&&!first)monNewEvent(MON.events.get('INGV:'+e.id));});
-    MON.lastIngv=Date.now();
-  }catch(e){}
-  monRenderEvents();
+    if(!evs.length){box.innerHTML='<div class="felt-p" style="padding:0 16px 14px">Nessun terremoto localizzato dall\'INGV nell\'ultima ora. Le localizzazioni arrivano di solito qualche minuto dopo la stima provvisoria.</div>';return;}
+    box.innerHTML=evs.map(e=>{const t=Date.parse(e.time),ago=Math.round((Date.now()-t)/60000);
+      return `<div class="mon-row" style="cursor:default"><span class="mon-mag" style="background:${magCol(e.mag)}">${e.mag.toFixed(1)}</span>
+        <span class="n"><b>${_esc(e.place)}</b><span>${_hm(t)} · ${ago<1?'adesso':ago+' min fa'} · ${e.depth.toFixed(0)} km di profondità</span></span>
+        <span class="mon-tag">${_esc(e.magType||'')}</span></div>`;}).join('');
+  }catch(e){box.innerHTML='<div class="felt-p" style="padding:0 16px 14px">Dati INGV non raggiungibili al momento.</div>';}
 }
-function monConnectEmsc(){
-  if(MON.ws||!('WebSocket' in window))return;
-  try{
-    const ws=new WebSocket('wss://www.seismicportal.eu/standing_order/websocket');MON.ws=ws;
-    ws.onmessage=m=>{
-      try{const j=JSON.parse(m.data),p=j.data&&j.data.properties;if(!p)return;
-        const lat=+p.lat,lon=+p.lon;if(!(lat>=35&&lat<=48&&lon>=6&&lon<=19.5))return;
-        const e={src:'EMSC',id:p.unid||j.data.id,t:Date.parse(p.time),lat,lon,depth:+p.depth||10,mag:+p.mag,place:_titleCase(p.flynn_region||'')};
-        if(monAddEvent(e)&&j.action==='create')monNewEvent(MON.events.get('EMSC:'+e.id));
-        monRenderEvents();
-      }catch(e){}
-    };
-    ws.onclose=()=>{MON.ws=null;if(MON.on)setTimeout(monConnectEmsc,15000);};
-    ws.onerror=()=>{try{ws.close();}catch(e){}};
-  }catch(e){MON.ws=null;}
-}
-function monNewEvent(e){
-  if(!e)return;
-  const age=(Date.now()-e.t)/1000;
-  let msg=`<b>Nuovo terremoto M${e.mag.toFixed(1)}</b> · ${_esc(e.place)} · ${e.src}`;
-  if(userLat!=null){
-    const d=haverDist(userLat,userLon,e.lat,e.lon),R=Math.hypot(d,e.depth),ts=R/MON_VS-age,I=feltIntensity(e.mag,e.depth,d);
-    msg+=`<br>A ${Math.round(d)} km da te · ${ts>0?'onda S da te tra <b>'+Math.round(ts)+' s</b>':'onde già passate'} · a casa tua: ${feltTitle(I).toLowerCase()}`;
-  }
-  const a=document.getElementById('monAlert');a.innerHTML=msg;a.hidden=false;
-  clearTimeout(MON._at);MON._at=setTimeout(()=>{a.hidden=true;},60000);
-  if(MON.sound&&e.mag>=2)monBeep();
-  if(e.mag>=2.5)MON.map.flyTo([e.lat,e.lon],Math.max(MON.map.getZoom(),7),{duration:1.2});
-}
-function monRenderEvents(){
-  const now=Date.now(),list=[...MON.events.values()].filter(e=>now-e.t<24*3600e3).sort((a,b)=>b.t-a.t);
-  MON.evLayer.clearLayers();
-  list.slice(0,150).forEach(e=>{
-    const recent=now-e.t<3600e3;
-    L.circleMarker([e.lat,e.lon],{radius:Math.max(3,Math.min(16,e.mag*3.2)),color:recent?'#1C1917':'#FFFFFF',weight:recent?2:1,
-      fillColor:magCol(e.mag),fillOpacity:recent?.95:.6,className:now-e.t<600e3?'mon-pulse':''})
-      .bindTooltip(`<b>M${e.mag.toFixed(1)}</b> · ${_esc(e.place)}<br>${_hm(e.t)} · ${e.depth.toFixed(0)} km · ${e.src}${e.also?' + '+e.also:''}`).addTo(MON.evLayer);
-  });
-  const feed=document.getElementById('monFeed');if(!feed)return;
-  feed.innerHTML=list.length?list.slice(0,25).map(e=>{
-    const ago=Math.round((now-e.t)/60000);
-    const d=userLat!=null?Math.round(haverDist(userLat,userLon,e.lat,e.lon))+' km da te · ':'';
-    return `<button type="button" class="mon-row" onclick="monFocus('${monEvKey(e).replace(/'/g,"")}')">
-      <span class="mon-mag" style="background:${magCol(e.mag)}">${e.mag.toFixed(1)}</span>
-      <span class="n"><b>${_esc(e.place)}</b><span>${ago<1?'adesso':ago<60?ago+' min fa':_hm(e.t)} · ${d}${e.depth.toFixed(0)} km</span></span>
-      <span class="mon-tag">${e.src}${e.also?'+'+e.also:''}</span></button>`;}).join(''):'<div class="felt-p" style="padding:14px 16px">Nessun terremoto nelle ultime 24 ore.</div>';
-}
-function monFocus(k){const e=MON.events.get(k);if(!e)return;MON.map.flyTo([e.lat,e.lon],8,{duration:.8});
-  document.getElementById('monMap').scrollIntoView({behavior:'smooth',block:'center'});}
-
-/* ── onde P e S che si allargano dall'epicentro (fino a 700 km) ── */
-function monTick(){
-  const c=document.getElementById('monClock');if(c)c.textContent=new Date().toLocaleTimeString('it-IT');
-  if(!MON.map)return;
-  const now=Date.now();
-  MON.waveLayer.clearLayers();
-  for(const e of MON.events.values()){
-    const dt=(now-e.t)/1000;if(dt<0||dt*MON_VP>MON_MAXR||e.mag<1.5)continue;
-    const rp=Math.sqrt(Math.max(0,(dt*MON_VP)**2-e.depth**2)),rs=Math.sqrt(Math.max(0,(dt*MON_VS)**2-e.depth**2));
-    const fade=1-dt*MON_VP/MON_MAXR;
-    if(rp>0)L.circle([e.lat,e.lon],{radius:rp*1000,color:'#1D4ED8',weight:2,opacity:.8*fade,fill:false,interactive:false}).addTo(MON.waveLayer);
-    if(rs>0&&rs<MON_MAXR)L.circle([e.lat,e.lon],{radius:rs*1000,color:'#C2410C',weight:2.5,opacity:.9*fade,fillColor:'#C2410C',fillOpacity:.06*fade,interactive:false}).addTo(MON.waveLayer);
-  }
-}
-
-/* ── stazioni: scuotimento degli ultimi 30 s rispetto al rumore di fondo ── */
-async function monPickStations(){
-  if(MON.sta.length)return MON.sta;
-  const r=await fetch(`${ST_BASE}?network=IV&channel=HHZ&level=station&format=text&starttime=${new Date().toISOString().slice(0,10)}`,{signal:AbortSignal.timeout(30000)});
-  const all=parseSta(await r.text(),'IV').filter(s=>s.lat>=36&&s.lat<=47.2&&s.lon>=6.5&&s.lon<=18.6);
-  /* una stazione per cella di circa 100 km: copertura uniforme con poche richieste */
-  const cells=new Map();
-  for(const s of all){const k=Math.floor(s.lat/0.9)+'|'+Math.floor(s.lon/1.1);if(!cells.has(k))cells.set(k,s);}
-  MON.sta=[...cells.values()].slice(0,48).map(s=>({...s,level:-1,ratio:0,lag:null}));
-  return MON.sta;
-}
-function monLevel(r){return r<3?0:r<8?1:r<25?2:3;}
-const MON_COL=['#22C55E','#EAB308','#F97316','#DC2626'];
-async function monStations(){
-  if(MON.busy||!MON.on)return;MON.busy=true;
-  const st=document.getElementById('monStStatus');
-  try{
-    const sta=await monPickStations();
-    const end=Date.now(),beg=end-4*60000,fmt=t=>new Date(t).toISOString().slice(0,19);
-    let done=0,ok=0,lags=[];
-    const q=sta.slice();
-    await Promise.all([0,1,2,3,4,5].map(async()=>{while(q.length&&MON.on){const s=q.shift();
-      try{
-        const r=await fetch(`${DS_BASE}?network=IV&station=${s.code}&location=*&channel=HHZ&starttime=${fmt(beg)}&endtime=${fmt(end)}`,{signal:AbortSignal.timeout(25000)});
-        if(r.status===204||!r.ok)throw 0;
-        const res=MiniSEED.parse(await r.arrayBuffer());if(!res||res.samples.length<200)throw 0;
-        const sr=res.sampleRate,x=bandpass(demean(res.samples),sr,1,Math.min(10,sr*.4),4);
-        const n=x.length,last=Math.max(1,Math.round(30*sr)),cut=Math.max(1,n-last);
-        const bg=x.slice(0,cut).map(Math.abs).sort((a,b)=>a-b),med=bg[Math.floor(bg.length/2)]||1;
-        let pk=0;for(let i=cut;i<n;i++)pk=Math.max(pk,Math.abs(x[i]));
-        s.ratio=pk/(med*3);s.level=monLevel(s.ratio);s.lag=(end-(res.startMs+n/sr*1000))/1000;lags.push(s.lag);ok++;
-      }catch(e){s.level=-1;}
-      done++;st.textContent=`Aggiorno le stazioni… ${done} di ${sta.length}`;
-    }}));
-    monDrawStations();
-    lags.sort((a,b)=>a-b);
-    const lag=lags.length?lags[Math.floor(lags.length/2)]:null;
-    st.textContent=`${ok} stazioni su ${sta.length} con dati · ritardo tipico ${lag!=null?Math.round(lag)+' s':'—'} · aggiornato alle ${new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}, di nuovo tra 90 s`;
-  }catch(e){st.textContent='Stazioni non disponibili al momento.';}
-  finally{MON.busy=false;}
-}
-function monDrawStations(){
-  MON.staLayer.clearLayers();
-  MON.sta.forEach(s=>{
-    const col=s.level<0?'#9CA3AF':MON_COL[s.level],sz=s.level>=2?20:15;
-    L.marker([s.lat,s.lon],{icon:L.divIcon({className:'mon-sta'+(s.level>=2?' hot':''),iconSize:[sz,sz],iconAnchor:[sz/2,sz*.62],
-      html:`<svg width="${sz}" height="${sz}" viewBox="0 0 24 24"><path d="M12 3l10 17H2z" fill="${col}" stroke="#1C1917" stroke-width="1.6" stroke-linejoin="round"/></svg>`})})
-      .bindTooltip(`<b>IV.${s.code}</b> ${_esc(_titleCase(s.name||''))}<br>${s.level<0?'nessun dato recente':['calmo','scuotimento debole','scuotimento moderato','scuotimento forte'][s.level]+' · '+s.ratio.toFixed(1)+'× il fondo'}${s.lag!=null&&s.level>=0?'<br>dati di '+Math.round(s.lag)+' s fa':''}`)
-      .addTo(MON.staLayer);
-  });
-}
-function monLoadGq(){
-  document.getElementById('monGq').innerHTML=`<div class="mon-video"><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=UCaQ9NmqngJXIqqAODuu1WDw&autoplay=1&mute=1"
-    title="Diretta GlobalQuake Italia" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-    <p class="felt-p" style="margin-top:8px">Diretta di GlobalQuake Italia (progetto sperimentale e non ufficiale). Se il video non parte, aprilo su YouTube.</p>`;
-}
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&MON.on){monLoadIngv();monStations();}});
+/* clic su una notifica mentre l'app è già aperta: il service worker chiede di aprire la sezione */
+if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{
+  if(e.data&&e.data.type==='itq-nav'&&e.data.sec)goSection(e.data.sec);
+});
 
 /* ================================================================
    ALTRI ENTI: reti regionali e sismografi locali
