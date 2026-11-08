@@ -322,7 +322,7 @@ exports.checkStimaProvvisoria = functions.pubsub
     if (!tokens.length) return null;
 
     const title = '⚠️ Stima provvisoria INGV';
-    const body  = `Magnitudo tra ${result.items[0].mag_min} e ${result.items[0].mag_max} · ${result.prov}${result.ora ? ' · ore ' + result.ora : ''}\nDato automatico INGV, non ancora rivisto.`;
+    const body  = `Magnitudo tra ${result.items[0].mag_min} e ${result.items[0].mag_max} · ${result.prov}${result.ora ? ' · ore ' + result.ora : ''}\nDato automatico INGV, non ancora rivisto. Tocca per vederlo su GlobalQuake Italia.`;
 
     for (let i = 0; i < tokens.length; i += 500) {
       const chunk = tokens.slice(i, i + 500);
@@ -330,10 +330,11 @@ exports.checkStimaProvvisoria = functions.pubsub
         const res = await messaging.sendEachForMulticast({
           tokens: chunk,
           notification: { title, body },
-          data: { url: 'https://italquake.firebaseapp.com/' },
+          data: { url: 'https://italquake.firebaseapp.com/#monitor', section: 'monitor' },
           webpush: {
             notification: { icon: '/icon-192.png', tag: 'stima_prov_' + Date.now() },
-            fcmOptions:   { link: 'https://italquake.firebaseapp.com/' }
+            /* il tocco apre la diretta di GlobalQuake Italia per confrontarla con la stima */
+            fcmOptions:   { link: 'https://italquake.firebaseapp.com/#monitor' }
           }
         });
         console.log(`  ✅ OK: ${res.successCount}  ❌ Fail: ${res.failureCount}`);

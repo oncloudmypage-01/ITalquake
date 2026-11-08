@@ -20,7 +20,7 @@ try {
       body: n.body || '',
       icon: './icon-192.png',
       tag: d.eventId || 'itq_push_' + Date.now(),
-      data: { url: d.url || './' }
+      data: { url: d.url || (d.section ? './#' + d.section : './') }
     });
   });
 } catch(e) { /* Firebase non configurato */ }
@@ -29,8 +29,13 @@ try {
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   const url = e.notification.data && e.notification.data.url ? e.notification.data.url : './';
-  e.waitUntil(clients.matchAll({type:'window'}).then(ws => {
-    for(const w of ws) if(w.url.includes('italquake')&&'focus'in w) return w.focus();
+  /* la sezione da aprire (es. #monitor per la stima provvisoria) */
+  const sec = (url.split('#')[1] || '').trim();
+  e.waitUntil(clients.matchAll({type:'window', includeUncontrolled:true}).then(ws => {
+    for(const w of ws) if(w.url.startsWith(self.location.origin) && 'focus' in w){
+      if(sec) w.postMessage({type:'itq-nav', sec});
+      return w.focus();
+    }
     return clients.openWindow(url);
   }));
 });
@@ -39,7 +44,7 @@ self.addEventListener('notificationclick', e => {
    è il modo in cui il Service Worker rileva l'aggiornamento e
    mostra il banner "Nuova versione disponibile" agli utenti
    che hanno già installato l'app. */
-const CACHE = 'italquake-v36';
+const CACHE = 'italquake-v37';
 /* Dati DISS (sorgenti, schede, immagini): cache separata che sopravvive agli aggiornamenti */
 const DISS_CACHE = 'italquake-diss';
 const PRECACHE = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
