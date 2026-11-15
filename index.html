@@ -6979,8 +6979,13 @@ function initFirebase(){
     try{ _fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); }catch(e){}
     /* Completa un eventuale accesso avvenuto via redirect (mobile / PWA
        installata), dove il popup non manterrebbe la sessione. */
-    _fbAuth.getRedirectResult().catch(e=>{
-      if(e && e.code && e.code!=='auth/no-auth-event') console.warn('Redirect login:',e.message);
+    _fbAuth.getRedirectResult().then(r=>{
+      if(r&&r.user)showToast('Accesso effettuato come <strong>'+_esc(r.user.displayName||r.user.email||'')+'</strong>');
+    }).catch(e=>{
+      if(e && e.code && e.code!=='auth/no-auth-event'){
+        console.warn('Redirect login:',e.message);
+        alert('Accesso non riuscito: '+(e.message||e.code));
+      }
     });
     _fbDb=firebase.firestore();
     try{
@@ -7070,21 +7075,37 @@ function handleAuth(){
   }
 }
 
+/* iPhone/iPad con l'app installata sulla schermata Home: il popup di Google si apre
+   in una finestra separata che non restituisce mai il risultato all'app, quindi
+   l'accesso "resta fermo". Lì si usa il reindirizzamento alla pagina di Google. */
+const _isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const _isStandalone=()=>(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+async function _signInRedirect(provider){
+  /* il reindirizzamento funziona su iPhone solo se l'app è aperta dal dominio di accesso Firebase */
+  if(location.hostname!==FIREBASE_CONFIG.authDomain&&!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)){
+    if(confirm('Su iPhone l\'accesso con Google funziona solo dall\'indirizzo ufficiale dell\'app:\nhttps://'+FIREBASE_CONFIG.authDomain+'\n\nVuoi aprirlo ora? Poi aggiungilo di nuovo alla schermata Home da lì.'))
+      location.href='https://'+FIREBASE_CONFIG.authDomain+'/';
+    return;
+  }
+  showToast('Ti porto alla pagina di accesso di Google…');
+  await _fbAuth.signInWithRedirect(provider);
+}
 async function signInWithGoogle(){
+  const provider=new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({prompt:'select_account'});
   try{
-    /* Persistenza locale: la sessione resta salvata e sopravvive a
-       chiusura/riapertura (è questa la correzione per lo "sconnesso al
-       rientro", non il tipo di login). */
+    /* Persistenza locale: la sessione resta salvata e sopravvive a chiusura/riapertura */
     try{ await _fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); }catch(e){}
-    const provider=new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({prompt:'select_account'});
-    /* Popup: è il metodo che funzionava. Il redirect, su alcune PWA/mobile,
-       non riporta la sessione e lasciava l'utente disconnesso. */
+    if(_isIOS&&_isStandalone()){await _signInRedirect(provider);return;}
+    /* Altrove il popup: è il metodo che funziona meglio su Android e computer */
     await _fbAuth.signInWithPopup(provider);
   }catch(e){
-    if(e.code!=='auth/popup-closed-by-user' && e.code!=='auth/cancelled-popup-request'){
-      alert('Errore login: '+e.message);
+    if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request')return;
+    /* popup bloccato o non supportato: si ripiega sul reindirizzamento */
+    if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment','auth/web-storage-unsupported'].includes(e.code)){
+      try{await _signInRedirect(provider);return;}catch(e2){e=e2;}
     }
+    alert('Errore login: '+e.message);
   }
 }
 
