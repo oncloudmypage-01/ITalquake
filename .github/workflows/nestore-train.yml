@@ -1,0 +1,41 @@
+name: Addestramento NESTORE
+
+# Scarica il catalogo INGV, addestra NESTORE sulle sequenze italiane e salva
+# il modello in nestore/model_italia.json sullo stesso ramo.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 1 * *'   # il primo di ogni mese
+  push:
+    branches: ['claude/**']
+    paths:
+      - 'nestore/nestore-core.js'
+      - 'tools/nestore_train.mjs'
+      - '.github/workflows/nestore-train.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nestore-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Addestra
+        run: node tools/nestore_train.mjs
+      - name: Salva il modello
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add nestore/model_italia.json nestore/report_italia.md
+          if git diff --cached --quiet; then echo "Nessun cambiamento"; exit 0; fi
+          git commit -m "NESTORE: modello addestrato sul catalogo INGV"
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
