@@ -17,6 +17,7 @@ const N = require('../nestore/nestore-core.js');
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const OUT_MODEL = path.join(ROOT, 'nestore', 'model_italia.json');
 const OUT_REPORT = path.join(ROOT, 'nestore', 'report_italia.md');
+const OUT_CLUSTERS = path.join(ROOT, 'nestore', 'clusters_italia.json');
 const CACHE = process.env.NESTORE_CACHE || path.join(ROOT, 'nestore', '.catalog-cache.json');
 
 const CONF = {
@@ -163,21 +164,24 @@ function buildCluster(cat, u) {
   return {
     id: m.id, time: m.time, year, lat: m.lat, lon: m.lon, dep: m.dep, m10: m.m10,
     afts, Naft: afts.length, maft10: ma, dt: strongest.t, typeA,
-    Tmax: first ? first.t : strongest.t, Mc10
+    Tmax: first ? first.t : strongest.t, Mc10,
+    has3: afts.some(e => e.m10 >= m.m10 - 30)
   };
 }
 
 // Selezione (feacalc_nostop_ti.m, label 2) per l'intervallo td
-function selected(c, td, lastTime) {
-  if (!c.afts.some(e => e.m10 >= c.m10 - 30)) return false;
-  if (c.typeA && !(c.Tmax > td)) return false;
-  if (!(c.m10 - c.Mc10 >= 20)) return false;
-  if (!N.inArea(c.lon, c.lat) || !(c.dep <= N.CFG.Zth)) return false;
+function reject(c, td, lastTime) {
+  if (!N.inArea(c.lon, c.lat)) return 'fuori area';
+  if (!(c.dep <= N.CFG.Zth)) return 'profondo';
+  if (c.year < CONF.start || c.time > lastTime) return 'periodo';
+  if (!(c.m10 - c.Mc10 >= 20)) return 'Mc';
+  if (!c.has3) return 'senza repliche';
   const dm = c.m10 - c.maft10;
-  if (dm >= 8 && dm <= 12) return false;
-  if (c.year < CONF.start || c.time > lastTime) return false;
-  return true;
+  if (dm >= 8 && dm <= 12) return 'dm 0.8-1.2';
+  if (c.typeA && !(c.Tmax > td)) return 'A già avvenuto';
+  return null;
 }
+const selected = (c, td, lastTime) => !reject(c, td, lastTime);
 
 // --------------------------------------------------------- prestazioni LOO
 function loo(x, y) {
@@ -198,9 +202,14 @@ const r6 = v => (isNum(v) ? Math.round(v * 1e6) / 1e6 : null);
 
 // ------------------------------------------------------------------- main
 async function main() {
-  let cat;
+  let cat, clusters;
   const arg = process.argv[2];
-  if (arg) cat = JSON.parse(fs.readFileSync(arg, 'utf8'));
+  if (arg === '--clusters') {
+    // riaddestramento veloce dall'elenco delle sequenze già estratte
+    const d = JSON.parse(fs.readFileSync(process.argv[3] || OUT_CLUSTERS, 'utf8'));
+    clusters = d.clusters.map(c => ({ ...c, afts: c.afts.map(([t, m10, lat, lon]) => ({ t, m10, lat, lon })) }));
+    cat = { length: d.catalogEvents };
+  } else if (arg) cat = JSON.parse(fs.readFileSync(arg, 'utf8'));
   else if (fs.existsSync(CACHE) && process.env.NESTORE_USE_CACHE) cat = JSON.parse(fs.readFileSync(CACHE, 'utf8'));
   else {
     console.log('Scarico il catalogo INGV…');
@@ -210,9 +219,20 @@ async function main() {
   console.log(`Catalogo: ${cat.length} eventi`);
   const lastTime = Date.now() - CONF.labelLagDays * 86400000;
 
-  const groups = identifyClusters(cat);
-  const clusters = groups.map(u => buildCluster(cat, u)).filter(Boolean);
+  if (!clusters) {
+    console.log(`Eventi M>=4: ${cat.filter(e => e.m10 >= 40).length}, di cui superficiali in area: ${cat.filter(e => e.m10 >= 40 && e.dep <= N.CFG.Zth && N.inArea(e.lon, e.lat)).length}`);
+    const groups = identifyClusters(cat);
+    clusters = groups.map(u => buildCluster(cat, u)).filter(Boolean);
+    // elenco compatto delle sequenze (repliche dei primi 7,1 giorni, M >= Mm-3)
+    fs.mkdirSync(path.dirname(OUT_CLUSTERS), { recursive: true });
+    fs.writeFileSync(OUT_CLUSTERS, JSON.stringify({ catalogEvents: cat.length, clusters: clusters.map(c => ({
+      ...c, afts: c.afts.filter(e => e.t <= 7.1 && e.m10 >= c.m10 - 30).map(e => [Math.round(e.t * 1e6) / 1e6, e.m10, e.lat, e.lon]) })) }));
+  }
   console.log(`Cluster con M>=${N.CFG.ThM}: ${clusters.length}`);
+  // diagnostica dei filtri a 6 ore
+  const why = {};
+  clusters.forEach(c => { const r = reject(c, 0.25, lastTime); why[r || 'ok'] = (why[r || 'ok'] || 0) + 1; });
+  console.log('Selezione a 6 ore:', JSON.stringify(why));
 
   const F = N.FEATURES, TDall = N.TD;
   // 1) caratteristiche per ogni intervallo (nostop)
@@ -350,6 +370,8 @@ async function main() {
   md += `Sequenze con M ≥ ${N.CFG.ThM}: ${clusters.length}. Intervalli: ${td.join(', ')} giorni.\n\n`;
   md += `| intervallo | sequenze | A | B | TP | FP | FN | TN |\n|---|---|---|---|---|---|---|---|\n`;
   td.forEach((d, i) => { const c = check[i]; md += `| ${d} g | ${nA[i] + nB[i]} | ${nA[i]} | ${nB[i]} | ${c.TP} | ${c.FP} | ${c.FN} | ${c.TN} |\n`; });
+  md += `\n## Prestazioni LOO (precisione / richiamo / accuratezza / informedness)\n\n| caratteristica | ${td.map(d => d + ' g').join(' | ')} |\n|---|${td.map(() => '---').join('|')}|\n`;
+  ['constant', ...F].forEach(k => { md += `| ${k} | ${td.map((d, i) => { const p = perf[i][k]; return p ? [p.pre, p.re, p.acc, p.inf].map(v => (isNum(v) ? v.toFixed(2) : '–')).join(' / ') : '—'; }).join(' | ')} |\n`; });
   md += `\n## Buon intervallo per caratteristica\n\n| caratteristica | inizio | max informedness | fine |\n|---|---|---|---|\n`;
   F.forEach(k => { const r = range[k]; md += `| ${k} | ${r ? r.join(' | ') : '— | — | —'} |\n`; });
   md += `\n## Soglie\n\n| caratteristica | ${td.map(d => d + ' g').join(' | ')} |\n|---|${td.map(() => '---').join('|')}|\n`;
