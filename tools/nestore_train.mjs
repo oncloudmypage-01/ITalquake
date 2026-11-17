@@ -15,17 +15,22 @@ const require = createRequire(import.meta.url);
 const N = require('../nestore/nestore-core.js');
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-const OUT_MODEL = path.join(ROOT, 'nestore', 'model_italia.json');
-const OUT_REPORT = path.join(ROOT, 'nestore', 'report_italia.md');
-const OUT_CLUSTERS = path.join(ROOT, 'nestore', 'clusters_italia.json');
+const OUT_MODEL = process.env.NESTORE_OUT || path.join(ROOT, 'nestore', 'model_italia.json');
+const OUT_REPORT = OUT_MODEL.replace(/model_([^/]*)\.json$/, 'report_$1.md');
+const OUT_CLUSTERS = OUT_MODEL.replace(/model_([^/]*)\.json$/, 'clusters_$1.json');
 const CACHE = process.env.NESTORE_CACHE || path.join(ROOT, 'nestore', '.catalog-cache.json');
 
 const CONF = {
-  start: 1990, yearchMc: 2005, Mc1: 2.8, Mc2: 2.0,
+  start: 1990, yearchMc: 2005, Mc1: 2.5, Mc2: 2.0,
   minMagOld: 2.0, minMagNew: 1.5,
   box: { minlat: 35, maxlat: 48, minlon: 5, maxlon: 20, maxdepth: 70 },
   labelLagDays: 200   // i principali più recenti non hanno ancora un esito certo
 };
+
+// parametri modificabili per le prove (es. NESTORE_THM=3.5)
+for (const [k, env] of [['ThM', 'NESTORE_THM'], ['Rmin', 'NESTORE_RMIN']]) if (process.env[env]) N.CFG[k] = +process.env[env];
+if (process.env.NESTORE_SPACE) N.CFG.space = process.env.NESTORE_SPACE;
+for (const [k, env] of [['Mc1', 'NESTORE_MC1'], ['Mc2', 'NESTORE_MC2'], ['yearchMc', 'NESTORE_YEARCHMC'], ['start', 'NESTORE_START']]) if (process.env[env]) CONF[k] = +process.env[env];
 
 // ---------------------------------------------------------------- catalogo
 async function fetchChunk(t1, t2, minmag, tries = 4) {
@@ -182,6 +187,9 @@ function reject(c, td, lastTime) {
   return null;
 }
 const selected = (c, td, lastTime) => !reject(c, td, lastTime);
+// per la statistica di base non si escludono le sequenze con dm tra 0.8 e 1.2
+const selectedBase = (c, td, lastTime) => { const r = reject(c, td, lastTime); return !r || r === 'dm 0.8-1.2'; };
+const aucOf = (x, y) => { let s = 0, n = 0; for (let i = 0; i < x.length; i++) if (y[i]) for (let j = 0; j < x.length; j++) if (!y[j]) { n++; s += x[i] > x[j] ? 1 : x[i] === x[j] ? 0.5 : 0; } return n ? s / n : NaN; };
 
 // --------------------------------------------------------- prestazioni LOO
 function loo(x, y) {
@@ -370,6 +378,13 @@ async function main() {
     return { td: d, TP, FP, FN, TN };
   });
   model.check = check;
+  // statistica di base: tra le sequenze senza replica forte fino a td, quante l'hanno avuta dopo
+  model.base = [0, ...TDall].map(d => {
+    const cl = clusters.filter(c => selectedBase(c, d, lastTime));
+    return { td: d, n: cl.length, nA: cl.filter(c => c.typeA).length };
+  });
+  // capacità di distinguere (AUC) di ogni caratteristica, per trasparenza
+  model.auc = S.map(s => F.map(k => r6(aucOf(s.f.map(f => (isNum(f[k]) ? f[k] : -1)), s.y))));
   model.clusters = R[0] ? R[0].cl.map(c => ({ id: c.id, t: new Date(c.time).toISOString().slice(0, 16),
     m: c.m10 / 10, lat: c.lat, lon: c.lon, maft: c.maft10 / 10, dt: Math.round(c.dt * 100) / 100,
     A: c.typeA ? 1 : 0 })) : [];
@@ -382,6 +397,10 @@ async function main() {
   md += `Sequenze con M ≥ ${N.CFG.ThM}: ${clusters.length}. Intervalli: ${td.join(', ')} giorni.\n\n`;
   md += `| intervallo | sequenze | A | B | TP | FP | FN | TN |\n|---|---|---|---|---|---|---|---|\n`;
   td.forEach((d, i) => { const c = check[i]; md += `| ${d} g | ${nA[i] + nB[i]} | ${nA[i]} | ${nB[i]} | ${c.TP} | ${c.FP} | ${c.FN} | ${c.TN} |\n`; });
+  md += `\n## Statistica di base (tutte le sequenze senza replica forte fino a quel momento)\n\n| intervallo | sequenze | con replica forte dopo | % |\n|---|---|---|---|\n`;
+  model.base.forEach(b => { md += `| ${b.td} g | ${b.n} | ${b.nA} | ${b.n ? Math.round(100 * b.nA / b.n) : '—'}% |\n`; });
+  md += `\n## AUC per caratteristica (0.5 = nessuna capacità di distinguere, 1 = perfetta)\n\n| caratteristica | ${td.map(d => d + ' g').join(' | ')} |\n|---|${td.map(() => '---').join('|')}|\n`;
+  F.forEach((k, j) => { md += `| ${k} | ${td.map((d, i) => (isNum(model.auc[i][j]) ? model.auc[i][j].toFixed(2) : '—')).join(' | ')} |\n`; });
   md += `\n## Prestazioni LOO (precisione / richiamo / accuratezza / informedness)\n\n| caratteristica | ${td.map(d => d + ' g').join(' | ')} |\n|---|${td.map(() => '---').join('|')}|\n`;
   ['constant', ...F].forEach(k => { md += `| ${k} | ${td.map((d, i) => { const p = perf[i][k]; return p ? [p.pre, p.re, p.acc, p.inf].map(v => (isNum(v) ? v.toFixed(2) : '–')).join(' / ') : '—'; }).join(' | ')} |\n`; });
   md += `\n## Buon intervallo per caratteristica\n\n| caratteristica | inizio | max informedness | fine |\n|---|---|---|---|\n`;

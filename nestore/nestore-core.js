@@ -27,11 +27,15 @@
     ThM: 4.0,          // magnitudo minima del terremoto principale
     Thwt: 6.5,         // cambio della formula della durata
     Rmin: 5,           // km, raggio minimo (adattamento per l'Italia)
+    space: 'kagan',    // 'kagan' = 0.02*10^(M/2) km; 'gk' = Gardner & Knopoff (1974)
     Zth: 30,           // km, profondità massima del principale
     six: 0.25          // 6 ore in giorni
   };
 
-  function winSpace(M) { return Math.max(0.02 * Math.pow(10, M / 2), CFG.Rmin); }
+  function winSpace(M) {
+    var r = CFG.space === 'gk' ? Math.pow(10, 0.1238 * M + 0.983) : 0.02 * Math.pow(10, M / 2);
+    return Math.max(r, CFG.Rmin);
+  }
   function winTime(M) {
     return M < CFG.Thwt ? Math.pow(10, 0.5409 * M - 0.547) : Math.pow(10, 0.032 * M + 2.7389);
   }
