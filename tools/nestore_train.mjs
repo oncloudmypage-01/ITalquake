@@ -209,6 +209,12 @@ async function main() {
     const d = JSON.parse(fs.readFileSync(process.argv[3] || OUT_CLUSTERS, 'utf8'));
     clusters = d.clusters.map(c => ({ ...c, afts: c.afts.map(([t, m10, lat, lon]) => ({ t, m10, lat, lon })) }));
     cat = { length: d.catalogEvents };
+  } else if (arg && arg.endsWith('.csv.gz')) {
+    const zlib = await import('node:zlib');
+    cat = zlib.gunzipSync(fs.readFileSync(arg)).toString().split('\n').map((l, i) => {
+      const [t, lat, lon, dep, m10] = l.split(',').map(Number);
+      return { id: 'e' + i, time: t * 1000, lat, lon, dep, m10 };
+    });
   } else if (arg) cat = JSON.parse(fs.readFileSync(arg, 'utf8'));
   else if (fs.existsSync(CACHE) && process.env.NESTORE_USE_CACHE) cat = JSON.parse(fs.readFileSync(CACHE, 'utf8'));
   else {
@@ -217,6 +223,12 @@ async function main() {
     if (process.env.NESTORE_USE_CACHE) fs.writeFileSync(CACHE, JSON.stringify(cat));
   }
   console.log(`Catalogo: ${cat.length} eventi`);
+  if (process.env.NESTORE_DUMP) {
+    const zlib = await import('node:zlib');
+    const csv = cat.map(e => [Math.round(e.time / 1000), e.lat.toFixed(3), e.lon.toFixed(3), Math.round(e.dep), e.m10].join(',')).join('\n');
+    fs.mkdirSync(path.dirname(process.env.NESTORE_DUMP), { recursive: true });
+    fs.writeFileSync(process.env.NESTORE_DUMP, zlib.gzipSync(csv, { level: 9 }));
+  }
   const lastTime = Date.now() - CONF.labelLagDays * 86400000;
 
   if (!clusters) {
