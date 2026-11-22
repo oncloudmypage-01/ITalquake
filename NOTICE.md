@@ -31,3 +31,4 @@ descritte in `nestore/report_italia.md`. Non è un prodotto OGS né INGV.
 - Terremoti, stazioni e forme d'onda: INGV, webservices.ingv.it (CC BY 4.0).
 - Segnalazioni "Hai sentito il terremoto?": INGV, hsit.it (CC BY 4.0).
 - Catalogo storico CPTI15: INGV (CC BY 4.0). Sorgenti DISS: INGV (CC BY 4.0).
+- Sagoma dell'Italia nell'icona: Natural Earth (pubblico dominio).

@@ -2,14 +2,16 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover"/>
 <title>ITalquake</title>
 <link rel="manifest" href="manifest.json"/>
 <meta name="theme-color" content="#F5F1EA"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap"/>
-<link rel="apple-touch-icon" href="icon-192.png"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="icon" type="image/svg+xml" href="icon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
@@ -601,6 +603,8 @@ body{padding-bottom:64px;}
   transform:translateX(100%);transition:transform .25s ease;
   overflow-y:auto;padding:20px;}
 .filter-drawer.open{transform:translateX(0);}
+/* chiuso: nascosto davvero, così su iPhone non si può scorrere di lato fino a lui */
+.filter-drawer:not(.open){visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s;}
 .filter-overlay{position:fixed;inset:0;z-index:299;background:rgba(0,0,0,0.5);
   display:none;pointer-events:all;}
 .filter-overlay.open{display:block;}
@@ -619,6 +623,7 @@ body{padding-bottom:64px;}
   transform:translateX(-100%);transition:transform .25s ease;
   display:flex;flex-direction:column;box-shadow:6px 0 24px rgba(0,0,0,0.35);}
 .side-menu.open{transform:translateX(0);}
+.side-menu:not(.open){visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s;}
 .side-menu-header{display:flex;align-items:center;justify-content:space-between;
   padding:16px 18px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .side-menu-header h3{margin:0;font-size:16px;color:var(--text);letter-spacing:.02em;}
@@ -1246,6 +1251,12 @@ input:checked+.sl{background:var(--magma);}
   --accent:#C2410C;--accent-2:#C2410C;--ring:0 0 0 3px rgba(194,65,12,.35);
   --font:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;--font-display:'Roboto',system-ui,sans-serif;--shadow:none;}
 html,body{background:#F5F1EA;color:#1C1917;color-scheme:light;}
+/* Niente scorrimento laterale della pagina (iPhone grandi): "clip" non rompe
+   gli elementi fissi/appiccicosi; "hidden" vale per i browser più vecchi. */
+html,body{max-width:100%;overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none;}
+/* Campi data su iOS: senza questo hanno una larghezza minima propria e sbordano */
+input[type=date],input[type=datetime-local]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;box-sizing:border-box;}
+input[type=date]::-webkit-date-and-time-value,input[type=datetime-local]::-webkit-date-and-time-value{text-align:left;}
 body{font-family:var(--font);letter-spacing:0;}
 body::before{background:#F5F1EA;}
 h1,h2,h3{font-family:var(--font);letter-spacing:0;}
@@ -2474,7 +2485,8 @@ body.sv-on{overflow:hidden;}
       <section class="panel" style="margin-top:12px;">
         <div style="padding:16px;">
           <div id="monGq" class="mon-gq"></div>
-          <a class="hs-link" href="https://www.youtube.com/channel/UCaQ9NmqngJXIqqAODuu1WDw/live" target="_blank" rel="noopener">Apri la diretta su YouTube →</a>
+          <a class="hs-compile" href="https://www.youtube.com/channel/UCaQ9NmqngJXIqqAODuu1WDw/live" target="_blank" rel="noopener">Apri nell'app YouTube</a>
+          <p class="felt-note" style="margin:8px 2px 0">Il lettore incorporato non gestisce bene il riavvolgimento delle dirette: se torni indietro di 10 secondi può ripartire dall'inizio. Per rivedere gli ultimi minuti aprila nell'app YouTube.</p>
         </div>
       </section>
       <section class="panel" style="margin-top:12px;">
@@ -2603,6 +2615,10 @@ body.sv-on{overflow:hidden;}
                 <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#FFFFFF;color:var(--text);border:1px solid rgba(28,25,23,0.12);">
                   <option value="waveform">Tracciato</option>
                   <option value="dayplot">Giornata a righe</option></select>
+                <select id="cleanSelect" title="Pulizia del segnale" aria-label="Pulizia del segnale" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#FFFFFF;color:var(--text);border:1px solid rgba(28,25,23,0.12);">
+                  <option value="clean">Segnale pulito</option>
+                  <option value="extra">Molto pulito</option>
+                  <option value="raw">Segnale completo</option></select>
                 <div id="dayplotControls" style="display:none;align-items:center;gap:7px;">
                   <label style="font-size:11px;color:var(--muted);white-space:nowrap;">Min/riga</label>
                   <input id="dayplotInterval" type="number" min="1" max="120" value="30"
@@ -5325,9 +5341,17 @@ function showToast(html,ms=4500){
   t.innerHTML=html;t.style.display='block';
   setTimeout(()=>t.style.display='none',ms);
 }
-async function openSeisForEq(i){
-  const ev=eqData[i];if(!ev)return;
+async function openSeisForEq(i){return openSeisForEvent(eqData[i]);}
+async function openSeisForSt(i){return openSeisForEvent(storicoData[i]);}
+/* Dalla lista terremoti si apre sempre la rete nazionale INGV: se prima
+   l'utente era su "Locali" o su una rete regionale, il tracciato falliva. */
+async function openSeisForEvent(ev){
+  if(!ev)return;
   goSection('sismogrammi');
+  if(seisSrc!=='ingv'||networkSelect.value!=='IV'){
+    setSeisSource('ingv',{noLoad:true});
+    networkSelect.value='IV';chCache.clear();stations=[];
+  }
   if(!stations.length)await loadNetwork();
   const near=findNearest(ev.lat,ev.lon);
   if(!near){setStatus('Nessuna stazione trovata.','err');return;}
@@ -5336,27 +5360,6 @@ async function openSeisForEq(i){
   const evT=new Date(ev.time);
   // Arrotonda al minuto pieno: se l'evento è alle 16:57:42 →
   // inizio 16:55:00, fine 17:05:00 (sempre secondi esatti, no troncamenti)
-  const floorMin=Math.floor(evT.getTime()/60000)*60000;
-  startInput.value=toLocal(new Date(floorMin-2*60000));
-  endInput.value=toLocal(new Date(floorMin+8*60000));
-  selectMapStation(true);updateMeta();
-  document.getElementById('viewModeSelect').value='dayplot';
-  document.getElementById('dayplotInterval').value='10';
-  document.getElementById('dayplotControls').style.display='flex';
-  showToast(`Stazione più vicina: <strong>${near.code}</strong> (${near.dist.toFixed(0)} km)<br>Giornata a righe, 10 minuti per riga`);
-  setStatus('Stazione '+near.code+' · '+near.dist.toFixed(0)+' km · Scarico...','ok');
-  await fetchWaveformAndPlot();
-}
-
-async function openSeisForSt(i){
-  const ev=storicoData[i];if(!ev)return;
-  goSection('sismogrammi');
-  if(!stations.length)await loadNetwork();
-  const near=findNearest(ev.lat,ev.lon);
-  if(!near){setStatus('Nessuna stazione trovata.','err');return;}
-  stationSelect.value=near.code;
-  await populateChannels(near.code);
-  const evT=new Date(ev.time);
   const floorMin=Math.floor(evT.getTime()/60000)*60000;
   startInput.value=toLocal(new Date(floorMin-2*60000));
   endInput.value=toLocal(new Date(floorMin+8*60000));
@@ -6038,11 +6041,23 @@ function decimateArr(samples,f){
   let sig=ff(new Float64Array(samples),c);
   return Array.from({length:Math.ceil(sig.length/f)},(_,i)=>sig[i*f]);
 }
+function _seisClean(){const el=document.getElementById('cleanSelect');return el?el.value:'clean';}
 function applyFilters(samples,sr){
   let s=samples.slice();
   if(document.getElementById('demeanEnabled').checked){s=demean(s);logMsg('Demean','ok');}
   if(document.getElementById('detrendEnabled').checked){s=detrend(s);logMsg('Detrend','ok');}
-  if(document.getElementById('filterEnabled').checked){
+  /* Pulizia rapida: toglie il rumore lento (onde del mare, deriva) e quello
+     molto veloce (traffico, vento), lasciando la banda dei terremoti vicini,
+     come nei sismogrammi a tamburo degli osservatori. */
+  const cm=_seisClean();
+  if(cm!=='raw'){
+    const[fl,fh]=cm==='extra'?[2,8]:[1,10];
+    s=demean(s);
+    /* raccordo morbido ai bordi, per evitare lo scatto del filtro all'inizio e alla fine */
+    const nt=Math.min(Math.round(sr*5),Math.floor(s.length*0.02));
+    for(let i=0;i<nt;i++){const w=0.5-0.5*Math.cos(Math.PI*i/nt);s[i]*=w;s[s.length-1-i]*=w;}
+    s=bandpass(s,sr,fl,Math.min(fh,sr*0.45),4);logMsg(`Pulizia ${fl}–${fh} Hz`,'ok');
+  }else if(document.getElementById('filterEnabled').checked){
     const fl=parseFloat(document.getElementById('freqMinInput').value)||.1;
     const fh=parseFloat(document.getElementById('freqMaxInput').value)||3;
     const ord=parseInt(document.getElementById('cornersInput').value)||4;
@@ -6088,7 +6103,7 @@ async function fetchWaveformAndPlot(){
     logMsg('SR: '+res.sampleRate+' Hz','ok');
     const{filtered,effectiveSR}=applyFilters(res.samples,res.sampleRate);
     const title=`${net}.${sta.code}..${ch}`;
-    lastPlot={filtered,effectiveSR,startMs:res.startMs,title};
+    lastPlot={filtered,effectiveSR,startMs:res.startMs,title,raw:res.samples,rawSR:res.sampleRate};
     renderMode();
     updateMeta({start:s0,end:s1,shown:filtered.length,orig:res.samples.length});
     setStatus(`OK · ${res.samples.length} camp. → ${filtered.length} filtrati (${effectiveSR.toFixed(1)} Hz).`,'ok');
@@ -6358,6 +6373,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&window._hvOpen)clos
     el.addEventListener('input',saveFilters);
   }
 });
+(function(){const el=document.getElementById('cleanSelect');if(!el)return;
+  try{const v=localStorage.getItem('itq_seis_clean');if(v&&[...el.options].some(o=>o.value===v))el.value=v;}catch(e){}
+  el.addEventListener('change',()=>{
+    try{localStorage.setItem('itq_seis_clean',el.value);}catch(e){}
+    if(lastPlot&&lastPlot.raw){const r=applyFilters(lastPlot.raw,lastPlot.rawSR);lastPlot.filtered=r.filtered;lastPlot.effectiveSR=r.effectiveSR;renderMode();}
+  });})();
 document.getElementById('viewModeSelect').addEventListener('change',()=>{
   const dp=document.getElementById('viewModeSelect').value==='dayplot';
   document.getElementById('dayplotControls').style.display=dp?'flex':'none';
