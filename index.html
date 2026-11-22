@@ -2613,6 +2613,10 @@ body.sv-on{overflow:hidden;}
                 <select id="viewModeSelect" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#FFFFFF;color:var(--text);border:1px solid rgba(28,25,23,0.12);">
                   <option value="waveform">Tracciato</option>
                   <option value="dayplot">Giornata a righe</option></select>
+                <select id="cleanSelect" title="Pulizia del segnale" aria-label="Pulizia del segnale" style="width:auto;padding:7px 11px;font-size:13px;border-radius:9px;background:#FFFFFF;color:var(--text);border:1px solid rgba(28,25,23,0.12);">
+                  <option value="clean">Segnale pulito</option>
+                  <option value="extra">Molto pulito</option>
+                  <option value="raw">Segnale completo</option></select>
                 <div id="dayplotControls" style="display:none;align-items:center;gap:7px;">
                   <label style="font-size:11px;color:var(--muted);white-space:nowrap;">Min/riga</label>
                   <input id="dayplotInterval" type="number" min="1" max="120" value="30"
@@ -6035,11 +6039,23 @@ function decimateArr(samples,f){
   let sig=ff(new Float64Array(samples),c);
   return Array.from({length:Math.ceil(sig.length/f)},(_,i)=>sig[i*f]);
 }
+function _seisClean(){const el=document.getElementById('cleanSelect');return el?el.value:'clean';}
 function applyFilters(samples,sr){
   let s=samples.slice();
   if(document.getElementById('demeanEnabled').checked){s=demean(s);logMsg('Demean','ok');}
   if(document.getElementById('detrendEnabled').checked){s=detrend(s);logMsg('Detrend','ok');}
-  if(document.getElementById('filterEnabled').checked){
+  /* Pulizia rapida: toglie il rumore lento (onde del mare, deriva) e quello
+     molto veloce (traffico, vento), lasciando la banda dei terremoti vicini,
+     come nei sismogrammi a tamburo degli osservatori. */
+  const cm=_seisClean();
+  if(cm!=='raw'){
+    const[fl,fh]=cm==='extra'?[2,8]:[1,10];
+    s=demean(s);
+    /* raccordo morbido ai bordi, per evitare lo scatto del filtro all'inizio e alla fine */
+    const nt=Math.min(Math.round(sr*5),Math.floor(s.length*0.02));
+    for(let i=0;i<nt;i++){const w=0.5-0.5*Math.cos(Math.PI*i/nt);s[i]*=w;s[s.length-1-i]*=w;}
+    s=bandpass(s,sr,fl,Math.min(fh,sr*0.45),4);logMsg(`Pulizia ${fl}–${fh} Hz`,'ok');
+  }else if(document.getElementById('filterEnabled').checked){
     const fl=parseFloat(document.getElementById('freqMinInput').value)||.1;
     const fh=parseFloat(document.getElementById('freqMaxInput').value)||3;
     const ord=parseInt(document.getElementById('cornersInput').value)||4;
@@ -6085,7 +6101,7 @@ async function fetchWaveformAndPlot(){
     logMsg('SR: '+res.sampleRate+' Hz','ok');
     const{filtered,effectiveSR}=applyFilters(res.samples,res.sampleRate);
     const title=`${net}.${sta.code}..${ch}`;
-    lastPlot={filtered,effectiveSR,startMs:res.startMs,title};
+    lastPlot={filtered,effectiveSR,startMs:res.startMs,title,raw:res.samples,rawSR:res.sampleRate};
     renderMode();
     updateMeta({start:s0,end:s1,shown:filtered.length,orig:res.samples.length});
     setStatus(`OK · ${res.samples.length} camp. → ${filtered.length} filtrati (${effectiveSR.toFixed(1)} Hz).`,'ok');
@@ -6355,6 +6371,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&window._hvOpen)clos
     el.addEventListener('input',saveFilters);
   }
 });
+(function(){const el=document.getElementById('cleanSelect');if(!el)return;
+  try{const v=localStorage.getItem('itq_seis_clean');if(v&&[...el.options].some(o=>o.value===v))el.value=v;}catch(e){}
+  el.addEventListener('change',()=>{
+    try{localStorage.setItem('itq_seis_clean',el.value);}catch(e){}
+    if(lastPlot&&lastPlot.raw){const r=applyFilters(lastPlot.raw,lastPlot.rawSR);lastPlot.filtered=r.filtered;lastPlot.effectiveSR=r.effectiveSR;renderMode();}
+  });})();
 document.getElementById('viewModeSelect').addEventListener('change',()=>{
   const dp=document.getElementById('viewModeSelect').value==='dayplot';
   document.getElementById('dayplotControls').style.display=dp?'flex':'none';
