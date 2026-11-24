@@ -3248,7 +3248,36 @@ async function _provFetch(){
   }
   return null;
 }
-function _provMs(ot){const t=Date.parse(String(ot).replace(' ','T')+'Z');return isNaN(t)?Date.now():t;}
+/* Orari: tutto in millisecondi assoluti, letti "a mano" (Safari interpreta male
+   alcune date). romeMs: data e ora ITALIANE (ora solare o legale) → istante. */
+function _utcMs(str){
+  const m=/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.(\d+))?)?/.exec(String(str||''));
+  if(!m)return NaN;
+  return Date.UTC(+m[1],m[2]-1,+m[3],+m[4],+m[5],+(m[6]||0),m[7]?Math.round(+('0.'+m[7])*1000):0);
+}
+function _romeOffsetMin(ms){
+  const f=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Rome',hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const p={};f.formatToParts(new Date(ms)).forEach(x=>p[x.type]=x.value);
+  return Math.round((Date.UTC(+p.year,p.month-1,+p.day,+p.hour,+p.minute,+p.second)-ms)/60000);
+}
+function romeMs(y,mo,d,h,mi,se){
+  const guess=Date.UTC(y,mo-1,d,h,mi,se||0);
+  let t=guess-_romeOffsetMin(guess)*60000;
+  t=guess-_romeOffsetMin(t)*60000;   /* ricontrollo vicino al cambio dell'ora legale */
+  return t;
+}
+/* Istante della stima provvisoria: dalla data e ora ITALIANE pubblicate dall'INGV
+   (date_it, time_it); se mancano, dall'orario "ot" letto come UTC. */
+function _provMsIt(it){
+  const d=/(\d{1,4})[-\/.](\d{1,2})[-\/.](\d{1,4})/.exec(String(it&&it.date_it||'')),t=/(\d{1,2}):(\d{2})(?::(\d{2}))?/.exec(String(it&&it.time_it||''));
+  if(d&&t){
+    let y=+d[1],mo=+d[2],dd=+d[3];if(d[1].length<=2){y=+d[3];dd=+d[1];}
+    const ms=romeMs(y,mo,dd,+t[1],+t[2],+(t[3]||0));
+    if(!isNaN(ms))return ms;
+  }
+  const u=_utcMs(it&&it.ot);return isNaN(u)?Date.now():u;
+}
+function _provMs(ot){const t=_utcMs(ot);return isNaN(t)?Date.now():t;}
 function _provKey(it){return [it.ot,it.mag_min,it.mag_max,it.region].join('|');}
 function _provAgo(ot){
   const t=Date.parse(String(ot).replace(' ','T')+'Z');if(isNaN(t))return '';
@@ -3288,7 +3317,7 @@ async function _provNotify(it){
     const reg=window._swReg||(navigator.serviceWorker&&await navigator.serviceWorker.getRegistration());
     const title='Stima provvisoria INGV';
     const body=`Magnitudo tra ${it.mag_min} e ${it.mag_max} · ${it.region} · ore ${it.time_it}\nTocca per vederlo in diretta su GlobalQuake Italia`;
-    const opt={body,icon:'./icon-192.png',badge:'./icon-192.png',tag:'stima_prov',renotify:true,data:{url:'./#monitor@'+_provMs(it.ot)}};
+    const opt={body,icon:'./icon-192.png',badge:'./icon-192.png',tag:'stima_prov',renotify:true,data:{url:'./#monitor@'+_provMsIt(it)}};
     if(reg&&reg.showNotification)await reg.showNotification(title,opt);else new Notification(title,opt);
   }catch(e){}
 }
@@ -4162,7 +4191,7 @@ function openEqDetail(containerId,i){
   _eqdCtx={containerId,i,ev};
 
   document.getElementById('eqdTitle').textContent=ev.place;
-  document.getElementById('eqdGqBtn').hidden=!gqCanReplay(Date.parse(ev.time));
+  document.getElementById('eqdGqBtn').hidden=!gqCanReplay(_utcMs(ev.time));
   renderEqdDati(ev);
   document.getElementById('eqdPaneLoc').innerHTML='';
   eqdSwitchTab('dati');
@@ -6220,22 +6249,23 @@ function gqApi(){
 function gqCanReplay(ms){const age=Date.now()-ms;return !isNaN(ms)&&age>-60000&&age<GQ_DVR_H*3600e3-120000;}
 function gqMsg(t){const m=document.getElementById('gqMsg');if(!m)return;m.textContent=t||'';m.hidden=!t;}
 function gqHm(ms){return new Date(ms).toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit',second:'2-digit'});}
-function gqReplay(ms,label){
+function gqReplay(ms,label,quakeMs){
   GQ.target={ms,label,tries:0};
   const sheet=document.getElementById('eqdSheet');if(sheet&&sheet.classList.contains('open'))closeEqDetail();
   goSection('monitor');
   const r=document.getElementById('gqReplay');
-  if(r){r.hidden=false;r.innerHTML=`<span>Rivedi <b>${_esc(label||'')}</b> · dalle ${gqHm(ms)}</span>`;}
+  if(r){r.hidden=false;r.innerHTML=`<span>Rivedi <b>${_esc(label||'')}</b> · scossa alle <b>${gqHm(quakeMs||ms)}</b> ora italiana${quakeMs&&quakeMs!==ms?` · video dalle ${gqHm(ms)}`:''}</span>`;}
   gqMsg('');
   gqApplyTarget();
 }
 function gqReplayProv(i){
   const it=(window._provItems||[])[i];if(!it)return;
-  gqReplay(_provMs(it.ot),`stima provvisoria M${it.mag_min}–${it.mag_max} ${it.region||''}`);
+  gqReplay(_provMsIt(it),`stima provvisoria M${it.mag_min}–${it.mag_max} ${it.region||''}`,_provMsIt(it));
 }
 function eqdGq(){
   const ev=_eqdCtx&&_eqdCtx.ev;if(!ev)return;
-  gqReplay(Date.parse(ev.time)-10000,`M${ev.mag.toFixed(1)} ${ev.place}`);
+  const evMs=_utcMs(ev.time);   /* l'INGV dà l'orario in UTC: qui diventa un istante esatto */
+  gqReplay(evMs-10000,`M${ev.mag.toFixed(1)} ${ev.place}`,evMs);
 }
 /* posizione del punto "in diretta" nel video (in secondi) */
 /* alla partenza il video è "in diretta": si memorizza quella posizione e da lì
@@ -6296,7 +6326,7 @@ function gqYtLink(pos){
 /* indirizzi tipo #monitor@1732460000000: apre la diretta al momento indicato */
 function _navHash(h){
   const m=/^monitor@(\d{12,14})$/.exec(h||'');
-  if(m){gqReplay(+m[1],'stima provvisoria');return;}
+  if(m){gqReplay(+m[1],'stima provvisoria',+m[1]);return;}
   goSection(h||'terremoti');
 }
 function monRenderProv(){
