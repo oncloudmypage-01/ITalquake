@@ -6171,17 +6171,32 @@ function stopMonitor(){
   if(!MON.on)return;MON.on=false;
   MON.timers.forEach(clearInterval);MON.timers=[];
   const g=document.getElementById('monGq');if(g)g.innerHTML='';   /* ferma video e consumo dati */
-  GQ.player=null;GQ.ready=false;
+  GQ.player=null;GQ.ready=false;GQ.playing=false;
 }
 function monTick(){const c=document.getElementById('monClock');if(c)c.textContent=new Date().toLocaleTimeString('it-IT');gqShowAt();}
 function monLoadGq(){
-  document.getElementById('monGq').innerHTML=`<div class="mon-video"><iframe id="gqFrame" src="https://www.youtube-nocookie.com/embed/live_stream?channel=${GQ_CHANNEL}&autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}"
-    title="Diretta GlobalQuake Italia" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
-  GQ.player=null;GQ.ready=false;
+  /* Il lettore viene creato direttamente dai comandi ufficiali di YouTube (IFrame API):
+     così i comandi per spostarsi nel video sono collegati con certezza. */
+  document.getElementById('monGq').innerHTML='<div class="mon-video"><div id="gqHost"></div></div>';
+  GQ.player=null;GQ.ready=false;GQ.playing=false;GQ.edgeAt=0;
   gqApi().then(()=>{
-    if(!MON.on||!document.getElementById('gqFrame'))return;
-    GQ.player=new YT.Player('gqFrame',{events:{onReady:()=>{GQ.ready=true;gqApplyTarget();}}});
-  }).catch(()=>gqMsg('I comandi per tornare indietro non sono disponibili in questo momento: usa "Apri nell\'app YouTube".'));
+    if(!MON.on||!document.getElementById('gqHost'))return;
+    GQ.player=new YT.Player('gqHost',{
+      videoId:'live_stream',width:'100%',height:'100%',
+      playerVars:{channel:GQ_CHANNEL,autoplay:1,mute:1,playsinline:1,rel:0,origin:location.origin},
+      events:{
+        onReady:e=>{GQ.ready=true;try{e.target.mute();e.target.playVideo();}catch(_){}gqApplyTarget();},
+        onStateChange:e=>{if(e.data===1){if(!GQ.playing){GQ.playing=true;gqMarkEdge();setTimeout(gqApplyTarget,800);}}},
+        onError:e=>gqMsg('Il lettore YouTube ha dato un errore (codice '+e.data+'). Prova con "Apri nell\'app YouTube".')
+      }});
+    const f=GQ.player.getIframe&&GQ.player.getIframe();
+    if(f){f.title='Diretta GlobalQuake Italia';f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen');f.setAttribute('allowfullscreen','');}
+  }).catch(()=>{
+    /* senza i comandi di YouTube: almeno la diretta */
+    document.getElementById('monGq').innerHTML=`<div class="mon-video"><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=${GQ_CHANNEL}&autoplay=1&mute=1&playsinline=1"
+      title="Diretta GlobalQuake Italia" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
+    gqMsg('I comandi per tornare indietro non si sono caricati: usa "Apri nell\'app YouTube".');
+  });
 }
 
 /* ── Rivedere un momento della diretta: la diretta YouTube di GlobalQuake si può
@@ -6189,7 +6204,7 @@ function monLoadGq(){
    rispetto al punto "in diretta", tenendo conto del ritardo della diretta. ── */
 const GQ_LAT=20;        /* s: ritardo tipico della diretta rispetto alla realtà */
 const GQ_DVR_H=12;      /* ore: YouTube conserva al massimo le ultime 12 ore di una diretta */
-const GQ={player:null,ready:false,target:null,apiP:null,vid:null};
+const GQ={player:null,ready:false,playing:false,target:null,apiP:null,tt:null};
 function gqApi(){
   if(window.YT&&YT.Player)return Promise.resolve();
   if(GQ.apiP)return GQ.apiP;
@@ -6222,34 +6237,53 @@ function eqdGq(){
   const ev=_eqdCtx&&_eqdCtx.ev;if(!ev)return;
   gqReplay(Date.parse(ev.time)-10000,`M${ev.mag.toFixed(1)} ${ev.place}`);
 }
+/* posizione del punto "in diretta" nel video (in secondi) */
+/* alla partenza il video è "in diretta": si memorizza quella posizione e da lì
+   si calcola il punto in diretta in ogni momento successivo */
+function gqMarkEdge(){try{const p=GQ.player;GQ.edge0=Math.max(p.getDuration()||0,p.getCurrentTime()||0);GQ.edgeAt=Date.now();}catch(e){}}
+function gqEdge(p){
+  if(GQ.edgeAt)return GQ.edge0+(Date.now()-GQ.edgeAt)/1000;
+  const d=p.getDuration()||0,c=p.getCurrentTime()||0;return Math.max(d,c);
+}
 function gqApplyTarget(){
   const t=GQ.target,p=GQ.player;
   if(!t||!GQ.ready||!p||!p.getDuration)return;
-  const dur=p.getDuration();
-  if(!dur){if(++t.tries<15)setTimeout(gqApplyTarget,1000);else gqMsg('La diretta non risponde: riprova tra poco.');return;}
-  GQ.target=null;
+  /* si sposta solo quando il video sta davvero andando */
+  if(!GQ.playing){
+    if(++t.tries===5)gqMsg('Tocca ▶ sul video per avviarlo: poi andrà da solo al momento della scossa.');
+    if(t.tries<120){clearTimeout(GQ.tt);GQ.tt=setTimeout(gqApplyTarget,1000);}
+    return;
+  }
+  GQ.target=null;gqMsg('');
   if(!gqCanReplay(t.ms)){gqMsg('Questo momento non è più nella registrazione della diretta (YouTube ne conserva al massimo 12 ore).');return;}
+  const edge=gqEdge(p);
   /* il punto "in diretta" mostra già la realtà di GQ_LAT secondi fa */
-  const pos=Math.min(dur,dur-((Date.now()-t.ms)/1000-GQ_LAT));
-  try{p.seekTo(Math.max(0,pos),true);p.playVideo();}catch(e){}
+  const back=Math.max(0,(Date.now()-t.ms)/1000-GQ_LAT);
+  const pos=edge-back;
+  if(pos<0){gqMsg('La registrazione di questa diretta non arriva così indietro.');return;}
+  const go=()=>{try{p.seekTo(pos,true);p.playVideo();}catch(e){}};
+  go();setTimeout(()=>{try{if(Math.abs(p.getCurrentTime()-pos)>20)go();}catch(e){}},1500);   /* secondo tentativo */
   setTimeout(()=>{
-    try{if(Math.abs(p.getCurrentTime()-pos)>45)gqMsg('La diretta non permette di tornare così indietro in questo momento. Prova con "Apri nell\'app YouTube".');}catch(e){}
+    try{
+      const c=p.getCurrentTime();
+      if(Math.abs(c-pos)>45)gqMsg(`YouTube non ha spostato il video (richiesti ${Math.round(back)} s indietro; lettore: posizione ${Math.round(c)}, durata ${Math.round(p.getDuration())}). Prova con "Apri nell'app YouTube".`);
+    }catch(e){}
     gqYtLink(pos);
-  },3000);
+  },4500);
 }
 function gqStep(sec){
   const p=GQ.player;if(!GQ.ready||!p){gqMsg('Il video non è ancora pronto.');return;}
-  try{const d=p.getDuration(),c=p.getCurrentTime();p.seekTo(Math.max(0,Math.min(d,c+sec)),true);p.playVideo();gqMsg('');}catch(e){}
+  try{const c=p.getCurrentTime();p.seekTo(Math.max(0,Math.min(gqEdge(p),c+sec)),true);p.playVideo();gqMsg('');}catch(e){}
 }
 function gqLive(){
   const p=GQ.player;const r=document.getElementById('gqReplay');if(r)r.hidden=true;gqMsg('');
-  if(!GQ.ready||!p)return;try{p.seekTo(p.getDuration(),true);p.playVideo();}catch(e){}
+  if(!GQ.ready||!p)return;try{p.seekTo(gqEdge(p)+60,true);p.playVideo();}catch(e){}
 }
 function gqShowAt(){
   const el=document.getElementById('gqAt'),p=GQ.player;if(!el)return;
   if(!GQ.ready||!p||!p.getDuration){el.textContent='In diretta';return;}
   try{
-    const behind=p.getDuration()-p.getCurrentTime();
+    const behind=Math.max(0,gqEdge(p)-p.getCurrentTime());
     el.textContent=behind<12?'In diretta':'Stai guardando circa le '+gqHm(Date.now()-(behind+GQ_LAT)*1000);
   }catch(e){}
 }
