@@ -2518,6 +2518,7 @@ body.sv-on{overflow:hidden;}
             </div>
           </div>
           <p id="gqMsg" class="gq-msg" hidden></p>
+          <p id="gqDiag" class="felt-note" style="margin:4px 2px 0;font-size:11px;color:#8A8075"></p>
           <a class="hs-compile" id="gqYtLink" href="https://www.youtube.com/channel/UCaQ9NmqngJXIqqAODuu1WDw/live" target="_blank" rel="noopener">Apri nell'app YouTube</a>
           <p class="felt-note" style="margin:8px 2px 0">Usa i pulsanti qui sopra per tornare indietro: quelli del lettore YouTube, nelle dirette, a volte ripartono dall'inizio. L'orario mostrato è approssimato di qualche secondo, perché la diretta arriva con un piccolo ritardo.</p>
         </div>
@@ -6247,6 +6248,7 @@ function gqApi(){
   return GQ.apiP;
 }
 function gqCanReplay(ms){const age=Date.now()-ms;return !isNaN(ms)&&age>-60000&&age<GQ_DVR_H*3600e3-120000;}
+function gqDiag(t){const el=document.getElementById('gqDiag');if(el)el.textContent=t||'';}
 function gqMsg(t){const m=document.getElementById('gqMsg');if(!m)return;m.textContent=t||'';m.hidden=!t;}
 function gqHm(ms){return new Date(ms).toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit',second:'2-digit'});}
 function gqReplay(ms,label,quakeMs){
@@ -6270,7 +6272,15 @@ function eqdGq(){
 /* posizione del punto "in diretta" nel video (in secondi) */
 /* alla partenza il video è "in diretta": si memorizza quella posizione e da lì
    si calcola il punto in diretta in ogni momento successivo */
-function gqMarkEdge(){try{const p=GQ.player;GQ.edge0=Math.max(p.getDuration()||0,p.getCurrentTime()||0);GQ.edgeAt=Date.now();}catch(e){}}
+function gqMarkEdge(){
+  try{
+    const p=GQ.player,c=p.getCurrentTime()||0,d=p.getDuration()||0;
+    /* la posizione in cui il video parte È la diretta; la "durata" dichiarata da
+       YouTube nelle dirette lunghe può essere sfasata (anche di un'ora): si usa solo come riserva */
+    GQ.edge0=c>0?c:d;GQ.edgeAt=Date.now();
+    GQ.diag={c:Math.round(c),d:Math.round(d)};
+  }catch(e){}
+}
 function gqEdge(p){
   if(GQ.edgeAt)return GQ.edge0+(Date.now()-GQ.edgeAt)/1000;
   const d=p.getDuration()||0,c=p.getCurrentTime()||0;return Math.max(d,c);
@@ -6297,6 +6307,7 @@ function gqApplyTarget(){
     try{
       const c=p.getCurrentTime();
       if(Math.abs(c-pos)>45)gqMsg(`YouTube non ha spostato il video (richiesti ${Math.round(back)} s indietro; lettore: posizione ${Math.round(c)}, durata ${Math.round(p.getDuration())}). Prova con "Apri nell'app YouTube".`);
+      gqDiag(`dettagli: partenza ${GQ.diag?GQ.diag.c:'?'}/${GQ.diag?GQ.diag.d:'?'} · indietro ${Math.round(back)} s · posizione ${Math.round(c)}`);
     }catch(e){}
     gqYtLink(pos);
   },4500);
