@@ -1254,6 +1254,11 @@ html,body{background:#F5F1EA;color:#1C1917;color-scheme:light;}
 /* Niente scorrimento laterale della pagina (iPhone grandi): "clip" non rompe
    gli elementi fissi/appiccicosi; "hidden" vale per i browser più vecchi. */
 html,body{max-width:100%;overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none;}
+/* iPhone: il dito può far scorrere la pagina solo in verticale (niente spostamento
+   laterale né zoom della pagina). Mappe, grafici e liste orizzontali gestiscono
+   i propri gesti e non sono toccati da questa regola. */
+html,body{touch-action:pan-y;}
+.dbg-w{position:fixed;left:8px;right:8px;bottom:calc(90px + env(safe-area-inset-bottom,0));z-index:9999;max-height:40vh;overflow:auto;background:#1C1917;color:#F5F1EA;font:12px/1.4 ui-monospace,Menlo,monospace;border-radius:12px;padding:10px 12px;}
 /* Campi data su iOS: senza questo hanno una larghezza minima propria e sbordano */
 input[type=date],input[type=datetime-local]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;box-sizing:border-box;}
 input[type=date]::-webkit-date-and-time-value,input[type=datetime-local]::-webkit-date-and-time-value{text-align:left;}
@@ -6163,6 +6168,30 @@ async function monLoadIngv(){
         <span class="n"><b>${_esc(e.place)}</b><span>${_hm(t)} · ${ago<1?'adesso':ago+' min fa'} · ${e.depth.toFixed(0)} km di profondità</span></span>
         <span class="mon-tag">${_esc(e.magType||'')}</span></div>`;}).join('');
   }catch(e){box.innerHTML='<div class="felt-p" style="padding:0 16px 14px">Dati INGV non raggiungibili al momento.</div>';}
+}
+/* iPhone: se la pagina si sposta di lato per qualsiasi motivo, la riporta subito a posto */
+(function(){
+  const fix=()=>{if(window.scrollX!==0)window.scrollTo(0,window.scrollY);};
+  addEventListener('scroll',fix,{passive:true});addEventListener('resize',fix);addEventListener('orientationchange',()=>setTimeout(fix,300));
+})();
+/* Diagnosi: aprendo l'app con ?larghezza in fondo all'indirizzo, elenca gli elementi
+   più larghi dello schermo (per trovare cosa fa "sbordare" la pagina su un telefono). */
+if(/[?&]larghezza\b/.test(location.search)){
+  const dbgRun=()=>{
+    const W=document.documentElement.clientWidth,out=[];
+    for(const e of document.querySelectorAll('body *')){
+      if(e.closest('.leaflet-container,.dbg-w'))continue;
+      const r=e.getBoundingClientRect();if(!r.width||getComputedStyle(e).visibility==='hidden')continue;
+      if((r.right>W+1||r.left<-1)&&getComputedStyle(e).position!=='fixed'){
+        const p=e.parentElement.getBoundingClientRect();
+        if(p.right<=W+1&&p.left>=-1)out.push(`${e.tagName.toLowerCase()}${e.id?'#'+e.id:''}${e.className&&typeof e.className==='string'?'.'+e.className.trim().split(/\s+/).join('.'):''} · da ${Math.round(r.left)} a ${Math.round(r.right)}`);
+      }
+    }
+    let box=document.querySelector('.dbg-w');if(!box){box=document.createElement('div');box.className='dbg-w';document.body.appendChild(box);}
+    box.textContent=`Schermo ${W}px · pagina ${document.documentElement.scrollWidth}px · zoom ${(window.visualViewport?visualViewport.scale:1).toFixed(2)}\n`+(out.length?out.slice(0,12).join('\n'):'Nessun elemento sborda.');
+    box.style.whiteSpace='pre-wrap';
+  };
+  addEventListener('load',()=>setTimeout(dbgRun,2500));setInterval(dbgRun,4000);
 }
 /* clic su una notifica mentre l'app è già aperta: il service worker chiede di aprire la sezione */
 if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{
