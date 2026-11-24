@@ -1516,6 +1516,19 @@ body.map-fs-on{overflow:hidden;}
 .mon-tag{font-size:10.5px;font-weight:700;color:#5F574F;background:#EFE8DC;border-radius:6px;padding:3px 6px;flex-shrink:0;}
 .mon-video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#1C1917;}
 .mon-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+/* rivedere un momento della diretta GlobalQuake */
+.gq-ctrl{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;}
+.gq-at{font-size:13.5px;font-weight:600;color:#1C1917;}
+.gq-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.gq-btns button{min-height:40px;min-width:52px;padding:0 10px;border-radius:10px;border:1px solid #D3C9B8;background:#FFFFFF;color:#1C1917;font:600 13px var(--font);cursor:pointer;}
+.gq-btns button.live{background:#C2410C;border-color:#C2410C;color:#FFFFFF;}
+.gq-replay{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border-radius:12px;background:#FBEADB;color:#7C2D12;font-size:13.5px;line-height:1.4;}
+.gq-replay b{color:#7C2D12;}
+.gq-msg{margin:8px 2px 0;font-size:12.5px;color:#9A3412;}
+.eqd-gq{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 10px;border-radius:11px;border:1px solid #E3DBCC;background:#FFFFFF;color:#C2410C;font:700 12.5px var(--font);cursor:pointer;}
+.eqd-gq svg{width:14px;height:14px;}
+.prov-gq{display:inline-flex;align-items:center;gap:6px;}
+.prov-gq svg{width:13px;height:13px;}
 /* ── Scheda terremoto: a casa tua, chi l'ha sentito, registrazioni ── */
 .felt-card{margin-top:14px;background:#FFFFFF;border:1px solid #E3DBCC;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;}
 .felt-h{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#8A8075;}
@@ -2493,9 +2506,20 @@ body.sv-on{overflow:hidden;}
       <div id="monProv"></div>
       <section class="panel" style="margin-top:12px;">
         <div style="padding:16px;">
-          <div id="monGq" class="mon-gq"></div>
-          <a class="hs-compile" href="https://www.youtube.com/channel/UCaQ9NmqngJXIqqAODuu1WDw/live" target="_blank" rel="noopener">Apri nell'app YouTube</a>
-          <p class="felt-note" style="margin:8px 2px 0">Il lettore incorporato non gestisce bene il riavvolgimento delle dirette: se torni indietro di 10 secondi può ripartire dall'inizio. Per rivedere gli ultimi minuti aprila nell'app YouTube.</p>
+          <div id="gqReplay" class="gq-replay" hidden></div>
+          <div id="monGq" class="mon-gq" style="margin-top:10px"></div>
+          <div class="gq-ctrl">
+            <span class="gq-at" id="gqAt" aria-live="polite">In diretta</span>
+            <div class="gq-btns">
+              <button type="button" onclick="gqStep(-30)" aria-label="Indietro di 30 secondi">−30 s</button>
+              <button type="button" onclick="gqStep(-10)" aria-label="Indietro di 10 secondi">−10 s</button>
+              <button type="button" onclick="gqStep(10)" aria-label="Avanti di 10 secondi">+10 s</button>
+              <button type="button" class="live" onclick="gqLive()">Diretta</button>
+            </div>
+          </div>
+          <p id="gqMsg" class="gq-msg" hidden></p>
+          <a class="hs-compile" id="gqYtLink" href="https://www.youtube.com/channel/UCaQ9NmqngJXIqqAODuu1WDw/live" target="_blank" rel="noopener">Apri nell'app YouTube</a>
+          <p class="felt-note" style="margin:8px 2px 0">Usa i pulsanti qui sopra per tornare indietro: quelli del lettore YouTube, nelle dirette, a volte ripartono dall'inizio. L'orario mostrato è approssimato di qualche secondo, perché la diretta arriva con un piccolo ritardo.</p>
         </div>
       </section>
       <section class="panel" style="margin-top:12px;">
@@ -3007,6 +3031,7 @@ body.sv-on{overflow:hidden;}
   <div class="eqd-sheet" id="eqdSheet">
     <div class="eqd-header">
       <div class="eqd-title" id="eqdTitle">—</div>
+      <button type="button" class="eqd-gq" id="eqdGqBtn" hidden onclick="eqdGq()" title="Rivedi su GlobalQuake Italia" aria-label="Rivedi il terremoto nella diretta di GlobalQuake Italia"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>GQ</button>
       <button class="eqd-close" onclick="closeEqDetail()" title="Chiudi">✕</button>
     </div>
     <div class="eqd-map" id="eqdMap"></div>
@@ -3179,8 +3204,7 @@ window.addEventListener('load',()=>{
   /* 1. Carica sempre le preferenze notifiche e avvia il timer */
   _bootLoadPrefs();
   /* 2. Ripristina sezione (URL hash) o vai a terremoti */
-  const hash=location.hash.slice(1);
-  goSection(hash||'terremoti');
+  _navHash(location.hash.slice(1));
   /* 3. Ripristina posizione GPS da localStorage per mostrare subito lo stato corretto */
   const _slat=parseFloat(localStorage.getItem('itq_lat')||'');
   const _slon=parseFloat(localStorage.getItem('itq_lon')||'');
@@ -3224,6 +3248,7 @@ async function _provFetch(){
   }
   return null;
 }
+function _provMs(ot){const t=Date.parse(String(ot).replace(' ','T')+'Z');return isNaN(t)?Date.now():t;}
 function _provKey(it){return [it.ot,it.mag_min,it.mag_max,it.region].join('|');}
 function _provAgo(ot){
   const t=Date.parse(String(ot).replace(' ','T')+'Z');if(isNaN(t))return '';
@@ -3243,7 +3268,7 @@ async function pollStimaProv(){
         <div class="prov-m">Terremoto di magnitudo tra <b>${_esc(it.mag_min)}</b> e <b>${_esc(it.mag_max)}</b></div>
         <div class="prov-s">ore ${_esc(it.time_it||'')} del ${_esc(String(it.date_it||'').replace(/-/g,'/'))} · prov/zona <b>${_esc(it.region||'')}</b></div>
         <div class="prov-n">Dato automatico INGV, in attesa della localizzazione rivista.</div>
-        <button type="button" class="prov-gq" onclick="goSection('monitor')">Guardalo in diretta su GlobalQuake Italia ›</button>
+        <button type="button" class="prov-gq" onclick="gqReplayProv(${live.indexOf(it)})"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Rivedilo su GlobalQuake Italia ›</button>
       </div>
       <button type="button" class="prov-x" aria-label="Nascondi la stima provvisoria" onclick="dismissProv('${_esc(_provKey(it)).replace(/'/g,"\\'")}')">✕</button>
     </div>`).join('');
@@ -3263,7 +3288,7 @@ async function _provNotify(it){
     const reg=window._swReg||(navigator.serviceWorker&&await navigator.serviceWorker.getRegistration());
     const title='Stima provvisoria INGV';
     const body=`Magnitudo tra ${it.mag_min} e ${it.mag_max} · ${it.region} · ore ${it.time_it}\nTocca per vederlo in diretta su GlobalQuake Italia`;
-    const opt={body,icon:'./icon-192.png',badge:'./icon-192.png',tag:'stima_prov',renotify:true,data:{url:'./#monitor'}};
+    const opt={body,icon:'./icon-192.png',badge:'./icon-192.png',tag:'stima_prov',renotify:true,data:{url:'./#monitor@'+_provMs(it.ot)}};
     if(reg&&reg.showNotification)await reg.showNotification(title,opt);else new Notification(title,opt);
   }catch(e){}
 }
@@ -4137,6 +4162,7 @@ function openEqDetail(containerId,i){
   _eqdCtx={containerId,i,ev};
 
   document.getElementById('eqdTitle').textContent=ev.place;
+  document.getElementById('eqdGqBtn').hidden=!gqCanReplay(Date.parse(ev.time));
   renderEqdDati(ev);
   document.getElementById('eqdPaneLoc').innerHTML='';
   eqdSwitchTab('dati');
@@ -6145,11 +6171,99 @@ function stopMonitor(){
   if(!MON.on)return;MON.on=false;
   MON.timers.forEach(clearInterval);MON.timers=[];
   const g=document.getElementById('monGq');if(g)g.innerHTML='';   /* ferma video e consumo dati */
+  GQ.player=null;GQ.ready=false;
 }
-function monTick(){const c=document.getElementById('monClock');if(c)c.textContent=new Date().toLocaleTimeString('it-IT');}
+function monTick(){const c=document.getElementById('monClock');if(c)c.textContent=new Date().toLocaleTimeString('it-IT');gqShowAt();}
 function monLoadGq(){
-  document.getElementById('monGq').innerHTML=`<div class="mon-video"><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=${GQ_CHANNEL}&autoplay=1&mute=1&playsinline=1"
+  document.getElementById('monGq').innerHTML=`<div class="mon-video"><iframe id="gqFrame" src="https://www.youtube-nocookie.com/embed/live_stream?channel=${GQ_CHANNEL}&autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}"
     title="Diretta GlobalQuake Italia" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
+  GQ.player=null;GQ.ready=false;
+  gqApi().then(()=>{
+    if(!MON.on||!document.getElementById('gqFrame'))return;
+    GQ.player=new YT.Player('gqFrame',{events:{onReady:()=>{GQ.ready=true;gqApplyTarget();}}});
+  }).catch(()=>gqMsg('I comandi per tornare indietro non sono disponibili in questo momento: usa "Apri nell\'app YouTube".'));
+}
+
+/* ── Rivedere un momento della diretta: la diretta YouTube di GlobalQuake si può
+   riavvolgere (al massimo di 12 ore). Si calcola quanti secondi indietro andare
+   rispetto al punto "in diretta", tenendo conto del ritardo della diretta. ── */
+const GQ_LAT=20;        /* s: ritardo tipico della diretta rispetto alla realtà */
+const GQ_DVR_H=12;      /* ore: YouTube conserva al massimo le ultime 12 ore di una diretta */
+const GQ={player:null,ready:false,target:null,apiP:null,vid:null};
+function gqApi(){
+  if(window.YT&&YT.Player)return Promise.resolve();
+  if(GQ.apiP)return GQ.apiP;
+  GQ.apiP=new Promise((res,rej)=>{
+    const prev=window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady=()=>{if(prev)try{prev();}catch(e){}res();};
+    const sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';
+    sc.onerror=()=>{GQ.apiP=null;rej();};document.head.appendChild(sc);
+    setTimeout(()=>{if(!(window.YT&&YT.Player)){GQ.apiP=null;rej();}},12000);
+  });
+  return GQ.apiP;
+}
+function gqCanReplay(ms){const age=Date.now()-ms;return !isNaN(ms)&&age>-60000&&age<GQ_DVR_H*3600e3-120000;}
+function gqMsg(t){const m=document.getElementById('gqMsg');if(!m)return;m.textContent=t||'';m.hidden=!t;}
+function gqHm(ms){return new Date(ms).toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+function gqReplay(ms,label){
+  GQ.target={ms,label,tries:0};
+  const sheet=document.getElementById('eqdSheet');if(sheet&&sheet.classList.contains('open'))closeEqDetail();
+  goSection('monitor');
+  const r=document.getElementById('gqReplay');
+  if(r){r.hidden=false;r.innerHTML=`<span>Rivedi <b>${_esc(label||'')}</b> · dalle ${gqHm(ms)}</span>`;}
+  gqMsg('');
+  gqApplyTarget();
+}
+function gqReplayProv(i){
+  const it=(window._provItems||[])[i];if(!it)return;
+  gqReplay(_provMs(it.ot),`stima provvisoria M${it.mag_min}–${it.mag_max} ${it.region||''}`);
+}
+function eqdGq(){
+  const ev=_eqdCtx&&_eqdCtx.ev;if(!ev)return;
+  gqReplay(Date.parse(ev.time)-10000,`M${ev.mag.toFixed(1)} ${ev.place}`);
+}
+function gqApplyTarget(){
+  const t=GQ.target,p=GQ.player;
+  if(!t||!GQ.ready||!p||!p.getDuration)return;
+  const dur=p.getDuration();
+  if(!dur){if(++t.tries<15)setTimeout(gqApplyTarget,1000);else gqMsg('La diretta non risponde: riprova tra poco.');return;}
+  GQ.target=null;
+  if(!gqCanReplay(t.ms)){gqMsg('Questo momento non è più nella registrazione della diretta (YouTube ne conserva al massimo 12 ore).');return;}
+  /* il punto "in diretta" mostra già la realtà di GQ_LAT secondi fa */
+  const pos=Math.min(dur,dur-((Date.now()-t.ms)/1000-GQ_LAT));
+  try{p.seekTo(Math.max(0,pos),true);p.playVideo();}catch(e){}
+  setTimeout(()=>{
+    try{if(Math.abs(p.getCurrentTime()-pos)>45)gqMsg('La diretta non permette di tornare così indietro in questo momento. Prova con "Apri nell\'app YouTube".');}catch(e){}
+    gqYtLink(pos);
+  },3000);
+}
+function gqStep(sec){
+  const p=GQ.player;if(!GQ.ready||!p){gqMsg('Il video non è ancora pronto.');return;}
+  try{const d=p.getDuration(),c=p.getCurrentTime();p.seekTo(Math.max(0,Math.min(d,c+sec)),true);p.playVideo();gqMsg('');}catch(e){}
+}
+function gqLive(){
+  const p=GQ.player;const r=document.getElementById('gqReplay');if(r)r.hidden=true;gqMsg('');
+  if(!GQ.ready||!p)return;try{p.seekTo(p.getDuration(),true);p.playVideo();}catch(e){}
+}
+function gqShowAt(){
+  const el=document.getElementById('gqAt'),p=GQ.player;if(!el)return;
+  if(!GQ.ready||!p||!p.getDuration){el.textContent='In diretta';return;}
+  try{
+    const behind=p.getDuration()-p.getCurrentTime();
+    el.textContent=behind<12?'In diretta':'Stai guardando circa le '+gqHm(Date.now()-(behind+GQ_LAT)*1000);
+  }catch(e){}
+}
+function gqYtLink(pos){
+  try{
+    const v=GQ.player.getVideoData&&GQ.player.getVideoData().video_id;const a=document.getElementById('gqYtLink');
+    if(v&&a)a.href=`https://www.youtube.com/watch?v=${encodeURIComponent(v)}&t=${Math.max(0,Math.floor(pos))}s`;
+  }catch(e){}
+}
+/* indirizzi tipo #monitor@1732460000000: apre la diretta al momento indicato */
+function _navHash(h){
+  const m=/^monitor@(\d{12,14})$/.exec(h||'');
+  if(m){gqReplay(+m[1],'stima provvisoria');return;}
+  goSection(h||'terremoti');
 }
 function monRenderProv(){
   const el=document.getElementById('monProv');if(!el)return;
@@ -6158,7 +6272,8 @@ function monRenderProv(){
     <div class="prov-h"><b>STIMA PROVVISORIA INGV</b><span>${_esc(_provAgo(it.ot))}</span></div>
     <div class="prov-m">Magnitudo tra <b>${_esc(it.mag_min)}</b> e <b>${_esc(it.mag_max)}</b></div>
     <div class="prov-s">ore ${_esc(it.time_it||'')} · prov/zona <b>${_esc(it.region||'')}</b></div>
-    <div class="prov-n">Confrontala con zona e magnitudo che GlobalQuake mostra nel video.</div></div></div>`:'';
+    <div class="prov-n">Confrontala con zona e magnitudo che GlobalQuake mostra nel video.</div>
+    <button type="button" class="prov-gq" onclick="gqReplayProv(0)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Riguarda dall'inizio della scossa</button></div></div>`:'';
 }
 async function monLoadIngv(){
   const box=document.getElementById('monIngv');if(!box)return;
@@ -6199,7 +6314,7 @@ if(/[?&]larghezza\b/.test(location.search)){
 }
 /* clic su una notifica mentre l'app è già aperta: il service worker chiede di aprire la sezione */
 if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{
-  if(e.data&&e.data.type==='itq-nav'&&e.data.sec)goSection(e.data.sec);
+  if(e.data&&e.data.type==='itq-nav'&&e.data.sec)_navHash(e.data.sec);
 });
 
 /* ================================================================
