@@ -1258,6 +1258,9 @@ html,body{max-width:100%;overflow-x:hidden;overflow-x:clip;overscroll-behavior-x
    laterale né zoom della pagina). Mappe, grafici e liste orizzontali gestiscono
    i propri gesti e non sono toccati da questa regola. */
 html,body{touch-action:pan-y;}
+/* Riquadri interni che scorrono in verticale (elenco terremoti, schede, menu):
+   su iPhone non devono mai potersi spostare di lato. */
+#eqListFull,.eq-list,.filter-drawer,.side-menu-body,.pl-eq-list,.eqd-body,.hs-body{overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y;}
 .dbg-w{position:fixed;left:8px;right:8px;bottom:calc(90px + env(safe-area-inset-bottom,0));z-index:9999;max-height:40vh;overflow:auto;background:#1C1917;color:#F5F1EA;font:12px/1.4 ui-monospace,Menlo,monospace;border-radius:12px;padding:10px 12px;}
 /* Campi data su iOS: senza questo hanno una larghezza minima propria e sbordano */
 input[type=date],input[type=datetime-local]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;box-sizing:border-box;}
@@ -1792,6 +1795,7 @@ body.sv-on{overflow:hidden;}
   .top-header .hdr-actions{gap:6px;}
   .btab{font-size:9.5px;}
   #sectionTerremoti .eq-list{padding:0 10px 8px;}
+  #sectionTerremoti .time-section{margin-left:-10px;margin-right:-10px;}
   #sectionTerremoti .eq-item{padding:12px;}
   .src-toggle{max-width:190px;padding:6px 8px;}
   #sectionMappa .mapbox{height:calc(100vh - 222px)!important;height:calc(100dvh - 222px)!important;}
