@@ -266,6 +266,28 @@ exports.sendEarthquakeNotifications = functions.pubsub
 ================================================================ */
 const INGV_STIMA = 'https://terremoti.ingv.it/ws/string_for_auto_hypocenter/query';
 
+/* Istante della scossa dalla data e ora ITALIANE pubblicate dall'INGV (date_it,
+   time_it), con ora solare/legale; se mancano, da "ot" letto come UTC. */
+function romeOffsetMin(ms) {
+  const f = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Rome', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const p = {}; f.formatToParts(new Date(ms)).forEach(x => { p[x.type] = x.value; });
+  return Math.round((Date.UTC(+p.year, p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - ms) / 60000);
+}
+function provMsIt(it) {
+  const d = /(\d{1,4})[-\/.](\d{1,2})[-\/.](\d{1,4})/.exec(String((it && it.date_it) || ''));
+  const t = /(\d{1,2}):(\d{2})(?::(\d{2}))?/.exec(String((it && it.time_it) || ''));
+  if (d && t) {
+    let y = +d[1], mo = +d[2], dd = +d[3];
+    if (d[1].length <= 2) { y = +d[3]; dd = +d[1]; }
+    const guess = Date.UTC(y, mo - 1, dd, +t[1], +t[2], +(t[3] || 0));
+    let ms = guess - romeOffsetMin(guess) * 60000;
+    ms = guess - romeOffsetMin(ms) * 60000;
+    if (!isNaN(ms)) return ms;
+  }
+  const m = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?/.exec(String((it && it.ot) || ''));
+  return m ? Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +(m[6] || 0)) : NaN;
+}
+
 function parseStimaProvvisoria(json) {
   let d;
   try { d = JSON.parse(json); } catch (e) { return { active: false, items: [] }; }
@@ -322,7 +344,7 @@ exports.checkStimaProvvisoria = functions.pubsub
     if (!tokens.length) return null;
 
     /* il tocco apre la diretta di GlobalQuake Italia al momento della scossa */
-    const otMs = Date.parse(String(result.items[0].ot || '').replace(' ', 'T') + 'Z');
+    const otMs = provMsIt(result.items[0]);
     const monUrl = 'https://italquake.firebaseapp.com/#monitor' + (isNaN(otMs) ? '' : '@' + otMs);
     const title = '⚠️ Stima provvisoria INGV';
     const body  = `Magnitudo tra ${result.items[0].mag_min} e ${result.items[0].mag_max} · ${result.prov}${result.ora ? ' · ore ' + result.ora : ''}\nDato automatico INGV, non ancora rivisto. Tocca per vederlo su GlobalQuake Italia.`;
